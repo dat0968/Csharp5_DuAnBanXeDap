@@ -1,0 +1,308 @@
+﻿@using MVCBanXeDap.ViewModels
+@model ProductVM
+<style>
+    table.table td,
+    table.table th {
+    text-align: left;
+    vertical-align: middle; /* Giúp căn giữa theo chiều dọc */
+    }
+</style>
+
+<div class="modal fade" id="modal-@Model.MaSP-edit" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Sửa thông tin sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="EditProduct" asp-controller="Product" id="editProductForm_@Model.MaSP" method="post" enctype="multipart/form-data">
+                    <input value="@Model.MaSP" type="hidden" class="form-control" id="MaSp" name="MaSp" readonly>
+                    <div class="mb-3">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input value="@Model.TenSp" type="text" class="form-control" id="TenSp" name="TenSp" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ThuongHieu" class="form-label">Thương hiệu</label>
+                        <select class="form-select" id="ThuongHieu" name="ThuongHieu" required>
+                            @foreach (var brand in ViewBag.Brand as List<BrandVM>)
+                            {
+                                if(brand.TenThuongHieu == Model.ThuongHieu)
+                                {
+                                    <option selected value="@brand.MaThuongHieu">@brand.TenThuongHieu</option>
+                                }
+                                <option value="@brand.MaThuongHieu">@brand.TenThuongHieu</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="DanhMuc" class="form-label">Danh mục</label>
+                        <select class="form-select" id="DanhMuc" name="DanhMuc" required>
+                            <option value="">-- Chọn danh mục --</option>
+                            @foreach (var category in ViewBag.Category as List<DanhmucVM>)
+                            {
+                                if(category.TenDanhMuc == Model.DanhMuc)
+                                {
+                                    <option selected value="@category.MaDanhMuc">@category.TenDanhMuc</option>
+                                }
+                                <option value="@category.MaDanhMuc">@category.TenDanhMuc</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="NhaCC" class="form-label">Nhà cung cấp</label>
+                        <select class="form-select" id="NhaCC" name="NhaCC" required>
+                            <option value="">-- Chọn nhà cung cấp --</option>
+                            @foreach (var supplier in ViewBag.Supplier as List<SupplierVM>)
+                            {
+                                if(supplier.TenNhaCc == Model.NhaCungCap)
+                                {
+                                    <option selected value="@supplier.MaNhaCc">@supplier.TenNhaCc</option>
+                                }
+                                <option value="@supplier.MaNhaCc">@supplier.TenNhaCc</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Hinh" class="form-label">
+                            Hình ảnh chính <span style="color: gray">( Có thể chọn ảnh khác để thay thế ảnh chính )</span>
+                        </label>
+                        <input type="file" class="form-control" id="Hinh" name="file">
+                        
+                        @if (!string.IsNullOrEmpty(Model.Hinh))
+                        {
+                            <div class="mt-2">
+                                <img src="@Url.Content($"~/Hinh/SanPham/{Model.Hinh}")" alt="Hình chính" class="img-thumbnail" style="width: 150px; height: auto;">
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Hinh" class="form-label">
+                            Hình ảnh phụ <span style="color: gray">( Có thể bổ sung thêm ảnh phụ )</span>
+                        </label>
+                        <input type="file" multiple class="form-control" id="Hinh" name="files">
+                        @if (Model.Hinhanhs != null && Model.Hinhanhs.Any())
+                        {
+                            <span style="color: gray">( Click vào ô vuông dưới ảnh muốn xóa )</span>
+                            <div class="mt-2">                              
+                                @foreach (var hinh in Model.Hinhanhs)
+                                {
+                                    <div class="d-inline-block position-relative me-2">
+                                        <img src="@Url.Content($"~/Hinh/SanPham/{hinh.HinhAnh1}")" alt="Hình phụ" class="img-thumbnail" style="width: 100px; height: auto;">
+                                        <div class="form-check mt-2 text-center">
+                                            <input class="form-check-input" type="checkbox" name="DeleteImages[]" value="@hinh.MaHinhAnh" id="deleteImage_@hinh.HinhAnh1">
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="MoTa" class="form-label">Mô tả</label>
+                        <input value="@Model.MoTa" class="form-control" id="MoTa" name="MoTa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="NgaySanXuat" class="form-label">Ngày sản xuất</label>
+                        <input value="@Model.NgaySanXuat.ToString("yyyy-MM-dd")" type="date" class="form-control" id="NgaySanXuat" name="NgaySanXuat" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Thuộc tính (Màu sắc, Kích thước)</label>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Màu sắc</th>
+                                    <th>Kích thước</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attributeTableEdit_@Model.MaSP" data-index="0">
+                                @for(int i = 0; i < Model.Chitietsanphams.Count; i++)
+                                {
+                                    var thuoctinh = Model.Chitietsanphams[i];
+                                    <tr>
+                                        <td>
+                                            <span class="input-group-text">@thuoctinh.TenMau</span>
+                                            <input value="@thuoctinh.MaMau" class="input-group-text" name="Chitietsanphams[@i].MaMau" type="hidden" readonly>
+                                        </td>
+                                        <td>
+                                            <span class="input-group-text">@thuoctinh.TenKichThuoc</span>
+                                            <input value="@thuoctinh.MaKichThuoc" class="input-group-text" name="Chitietsanphams[@i].MaKichThuoc" type="hidden" readonly>
+                                        </td>
+                                        <td>
+                                            <input oninput="validateSl_Dg(this)" name="Chitietsanphams[@i].SoLuongTon" min="1" value="@thuoctinh.SoLuongTon" class="input-number" type="number" required>
+                                        </td>
+                                        <td>
+                                            <input oninput="validateSl_Dg(this)" name="Chitietsanphams[@i].DonGia" min="1" value="@thuoctinh.DonGia" class="input-number" type="number" required>
+                                        </td>
+                                        <td>
+                                            <button onclick="DeleteDetailsProduct('@Model.MaSP', '@thuoctinh.MaMau', '@thuoctinh.MaKichThuoc', this)" type="button" class="btn btn-danger btn-sm">Xóa</button>
+                                        </td>
+                                    </tr>
+                                }
+                                @* <tr> *@
+                                @*     <td> *@
+                                @*         <select class="form-select" name="Attributes[0].MaMau" required> *@
+                                @*             <option value="">-- Chọn màu --</option> *@
+                                @*             @foreach (var color in ViewBag.Color as List<ColorVM>) *@
+                                @*             { *@
+                                @*                 <option value="@color.MaMau">@color.TenMau</option> *@
+                                @*             } *@
+                                @*         </select> *@
+                                @*     </td> *@
+                                @*     <td> *@
+                                @*         <select class="form-select" name="Attributes[0].MaKichThuoc" required> *@
+                                @*             <option value="">-- Chọn kích thước --</option> *@
+                                @*             @foreach (var size in ViewBag.Size as List<SizeVM>) *@
+                                @*             { *@
+                                @*                 <option value="@size.MaKichThuoc">@size.TenKichThuoc</option> *@
+                                @*             } *@
+                                @*         </select> *@
+                                @*     </td> *@
+                                @*     <td> *@
+                                @*         <input oninput="validateSl_Dg(this)" name="Attributes[0].SoLuongTon" min="1" class="input-number" type="number" required> *@
+                                @*     </td> *@
+                                @*     <td> *@
+                                @*         <input oninput="validateSl_Dg(this)" name="Attributes[0].DonGia" min="1" class="input-number" type="number" required> *@
+                                @*     </td> *@
+
+                                @*     <td> *@
+                                @*         <button type="button" class="btn btn-danger btn-sm" onclick="removeRow_EditForm(this)">Xóa</button> *@
+                                @*     </td> *@
+                                @* </tr> *@
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addRow_EditForm('@Model.MaSP')">Thêm thuộc tính</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-primary" form="editProductForm_@Model.MaSP">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+ <script> 
+    function addRow_EditForm(maSP) {
+         const tableEdit = document.querySelector(`#attributeTableEdit_${maSP}`);   
+         let index = parseInt(tableEdit.dataset.index, 10);
+         const newRow = tableEdit.insertRow();
+         newRow.innerHTML = ` 
+             <td> 
+                 <select class="form-select" name="Attributes[${index}].MaMau" required>
+                     <option value="">-- Chọn màu --</option> 
+                     @foreach (var color in ViewBag.Color as List<ColorVM>) 
+                     { 
+                        <option value="@color.MaMau">@color.TenMau</option> 
+                     } 
+                 </select> 
+             </td> 
+             <td> 
+                 <select class="form-select" name="Attributes[${index}].MaKichThuoc" required>
+                     <option value="">-- Chọn kích thước --</option> 
+                     @foreach (var size in ViewBag.Size as List<SizeVM>) 
+                     { 
+                        <option value="@size.MaKichThuoc">@size.TenKichThuoc</option> 
+                     } 
+                 </select> 
+             </td> 
+             <td> 
+                 <input oninput="validateSl_Dg(this)" name="Attributes[${index}].SoLuongTon" min="1" class="input-number" type="number" required>
+            </td> 
+            <td> 
+                 <input oninput="validateSl_Dg(this)" name="Attributes[${index}].DonGia" min="1" class="input-number" type="number"  required>
+            </td> 
+             <td> 
+                 <button type="button" class="btn btn-danger btn-sm" onclick="removeRow_EditForm(this)">Xóa</button> 
+             </td> 
+         `; 
+         tableEdit.dataset.index = index + 1;
+     } 
+
+     function removeRow_EditForm(button) {
+         const row = button.closest('tr'); 
+         row.remove(); 
+     } 
+
+
+
+
+
+     document.getElementById('editProductForm_@Model.MaSP').addEventListener('submit', function (event)
+     { 
+         // Lấy các hàng trong bảng thuộc tính 
+         const rows = document.querySelectorAll('#attributeTableEdit_@Model.MaSP tr');
+         const attributeSet = new Set(); 
+         let isDuplicate = false; 
+
+         rows.forEach(row => { 
+             const color = row.querySelector('[name*=".MaMau"]').value; 
+             const size = row.querySelector('[name*=".MaKichThuoc"]').value; 
+
+             // Tạo cặp giá trị để kiểm tra trùng lặp 
+             const attributeKey = `${color}-${size}`; 
+
+             if (attributeSet.has(attributeKey)) { 
+                 isDuplicate = true; 
+             } else { 
+                 attributeSet.add(attributeKey); 
+             } 
+         }); 
+
+         if (isDuplicate) { 
+             event.preventDefault(); // Ngăn form được gửi đi 
+             alert('Không thể chọn các cặp thuộc tính trùng lặp, vui lòng chọn lại!'); 
+         } 
+         else{
+            const isConfirmed = window.confirm("Bạn có chắc chắn muốn chỉnh sửa thông tin sản phẩm này?");
+            if (isConfirmed) {
+                this.submit();
+            } else {
+                return false;
+            }
+        }
+     }); 
+
+
+     function validateSl_Dg(element){ 
+         if(element.value <= 0){ 
+             element.value = 1 
+         } 
+     }
+
+
+         function DeleteDetailsProduct(MaSP, MaMau, MaKichThuoc, button) {
+            const isConfirmed = window.confirm("Bạn có chắc chắn muốn xóa thuộc tính này của sản phẩm?");
+            if (isConfirmed) {
+                const row = button.closest('tr');
+
+                const url = `https://localhost:7137/api/ProductDetails/DeleteDetailsProduct?MaSP=${MaSP}&MaMau=${MaMau}&MaKichThuoc=${MaKichThuoc}`;
+
+                fetch(url, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Xóa không thành công!');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    row.remove();
+                    alert('Xóa thành công!');
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert('Không thể xóa thuộc tính, vui lòng thử lại!');
+                });
+            } else {
+                return false;
+            }
+            
+    }
+
+ </script> 

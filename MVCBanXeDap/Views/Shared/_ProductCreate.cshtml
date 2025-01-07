@@ -1,0 +1,208 @@
+﻿@using MVCBanXeDap.ViewModels
+
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">Thêm sản phẩm mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="CreateProduct" asp-controller="Product" id="addProductForm" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="TenSp" name="TenSp" required>                       
+                    </div>
+                    <div class="mb-3">
+                        <label for="ThuongHieu" class="form-label">Thương hiệu</label>
+                        <select class="form-select" id="ThuongHieu" name="ThuongHieu" required>
+                            <option value="">-- Chọn thương hiệu --</option>
+                            @foreach (var brand in ViewBag.Brand as List<BrandVM>)
+                            {
+                                <option value="@brand.MaThuongHieu">@brand.TenThuongHieu</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="DanhMuc" class="form-label">Danh mục</label>
+                        <select class="form-select" id="DanhMuc" name="DanhMuc" required>
+                            <option value="">-- Chọn danh mục --</option>
+                            @foreach (var category in ViewBag.Category as List<DanhmucVM>)
+                            {
+                                <option value="@category.MaDanhMuc">@category.TenDanhMuc</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="NhaCC" class="form-label">Nhà cung cấp</label>
+                        <select class="form-select" id="NhaCC" name="NhaCC" required>
+                            <option value="">-- Chọn nhà cung cấp --</option>
+                            @foreach (var supplier in ViewBag.Supplier as List<SupplierVM>)
+                            {
+                                <option value="@supplier.MaNhaCc">@supplier.TenNhaCc</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Hinh" class="form-label">Hình ảnh chính</label>
+                        <input type="file" class="form-control" id="Hinh" name="file" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Hinh" class="form-label">Hình ảnh phụ</label>
+                        <input type="file" multiple class="form-control" id="Hinh" name="files" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="MoTa" class="form-label">Mô tả</label>
+                        <textarea class="form-control" id="MoTa" name="MoTa" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="NgaySanXuat" class="form-label">Ngày sản xuất</label>
+                        <input type="date" class="form-control" id="NgaySanXuat" name="NgaySanXuat" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Thuộc tính (Màu sắc, Kích thước)</label>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Màu sắc</th>
+                                    <th>Kích thước</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attributeTableCreate">
+                                <tr>
+                                    <td>
+                                        <select class="form-select" name="Attributes[0].MaMau" required>
+                                            <option value="" >-- Chọn màu --</option>
+                                            @foreach (var color in ViewBag.Color as List<ColorVM>)
+                                            {
+                                                <option value="@color.MaMau">@color.TenMau</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-select" name="Attributes[0].MaKichThuoc" required>
+                                            <option value="">-- Chọn kích thước --</option>
+                                            @foreach (var size in ViewBag.Size as List<SizeVM>)
+                                            {
+                                                <option value="@size.MaKichThuoc">@size.TenKichThuoc</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input oninput="validateSl_Dg(this)" name="Attributes[0].SoLuongTon" min="1" class="input-number" type="number" required>
+                                    </td>
+                                    <td>
+                                        <input oninput="validateSl_Dg(this)" name="Attributes[0].DonGia" min="1" class="input-number" type="number" required>
+                                    </td>
+
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeRow_createRow(this)">Xóa</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addRow_createForm()">Thêm thuộc tính</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-primary" form="addProductForm">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let attributeIndex = 1;
+
+    function addRow_createForm() {
+        const table = document.getElementById('attributeTableCreate');
+        const newRow = table.insertRow();
+        newRow.innerHTML = `
+            <td>
+                <select class="form-select" name="Attributes[${attributeIndex}].MaMau" required>
+                    <option value="">-- Chọn màu --</option>
+                    @foreach (var color in ViewBag.Color as List<ColorVM>)
+                    {
+                        <option value="@color.MaMau">@color.TenMau</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <select class="form-select" name="Attributes[${attributeIndex}].MaKichThuoc" required>
+                    <option value="">-- Chọn kích thước --</option>
+                    @foreach (var size in ViewBag.Size as List<SizeVM>)
+                    {
+                        <option value="@size.MaKichThuoc">@size.TenKichThuoc</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <input oninput="validateSl_Dg(this)" name="Attributes[0].SoLuongTon" min="1" class="input-number" type="number" required>
+           </td>
+           <td>
+                <input oninput="validateSl_Dg(this)" name="Attributes[0].DonGia" min="1" class="input-number" type="number"  required>
+           </td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRow_createRow(this)">Xóa</button>
+            </td>
+        `;
+        attributeIndex++;
+    }
+
+    function removeRow_createRow(button) {
+        const row = button.closest('tr');
+        row.remove();
+    }
+
+
+
+
+
+    document.getElementById('addProductForm').addEventListener('submit', function (event) 
+    {
+        event.preventDefault();
+        // Lấy các hàng trong bảng thuộc tính
+        const rows = document.querySelectorAll('#attributeTableCreate tr');
+        const attributeSet = new Set();
+        let isDuplicate = false;
+
+        rows.forEach(row => {
+            const color = row.querySelector('select[name*=".MaMau"]').value;
+            const size = row.querySelector('select[name*=".MaKichThuoc"]').value;
+
+            // Tạo cặp giá trị để kiểm tra trùng lặp
+            const attributeKey = `${color}-${size}`;
+
+            if (attributeSet.has(attributeKey)) {
+                isDuplicate = true;
+            } else {
+                attributeSet.add(attributeKey);
+            }
+        });
+
+        if (isDuplicate) {
+            event.preventDefault(); // Ngăn form được gửi đi
+            alert('Không thể chọn các cặp thuộc tính trùng lặp, vui lòng chọn lại!');
+        }
+        else{
+            const isConfirmed = window.confirm("Bạn có chắc chắn muốn thêm sản phẩm này?");
+            if (isConfirmed) {
+                this.submit();
+            } else {
+                return false;
+            }
+        }
+    });
+
+
+    function validateSl_Dg(element){
+        if(element.value <= 0){
+            element.value = 1
+        }
+    }
+
+</script>

@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>URANI&SHOP</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="~/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/css/style.css" type="text/css">
+    @* Toastr *@
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+</head>
+<style>
+    .brand-logo {
+    font-family: 'Roboto', sans-serif; /* Chọn font chữ đẹp */
+    font-size: 36px; /* Kích thước chữ lớn */
+    font-weight: 700; /* Chữ đậm */
+    color: #000; /* Màu đen */
+    text-transform: uppercase; /* Viết hoa toàn bộ */
+    text-decoration: none; /* Bỏ gạch chân */
+    letter-spacing: 1px; /* Khoảng cách giữa các chữ */
+    display: inline-block;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Tạo bóng chữ nhẹ */
+    transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease; /* Hiệu ứng hover */
+    cursor: pointer;
+    }
+    .brand-logo:hover {
+    color: #333; /* Đổi sang màu xám đậm khi hover */
+    transform: scale(1.05); /* Phóng to nhẹ khi hover */
+    text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.2); /* Bóng chữ đậm hơn khi hover */
+    }
+</style>
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7">
+                        <div class="header__top__left">
+                            <p>Vận chuyển miễn phí toàn quốc</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-5">
+                        <div class="header__top__right">
+                            @if (Context.Session.GetString("RefreshToken") == null)
+                            {
+                                <div class="header__top__links">
+                                    <a asp-action="Register" asp-controller="Accounts">ĐĂNG KÝ</a>
+                                    @* <a href="#">FAQs</a> *@
+                                </div>
+                                <div class="header__top__hover">
+                                    <span>ĐĂNG NHẬP <i class="arrow_carrot-down"></i></span>
+                                    <ul style="text-align: left" >
+                                        <a asp-controller="Accounts" asp-action="LoginCustomer" >
+                                            <li>KHÁCH HÀNG</li>
+                                        </a>
+                                        <a asp-controller="Accounts" asp-action="LoginStaff" >
+                                            <li>NHÂN VIÊN</li>
+                                        </a>                                       
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="header__top__hover">
+                                    <span>TÀI KHOẢN CỦA TÔI<i class="arrow_carrot-down"></i></span>
+                                    <ul>
+                                        <li>OPTIONS1</li>
+                                        <a asp-controller="Accounts" asp-action="Logout">
+                                            <li>ĐĂNG XUẤT</li>
+                                        </a>
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__logo">
+                        <a href="" class="brand-logo">URANISHOP</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li class="active"><a href="">Trang chủ</a></li>
+                            <li><a href="">Cửa hàng</a></li>
+                            @* <li> *@
+                            @*     <a href="#">Pages</a> *@
+                            @*     <ul class="dropdown"> *@
+                            @*         <li><a href="./about.html">About Us</a></li> *@
+                            @*         <li><a href="./shop-details.html">Shop Details</a></li> *@
+                            @*         <li><a href="./shopping-cart.html">Shopping Cart</a></li> *@
+                            @*         <li><a href="./checkout.html">Check Out</a></li> *@
+                            @*         <li><a href="./blog-details.html">Blog Details</a></li> *@
+                            @*     </ul> *@
+                            @* </li> *@
+                            @* <li><a href="./blog.html">Blog</a></li> *@
+                            @* <li><a href="./contact.html">Contacts</a></li> *@
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__nav__option">                     
+                        @* <a href="#"><img src="img/icon/heart.png" alt=""></a> *@
+                        <a href="#"><img src="~/img/icon/cart.png" alt=""> <span>0</span></a>
+                        <div class="price">0.00 VNĐ </div>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+    <!-- Hero Section Begin -->
+    @RenderBody()
+    <section class="hero">
+        <div class="hero__slider owl-carousel">
+            <div class="hero__items set-bg" data-setbg="img/hero/46-1.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-8">
+                            <div class="hero__text">
+                                <h6>Khám phá bộ sưu tập xe đạp</h6>
+                                <h2>Xe đạp hiện đại</h2>
+                                <p style="color: black" >
+                                    Chất lượng vượt trội, thiết kế tinh tế và phù hợp cho mọi nhu cầu. Khám phá các mẫu xe đạp với công nghệ mới nhất, mang đến sự thoải mái và hiệu suất tối ưu.
+                                </p>
+                                <a href="#" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
+                                @* <div class="hero__social"> *@
+                                @*     <a href="#"><i class="fa fa-facebook"></i></a> *@
+                                @*     <a href="#"><i class="fa fa-twitter"></i></a> *@
+                                @*     <a href="#"><i class="fa fa-pinterest"></i></a> *@
+                                @*     <a href="#"><i class="fa fa-instagram"></i></a> *@
+                                @* </div> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero__items set-bg" data-setbg="img/hero/dap-xe-co-tac-dung-gi-6.webp">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-8">
+                            <div class="hero__text">
+                                <h6>Khám phá bộ sưu tập xe đạp</h6>
+                                <h2>Xe đạp cao cấp</h2>
+                                <p style="color: black">
+                                    Những chiếc xe đạp tuyệt vời với thiết kế hiện đại và chất liệu cao cấp, phù hợp với tất cả mọi người, mang đến trải nghiệm tuyệt vời mỗi khi di chuyển.
+                                </p>
+                                <a href="#" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
+                                @* <div class="hero__social"> *@
+                                @*     <a href="#"><i class="fa fa-facebook"></i></a> *@
+                                @*     <a href="#"><i class="fa fa-twitter"></i></a> *@
+                                @*     <a href="#"><i class="fa fa-pinterest"></i></a> *@
+                                @*     <a href="#"><i class="fa fa-instagram"></i></a> *@
+                                @* </div> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Section End -->
+
+    <div class="container py-5">
+        <h2 class="text-center mb-4">Sản phẩm bán chạy</h2>
+        <div class="row">
+            <!-- Product Item -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/product/product-1.jpg" />
+                        @*<span class="label">Mới</span>*@
+                        @* <ul class="product__hover"> *@
+                        @*     <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> *@
+                        @*     <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> *@
+                        @*     <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> *@
+                        @* </ul> *@
+                    </div>
+                    <div class="product__item__text">
+                        <h6>Áo khoác biker Piqué</h6>
+                        <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
+                        <div class="rating">
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>67.24 VNĐ</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Item -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/product/product-1.jpg" />
+                        @*<span class="label">Mới</span>*@
+                        @* <ul class="product__hover"> *@
+                        @*     <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> *@
+                        @*     <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> *@
+                        @*     <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> *@
+                        @* </ul> *@
+                    </div>
+                    <div class="product__item__text">
+                        <h6>Áo khoác biker Piqué</h6>
+                        <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
+                        <div class="rating">
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>67.24 VNĐ</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Item -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/product/product-1.jpg" />
+                        @*<span class="label">Mới</span>*@
+                        @* <ul class="product__hover"> *@
+                        @*     <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> *@
+                        @*     <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> *@
+                        @*     <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> *@
+                        @* </ul> *@
+                    </div>
+                    <div class="product__item__text">
+                        <h6>Áo khoác biker Piqué</h6>
+                        <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
+                        <div class="rating">
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>67.24 VNĐ</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Item -->
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/product/product-1.jpg" />
+                        @*<span class="label">Mới</span>*@
+                        @* <ul class="product__hover"> *@
+                        @*     <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> *@
+                        @*     <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> *@
+                        @*     <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> *@
+                        @* </ul> *@
+                    </div>
+                    <div class="product__item__text">
+                        <h6>Áo khoác biker Piqué</h6>
+                        <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
+                        <div class="rating">
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>67.24 VNĐ</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a style="color: white" href="" class="brand-logo">URANISHOP</a>
+                        </div>
+                        <p>Khách hàng là trung tâm trong mô hình kinh doanh độc đáo của chúng tôi.</p>
+                    </div>
+                </div>
+                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Mua Sắm</h6>
+                        <ul>
+                            <li><a href="#">Cửa hàng quần áo</a></li>
+                            <li><a href="#">Giỏ hàng</a></li>
+                        </ul>
+                    </div>
+                </div>
+                @* <div class="col-lg-2 col-md-3 col-sm-6"> *@
+                @*     <div class="footer__widget"> *@
+                @*         <h6>Hỗ trợ</h6> *@
+                @*         <ul> *@
+                @*             <li><a href="#">Liên hệ với chúng tôi</a></li> *@
+                @*             <li><a href="#">Phương thức thanh toán</a></li> *@
+                @*             <li><a href="#">Vận chuyển</a></li> *@
+                @*             <li><a href="#">Đổi trả & Hoàn tiền</a></li> *@
+                @*         </ul> *@
+                @*     </div> *@
+                @* </div> *@
+                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Liên hệ</h6>
+                        <div class="footer__newslatter">
+                            <p><strong>Địa chỉ:</strong> 123 Đường Hà Huy Tập, Thành phố Buôn Ma Thuột</p>
+                            <p><strong>Số điện thoại:</strong> 0889882935</p>
+                            <p><strong>Email:</strong> UraniShop@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="footer__copyright__text">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <p>
+                            Bản quyền ©
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script>2020
+                            Tất cả các quyền được bảo lưu | Mẫu website này được tạo bởi <i class="fa fa-heart-o" aria-hidden="true"></i> bởi <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        </p>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Footer Section End -->
+    <!-- Js Plugins -->
+    <script src="~/js/jquery-3.3.1.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/jquery.nice-select.min.js"></script>
+    <script src="~/js/jquery.nicescroll.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/jquery.countdown.min.js"></script>
+    <script src="~/js/jquery.slicknav.js"></script>
+    <script src="~/js/mixitup.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/main.js"></script>
+    <!-- Bootstrap JS -->
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                toastr.success(successMessage);
+            }
+
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage) {
+                toastr.error(errorMessage);
+            }
+        });       
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

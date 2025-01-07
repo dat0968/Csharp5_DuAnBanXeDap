@@ -1,0 +1,127 @@
+﻿@using MVCBanXeDap.ViewModels
+@using X.PagedList.Mvc.Core
+@* @model IEnumerable<ProductVM> *@
+@model X.PagedList.IPagedList<ProductVM>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    .input-number {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+    }
+
+        .input-number:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+</style>
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Danh sách sản phẩm</h4>
+        </div>
+        <div class="card-body">
+            <!-- Tìm kiếm, Bộ lọc, và Sắp xếp -->
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." />
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option value="">Lọc theo danh mục</option>
+                        <option value="1">Danh mục 1</option>
+                        <option value="2">Danh mục 2</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option value="">Lọc theo thương hiệu</option>
+                        <option value="1">Thương hiệu A</option>
+                        <option value="2">Thương hiệu B</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option value="">Sắp xếp</option>
+                        <option value="asc">Giá: Thấp đến Cao</option>
+                        <option value="desc">Giá: Cao đến Thấp</option>
+                        <option value="name">Tên sản phẩm: A-Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Nút Thêm sản phẩm -->
+            <div class="d-flex justify-content-start mb-3">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                    <i class="fas fa-plus"></i> Thêm sản phẩm
+                </button>
+            </div>
+
+            <!-- Danh sách sản phẩm -->
+            <div class="table-responsive">
+                <table id="basic-datatables" class="display table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Hình</th>
+                            <th>Thương Hiệu</th>
+                            <th>Danh mục</th>
+                            <th>Đơn giá</th>
+                            <th>Số lượng</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @product.TenSp
+                                </td>
+                                <td>
+                                    <img src="~/Hinh/SanPham/@product.Hinh" style="width: 100px; height: 70px;" />
+                                </td>
+                                <td>@product.ThuongHieu</td>
+                                <td>@product.DanhMuc</td>
+                                <td>@product.KhoangGia</td>
+                                <td>@product.SoLuong</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@product.MaSP">
+                                            <i class="fas fa-eye"></i> Chi tiết
+                                        </button>
+                                        <partial name="_ProductDetails" model="@product"></partial>
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@product.MaSP-edit">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </button>
+                                        <partial name="_ProductEdit" model="@product"></partial>
+                                        <form method="post" asp-action="DeleteProduct" asp-controller="Product" asp-route-id="@product.MaSP" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không')">
+                                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thêm sản phẩm -->
+<partial name="_ProductCreate"></partial>
+
+ @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions 
+ { 
+     LiElementClasses = new List<string> { "page-item" }, 
+     PageClasses = new List<string> { "page-link" } 
+ }) 

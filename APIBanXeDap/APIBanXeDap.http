@@ -1,0 +1,6 @@
+@APIBanXeDap_HostAddress = http://localhost:5117
+
+GET {{APIBanXeDap_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

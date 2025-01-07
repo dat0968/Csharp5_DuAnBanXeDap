@@ -1,0 +1,109 @@
+﻿@model MVCBanXeDap.ViewModels.ProductVM
+<style>
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: rgba(0, 0, 0, 0.8); /* Màu đen đậm hơn */
+        border-radius: 50%; /* Làm tròn góc để trông hiện đại hơn */
+        width: 40px; /* Điều chỉnh kích thước nút */
+        height: 40px;
+    }
+
+    .carousel-control-prev-icon:hover,
+    .carousel-control-next-icon:hover {
+        background-color: rgba(0, 0, 0, 1); /* Đậm hơn khi hover */
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        opacity: 0.9; /* Làm nút nổi bật hơn */
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        opacity: 1;
+    }
+</style>
+<!-- Modal -->
+<div class="modal fade" id="modal-@Model.MaSP" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">Thông tin chi tiết sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div id="carousel-@Model.MaSP" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img style="width: 370px; height: 230px" src="~/Hinh/SanPham/@Model.Hinh" class="d-block w-100 img-fluid" alt="Ảnh chính">
+                                </div>
+                                @if (Model.Hinhanhs != null && Model.Hinhanhs.Any())
+                                {
+                                    foreach (var anh in Model.Hinhanhs)
+                                    {
+                                        <div class="carousel-item">
+                                            <img style="width: 370px; height: 230px" src="~/Hinh/SanPham/@anh.HinhAnh1" class="d-block w-100 img-fluid" alt="Ảnh sản phẩm">
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="carousel-item active">
+                                        <img style="width: 370px; height: 230px" src="~/Hinh/SanPham/default.jpg" class="d-block w-100 img-fluid" alt="Ảnh mặc định">
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@Model.MaSP" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carousel-@Model.MaSP" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>@Model.TenSp</h4>
+                        <p><strong>Mã sản phẩm:</strong> @Model.MaSP</p>
+                        <p><strong>Thương hiệu:</strong> @Model.ThuongHieu</p>
+                        <p><strong>Danh mục:</strong> @Model.DanhMuc</p>
+                        <p><strong>Khoảng giá:</strong> @Model.KhoangGia</p>
+                        <p><strong>Số lượng:</strong> @Model.SoLuong</p>
+                        <p><strong>Nhà cung cấp:</strong> @Model.NhaCungCap</p>
+                        <p><strong>Mô tả:</strong> @Model.MoTa</p>
+                    </div>
+                </div>
+                <h5>Thuộc tính sản phẩm</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Màu</th>
+                                <th>Kích thước</th>
+                                <th>Số lượng tồn</th>
+                                <th>Đơn giá</th>    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var thuoctinh in Model.Chitietsanphams)
+                            {
+                                <tr>
+                                    <td>@thuoctinh.TenMau</td>
+                                    <td>@thuoctinh.TenKichThuoc</td>
+                                    <td>@thuoctinh.SoLuongTon</td>
+                                    <td>@thuoctinh.DonGia.ToString() VNĐ</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
