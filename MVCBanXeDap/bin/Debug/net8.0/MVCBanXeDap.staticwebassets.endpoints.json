@@ -34935,6 +34935,88 @@
       ]
     },
     {
+      "Route": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.4y2gn89k0t.jpg",
+      "AssetFile": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "206217"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7JlGGMXIRckS4qexwKTe1vtS+uEIskFgprKGPNQskm8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 07 Jan 2025 15:46:17 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4y2gn89k0t"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-7JlGGMXIRckS4qexwKTe1vtS+uEIskFgprKGPNQskm8="
+        },
+        {
+          "Name": "label",
+          "Value": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.jpg"
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.jpg",
+      "AssetFile": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "206217"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7JlGGMXIRckS4qexwKTe1vtS+uEIskFgprKGPNQskm8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 07 Jan 2025 15:46:17 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-7JlGGMXIRckS4qexwKTe1vtS+uEIskFgprKGPNQskm8="
+        }
+      ]
+    },
+    {
       "Route": "Hinh/SanPham/4-VANG.gyek4vj1kh.png",
       "AssetFile": "Hinh/SanPham/4-VANG.png",
       "Selectors": [],
@@ -35013,6 +35095,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-SKc8GiFwI5nvCHfMzQPcF8w32dpiSyQ704XGxN/yYiE="
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/SanPham/Annotation 2025-01-06 145646.jpg",
+      "AssetFile": "Hinh/SanPham/Annotation 2025-01-06 145646.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "133891"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"AR8ucTViqXyBQPnzi40y1UTB76dwgWZUq6CYssKyOBg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 07 Jan 2025 15:46:18 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-AR8ucTViqXyBQPnzi40y1UTB76dwgWZUq6CYssKyOBg="
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/SanPham/Annotation 2025-01-06 145646.zf0byuv67l.jpg",
+      "AssetFile": "Hinh/SanPham/Annotation 2025-01-06 145646.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "133891"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"AR8ucTViqXyBQPnzi40y1UTB76dwgWZUq6CYssKyOBg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 07 Jan 2025 15:46:18 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zf0byuv67l"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-AR8ucTViqXyBQPnzi40y1UTB76dwgWZUq6CYssKyOBg="
+        },
+        {
+          "Name": "label",
+          "Value": "Hinh/SanPham/Annotation 2025-01-06 145646.jpg"
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/SanPham/Csharp5_BanXeDap.drawio.bicj42s2he.png",
+      "AssetFile": "Hinh/SanPham/Csharp5_BanXeDap.drawio.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "337210"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7S1roquQgMm+cJIg2qZCwTrh/cRX3d3JV5cXQA3ZWJE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 07 Jan 2025 06:24:56 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "bicj42s2he"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-7S1roquQgMm+cJIg2qZCwTrh/cRX3d3JV5cXQA3ZWJE="
+        },
+        {
+          "Name": "label",
+          "Value": "Hinh/SanPham/Csharp5_BanXeDap.drawio.png"
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/SanPham/Csharp5_BanXeDap.drawio.png",
+      "AssetFile": "Hinh/SanPham/Csharp5_BanXeDap.drawio.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "337210"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7S1roquQgMm+cJIg2qZCwTrh/cRX3d3JV5cXQA3ZWJE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 07 Jan 2025 06:24:56 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-7S1roquQgMm+cJIg2qZCwTrh/cRX3d3JV5cXQA3ZWJE="
         }
       ]
     },
@@ -36489,6 +36735,88 @@
         {
           "Name": "label",
           "Value": "Hinh/SanPham/animator-fw-12-2022-black.jpg"
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/SanPham/astro_w2gw_t_nguyn.28467.2177558.pdf",
+      "AssetFile": "Hinh/SanPham/astro_w2gw_t_nguyn.28467.2177558.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "68833"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"G6ldfVlU37E3XLIExsEEWe9sF6iRYOXbe7rWoKs0hDI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 07 Jan 2025 06:22:17 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-G6ldfVlU37E3XLIExsEEWe9sF6iRYOXbe7rWoKs0hDI="
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/SanPham/astro_w2gw_t_nguyn.28467.2177558.v3x68pnpf1.pdf",
+      "AssetFile": "Hinh/SanPham/astro_w2gw_t_nguyn.28467.2177558.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "68833"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"G6ldfVlU37E3XLIExsEEWe9sF6iRYOXbe7rWoKs0hDI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 07 Jan 2025 06:22:17 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "v3x68pnpf1"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-G6ldfVlU37E3XLIExsEEWe9sF6iRYOXbe7rWoKs0hDI="
+        },
+        {
+          "Name": "label",
+          "Value": "Hinh/SanPham/astro_w2gw_t_nguyn.28467.2177558.pdf"
         }
       ]
     },

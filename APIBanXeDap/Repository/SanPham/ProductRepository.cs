@@ -41,7 +41,7 @@ namespace APIBanXeDap.Repository.SanPham
             db.SaveChanges();
         }
 
-        public List<ProductVM> GetAllProduct()
+        public List<ProductVM> GetAllProduct(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort)
         {
             var list = db.Sanphams.AsNoTracking().Where(p => p.IsDelete == false)
                 .Include(sp => sp.MaThuongHieuNavigation)
@@ -52,7 +52,31 @@ namespace APIBanXeDap.Repository.SanPham
                 .Include(sp => sp.Chitietsanphams)
                 .ThenInclude(ct => ct.MaKichThuocNavigation)
                 .Include(sp => sp.Hinhanhs)
-                .ToList();
+                .AsQueryable();
+            if (!string.IsNullOrEmpty(keywords))
+            {
+                list = list.Where(p => p.MaSp.ToString().Contains(keywords) || p.TenSp.Contains(keywords));
+            }
+            if (MaDanhMuc.HasValue)
+            {
+                list = list.Where(p => p.MaDanhMuc == MaDanhMuc);
+            }
+            if (MaThuongHieu.HasValue)
+            {
+                list = list.Where(p => p.MaThuongHieu == MaThuongHieu);
+            }
+            switch (sort)
+            {
+                case "asc":
+                    list = list.OrderBy(p => p.Chitietsanphams.Min(p => p.DonGia));
+                    break;
+                case "desc":
+                    list = list.OrderByDescending(p => p.Chitietsanphams.Min(p => p.DonGia));
+                    break;
+                default:
+                    list = list.OrderByDescending(p => p.TenSp);
+                    break;
+            }
             var ConvertToProductVM = new List<ProductVM>();
             foreach (var item in list)
             {

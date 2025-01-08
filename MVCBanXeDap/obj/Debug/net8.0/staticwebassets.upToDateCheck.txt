@@ -450,9 +450,13 @@ wwwroot\fonts\fontawesome-webfont.svg
 wwwroot\fonts\fontawesome-webfont.ttf
 wwwroot\fonts\fontawesome-webfont.woff
 wwwroot\fonts\fontawesome-webfont.woff2
+wwwroot\Hinh\SanPham\366760000_968465774368418_3331979115163731096_n.jpg
 wwwroot\Hinh\SanPham\4-VANG.png
 wwwroot\Hinh\SanPham\anh-mat-truoc-tui-gucci-marmont-sieu-cap-chup-gan.jpg
 wwwroot\Hinh\SanPham\animator-fw-12-2022-black.jpg
+wwwroot\Hinh\SanPham\Annotation 2025-01-06 145646.jpg
+wwwroot\Hinh\SanPham\astro_w2gw_t_nguyn.28467.2177558.pdf
+wwwroot\Hinh\SanPham\Csharp5_BanXeDap.drawio.png
 wwwroot\Hinh\SanPham\f6a59412f7418faedec46a76c2398b3f-1.jpg
 wwwroot\Hinh\SanPham\images (1).jfif
 wwwroot\Hinh\SanPham\images (2).jfif

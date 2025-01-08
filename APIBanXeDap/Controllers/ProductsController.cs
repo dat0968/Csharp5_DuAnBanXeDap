@@ -4,6 +4,8 @@ using APIBanXeDap.Repository.SanPham;
 using APIBanXeDap.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Razor;
+using System.Drawing.Printing;
 
 namespace APIBanXeDap.Controllers
 {
@@ -18,10 +20,23 @@ namespace APIBanXeDap.Controllers
             this.ProductRepository = ProductRepository;
         }
         [HttpGet("GetAllProduct")]
-        public IActionResult GetAllProduct()
+        public IActionResult GetAllProduct(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, int page = 1)
         {
-            var list = ProductRepository.GetAllProduct();
-            return Ok(list);
+            page = page < 1 ? 1 : page;
+            int pagesize = 10;
+            var list = ProductRepository.GetAllProduct(keywords, MaDanhMuc, MaThuongHieu, sort);
+            //Phân trang
+            var pagedProducts = list.Skip((page - 1) * pagesize).Take(pagesize).ToList();
+            //Tổng số trang
+            var totalItems = list.Count();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
+            return Ok(new
+            {
+                Data = pagedProducts,
+                TotalItems = totalItems,
+                TotalPages = totalPages,
+                Page = page,
+            }); 
         }
         [HttpGet("GetProductById/{id}")]
         public IActionResult GetProductById([FromRoute]int id)

@@ -1709,8 +1709,20 @@
       "PackagePath": "staticwebassets\\AdminTemplate\\widgets.html"
     },
     {
+      "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\366760000_968465774368418_3331979115163731096_n.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\SanPham\\366760000_968465774368418_3331979115163731096_n.jpg"
+    },
+    {
       "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\4-VANG.png",
       "PackagePath": "staticwebassets\\Hinh\\SanPham\\4-VANG.png"
+    },
+    {
+      "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\Annotation 2025-01-06 145646.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\SanPham\\Annotation 2025-01-06 145646.jpg"
+    },
+    {
+      "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\Csharp5_BanXeDap.drawio.png",
+      "PackagePath": "staticwebassets\\Hinh\\SanPham\\Csharp5_BanXeDap.drawio.png"
     },
     {
       "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\Xe-Dap-Dia-Hinh-Fascino-328-26-Inch-6.jpg",
@@ -1783,6 +1795,10 @@
     {
       "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\animator-fw-12-2022-black.jpg",
       "PackagePath": "staticwebassets\\Hinh\\SanPham\\animator-fw-12-2022-black.jpg"
+    },
+    {
+      "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\astro_w2gw_t_nguyn.28467.2177558.pdf",
+      "PackagePath": "staticwebassets\\Hinh\\SanPham\\astro_w2gw_t_nguyn.28467.2177558.pdf"
     },
     {
       "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\f6a59412f7418faedec46a76c2398b3f-1.jpg",

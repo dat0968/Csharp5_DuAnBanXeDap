@@ -1,26 +1,24 @@
 ﻿@using MVCBanXeDap.ViewModels
-@using X.PagedList.Mvc.Core
-@* @model IEnumerable<ProductVM> *@
-@model X.PagedList.IPagedList<ProductVM>
+@model IEnumerable<ProductVM>
 @{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <style>
     .input-number {
-        width: 100%;
-        padding: 0.375rem 0.75rem;
-        font-size: 1rem;
-        line-height: 1.5;
-        border-radius: 0.25rem;
-        border: 1px solid #ced4da;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
     }
 
-        .input-number:focus {
-            border-color: #80bdff;
-            outline: 0;
-            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
-        }
+    .input-number:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    }
 </style>
 
 <div class="col-md-12">
@@ -32,30 +30,51 @@
             <!-- Tìm kiếm, Bộ lọc, và Sắp xếp -->
             <div class="row mb-3">
                 <div class="col-md-3">
-                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." />
+                    <input id="keywords" value="@ViewBag.Keywords" name="keywords" type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." />
                 </div>
                 <div class="col-md-3">
-                    <select class="form-select">
+                    <select id="categoryFilter" class="form-select">
                         <option value="">Lọc theo danh mục</option>
-                        <option value="1">Danh mục 1</option>
-                        <option value="2">Danh mục 2</option>
+                        @foreach (var category in ViewBag.Category as List<DanhmucVM>)
+                        {
+                            if(category.MaDanhMuc == ViewBag.MaDanhMuc)
+                            {
+                                <option selected value="@category.MaDanhMuc">@category.TenDanhMuc</option>
+                            }
+                            else
+                            {
+                                <option value="@category.MaDanhMuc">@category.TenDanhMuc</option>
+                            }                          
+                        }
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select class="form-select">
+                    <select id="brandFilter" class="form-select">
                         <option value="">Lọc theo thương hiệu</option>
-                        <option value="1">Thương hiệu A</option>
-                        <option value="2">Thương hiệu B</option>
+                        @foreach (var brand in ViewBag.Brand as List<BrandVM>)
+                        {
+                            @if(brand.MaThuongHieu == ViewBag.MaThuongHieu)
+                            {
+                                <option selected value="@brand.MaThuongHieu">
+                                    @brand.TenThuongHieu
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@brand.MaThuongHieu">
+                                    @brand.TenThuongHieu
+                                </option>
+                            }
+                        }
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <select class="form-select">
-                        <option value="">Sắp xếp</option>
-                        <option value="asc">Giá: Thấp đến Cao</option>
-                        <option value="desc">Giá: Cao đến Thấp</option>
-                        <option value="name">Tên sản phẩm: A-Z</option>
+                <div class="col-md-3"> 
+                    <select id="SortByPrice" class="form-select"> 
+                        <option selected="@(string.IsNullOrEmpty(ViewBag.Page.ToString()))" value="">Sắp xếp</option> 
+                        <option selected="@(ViewBag.Page.ToString() == "asc")" value="asc">Khoảng Giá: Thấp đến Cao</option>
+                        <option selected="@(ViewBag.Page.ToString() == "desc")" value="desc">Khoảng Giá: Cao đến Thấp</option>
                     </select>
-                </div>
+                 </div>
             </div>
 
             <!-- Nút Thêm sản phẩm -->
@@ -79,7 +98,7 @@
                             <th>Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="basic-datatables">
                         @foreach (var product in Model)
                         {
                             <tr>
@@ -116,12 +135,100 @@
         </div>
     </div>
 </div>
-
+<!-- Phân trang -->
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++) 
+        {
+             <li class="page-item @(ViewBag.Page == i ? "active" : "")">
+                <a class="page-link" data-page="@i" href="@Url.Action("Index", new { keywords = ViewBag.Keywords, MaDanhMuc = ViewBag.MaDanhMuc, page = i })">@i</a>
+            </li> 
+         } 
+    </ul>
+</nav>
 <!-- Modal Thêm sản phẩm -->
 <partial name="_ProductCreate"></partial>
+ 
+<script>
+    const keywords = document.getElementById("keywords");
+    var paginationContainer  = document.querySelector(".pagination")
+    const paginationLinks = document.querySelectorAll(".pagination-link");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const brandFilter = document.getElementById("brandFilter");
+    const SortByPrice = document.getElementById("SortByPrice");
+    //Hàm hiển thị và reload table sản phẩm
+    function GenerateTableProduct(){
+        function updatePagination(currentPage, totalPages) {
+            paginationContainer.innerHTML = "";
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = `
+                    <li class="page-item ${i === currentPage ? "active" : ""}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>
+                `;
+                paginationContainer.innerHTML += pageLink
+            }
+        }
+        fetch(`https://localhost:7137/api/Products/GetAllProduct?keywords=${keywords.value}&MaDanhMuc=${categoryFilter.value}&MaThuongHieu=${brandFilter.value}&sort=${SortByPrice.value}`)
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector("#basic-datatables tbody");
+            tbody.innerHTML = "";
 
- @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions 
- { 
-     LiElementClasses = new List<string> { "page-item" }, 
-     PageClasses = new List<string> { "page-link" } 
- }) 
+            data.data.forEach(product => {
+                const row = `
+                    <tr>
+                        <td>${product.tenSp}</td>
+                        <td><img src="/Hinh/SanPham/${product.hinh}" style="width: 100px; height: 70px;" /></td>
+                        <td>${product.thuongHieu}</td>
+                        <td>${product.danhMuc}</td>
+                        <td>${product.khoangGia}</td>
+                        <td>${product.soLuong}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Chi tiết
+                                </button>
+                                <button type="button" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i> Xóa
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            updatePagination(data.page, data.totalPages);
+            const paginationLinks = document.querySelectorAll(".page-link");
+            if (keywords && paginationLinks) {
+            paginationLinks.forEach(link => {
+                    const page = link.getAttribute("data-page");
+                    link.href = `/Product/Index?keywords=${encodeURIComponent(keywords.value)}&MaDanhMuc=${categoryFilter.value}&MaThuongHieu=${brandFilter.value}&sort=${SortByPrice.value}&page=${page}`;
+                });
+            }
+        });
+    }
+
+    keywords.oninput = function() {        
+        GenerateTableProduct()
+    };
+
+    //Xử lí filter danh mục 
+    categoryFilter.onchange = function(){
+        GenerateTableProduct()
+    }
+
+
+    //Xử lí filter thương hiệu
+    brandFilter.onchange = function(){
+        GenerateTableProduct()
+    }
+
+    //Xử lí sort
+    SortByPrice.onchange = function(){
+        GenerateTableProduct()
+    }
+</script>

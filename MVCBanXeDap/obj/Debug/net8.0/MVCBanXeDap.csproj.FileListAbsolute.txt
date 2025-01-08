@@ -43,3 +43,4 @@ F:\CSHARP_5\APIBanXeDap\MVCBanXeDap\bin\Debug\net8.0\runtimes\win\lib\net8.0\Sys
 F:\CSHARP_5\APIBanXeDap\MVCBanXeDap\bin\Debug\net8.0\X.PagedList.dll
 F:\CSHARP_5\APIBanXeDap\MVCBanXeDap\bin\Debug\net8.0\X.PagedList.Mvc.Core.dll
 F:\CSHARP_5\APIBanXeDap\MVCBanXeDap\obj\Debug\net8.0\MVCBanXeDap.MvcApplicationPartsAssemblyInfo.cs
+F:\CSHARP_5\APIBanXeDap\MVCBanXeDap\obj\Debug\net8.0\MVCBanXeDap.sourcelink.json

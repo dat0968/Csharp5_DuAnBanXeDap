@@ -263,3 +263,4 @@ F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\runtimes\win\lib\net7.0\Mic
 F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
 F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
+F:\CSHARP_5\APIBanXeDap\APIBanXeDap\obj\Debug\net8.0\APIBanXeDap.sourcelink.json
