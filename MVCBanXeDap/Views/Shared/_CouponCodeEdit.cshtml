@@ -1,0 +1,130 @@
+﻿@using MVCBanXeDap.ViewModels
+@model MaCouponVM
+<style>
+    table.table td,
+    table.table th {
+    text-align: left;
+    vertical-align: middle; /* Giúp căn giữa theo chiều dọc */
+    }
+
+    input[type="number"][readonly]::-webkit-inner-spin-button,
+    input[type="number"][readonly]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"][readonly] {
+        -moz-appearance: textfield; /* For Firefox */
+    }
+
+</style>
+
+<div class="modal fade" id="modal-@Model.Code-edit" tabindex="-1" aria-labelledby="editMaCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Sửa thông tin mã coupon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="EditCouponCode" asp-controller="CouponCode" id="editCouponCodetForm_@Model.Code" method="post">
+                    <div class="mb-3">
+                        <label asp-for="Code" class="form-label">Mã</label>
+                        <input asp-for="Code"  type="text" class="form-control" id="Code_@Model.Code" name="Code" readonly required>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="PhanTramGiam" class="form-label">Số % giảm</label>
+                        <input asp-for="PhanTramGiam" min="0" max="100" type="number" class="form-control" id="SoPhanTramGiam_@Model.Code" required>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="SoTienGiam" for="SoTienGiam_@Model.Code" class="form-label">Số tiền giảm</label>
+                        <input asp-for="SoTienGiam" min="0" type="number" class="form-control" id="SoTienGiam_@Model.Code" required>
+                    </div>
+                    <span style="color: red; font-style: italic" >(* Lưu ý: Giữa hai trường "Số % giảm" và "Số tiền giảm", điền giá trị lớn hơn 0 vào trường này thì giá trị của trường còn lại sẽ bị vô hiệu )</span>
+                    <div class="mb-3">
+                        <label asp-for="NgayHetHan" class="form-label">Ngày hết hạn</label>
+                        <input asp-for="NgayHetHan" type="date" class="form-control" id="NgayHetHan_@Model.Code" required>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="MinimumOrderAmount" class="form-label">Áp dụng cho sản phẩm có giá tối thiểu</label>
+                        <input asp-for="MinimumOrderAmount" min="1" type="number" class="form-control" id="GiaToiThieu_@Model.Code" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-primary" form="editCouponCodetForm_@Model.Code">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        document.querySelectorAll('.modal').forEach(modal => {
+        const code = modal.id.split('-')[1]; // Lấy giá trị từ ID modal
+        const soPhanTramGiam = modal.querySelector(`#SoPhanTramGiam_${code}`);
+        const soTienGiam = modal.querySelector(`#SoTienGiam_${code}`);
+        const giaToiThieu = modal.querySelector(`#GiaToiThieu_${code}`)
+        if (soPhanTramGiam && soTienGiam) {  
+            if (soPhanTramGiam.value != "") {
+                soTienGiam.setAttribute('readonly', true);
+                soTienGiam.style.textDecoration = "line-through";
+            } else {
+                soTienGiam.removeAttribute('readonly');
+                soTienGiam.style.textDecoration = "none";
+            }
+
+            if (soTienGiam.value != "") {
+                soPhanTramGiam.setAttribute('readonly', true);
+                soPhanTramGiam.style.textDecoration = "line-through";
+
+            } else {
+                soPhanTramGiam.removeAttribute('readonly');
+                soPhanTramGiam.style.textDecoration = "none"
+            }
+            const validateFields = () => {
+                if (soPhanTramGiam.value == 0 && soTienGiam.value == 0) {
+                    alert("Trường 'Số % giảm' hoặc 'Số tiền giảm' phải lớn hơn 0.");
+                    soPhanTramGiam.value = "";
+                    soTienGiam.value = "";
+                }
+             };
+            soPhanTramGiam.addEventListener('input', () => {
+                if (soPhanTramGiam.value != "") {
+                    soTienGiam.setAttribute('readonly', true);
+                    soTienGiam.style.textDecoration = "line-through";  
+                    validateFields()
+                } else {
+                    soTienGiam.removeAttribute('readonly');
+                    soTienGiam.style.textDecoration = "none";
+                }
+                if(soPhanTramGiam.value < 0){
+                    soPhanTramGiam.value = 1
+                }
+                if(soPhanTramGiam > 100){
+                    soPhanTramGiam.value = 100
+                }
+            });
+
+            soTienGiam.addEventListener('input', () => {
+                if (soTienGiam.value != "") {
+                    soPhanTramGiam.setAttribute('readonly', true);
+                    soPhanTramGiam.style.textDecoration = "line-through";
+                    validateFields()
+                    
+                } else {
+                    soPhanTramGiam.removeAttribute('readonly');
+                    soPhanTramGiam.style.textDecoration = "none"
+                }
+                if(soTienGiam.value < 0){
+                    soTienGiam.value = 1
+                }
+            });
+        }
+        giaToiThieu.addEventListener("input", function(){
+            if(giaToiThieu.value < 0){
+                giaToiThieu.value = 1
+            }
+        })
+    });
+
+</script>

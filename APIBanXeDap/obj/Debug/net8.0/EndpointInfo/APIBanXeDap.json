@@ -315,6 +315,133 @@
         }
       }
     },
+    "/api/MaCoupons/GetAllCouponCode": {
+      "get": {
+        "tags": [
+          "MaCoupons"
+        ],
+        "parameters": [
+          {
+            "name": "keywords",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MaCoupons/Create": {
+      "post": {
+        "tags": [
+          "MaCoupons"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaCouponVM"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaCouponVM"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaCouponVM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MaCoupons/Update": {
+      "put": {
+        "tags": [
+          "MaCoupons"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaCouponVM"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaCouponVM"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaCouponVM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MaCoupons/Delete": {
+      "delete": {
+        "tags": [
+          "MaCoupons"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/ProductDetails/GetAllProductDetails": {
       "get": {
         "tags": [
@@ -755,6 +882,38 @@
           },
           "matKhau": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MaCouponVM": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "soTienGiam": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "phanTramGiam": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "ngayHetHan": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trangThai": {
+            "type": "boolean"
+          },
+          "minimumOrderAmount": {
+            "type": "number",
+            "format": "double",
             "nullable": true
           }
         },

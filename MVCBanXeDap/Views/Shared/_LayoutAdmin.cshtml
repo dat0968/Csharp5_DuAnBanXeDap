@@ -101,9 +101,21 @@
                             </span>
                         </li>
                         <li class="nav-item">
-                            <a href="#">
+                            <a asp-action="Index" asp-controller="Product">
                                 <i class="fa fa-box"></i> <!-- Icon sản phẩm -->
                                 QUẢN LÝ SẢN PHẨM
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="CouponCode">
+                                <i class="fas fa-ticket-alt"></i> <!-- Icon mã khuyến mãi -->
+                                QUẢN LÝ MÃ COUPON
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#charts">
+                                <i class="fa fa-gift"></i> <!-- Icon combo -->
+                                QUẢN LÝ COMBO
                             </a>
                         </li>
                         <li class="nav-item">
@@ -116,12 +128,6 @@
                             <a href="#">
                                 <i class="fa fa-comments"></i> <!-- Icon bình luận -->
                                 QUẢN LÝ BÌNH LUẬN
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#charts">
-                                <i class="fa fa-gift"></i> <!-- Icon combo -->
-                                QUẢN LÝ COMBO
                             </a>
                         </li>
                         <li class="nav-item">

@@ -1,0 +1,91 @@
+﻿@using MVCBanXeDap.ViewModels
+
+<div class="modal fade" id="addCouponCodeModal" tabindex="-1" aria-labelledby="addCouponCodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCouponCodeModalLabel">Thêm mã coupon mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="CreateCouponCode" asp-controller="CouponCode" id="addCouponCodeForm" method="post">
+                    <div class="mb-3">
+                        <label for="SoPhanTramGiam" class="form-label">Số phần trăm giảm</label>
+                        <input type="number" min="0" max="100" class="form-control" id="SoPhanTramGiam" name="SoPhanTramGiam" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="SoTienGiam" class="form-label">Số tiền giảm</label>
+                        <input type="number" min="0" class="form-control" id="SoTienGiam" name="SoTienGiam" required>
+                    </div>
+                    <span style="color: red; font-style: italic">(* Lưu ý: Giữa hai trường "Số % giảm" và "Số tiền giảm", điền giá trị lớn hơn 0 vào trường này thì giá trị của trường còn lại sẽ bị vô hiệu )</span>
+                    <div class="mb-3">
+                        <label for="NgayHetHan" class="form-label">Ngày hết hạn</label>
+                        <input  type="date" class="form-control" id="NgayHetHan" name="NgayHetHan" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="GiaToiThieu" class="form-label">Áp dụng cho sản phẩm có giá tối thiểu</label>
+                        <input  type="number" min="0" class="form-control" id="GiaToiThieu" name="GiaToiThieu" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-primary" form="addCouponCodeForm">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const soPhanTramGiam = document.getElementById("SoPhanTramGiam");
+    const soTienGiam = document.getElementById("SoTienGiam");
+    const GiaToiThieu = document.getElementById("GiaToiThieu")
+    const validateFields = () => {
+            if (soPhanTramGiam.value == 0 && soTienGiam.value == 0) {
+                alert("Trường 'Số % giảm' hoặc 'Số tiền giảm' phải lớn hơn 0.");
+                soPhanTramGiam.value = "";
+                soTienGiam.value = "";
+                soPhanTramGiam.disabled = false;
+                soTienGiam.disabled = false;
+            }
+        };
+    soPhanTramGiam.addEventListener("input", function () {
+        soTienGiam.disabled = this.value !== "";
+        if (this.value !== ""){
+            soTienGiam.value = ""; 
+            validateFields()
+        }
+        if(soPhanTramGiam.value < 0){
+            soPhanTramGiam.value = 1
+        }
+        if(soPhanTramGiam.value > 100){
+            soPhanTramGiam.value = 1
+        }
+        
+    });
+
+    soTienGiam.addEventListener("input", function () {
+        soPhanTramGiam.disabled = this.value !== "";
+        if (this.value !== ""){
+            soPhanTramGiam.value = "";
+            validateFields()
+        }
+        if(soTienGiam.value < 0){
+            soTienGiam.value = 1
+        }
+    });
+
+    GiaToiThieu.addEventListener("input", function(){
+        if(GiaToiThieu.value < 0){
+            GiaToiThieu.value = 1
+        }
+    })
+
+    document.getElementById("addCouponCodeForm").addEventListener("submit", function(){
+        const isConfirmed = window.confirm("Bạn có muốn thêm mã coupon này không?")
+        if(isConfirmed){
+            this.submit()
+        }else{
+            return;
+        }
+    })
+</script>

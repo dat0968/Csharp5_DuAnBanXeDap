@@ -122,7 +122,7 @@
                                             <i class="fas fa-edit"></i> Sửa
                                         </button>
                                         <partial name="_ProductEdit" model="@product"></partial>
-                                        <form method="post" asp-action="DeleteProduct" asp-controller="Product" asp-route-id="@product.MaSP" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không')">
+                                        <form method="post" asp-action="DeleteProduct" asp-controller="Product" asp-route-id="@product.MaSP" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')">
                                             <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
                                         </form>
                                     </div>

@@ -3,6 +3,7 @@ using APIBanXeDap.Repository.ChiTietSanPham;
 using APIBanXeDap.Repository.DanhMuc;
 using APIBanXeDap.Repository.HinhAnhSanPham;
 using APIBanXeDap.Repository.KichThuoc;
+using APIBanXeDap.Repository.MaCoupon;
 using APIBanXeDap.Repository.MauSac;
 using APIBanXeDap.Repository.NhaCungCap;
 using APIBanXeDap.Repository.SanPham;
@@ -59,6 +60,7 @@ builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<IProductDetailsRepository, ProductDetailsRepository>();
 builder.Services.AddScoped<IProductImagesRepository, ProductImagesRepository>();
+builder.Services.AddScoped<IMaCouponRepository, MaCouponRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyPolicy", options =>

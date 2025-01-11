@@ -4,6 +4,7 @@ using APIBanXeDap.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIBanXeDap.Migrations
 {
     [DbContext(typeof(Csharp5Context))]
-    partial class Csharp5ContextModelSnapshot : ModelSnapshot
+    [Migration("20250109142234_AddDatatoMaCouponTable")]
+    partial class AddDatatoMaCouponTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,9 +289,6 @@ namespace APIBanXeDap.Migrations
                     b.Property<DateTime>("NgayHetHan")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NgayTao")
-                        .HasColumnType("datetime2");
-
                     b.Property<float?>("PhanTramGiam")
                         .HasColumnType("real");
 
@@ -307,8 +307,7 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON001",
                             MinimumOrderAmount = 200000m,
-                            NgayHetHan = new DateTime(2025, 2, 10, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5081),
-                            NgayTao = new DateTime(2025, 1, 11, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5066),
+                            NgayHetHan = new DateTime(2025, 2, 8, 21, 22, 32, 804, DateTimeKind.Local).AddTicks(8642),
                             SoTienGiam = 50000m,
                             TrangThai = true
                         },
@@ -316,8 +315,7 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON002",
                             MinimumOrderAmount = 300000m,
-                            NgayHetHan = new DateTime(2025, 1, 26, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5095),
-                            NgayTao = new DateTime(2025, 1, 11, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5093),
+                            NgayHetHan = new DateTime(2025, 1, 24, 21, 22, 32, 804, DateTimeKind.Local).AddTicks(8670),
                             PhanTramGiam = 10f,
                             TrangThai = true
                         },
@@ -325,8 +323,7 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON003",
                             MinimumOrderAmount = 500000m,
-                            NgayHetHan = new DateTime(2025, 1, 31, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5115),
-                            NgayTao = new DateTime(2025, 1, 11, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5114),
+                            NgayHetHan = new DateTime(2025, 1, 29, 21, 22, 32, 804, DateTimeKind.Local).AddTicks(8674),
                             SoTienGiam = 100000m,
                             TrangThai = false
                         },
@@ -334,8 +331,7 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON004",
                             MinimumOrderAmount = 400000m,
-                            NgayHetHan = new DateTime(2025, 1, 21, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5118),
-                            NgayTao = new DateTime(2025, 1, 11, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5117),
+                            NgayHetHan = new DateTime(2025, 1, 19, 21, 22, 32, 804, DateTimeKind.Local).AddTicks(8679),
                             PhanTramGiam = 20f,
                             TrangThai = true
                         },
@@ -343,8 +339,7 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON005",
                             MinimumOrderAmount = 600000m,
-                            NgayHetHan = new DateTime(2025, 2, 5, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5121),
-                            NgayTao = new DateTime(2025, 1, 11, 0, 9, 47, 546, DateTimeKind.Local).AddTicks(5120),
+                            NgayHetHan = new DateTime(2025, 2, 3, 21, 22, 32, 804, DateTimeKind.Local).AddTicks(8684),
                             SoTienGiam = 150000m,
                             TrangThai = true
                         });

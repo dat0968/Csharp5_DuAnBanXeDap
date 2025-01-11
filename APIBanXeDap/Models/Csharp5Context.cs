@@ -40,6 +40,7 @@ public partial class Csharp5Context : DbContext
 
     public virtual DbSet<Thuonghieu> Thuonghieus { get; set; }
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+    public virtual DbSet<MaCoupon> MaCoupons { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -318,7 +319,54 @@ public partial class Csharp5Context : DbContext
             entity.Property(e => e.IsDelete).HasDefaultValue(false);
             entity.Property(e => e.TenThuongHieu).HasMaxLength(40);
         });
-
+        //Thêm data cho bảng MaCoupon
+        modelBuilder.Entity<MaCoupon>().HasData(
+        new MaCoupon
+        {
+            Code = "COUPON001",
+            SoTienGiam = 50000,
+            PhanTramGiam = null,
+            NgayHetHan = DateTime.Now.AddDays(30),
+            TrangThai = true,
+            MinimumOrderAmount = 200000
+        },
+        new MaCoupon
+        {
+            Code = "COUPON002",
+            SoTienGiam = null,
+            PhanTramGiam = 10,
+            NgayHetHan = DateTime.Now.AddDays(15),
+            TrangThai = true,
+            MinimumOrderAmount = 300000
+        },
+        new MaCoupon
+        {
+            Code = "COUPON003",
+            SoTienGiam = 100000,
+            PhanTramGiam = null,
+            NgayHetHan = DateTime.Now.AddDays(20),
+            TrangThai = false,
+            MinimumOrderAmount = 500000
+        },
+        new MaCoupon
+        {
+            Code = "COUPON004",
+            SoTienGiam = null,
+            PhanTramGiam = 20,
+            NgayHetHan = DateTime.Now.AddDays(10),
+            TrangThai = true,
+            MinimumOrderAmount = 400000
+        },
+        new MaCoupon
+        {
+            Code = "COUPON005",
+            SoTienGiam = 150000,
+            PhanTramGiam = null,
+            NgayHetHan = DateTime.Now.AddDays(25),
+            TrangThai = true,
+            MinimumOrderAmount = 600000
+        }
+    );
         OnModelCreatingPartial(modelBuilder);
     }
 

@@ -1,0 +1,211 @@
+﻿@using MVCBanXeDap.ViewModels
+@model IEnumerable<MaCouponVM>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    .input-number {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+    }
+
+    .input-number:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    }
+
+</style>
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Danh sách mã coupon</h4>
+        </div>
+        <div class="card-body">
+            <!-- Tìm kiếm, Bộ lọc, và Sắp xếp -->
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input id="keywords" value="@ViewBag.Keywords" name="keywords" type="text" class="form-control" placeholder="Tìm kiếm mã coupon..." />
+                </div>
+                <div class="col-md-3">
+                    <select id="statusFilter" class="form-select">
+                        <option selected="@(ViewBag.Page == null)" value="">Lọc theo trạng thái</option>
+                        <option selected="@(ViewBag.Page == 1)" value="true">Còn hiệu lực</option>
+                        <option selected="@(ViewBag.Page == 0)" value="false">Hết hiệu lực</option>
+                    </select>
+                </div>               
+                <div class="col-md-3">
+                    <select id="SortByTime" class="form-select">
+                        <option value="">Sắp xếp</option>
+                        <option value="desc">Ngày tạo: Mới nhất (Mặc định)</option>
+                        <option value="asc">Ngày tạo: Cũ nhất</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Nút thêm mã coupon -->
+            <div class="d-flex justify-content-start mb-3">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCouponCodeModal">
+                    <i class="fas fa-plus"></i> Thêm mã coupon
+                </button>
+            </div>
+
+            <!-- Danh sách mã coupon -->
+            <div class="table-responsive">
+                <table id="basic-datatables" class="display table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Số tiền giảm / phần trăm giảm</th>
+                            <th>Ngày hết hạn</th>
+                            <th>Trạng thái</th>
+                            <th>Áp dụng với các sản phẩm có giá tối thiểu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="basic-datatables">
+                        @foreach (var couponcode in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @couponcode.Code
+                                </td>
+                                <td>
+                                    @if (couponcode.SoTienGiam != null )
+                                    {
+                                        @($"{couponcode.SoTienGiam.Value} VNĐ")
+                                    }
+                                    else if (couponcode.PhanTramGiam != null)
+                                    {
+                                        @($"{couponcode.PhanTramGiam.Value} %")
+                                    }
+                                    else
+                                    {
+                                        <span>Không có ưu đãi</span>
+                                    }
+                                </td>
+                                <td>
+                                    @couponcode.NgayHetHan.ToString("dd-MM-yyyy")
+                                </td>
+                                <td class="@((couponcode.TrangThai == true ? "text-success fw-bold" : "text-danger fw-bold"))">
+                                    @(couponcode.TrangThai == true ? "Còn hiệu lực" : "Hết hiệu lực")
+                                </td>
+                                <td>@($"{couponcode.MinimumOrderAmount} VNĐ")</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        @if (couponcode.TrangThai == true)
+                                        {
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@couponcode.Code-edit">
+                                                <i class="fas fa-edit"></i> Sửa
+                                            </button>
+                                            <partial name="_CouponCodeEdit" model="@couponcode"></partial>                                           
+                                        }
+                                        <form method="post" asp-action="DeleteCouponCode" asp-controller="CouponCode" asp-route-id="@couponcode.Code" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa mã coupon này không?')">
+                                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Phân trang -->
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(ViewBag.Page == i ? "active" : "")">
+                <a class="page-link" data-page="@i" href="@Url.Action("Index", new {keywords = ViewBag.Keywords, status = ViewBag.Status, sort = ViewBag.Sort ,page = i})">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
+<!-- Modal Thêm sản phẩm -->
+<partial name="_CouponCodeCreate"></partial>
+<script>
+    const keywords = document.getElementById("keywords");
+    const statusFilter = document.getElementById("statusFilter");
+    const SortByTime = document.getElementById("SortByTime");
+    function GenerateTableCouponCode(){
+        fetch(`https://localhost:7137/api/MaCoupons/GetAllCouponCode?keywords=${keywords.value}&status=${statusFilter.value}&sort=${SortByTime.value}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById("basic-datatables");
+                tableBody.innerHTML = "";
+
+                data.data.forEach(couponcode => {
+                    const discount = couponcode.soTienGiam != null
+                        ? `${couponcode.soTienGiam} VNĐ`
+                        : couponcode.phanTramGiam
+                            ? `${couponcode.phanTramGiam} %`
+                            : "Không có ưu đãi";
+
+                    const status = couponcode.trangThai
+                        ? `<span class="text-success fw-bold">Còn hiệu lực</span>`
+                        : `<span class="text-danger fw-bold">Hết hiệu lực</span>`;
+
+                    const row = `
+                        <tr>
+                            <td>${couponcode.code}</td>
+                            <td>${discount}</td>
+                            <td>${new Date(couponcode.ngayHetHan).toLocaleDateString("vi-VN")}</td>
+                            <td>${status}</td>
+                            <td>${couponcode.minimumOrderAmount} VNĐ</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    ${couponcode.trangThai
+                                        ? `<button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${couponcode.Code}-edit">
+                                            <i class="fas fa-edit"></i> Sửa
+                                          </button>
+                                          <partial name="_CouponCodeEdit" model="${couponcode}"></partial>`
+                                        : ""}
+                                    <form method="post" action="/CouponCode/DeleteCouponCode/${couponcode.code}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa mã coupon này không?')">
+                                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+                //Cập nhật phân trang
+                var pagination = document.querySelector(".pagination")
+                pagination.innerHTML = "";
+                for(let i = 1; i <= data.totalPages; i++){
+                    const pageLink = `
+                        <li class="page-item ${data.page === i ? "active" : ""}">
+                            <a class="page-link" data-page="${i}" href="#">${i}</a>
+                        </li>
+                    `;
+                    pagination.innerHTML += pageLink
+                }
+                const paginationLinks = document.querySelectorAll(".page-link")
+                if(keywords && paginationLinks){
+                    paginationLinks.forEach(link => {
+                        const page = link.getAttribute("data-page")
+                        link.href = `/CouponCode/Index?keywords=${keywords.value}&status=${statusFilter.value}&sort=${SortByTime.value}&page=${page}`
+                    })
+                }
+            })
+            .catch(error => console.error("Error fetching data:", error));
+    }
+    keywords.addEventListener("input", function () {
+        GenerateTableCouponCode()
+    });
+    statusFilter.onchange = function(){
+        GenerateTableCouponCode()
+    }
+    SortByTime.onchange = function(){
+        GenerateTableCouponCode();
+    }
+
+</script>
