@@ -658,15 +658,15 @@
         }
 
         .user-message {
-            background-color: #66C8FA;
+            background-color: cornflowerblue;
             color: white;
             text-align: left;
             align-self: flex-start;
         }
 
         .system-message {
-            background-color: #F99CE6;
-            color: white;
+            background-color: lightgray;
+            color: black;
             text-align: left;
             align-self: flex-end;
         }
@@ -700,7 +700,6 @@
             chatBody.appendChild(userMessage);
             userInput.value = '';
             typingIndicator.style.display = 'block';
-            userInput.value = '';
             try {
                 const response = await fetch('https://localhost:7137/api/Gemini', {
                     method: 'POST',
@@ -721,7 +720,6 @@
                 chatBody.appendChild(systemMessage);
             } catch (error) {
                 typingIndicator.style.display = 'none';
-
                 const errorMessage = document.createElement('div');
                 errorMessage.className = 'chat-message system-message';
                 errorMessage.textContent = 'Xin lỗi, đã xảy ra lỗi trong quá trình xử lý.'

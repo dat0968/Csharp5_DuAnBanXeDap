@@ -46,8 +46,8 @@ namespace APIBanXeDap.Controllers
                         {
                             new
                             {
-                                text = dataProduct + 
-                                "\n Yêu cầu đầu ra: bạn hãy trả lời một cách linh hoạt, ngắn gọn. Riêng thông tin liên quan tới biến thể của sản phẩm bạn phải trả lời thật chi tiết" +
+                                text = dataProduct +
+                                "\n Yêu cầu đầu ra: bạn hãy trả lời một cách linh hoạt, ngắn gọn, sau mỗi thông tin được liệt kê ra phải xuống dòng bằng cách thêm <br/>. Riêng thông tin liên quan tới biến thể của sản phẩm bạn phải trả lời thật chi tiết" +
                                 "Bạn hãy dựa vào dữ liệu tôi đưa ra và trả lời cho câu hỏi: " + userInput,
                             }
                         }
