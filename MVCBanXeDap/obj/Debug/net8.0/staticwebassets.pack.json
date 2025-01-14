@@ -2225,6 +2225,10 @@
       "PackagePath": "staticwebassets\\img\\payment.png"
     },
     {
+      "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\img\\pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png",
+      "PackagePath": "staticwebassets\\img\\pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png"
+    },
+    {
       "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\img\\product-sale.png",
       "PackagePath": "staticwebassets\\img\\product-sale.png"
     },

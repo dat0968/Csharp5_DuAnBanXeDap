@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "c0z07NidRZcYG49s11+nSDgXqauaecQ/MUpfzIXTMXE=",
+  "Hash": "Oat4nTnBLycT6wuXgZrc+tHpl0hFUD5MEINo0XUW2AU=",
   "Source": "MVCBanXeDap",
   "BasePath": "_content/MVCBanXeDap",
   "Mode": "Default",
@@ -11565,6 +11565,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\img\\payment.png"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\img\\pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png",
+      "SourceId": "MVCBanXeDap",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\",
+      "BasePath": "_content/MVCBanXeDap",
+      "RelativePath": "img/pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ayie4ij6zh",
+      "Integrity": "chOr9nqxQiF2n04xrR5wxZSfoAigzvcPVAdv6/WIhKs=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png"
     },
     {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\img\\product\\product-1.jpg",
@@ -59210,6 +59231,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-WPisdopg8MiEz5YZW6tbvzXSTFV/aw9W4NPVvvoWB4Q="
+        }
+      ]
+    },
+    {
+      "Route": "img/pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.ayie4ij6zh.png",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\img\\pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "111971"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"chOr9nqxQiF2n04xrR5wxZSfoAigzvcPVAdv6/WIhKs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 14 Jan 2025 03:52:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ayie4ij6zh"
+        },
+        {
+          "Name": "label",
+          "Value": "img/pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-chOr9nqxQiF2n04xrR5wxZSfoAigzvcPVAdv6/WIhKs="
+        }
+      ]
+    },
+    {
+      "Route": "img/pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\img\\pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "111971"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"chOr9nqxQiF2n04xrR5wxZSfoAigzvcPVAdv6/WIhKs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 14 Jan 2025 03:52:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-chOr9nqxQiF2n04xrR5wxZSfoAigzvcPVAdv6/WIhKs="
         }
       ]
     },

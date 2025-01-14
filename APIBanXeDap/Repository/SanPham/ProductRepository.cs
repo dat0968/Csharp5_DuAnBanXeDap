@@ -99,6 +99,7 @@ namespace APIBanXeDap.Repository.SanPham
                     {
                         MaSP = ct.MaSp,
                         MaMau = ct.MaMau,
+                        TenSP = ct.MaSpNavigation.TenSp,
                         TenMau = ct.MaMauNavigation?.TenMau,
                         MaKichThuoc = ct.MaKichThuoc,
                         TenKichThuoc = ct.MaKichThuocNavigation?.TenKichThuoc,

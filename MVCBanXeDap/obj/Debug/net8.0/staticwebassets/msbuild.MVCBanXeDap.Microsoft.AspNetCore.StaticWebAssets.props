@@ -9864,6 +9864,24 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\img\payment.png'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\img\pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>MVCBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/MVCBanXeDap</BasePath>
+      <RelativePath>img/pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>ayie4ij6zh</Fingerprint>
+      <Integrity>chOr9nqxQiF2n04xrR5wxZSfoAigzvcPVAdv6/WIhKs=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\img\pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\img\product-sale.png'))">
       <SourceType>Package</SourceType>
       <SourceId>MVCBanXeDap</SourceId>

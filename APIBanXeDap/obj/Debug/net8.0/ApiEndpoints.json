@@ -216,6 +216,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "APIBanXeDap.Controllers.GeminiController",
+    "Method": "GetResponseAsync",
+    "RelativePath": "api/Gemini",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userInput",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
     "Method": "Create",
     "RelativePath": "api/MaCoupons/Create",

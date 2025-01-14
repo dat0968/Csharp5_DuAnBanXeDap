@@ -546,6 +546,7 @@ wwwroot\img\instagram\instagram-5.jpg
 wwwroot\img\instagram\instagram-6.jpg
 wwwroot\img\logo.png
 wwwroot\img\payment.png
+wwwroot\img\pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png
 wwwroot\img\product\product-1.jpg
 wwwroot\img\product\product-10.jpg
 wwwroot\img\product\product-11.jpg
