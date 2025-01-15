@@ -120,6 +120,53 @@ namespace APIBanXeDap.Repository.HoaDon
             return invoiceViewModel;
         }
 
+        public async Task<IEnumerable<InvoiceVM>> GetAllInvoiceDataAsync(int maHoaDon)
+        {
+            // Truy vấn hóa đơn chính
+            var invoicesData = _db.Hoadons
+                .Include(i => i.MaKhNavigation)
+                .Include(i => i.MaNvNavigation);
 
+            if (invoicesData == null)
+            {
+                throw new Exception("Hóa đơn không tồn tại.");
+            }
+
+            // Truy vấn chi tiết hóa đơn
+            var invoiceItems = await _db.Chitiethoadons
+                .Where(ct => ct.MaHoaDon == maHoaDon)
+                .Include(ct => ct.MaSpNavigation) // Include sản phẩm
+                .ToListAsync();
+
+            var invoicesViewModel = invoicesData.Select(invoiceData => new InvoiceVM
+            {
+                MaHoaDon = invoiceData.MaHoaDon,
+                DiaChiNhanHang = invoiceData.DiaChiNhanHang,
+                TinhTrang = invoiceData.TinhTrang,
+                NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
+                Httt = invoiceData.Httt,
+                CustomerName = invoiceData.MaKhNavigation.HoTen,
+                CustomerPhone = invoiceData.MaKhNavigation.Sdt,
+                CustomerAddress = invoiceData.MaKhNavigation.DiaChi,
+                Items = invoiceItems.Select(ct => new InvoiceVM.InvoiceItemViewModel
+                {
+                    ProductName = ct.MaSpNavigation.TenSp,
+                    Quantity = ct.SoLuong,
+                    UnitPrice = ct.Gia,
+                    Total = ct.ThanhTien
+                }).ToList(),
+                TotalAmount = invoiceItems.Sum(ct => ct.ThanhTien)
+            });
+
+            return invoicesViewModel;
+        }
+
+
+        public async Task<string?> GetOrderStatusById(int maHoaDon)
+        {
+            Hoadon? hoadon = await _db.Hoadons.FirstOrDefaultAsync(x => x.MaHoaDon == maHoaDon);
+            if (hoadon == null) return null;
+            return hoadon.TinhTrang;
+        }
     }
 }

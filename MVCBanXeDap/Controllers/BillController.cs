@@ -65,34 +65,31 @@ namespace MVCBanXeDap.Controllers
                 return Json(new { success = false, message = "Không tìm thấy mã người dùng đăng nhập, vui lòng liên hệ nhà phát triển để được hỗ trợ." });
             }
 
-            if (String.IsNullOrEmpty(idStaffChanged)) //Nếu chưa ai đổi tình trạng bill
+            var paramsChange = new Dictionary<string, string>
             {
-                var paramsChange = new Dictionary<string, string>
-                {
-                    { "idOrder", idOrder },
-                    { "idStaff", idStaff },
-                    { "status", status }
-                };
+                { "idOrder", idOrder },
+                { "idStaff", idStaff },
+                { "statusOrder", status },
+                { "idStaffChanged", idStaffChanged } // Gửi idStaffChanged
+            };
 
-                string queryString = string.Join("&", paramsChange.Select(x => $"{x.Key}={Uri.EscapeUriString(x.Value)}"));
-                var content = new StringContent("", Encoding.UTF8, "application/x-www-form-urlencoded");
-                HttpResponseMessage httpResponse = await _client.PutAsync(_client.BaseAddress + "bill/update/?" + queryString, content);
+            string queryString = string.Join("&", paramsChange.Select(x => $"{x.Key}={Uri.EscapeUriString(x.Value)}"));
+            var content = new StringContent("", Encoding.UTF8, "application/x-www-form-urlencoded");
+            HttpResponseMessage httpResponse = await _client.PutAsync(_client.BaseAddress + "bill/update/?" + queryString, content);
 
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    return Json(new { success = true, message = "Đã thay đổi tình trạng đơn hàng thành công." });
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Đã thay đổi tình trạng đơn hàng thất bại." });
-                }
-            }
-            if (idStaff != idStaffChanged) //Nếu người đã đổi tình trạng không phải người đang đổi
+            // Xử lý dữ liệu trả về từ API
+            if (httpResponse.IsSuccessStatusCode)
             {
-                return Json(new { success = false, message = $"Đơn hàng đã được quản lý bởi nhân viên khác mang mã {idStaffChanged}, {idStaff}, {idOrder}." });
+                string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+                return Json(jsonResponse);
             }
-            return Json(new { success = false, message = "Gặp vấn đề không xác định, vui lòng liên hệ nhà phát triển để được hỗ trợ." });
+            else
+            {
+                string jsonError = await httpResponse.Content.ReadAsStringAsync();
+                return Json(jsonError);
+            }
         }
+
         public async Task<IActionResult> TakeInvoice(string maHoaDon)
         {
             InvoiceVM invoice = null;

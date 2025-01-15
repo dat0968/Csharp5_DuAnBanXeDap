@@ -11,5 +11,7 @@ namespace APIBanXeDap.Repository.HoaDon
         Task<Hoadon> GetAsync(Expression<Func<Hoadon, bool>> filter, string? includeProperties = null, bool tracked = false);
         Task ChangStatusOrder(int idOrder, int idStaff, string statusOrder);
         Task<InvoiceVM> GetInvoiceDataAsync(int maHoaDon);
+        Task<string?> GetOrderStatusById(int maHoaDon);
+        Task<IEnumerable<InvoiceVM>> GetAllInvoiceDataAsync(int maHoaDon);
     }
 }
