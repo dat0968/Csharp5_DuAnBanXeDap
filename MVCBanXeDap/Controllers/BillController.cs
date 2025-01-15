@@ -1,5 +1,4 @@
-﻿using APIBanXeDap.ViewModels;
-using iText.IO.Font;
+﻿using iText.IO.Font;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
+using System.IO.Compression;
 using System.Security.Claims;
 using System.Text;
 
@@ -95,7 +95,7 @@ namespace MVCBanXeDap.Controllers
             InvoiceVM invoice = null;
 
             // Gọi API để lấy thông tin hóa đơn
-            HttpResponseMessage httpResponseMessage = await _client.GetAsync($"https://localhost:7137/api/Bill/GetInvoiceData/{maHoaDon}");
+            HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + $"Bill/GetInvoiceData/{maHoaDon}");
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 string data = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -194,13 +194,114 @@ namespace MVCBanXeDap.Controllers
                 return File(pdfBytes, "application/pdf", $"hoa_don_{maHoaDon}.pdf");
             }
         }
+        public async Task<IActionResult> ExportAllInvoicesAsSinglePDF()
+        {
+            // Lấy danh sách hóa đơn từ API
+            List<InvoiceVM> invoices = new List<InvoiceVM>();
+
+            HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + $"Bill/GetAllInvoiceData/");
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                string data = await httpResponseMessage.Content.ReadAsStringAsync();
+                invoices = JsonConvert.DeserializeObject<List<InvoiceVM>>(data);
+            }
+
+            // Kiểm tra nếu không có hóa đơn
+            if (invoices == null || !invoices.Any())
+            {
+                return NotFound("Không có hóa đơn nào để xuất.");
+            }
+
+            // File PDF hợp nhất
+            using var outputStream = new MemoryStream();
+            using var pdfWriter = new PdfWriter(outputStream);
+            using var pdfDocument = new PdfDocument(pdfWriter);
+            var document = new Document(pdfDocument);
+
+            // Đặt font chữ
+            var fontPath = Path.Combine("wwwroot", "fonts", "Merriweather-Regular.ttf");
+            PdfFont font = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+            document.SetFont(font);
+
+            foreach (var invoice in invoices)
+            {
+                // Tiêu đề hóa đơn
+                //document.Add(new Paragraph("****************************************")
+                //    .SetTextAlignment(TextAlignment.CENTER)
+                //    .SetFontSize(12)
+                //    .SetBold());
+                document.Add(new Paragraph("HÓA ĐƠN BÁN HÀNG")
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .SetFontSize(20)
+                    .SetBold());
+                document.Add(new Paragraph($"Mã hóa đơn: {invoice.MaHoaDon}")
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .SetFontSize(14)
+                    .SetBold()
+                    .SetMarginBottom(10));
+
+                // Thông tin khách hàng
+                document.Add(new Paragraph($"Tên: {invoice.CustomerName}")
+                    .SetTextAlignment(TextAlignment.LEFT));
+                document.Add(new Paragraph($"Số điện thoại: {invoice.CustomerPhone}")
+                    .SetTextAlignment(TextAlignment.LEFT));
+                document.Add(new Paragraph($"Ngày hóa đơn: {invoice.NgayTao:dd/MM/yyyy}")
+                    .SetTextAlignment(TextAlignment.LEFT));
+                document.Add(new Paragraph($"Địa chỉ: {invoice.CustomerAddress}")
+                    .SetTextAlignment(TextAlignment.LEFT)
+                    .SetMarginBottom(20));
+
+                // Bảng sản phẩm
+                var table = new Table(UnitValue.CreatePercentArray(new float[] { 4, 1, 2, 2 })).UseAllAvailableWidth();
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Tên sản phẩm").SetBold()));
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Số lượng").SetBold()));
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Đơn giá").SetBold()));
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Thành tiền").SetBold()));
+
+                // Nội dung các dòng trong bảng
+                double totalAmount = 0;
+                foreach (var item in invoice.Items)
+                {
+                    double subTotal = (double)(item.Quantity * item.UnitPrice);
+                    totalAmount += subTotal;
+
+                    table.AddCell(new Paragraph(item.ProductName));
+                    table.AddCell(new Paragraph(item.Quantity.ToString()));
+                    table.AddCell(new Paragraph($"{item.UnitPrice:n0} đ"));
+                    table.AddCell(new Paragraph($"{subTotal:n0} đ"));
+                }
+
+                document.Add(table.SetMarginBottom(20));
+
+                // Tổng tiền
+                document.Add(new Paragraph($"Tổng tiền: {totalAmount:n0} đ")
+                    .SetBold()
+                    .SetFontSize(14)
+                    .SetMarginBottom(20));
+
+                // Khoảng cách giữa các hóa đơn (dòng phân cách)
+                //document.Add(new Paragraph("****************************************")
+                //    .SetTextAlignment(TextAlignment.CENTER)
+                //    .SetFontSize(12)
+                //    .SetBold()
+                //    .SetMarginBottom(20));
+                // Ngắt trang để ghi hóa đơn tiếp theo
+                document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+            }
+
+            // Tải xuống file PDF tại đây
+            document.Close();
+            //outputStream.Seek(0, SeekOrigin.Begin);
+
+            return File(outputStream.ToArray(), "application/pdf", "Tổng_hợp_hóa_đơn_LightTeam.pdf");
+        }
 
         #region//GET API
         [HttpGet]
         public async Task<IActionResult> GetAll(
-            [FromQuery] DateOnly? ngayTao,
-            [FromQuery] string? httt,
-            [FromQuery] string? tinhTrang)
+                [FromQuery] DateOnly? ngayTao,
+                [FromQuery] string? httt,
+                [FromQuery] string? tinhTrang)
         {
             List<HoadonVM> hoadonVMs = new List<HoadonVM>();
             HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + "bill/get");

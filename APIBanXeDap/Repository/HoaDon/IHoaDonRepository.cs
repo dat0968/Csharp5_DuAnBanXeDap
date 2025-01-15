@@ -12,6 +12,6 @@ namespace APIBanXeDap.Repository.HoaDon
         Task ChangStatusOrder(int idOrder, int idStaff, string statusOrder);
         Task<InvoiceVM> GetInvoiceDataAsync(int maHoaDon);
         Task<string?> GetOrderStatusById(int maHoaDon);
-        Task<IEnumerable<InvoiceVM>> GetAllInvoiceDataAsync(int maHoaDon);
+        Task<IEnumerable<InvoiceVM>> GetAllInvoiceDataAsync();
     }
 }

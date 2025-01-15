@@ -16,17 +16,17 @@ namespace APIBanXeDap.Controllers
             this.hoaDonRepository = hoaDonRepository;
         }
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get() //Lấy thông tin danh sách hóa đơn
         {
             return Ok(await hoaDonRepository.GetAllAsync());
         }
         [HttpGet("{maHoadon}")]
-        public async Task<IActionResult> Get(int maHoadon)
+        public async Task<IActionResult> Get(int maHoadon) //Lấy 1 thông tin hóa đơn
         {
             return Ok(await hoaDonRepository.GetAsync(x => x.MaHoaDon == maHoadon));
         }
         [HttpPut]
-        public async Task<IActionResult> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder, string? idStaffChanged)
+        public async Task<IActionResult> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder, string? idStaffChanged) // Thay đổi trạng thái hóa đơn
         {
             // Lấy tình trạng hiện tại của đơn hàng từ cơ sở dữ liệu
             var currentOrderStatus = await hoaDonRepository.GetOrderStatusById(idOrder);
@@ -38,15 +38,15 @@ namespace APIBanXeDap.Controllers
 
             // Định nghĩa các tình trạng hợp lệ tiếp theo
             var validNextStatesMap = new Dictionary<string, List<string>>
-    {
-        { "Chờ xác nhận", new List<string> { "Đã xác nhận", "Đã hủy" } },
-        { "Đã xác nhận", new List<string> { "Đã giao cho đơn vị vận chuyển", "Đã hủy" } },
-        { "Đã giao cho đơn vị vận chuyển", new List<string> { "Đang giao hàng", "Đã hủy" } },
-        { "Đang giao hàng", new List<string> { "Đã giao cho khách", "Hoàn trả/Hoàn tiền", "Đã hủy" } },
-        { "Chờ thanh toán", new List<string> { "Đã xác nhận", "Đã hủy" } },
-        { "Hoàn trả/Hoàn tiền", new List<string> { } },
-        { "Đã hủy", new List<string> { } }
-    };
+            {
+                { "Chờ xác nhận", new List<string> { "Đã xác nhận", "Đã hủy" } },
+                { "Đã xác nhận", new List<string> { "Đã giao cho đơn vị vận chuyển", "Đã hủy" } },
+                { "Đã giao cho đơn vị vận chuyển", new List<string> { "Đang giao hàng", "Đã hủy" } },
+                { "Đang giao hàng", new List<string> { "Đã giao cho khách", "Hoàn trả/Hoàn tiền", "Đã hủy" } },
+                { "Chờ thanh toán", new List<string> { "Đã xác nhận", "Đã hủy" } },
+                { "Hoàn trả/Hoàn tiền", new List<string> { } },
+                { "Đã hủy", new List<string> { } }
+            };
 
             // Kiểm tra tính hợp lệ của trạng thái tiếp theo
             if (!validNextStatesMap.ContainsKey(currentOrderStatus) ||
@@ -69,9 +69,14 @@ namespace APIBanXeDap.Controllers
 
 
         [HttpGet("{maHoaDon}")]
-        public async Task<IActionResult> GetInvoiceData(int maHoaDon)
+        public async Task<IActionResult> GetInvoiceData(int maHoaDon) // Lấy 1 thông tin hóa đơn cùng sản phẩm cho xuất hóa đơn
         {
             return Ok(await hoaDonRepository.GetInvoiceDataAsync(maHoaDon));
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllInvoiceData() // Lấy nhiều thông tin hóa đơn cùng sản phẩm cho xuất hóa đơn
+        {
+            return Ok(await hoaDonRepository.GetAllInvoiceDataAsync());
         }
     }
 }

@@ -11,37 +11,44 @@
 
 <div class="col-md-12">
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between">
             <h4 class="card-title">Danh sách đơn hàng</h4>
+            <button id="exportInvoicesButton" class="btn btn-primary" onclick="takeAllInvoices()">Xuất tất cả hóa đơn</button>
         </div>
         <div class="card-body">
             <!-- Tìm kiếm, Bộ lọc, và Sắp xếp -->
             <div class="row mb-3">
-                <div class="col-md-3">
-                    <input id="ngayTao" name="ngayTao" type="date" class="form-control" placeholder="Ngày tạo" />
-                </div>
-                <div class="col-md-3">
-                    <select id="httt" name="httt" class="form-select">
-                        <option value="">Lọc theo hình thức thanh toán</option>
-                        <option value="VNPAY">VNPAY</option>
-                        <option value="COD">COD</option>
-                        <!-- Các giá trị khác cho hình thức thanh toán -->
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select id="tinhTrang" name="tinhTrang" class="form-select">
-                        <option value="">Lọc theo tình trạng</option>
-                        <option value="Chờ xác nhận">Chờ xác nhận</option>
-                        <option value="Đã xác nhận">Đã xác nhận</option>
-                        <option value="Đã giao cho đơn vị vận chuyển">Đã giao cho đơn vị vận chuyển</option>
-                        <option value="Đang giao hàng">Đang giao hàng</option>
-                        <option value="Hoàn trả/Hoàn tiền">Hoàn trả/Hoàn tiền</option>
-                        <option value="Đã hủy">Đã hủy</option>
-                        <!-- Các giá trị khác cho tình trạng -->
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <input id="thoiGianGiao" name="thoiGianGiao" type="date" class="form-control" placeholder="Thời gian giao" />
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="ngayTao" class="form-label">Ngày tạo</label>
+                        <input id="ngayTao" name="ngayTao" type="date" class="form-control" onchange="loadDT()" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="httt" class="form-label">Hình thức thanh toán</label>
+                        <select id="httt" name="httt" class="form-select" onchange="loadDT()">
+                            <option value="">Lọc theo hình thức thanh toán</option>
+                            <option value="VNPAY">VNPAY</option>
+                            <option value="COD">COD</option>
+                            <!-- Các giá trị khác cho hình thức thanh toán -->
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="tinhTrang" class="form-label">Tình trạng</label>
+                        <select id="tinhTrang" name="tinhTrang" class="form-select" onchange="loadDT()">
+                            <option value="">Lọc theo tình trạng</option>
+                            <option value="Chờ xác nhận">Chờ xác nhận</option>
+                            <option value="Đã xác nhận">Đã xác nhận</option>
+                            <option value="Đã giao cho đơn vị vận chuyển">Đã giao cho đơn vị vận chuyển</option>
+                            <option value="Đang giao hàng">Đang giao hàng</option>
+                            <option value="Hoàn trả/Hoàn tiền">Hoàn trả/Hoàn tiền</option>
+                            <option value="Đã hủy">Đã hủy</option>
+                            <!-- Các giá trị khác cho tình trạng -->
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="thoiGianGiao" class="form-label">Thời gian giao</label>
+                        <input id="thoiGianGiao" name="thoiGianGiao" type="date" class="form-control" onchange="loadDT()" />
+                    </div>
                 </div>
 
             </div>
@@ -72,26 +79,26 @@
                     },
                     dataSrc: 'data'
                 },
-                      columns: [
-                        { title: 'Mã Hóa Đơn', data: 'maHoaDon', width: '8%' },
-                        { title: 'Ngày Tạo', data: 'ngayTao', width: '10%' },
-                        { title: 'Hình Thức Thanh Toán', data: 'httt', width: '12%' },
-                        { title: 'Tình Trạng', data: 'tinhTrang', width: '15%' },
-                        { title: 'Họ Tên', data: 'hoten', width: '15%' },
-                        { title: 'Số Điện Thoại', data: 'sdt', width: '10%' },
-                        { title: 'Thời Gian Giao', data: 'thoiGianGiao', width: '10%' },
-                        { title: 'Thao tác', 
-                            data: 'maHoaDon', 
-                            "render": function(data) {
-                                return `
-                                    <div class="d-flex justify-content-start mb-3">
-                                      <a class="btn btn-primary" onclick="takeInvoice(${data})">
-                                          <i class="fas fa-plus"></i>
-                                          Xuất hóa đơn
-                                      </a>
-                                    </div> `}, 
-                            width: '20%' }                
-                    ],
+                    columns: [
+                    { title: 'Mã Hóa Đơn', data: 'maHoaDon', width: '8%' },
+                    { title: 'Ngày Tạo', data: 'ngayTao', width: '10%' },
+                    { title: 'Hình Thức Thanh Toán', data: 'httt', width: '17%' },
+                    { title: 'Tình Trạng', data: 'tinhTrang', width: '15%' },
+                    { title: 'Họ Tên', data: 'hoten', width: '20%' },
+                    { title: 'Số Điện Thoại', data: 'sdt', width: '10%' },
+                    { title: 'Thời Gian Giao', data: 'thoiGianGiao', width: '10%' },
+                    { title: 'Thao tác', 
+                        data: 'maHoaDon', 
+                        "render": function(data) {
+                            return `
+                                <div class="d-flex justify-content-start mb-3">
+                                    <a class="btn btn-primary" onclick="takeInvoice(${data})">
+                                        <i class="fas fa-plus"></i>
+                                        Xuất hóa đơn
+                                    </a>
+                                </div> `}, 
+                        width: '10%' }                
+                ],
                 createdRow: function(row, data, dataIndex) {
                     // Thêm sự kiện onchange cho select trong cột tình trạng
                     $(row).find('td:eq(3)').html(`
@@ -168,12 +175,36 @@
                 success: (response) => {
                     toastr.success(`Bạn đã xuất hóa đơn đơn hàng mang mã ${maHoaDon}!`, "Xuất hóa đơn");
                 },
-                error: (xhr) => {
-                    toastr.info(`Hiện không thể xuất hóa đơn mã ${maHoaDon}!`, "Xuất hóa đơn");
+                error: (xhr, status, error) => {
+                    console.error("Error occurred:", xhr, status, error); // Log lỗi ra console
+                    // toastr.info(`Hiện không thể xuất hóa đơn mã ${maHoaDon}!`, "Xuất hóa đơn"); // Bug ở đây
                 }
             });
         }
 
+        // Hàm lấy tất cả hóa đơn đơn hàng trong hệ thống
+        function takeAllInvoices() {
+            $.ajax({
+                url: 'bill/ExportAllInvoicesAsSinglePDF', // Đường dẫn đến endpoint của server để lấy tất cả hóa đơn
+                type: 'GET', // Loại yêu cầu là GET
+                success: (response) => {
+                    // Giả sử response là một mảng hóa đơn
+                    toastr.success("Đã lấy tất cả hóa đơn thành công!", "Thành công");
+
+                    // Xử lý dữ liệu hóa đơn
+                    console.log(response); // Ghi log ra console để xem dữ liệu
+                },
+                error: (xhr, status, error) => {
+                    console.error("Error occurred:", xhr, status, error); // Log lỗi ra console
+                    // toastr.error("Không thể lấy danh sách hóa đơn!", "Lỗi"); //Bug ở đây
+                }
+            });
+        }
+
+        //Hàm load datatable đơn giản
+        function loadDT() {
+            datatable.ajax.reload();
+        }
         $(document).ready(function(){
             loadDatatable();
         })

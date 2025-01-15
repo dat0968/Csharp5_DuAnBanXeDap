@@ -1,4 +1,4 @@
-﻿namespace APIBanXeDap.ViewModels
+﻿namespace MVCBanXeDap.ViewModels
 {
     public class InvoiceVM
     {
