@@ -71,8 +71,10 @@
             }
     </style>
 
-    </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+    @RenderSection("CSSs", required: false)
+
 </head>
 <body>
     <div class="wrapper">
@@ -605,7 +607,6 @@
         </div>
     </div>
     <!-- End Custom template -->
-    </div>
     <!--   Core JS Files   -->
     <script src="~/AdminTemplate/assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="~/AdminTemplate/assets/js/core/popper.min.js"></script>
@@ -684,5 +685,6 @@
             }
         });
     </script>
+        @RenderSection("Scripts", required: false)
 </body>
 </html>

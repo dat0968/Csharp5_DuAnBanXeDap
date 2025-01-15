@@ -7790,11 +7790,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj",
+      "projectUniqueName": "D:\\FPT\\Ky5\\CS5\\Csharp5_DuAnBanXeDap_Main\\APIBanXeDap\\APIBanXeDap.csproj",
       "projectName": "APIBanXeDap",
-      "projectPath": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj",
+      "projectPath": "D:\\FPT\\Ky5\\CS5\\Csharp5_DuAnBanXeDap_Main\\APIBanXeDap\\APIBanXeDap.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\obj\\",
+      "outputPath": "D:\\FPT\\Ky5\\CS5\\Csharp5_DuAnBanXeDap_Main\\APIBanXeDap\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -7828,7 +7828,7 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -7884,7 +7884,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.2.24474.11/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200-preview.0.24575.35/PortableRuntimeIdentifierGraph.json"
       }
     }
   },

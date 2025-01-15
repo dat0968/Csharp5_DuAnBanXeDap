@@ -1,0 +1,80 @@
+﻿@using MVCBanXeDap.ViewModels
+@model HoadonVM
+
+<style>
+    table.table td,
+    table.table th {
+        text-align: left;
+        vertical-align: middle; /* Giúp căn giữa theo chiều dọc */
+    }
+</style>
+
+<div class="modal fade" id="modal-@Model.MaHoaDon-edit" tabindex="-1" aria-labelledby="editHoadonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editHoadonModalLabel">Sửa thông tin hóa đơn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Update" asp-controller="Bill" id="editHoadonForm_@Model.MaHoaDon" method="post">
+                    <input value="@Model.MaHoaDon" type="hidden" class="form-control" id="MaHoaDon" name="MaHoaDon" readonly>
+
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ nhận hàng</label>
+                        <input value="@Model.DiaChiNhanHang" type="text" class="form-control" id="DiaChiNhanHang" name="DiaChiNhanHang" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ngày tạo</label>
+                        <input value="@Model.NgayTao.ToString("yyyy-MM-dd")" type="date" class="form-control" id="NgayTao" name="NgayTao" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Hình thức thanh toán</label>
+                        <input value="@Model.Httt" type="text" class="form-control" id="Httt" name="Httt" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tình trạng</label>
+                        <input value="@Model.TinhTrang" type="text" class="form-control" id="TinhTrang" name="TinhTrang" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mã nhân viên</label>
+                        <input value="@Model.MaNv" type="text" class="form-control" id="MaNv" name="MaNv">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mã khách hàng</label>
+                        <input value="@Model.MaKh" type="text" class="form-control" id="MaKh" name="MaKh" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả</label>
+                        <input value="@Model.MoTa" type="text" class="form-control" id="MoTa" name="MoTa">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Họ tên</label>
+                        <input value="@Model.Hoten" type="text" class="form-control" id="Hoten" name="Hoten">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input value="@Model.Sdt" type="text" class="form-control" id="Sdt" name="Sdt">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Thời gian giao</label>
+                        <input value="@Model.ThoiGianGiao.ToString("yyyy-MM-dd")" type="date" class="form-control" id="ThoiGianGiao" name="ThoiGianGiao" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-primary" form="editHoadonForm_@Model.MaHoaDon">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,1 +1,8 @@
 .vs/
+# Ignore bin and obj folders for APIBanXeDap project
+APIBanXeDap/bin/
+APIBanXeDap/obj/
+
+# Ignore bin and obj folders for MVCBanXeDap project
+MVCBanXeDap/bin/
+MVCBanXeDap/obj/

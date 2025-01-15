@@ -186,6 +186,74 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "APIBanXeDap.Controllers.BillController",
+    "Method": "ChangeStatusOrder",
+    "RelativePath": "api/Bill/ChangeStatusOrder",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idOrder",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "idStaff",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "statusOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.BillController",
+    "Method": "Get",
+    "RelativePath": "api/Bill/Get",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.BillController",
+    "Method": "Get",
+    "RelativePath": "api/Bill/Get/{maHoadon}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maHoadon",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.BillController",
+    "Method": "GetInvoiceData",
+    "RelativePath": "api/Bill/GetInvoiceData/{maHoaDon}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maHoaDon",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIBanXeDap.Controllers.BrandsController",
     "Method": "GettAllBrand",
     "RelativePath": "api/Brands/GettAllBrand",

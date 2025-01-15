@@ -7,7 +7,6 @@ using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace MVCBanXeDap.Controllers
 {

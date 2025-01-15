@@ -1,0 +1,181 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using MVCBanXeDap.ViewModels
+@model IEnumerable<HoadonVM>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section CSSs {
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Danh sách đơn hàng</h4>
+        </div>
+        <div class="card-body">
+            <!-- Tìm kiếm, Bộ lọc, và Sắp xếp -->
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input id="ngayTao" name="ngayTao" type="date" class="form-control" placeholder="Ngày tạo" />
+                </div>
+                <div class="col-md-3">
+                    <select id="httt" name="httt" class="form-select">
+                        <option value="">Lọc theo hình thức thanh toán</option>
+                        <option value="VNPAY">VNPAY</option>
+                        <option value="COD">COD</option>
+                        <!-- Các giá trị khác cho hình thức thanh toán -->
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="tinhTrang" name="tinhTrang" class="form-select">
+                        <option value="">Lọc theo tình trạng</option>
+                        <option value="Chờ xác nhận">Chờ xác nhận</option>
+                        <option value="Đã xác nhận">Đã xác nhận</option>
+                        <option value="Đã giao cho đơn vị vận chuyển">Đã giao cho đơn vị vận chuyển</option>
+                        <option value="Đang giao hàng">Đang giao hàng</option>
+                        <option value="Hoàn trả/Hoàn tiền">Hoàn trả/Hoàn tiền</option>
+                        <option value="Đã hủy">Đã hủy</option>
+                        <!-- Các giá trị khác cho tình trạng -->
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input id="thoiGianGiao" name="thoiGianGiao" type="date" class="form-control" placeholder="Thời gian giao" />
+                </div>
+
+            </div>
+
+            <!-- Danh sách đơn hàng -->
+            <div class="table-responsive">
+                <table id="basic-datatables" class="display table table-striped table-hover">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js" asp-append-version="true"></script>
+    <script>
+        let datatable;
+        // Khởi tạo datatable
+        function loadDatatable() {
+            datatable = $('#basic-datatables').DataTable({
+                ajax: {
+                    url: 'bill/getall',
+                    data: function(d) {
+                        d.ngayTao = $('#ngayTao').val();
+                        d.httt = $('#httt').val();
+                        d.tinhTrang = $('#tinhTrang').val();
+                    },
+                    dataSrc: 'data'
+                },
+                      columns: [
+                        { title: 'Mã Hóa Đơn', data: 'maHoaDon', width: '8%' },
+                        { title: 'Ngày Tạo', data: 'ngayTao', width: '10%' },
+                        { title: 'Hình Thức Thanh Toán', data: 'httt', width: '12%' },
+                        { title: 'Tình Trạng', data: 'tinhTrang', width: '15%' },
+                        { title: 'Họ Tên', data: 'hoten', width: '15%' },
+                        { title: 'Số Điện Thoại', data: 'sdt', width: '10%' },
+                        { title: 'Thời Gian Giao', data: 'thoiGianGiao', width: '10%' },
+                        { title: 'Thao tác', 
+                            data: 'maHoaDon', 
+                            "render": function(data) {
+                                return `
+                                    <div class="d-flex justify-content-start mb-3">
+                                      <a class="btn btn-primary" onclick="takeInvoice(${data})">
+                                          <i class="fas fa-plus"></i>
+                                          Xuất hóa đơn
+                                      </a>
+                                    </div> `}, 
+                            width: '20%' }                
+                    ],
+                createdRow: function(row, data, dataIndex) {
+                    // Thêm sự kiện onchange cho select trong cột tình trạng
+                    $(row).find('td:eq(3)').html(`
+                                <select class="form-select status-select">
+                                    <option value="Đã xác nhận" ${data.tinhTrang === "Đã xác nhận" ? "selected" : ""}>Đã xác nhận</option>
+                                    <option value="Đã giao cho đơn vị vận chuyển" ${data.tinhTrang === "Đã giao cho đơn vị vận chuyển" ? "selected" : ""}>Đã giao cho đơn vị vận chuyển</option>
+                                    <option value="Đang giao hàng" ${data.tinhTrang === "Đang giao hàng" ? "selected" : ""}>Đang giao hàng</option>
+                                    <option value="Chờ thanh toán" ${data.tinhTrang === "Chờ thanh toán" ? "selected" : ""}>Chờ thanh toán</option>
+                                    <option value="Hoàn trả/Hoàn tiền" ${data.tinhTrang === "Hoàn trả/Hoàn tiền" ? "selected" : ""}>Hoàn trả/Hoàn tiền</option>
+                                    <option value="Đã hủy" ${data.tinhTrang === "Đã hủy" ? "selected" : ""}>Đã hủy</option>
+                                    <option value="Chờ xác nhận" ${data.tinhTrang === "Chờ xác nhận" ? "selected" : ""}>Chờ xác nhận</option>
+                                </select>
+                    `);
+                    $(row).find('.status-select').change(function() {
+                        const newStatus = $(this).val();
+                        console.table(data);
+                        changeOrderStatus(data.maHoaDon, newStatus, data.maNv);
+                    });
+                },
+                "language": {
+                    "sSearch": "Tìm kiếm:",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "paginate": {
+                        "first": "<<",
+                        "last": ">>",
+                        "next": ">",
+                        "previous": "<"
+                    },
+                    "zeroRecords": `<div style="text-align: center;">Không tìm thấy kết quả nào.</div>`,
+                    "infoEmpty": "Không có mục nào để hiển thị",
+                    "infoFiltered": "(lọc từ _MAX_ mục)"
+                }
+            });
+        }
+
+        //Hàm thay đổi trạng thái đơn hàng
+        function changeOrderStatus(idOrder, status, idStaffChanged = null) {
+            const paramsChange = {
+                idOrder: idOrder,
+                status: status,
+                idStaffChanged:idStaffChanged
+            };
+
+            const queryString = $.param(paramsChange);
+            const url = `bill/ChangeStatusOrder?${queryString}`;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                // contentType: 'application/x-www-form-urlencoded',
+                success: function(result) {
+                    if (result.success) {
+                        toastr.success(result.message, 'Thành công');
+                    } else {
+                        toastr.info(result.message, 'Lỗi');
+                    }
+                    datatable.ajax.reload();
+                    return { success: true, message: result.message };
+                },
+                error: function(xhr, status, error) {
+                    const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Đã xảy ra lỗi khi thay đổi tình trạng đơn hàng.';
+                    datatable.ajax.reload();
+                    toastr.error(errorMessage, 'Thất bại');
+                    return { success: false, message: errorMessage };
+                }
+            });
+        }
+
+        //Hàm xuất hóa đơn
+        function takeInvoice(maHoaDon) {
+            $.ajax({
+                url: 'bill/TakeInvoice?maHoaDon=' + maHoaDon,
+                success: (response) => {
+                    toastr.success(`Bạn đã xuất hóa đơn đơn hàng mang mã ${maHoaDon}!`, "Xuất hóa đơn");
+                },
+                error: (xhr) => {
+                    toastr.info(`Hiện không thể xuất hóa đơn mã ${maHoaDon}!`, "Xuất hóa đơn");
+                }
+            });
+        }
+
+        $(document).ready(function(){
+            loadDatatable();
+        })
+    </script>
+}
