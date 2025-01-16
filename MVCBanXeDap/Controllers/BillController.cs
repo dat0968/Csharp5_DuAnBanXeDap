@@ -30,33 +30,6 @@ namespace MVCBanXeDap.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Update(int id)
-        {
-            HoadonVM hoadonVM = new HoadonVM();
-            HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + "bill/get");
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-                string data = await httpResponseMessage.Content.ReadAsStringAsync();
-                hoadonVM = JsonConvert.DeserializeObject<HoadonVM>(data);
-            }
-            return PartialView(hoadonVM);
-        }
-        [HttpPut]
-        public async Task<IActionResult> Update(HoadonVM hoadonVM)
-        {
-            if (ModelState.IsValid)
-            {
-                var hoadonVM_Js = JsonConvert.SerializeObject(hoadonVM);
-                StringContent content = new StringContent(hoadonVM_Js, Encoding.UTF8, "application/json");
-                HttpResponseMessage http = await _client.PutAsync(_client.BaseAddress + "bill/update/", content);
-                if (http.IsSuccessStatusCode)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-            }
-            return View(hoadonVM);
-        }
-        [HttpGet]
         public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status, string? idStaffChanged)
         {
             string? idStaff = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -144,9 +117,9 @@ namespace MVCBanXeDap.Controllers
                     .SetFontSize(14)
                     .SetBold()
                     .SetMarginBottom(10));
-                document.Add(new Paragraph($"Tên Người Nhận: {invoice.CustomerName}"));
-                document.Add(new Paragraph($"Số Điện Thoại: {invoice.CustomerPhone}"));
-                document.Add(new Paragraph($"Địa Chỉ: {invoice.CustomerAddress}"));
+                document.Add(new Paragraph($"Tên Người Nhận: {invoice.TenKhachHang}"));
+                document.Add(new Paragraph($"Số Điện Thoại: {invoice.SoDienThoaiKhachHang}"));
+                document.Add(new Paragraph($"Địa Chỉ: {invoice.DiaChiKhachHang}"));
                 document.Add(new Paragraph($"Ngày Đặt Hàng: {invoice.NgayTao:dd/MM/yyyy}")
                     .SetMarginBottom(20));
 
@@ -161,13 +134,13 @@ namespace MVCBanXeDap.Controllers
                 double totalAmount = 0;
                 foreach (var item in invoice.Items)
                 {
-                    double itemTotal = (double)item.Quantity * (double)item.UnitPrice;
+                    double itemTotal = (double)item.SoLuong * (double)item.DonGia;
                     totalAmount += itemTotal;
 
-                    table.AddCell(new Cell().Add(new Paragraph(item.ProductName)));
-                    table.AddCell(new Cell().Add(new Paragraph(item.Quantity.ToString())).SetTextAlignment(TextAlignment.CENTER));
-                    table.AddCell(new Cell().Add(new Paragraph($"{String.Format("{0:n0}", item.UnitPrice)} đ")));
-                    table.AddCell(new Cell().Add(new Paragraph($"{String.Format("{0:n0}", itemTotal)} đ")));
+                    table.AddCell(new Cell().Add(new Paragraph(item.TenSanPham)));
+                    table.AddCell(new Cell().Add(new Paragraph(item.SoLuong.ToString())).SetTextAlignment(TextAlignment.CENTER));
+                    table.AddCell(new Cell().Add(new Paragraph($"{String.Format("{0:n0}", item.DonGia)} đ")).SetTextAlignment(TextAlignment.RIGHT));
+                    table.AddCell(new Cell().Add(new Paragraph($"{String.Format("{0:n0}", itemTotal)} đ"))).SetTextAlignment(TextAlignment.RIGHT);
                 }
 
                 document.Add(table.SetMarginBottom(20));
@@ -241,13 +214,13 @@ namespace MVCBanXeDap.Controllers
                     .SetMarginBottom(10));
 
                 // Thông tin khách hàng
-                document.Add(new Paragraph($"Tên: {invoice.CustomerName}")
+                document.Add(new Paragraph($"Tên: {invoice.TenKhachHang}")
                     .SetTextAlignment(TextAlignment.LEFT));
-                document.Add(new Paragraph($"Số điện thoại: {invoice.CustomerPhone}")
+                document.Add(new Paragraph($"Số điện thoại: {invoice.SoDienThoaiKhachHang}")
                     .SetTextAlignment(TextAlignment.LEFT));
                 document.Add(new Paragraph($"Ngày hóa đơn: {invoice.NgayTao:dd/MM/yyyy}")
                     .SetTextAlignment(TextAlignment.LEFT));
-                document.Add(new Paragraph($"Địa chỉ: {invoice.CustomerAddress}")
+                document.Add(new Paragraph($"Địa chỉ: {invoice.DiaChiKhachHang}")
                     .SetTextAlignment(TextAlignment.LEFT)
                     .SetMarginBottom(20));
 
@@ -262,13 +235,13 @@ namespace MVCBanXeDap.Controllers
                 double totalAmount = 0;
                 foreach (var item in invoice.Items)
                 {
-                    double subTotal = (double)(item.Quantity * item.UnitPrice);
+                    double subTotal = (double)(item.SoLuong * item.DonGia);
                     totalAmount += subTotal;
 
-                    table.AddCell(new Paragraph(item.ProductName));
-                    table.AddCell(new Paragraph(item.Quantity.ToString()));
-                    table.AddCell(new Paragraph($"{item.UnitPrice:n0} đ"));
-                    table.AddCell(new Paragraph($"{subTotal:n0} đ"));
+                    table.AddCell(new Paragraph(item.TenSanPham));
+                    table.AddCell(new Paragraph(item.SoLuong.ToString()).SetTextAlignment(TextAlignment.CENTER));
+                    table.AddCell(new Paragraph($"{item.DonGia:n0} đ").SetTextAlignment(TextAlignment.RIGHT));
+                    table.AddCell(new Paragraph($"{subTotal:n0} đ").SetTextAlignment(TextAlignment.RIGHT));
                 }
 
                 document.Add(table.SetMarginBottom(20));

@@ -18,52 +18,82 @@ namespace APIBanXeDap.Repository.HoaDon
             this.dbSet = _db.Set<Hoadon>();
         }
 
-        public async Task<IEnumerable<Hoadon>> GetAllAsync(Expression<Func<Hoadon, bool>>? filter = null, string? includeProperties = null)
+        // Phương thức để lấy tất cả hóa đơn dưới dạng HoadonVM
+        public async Task<IEnumerable<HoadonVM>> GetAllHoadonVMAsync(Expression<Func<Hoadon, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<Hoadon> query = dbSet;
+
             if (filter != null)
             {
                 query = query.Where(filter);
             }
+
             if (!string.IsNullOrEmpty(includeProperties))
             {
-                foreach (var includeProp in includeProperties
-                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);
                 }
             }
-            return await query.ToListAsync();
+
+            // Lấy dữ liệu từ cơ sở dữ liệu
+            var hoadonList = await query.ToListAsync();
+
+            // Chuyển đổi danh sách Hoadon sang HoadonVM
+            return hoadonList.Select(hoadon => new HoadonVM
+            {
+                MaHoaDon = hoadon.MaHoaDon,
+                DiaChiNhanHang = hoadon.DiaChiNhanHang,
+                NgayTao = hoadon.NgayTao,
+                Httt = hoadon.Httt,
+                TinhTrang = hoadon.TinhTrang,
+                MaNv = hoadon.MaNv,
+                MaKh = hoadon.MaKh,
+                MoTa = hoadon.MoTa,
+                Hoten = hoadon.Hoten,
+                Sdt = hoadon.Sdt,
+                ThoiGianGiao = hoadon.ThoiGianGiao
+            }).ToList();
         }
 
-        public async Task<Hoadon> GetAsync(Expression<Func<Hoadon, bool>> filter, string? includeProperties = null, bool tracked = false)
+        public async Task<HoadonVM> GetAsync(Expression<Func<Hoadon, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
             IQueryable<Hoadon> query;
             if (tracked)
             {
                 query = dbSet;
-
             }
             else
             {
                 query = dbSet.AsNoTracking();
             }
-            {
-                query = dbSet.AsNoTracking();
-            }
 
             query = query.Where(filter);
+
             if (!string.IsNullOrEmpty(includeProperties))
             {
-                foreach (var includeProp in includeProperties
-                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);
                 }
             }
-            return await query.FirstOrDefaultAsync();
+            var hoadon = await query.FirstOrDefaultAsync();
+            HoadonVM hoadonVM = new HoadonVM
+            {
+                MaHoaDon = hoadon.MaHoaDon,
+                DiaChiNhanHang = hoadon.DiaChiNhanHang,
+                NgayTao = hoadon.NgayTao,
+                Httt = hoadon.Httt,
+                TinhTrang = hoadon.TinhTrang,
+                MaNv = hoadon.MaNv,
+                MaKh = hoadon.MaKh,
+                MoTa = hoadon.MoTa,
+                Hoten = hoadon.Hoten,
+                Sdt = hoadon.Sdt,
+                ThoiGianGiao = hoadon.ThoiGianGiao
+            };
+            return hoadonVM;
         }
-
         public async Task ChangStatusOrder(int idOrder, int idStaff, string statusOrder)
         {
             var originHoadon = await _db.Hoadons.FirstOrDefaultAsync(x => x.MaHoaDon == idOrder);
@@ -103,18 +133,18 @@ namespace APIBanXeDap.Repository.HoaDon
                 DiaChiNhanHang = invoiceData.DiaChiNhanHang,
                 TinhTrang = invoiceData.TinhTrang,
                 NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
-                Httt = invoiceData.Httt,
-                CustomerName = invoiceData.MaKhNavigation.HoTen,
-                CustomerPhone = invoiceData.MaKhNavigation.Sdt,
-                CustomerAddress = invoiceData.MaKhNavigation.DiaChi,
-                Items = invoiceItems.Select(ct => new InvoiceVM.InvoiceItemViewModel
+                HinhThucThanhToan = invoiceData.Httt,
+                TenKhachHang = invoiceData.MaKhNavigation.HoTen,
+                SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
+                DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
+                Items = invoiceItems.Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
                 {
-                    ProductName = ct.MaSpNavigation.TenSp,
-                    Quantity = ct.SoLuong,
-                    UnitPrice = ct.Gia,
-                    Total = ct.ThanhTien
+                    TenSanPham = ct.MaSpNavigation.TenSp,
+                    SoLuong = ct.SoLuong,
+                    DonGia = ct.Gia,
+                    Tong = ct.ThanhTien
                 }).ToList(),
-                TotalAmount = invoiceItems.Sum(ct => ct.ThanhTien)
+                TongTien = invoiceItems.Sum(ct => ct.ThanhTien)
             };
 
             return invoiceViewModel;
@@ -143,18 +173,18 @@ namespace APIBanXeDap.Repository.HoaDon
                 DiaChiNhanHang = invoiceData.DiaChiNhanHang,
                 TinhTrang = invoiceData.TinhTrang,
                 NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
-                Httt = invoiceData.Httt,
-                CustomerName = invoiceData.MaKhNavigation.HoTen,
-                CustomerPhone = invoiceData.MaKhNavigation.Sdt,
-                CustomerAddress = invoiceData.MaKhNavigation.DiaChi,
-                Items = invoiceItems.Where(ct => ct.MaHoaDon == invoiceData.MaHoaDon).Select(ct => new InvoiceVM.InvoiceItemViewModel
+                HinhThucThanhToan = invoiceData.Httt,
+                TenKhachHang = invoiceData.MaKhNavigation.HoTen,
+                SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
+                DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
+                Items = invoiceItems.Where(ct => ct.MaHoaDon == invoiceData.MaHoaDon).Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
                 {
-                    ProductName = ct.MaSpNavigation.TenSp,
-                    Quantity = ct.SoLuong,
-                    UnitPrice = ct.Gia,
-                    Total = ct.ThanhTien
+                    TenSanPham = ct.MaSpNavigation.TenSp,
+                    SoLuong = ct.SoLuong,
+                    DonGia = ct.Gia,
+                    Tong = ct.ThanhTien
                 }).ToList(),
-                TotalAmount = invoiceItems
+                TongTien = invoiceItems
                     .Where(ct => ct.MaHoaDon == invoiceData.MaHoaDon) // Tính tổng tiền cho hóa đơn hiện tại
                     .Sum(ct => ct.ThanhTien)
             });

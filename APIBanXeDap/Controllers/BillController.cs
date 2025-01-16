@@ -18,7 +18,7 @@ namespace APIBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Get() //Lấy thông tin danh sách hóa đơn
         {
-            return Ok(await hoaDonRepository.GetAllAsync());
+            return Ok(await hoaDonRepository.GetAllHoadonVMAsync());
         }
         [HttpGet("{maHoadon}")]
         public async Task<IActionResult> Get(int maHoadon) //Lấy 1 thông tin hóa đơn
