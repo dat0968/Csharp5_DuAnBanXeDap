@@ -120,10 +120,13 @@ namespace APIBanXeDap.Repository.SanPham
         public ProductVM GetProductById(int id)
         {
             var Product = db.Sanphams.AsNoTracking()
+                .Include(sp => sp.Chitietsanphams)
+                    .ThenInclude(ct => ct.MaMauNavigation)
+                .Include(sp => sp.Chitietsanphams)
+                    .ThenInclude(ct => ct.MaKichThuocNavigation)
                 .Include(sp => sp.MaThuongHieuNavigation)
                 .Include(sp => sp.MaNhaCcNavigation)
                 .Include(sp => sp.MaDanhMucNavigation)
-                .Include(sp => sp.Chitietsanphams)
                 .FirstOrDefault(sp => sp.MaSp == id);
             var ProductVM = new ProductVM
             {

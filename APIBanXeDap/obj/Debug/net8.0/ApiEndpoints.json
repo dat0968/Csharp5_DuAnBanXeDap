@@ -232,6 +232,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "APIBanXeDap.Controllers.HomeController",
+    "Method": "GetProductById",
+    "RelativePath": "api/Home/GetProductById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.HomeController",
+    "Method": "GetSanPhamBanChay",
+    "RelativePath": "api/Home/SanPhamBanChay",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
     "Method": "Create",
     "RelativePath": "api/MaCoupons/Create",
