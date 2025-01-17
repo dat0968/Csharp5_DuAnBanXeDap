@@ -33,7 +33,7 @@ namespace MVCBanXeDap.Controllers
             }
             return View(list);
         }
-        [HttpGet("id")]
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var ProductVM = new ProductVM();
@@ -43,7 +43,7 @@ namespace MVCBanXeDap.Controllers
                 string data = await response.Content.ReadAsStringAsync();
                 ProductVM = JsonConvert.DeserializeObject<ProductVM>(data);
             };
-            return PartialView("_ProductDetails", ProductVM);
+            return View(ProductVM);
         }
     }
 }

@@ -1,0 +1,101 @@
+﻿@model MVCBanXeDap.ViewModels.ProductVM
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Phần trái: Slide hình ảnh sản phẩm -->
+        <div class="col-md-6">
+            <div id="productImage" class="text-center">
+                <img src="@Model.Hinh" alt="Hình ảnh sản phẩm" class="img-fluid" id="productImageDisplay">
+            </div>
+        </div>
+
+        <!-- Phần phải: Thông tin chi tiết sản phẩm -->
+        <div class="col-md-6">
+            <h3>@Model.TenSp</h3>
+            <p><strong>Mã sản phẩm:</strong> @Model.MaSP</p>
+            <p><strong>Thương hiệu:</strong> @Model.ThuongHieu</p>
+            <p><strong>Danh mục:</strong> @Model.DanhMuc</p>
+            <p><strong>Khoảng giá:</strong> @Model.KhoangGia</p>
+            <p><strong>Nhà cung cấp:</strong> @Model.NhaCungCap</p>
+            <p><strong>Mô tả:</strong> @Model.MoTa</p>
+
+            <!-- Màu sắc -->
+            <div class="mb-3">
+                <label class="form-label"><strong>Màu sắc:</strong></label>
+                <div>
+                    @foreach (var colorGroup in Model.Chitietsanphams.GroupBy(x => x.TenMau))
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input color-option" type="radio" name="color" id="color-@colorGroup.Key" value="@colorGroup.Key" />
+                            <label class="form-check-label" for="color-@colorGroup.Key">@colorGroup.Key</label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Kích thước -->
+            <div class="mb-3">
+                <label class="form-label"><strong>Kích thước:</strong></label>
+                <div id="sizeOptions">
+                    <!-- Các kích thước sẽ được render lại dựa trên màu sắc được chọn -->
+                </div>
+            </div>
+
+            <p id="stockDisplay"><strong>Số lượng tồn:</strong> <span>Chưa chọn</span></p>
+            <p id="priceDisplay"><strong>Đơn giá:</strong> <span>Chưa chọn</span></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const colorOptions = document.querySelectorAll('.color-option');
+        const sizeOptionsContainer = document.getElementById('sizeOptions');
+        const stockDisplay = document.getElementById('stockDisplay');
+        const priceDisplay = document.getElementById('priceDisplay');
+        const productImageDisplay = document.getElementById('productImageDisplay');
+
+        let productVariants = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Chitietsanphams));
+
+        // Xử lý khi chọn màu sắc
+        colorOptions.forEach(color => {
+            color.addEventListener('change', function () {
+                const selectedColor = this.value;
+
+                // Lọc các kích thước liên quan đến màu sắc được chọn
+                const filteredVariants = productVariants.filter(variant => variant.TenMau === selectedColor);
+
+                // Render kích thước tương ứng
+                sizeOptionsContainer.innerHTML = '';
+                filteredVariants.forEach(variant => {
+                    const sizeOption = `
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input size-option" type="radio" name="size" id="size-${variant.TenKichThuoc}" value="${variant.TenKichThuoc}"
+                                data-quantity="${variant.SoLuongTon}" data-price="${variant.DonGia}" />
+                            <label class="form-check-label" for="size-${variant.TenKichThuoc}">${variant.TenKichThuoc}</label>
+                        </div>
+                    `;
+                    sizeOptionsContainer.insertAdjacentHTML('beforeend', sizeOption);
+                });
+
+                // Cập nhật sự kiện khi chọn kích thước
+                updateSizeEvents();
+            });
+        });
+
+        // Hàm cập nhật sự kiện khi chọn kích thước
+        function updateSizeEvents() {
+            const sizeOptions = document.querySelectorAll('.size-option');
+            sizeOptions.forEach(size => {
+                size.addEventListener('change', function () {
+                    const quantity = this.dataset.quantity;
+                    const price = this.dataset.price;
+
+                    // Hiển thị số lượng tồn và giá
+                    stockDisplay.querySelector('span').textContent = quantity;
+                    priceDisplay.querySelector('span').textContent = `${price} VND`;
+                });
+            });
+        }
+    });
+</script>
