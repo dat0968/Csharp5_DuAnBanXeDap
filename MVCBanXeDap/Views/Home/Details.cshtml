@@ -4,45 +4,66 @@
     <div class="row">
         <!-- Phần trái: Slide hình ảnh sản phẩm -->
         <div class="col-md-6">
-            <div id="productImage" class="text-center">
-                <img src="/Hinh/SanPham/@Model.Hinh" alt="Hình ảnh sản phẩm" class="img-fluid" id="productImageDisplay">
+            <div class="border rounded p-3 bg-white shadow-sm">
+                <div id="productImage" class="text-center">
+                    <img src="/Hinh/SanPham/@Model.Hinh" alt="Hình ảnh sản phẩm" class="img-fluid rounded" id="productImageDisplay">
+                </div>
             </div>
         </div>
 
         <!-- Phần phải: Thông tin chi tiết sản phẩm -->
         <div class="col-md-6">
-            <h3>@Model.TenSp</h3>
-            <p><strong>Mã sản phẩm:</strong> @Model.MaSP</p>
-            <p><strong>Thương hiệu:</strong> @Model.ThuongHieu</p>
-            <p><strong>Danh mục:</strong> @Model.DanhMuc</p>
-            <p><strong>Khoảng giá:</strong> @Model.KhoangGia</p>
-            <p><strong>Nhà cung cấp:</strong> @Model.NhaCungCap</p>
-            <p><strong>Mô tả:</strong> @Model.MoTa</p>
+            <div class="border rounded p-4 bg-white shadow-sm">
+                <h2 class="text-danger">@Model.TenSp</h2>
+                <p class="text-muted mb-1"><strong>Thương hiệu:</strong> @Model.ThuongHieu</p>
+                <p class="text-muted mb-1"><strong>Danh mục:</strong> @Model.DanhMuc</p>
+                <p class="text-muted mb-1"><strong>Khoảng giá:</strong> <span class="text-success">@Model.KhoangGia</span></p>
+                <p class="text-muted mb-1"><strong>Nhà cung cấp:</strong> @Model.NhaCungCap</p>
+                <p class="text-muted mb-3"><strong>Mô tả:</strong> @Model.MoTa</p>
 
-            <!-- Màu sắc -->
-            <div class="mb-3">
-                <label class="form-label"><strong>Màu sắc:</strong></label>
-                <div>
-                    @foreach (var colorGroup in Model.Chitietsanphams.GroupBy(x => x.TenMau))
-                    {
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input color-option" type="radio" name="color" id="color-@colorGroup.Key" value="@colorGroup.Key" />
-                            <label class="form-check-label" for="color-@colorGroup.Key">@colorGroup.Key</label>
-                        </div>
-                    }
+                <!-- Màu sắc -->
+                <div class="mb-4">
+                    <label class="form-label"><strong>Màu sắc:</strong></label>
+                    <div>
+                        @foreach (var colorGroup in Model.Chitietsanphams.GroupBy(x => x.TenMau))
+                        {
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input color-option" type="radio" name="color" id="color-@colorGroup.Key" value="@colorGroup.Key" />
+                                <label class="form-check-label btn btn-outline-secondary rounded-pill me-1" for="color-@colorGroup.Key">@colorGroup.Key</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Kích thước -->
+                <div class="mb-4">
+                    <label class="form-label"><strong>Kích thước:</strong></label>
+                    <div id="sizeOptions"></div>
+                </div>
+
+                <!-- Thông tin tồn kho và giá -->
+                <p id="stockDisplay" class="mb-2"><strong>Số lượng tồn:</strong> <span class="text-muted"></span></p>
+                <p id="priceDisplay" class="mb-4"><strong>Đơn giá:</strong> <span class="text-success"></span></p>
+
+                <!-- Số lượng -->
+                <div class="mb-4">
+                    <label class="form-label"><strong>Số lượng:</strong></label>
+                    <div class="input-group" style="width: 200px;">
+                        <button class="btn btn-outline-danger" type="button" id="decreaseQuantity">-</button>
+                        <input type="number" class="form-control text-center border-danger" id="quantityInput" value="1" min="1"  />
+                        <button class="btn btn-outline-danger" type="button" id="increaseQuantity">+</button>
+                    </div>
+                    <small id="quantityError" class="text-danger" style="display: none;">Số lượng không hợp lệ!</small>
+                </div>
+
+                <!-- Tổng tiền -->
+                <p id="totalPriceDisplay" class="mb-4"><strong>Tổng tiền:</strong> <span class="text-success">0 VND</span></p>
+
+                <!-- Nút đặt hàng -->
+                <div class="mt-4">
+                    <button class="btn btn-danger btn-lg w-100" id="addToCart" disabled>Đặt hàng</button>
                 </div>
             </div>
-
-            <!-- Kích thước -->
-            <div class="mb-3">
-                <label class="form-label"><strong>Kích thước:</strong></label>
-                <div id="sizeOptions">
-                    <!-- Các kích thước sẽ được render lại dựa trên màu sắc được chọn -->
-                </div>
-            </div>
-
-            <p id="stockDisplay"><strong>Số lượng tồn:</strong> <span>Chưa chọn</span></p>
-            <p id="priceDisplay"><strong>Đơn giá:</strong> <span>Chưa chọn</span></p>
         </div>
     </div>
 </div>
@@ -53,19 +74,48 @@
         const sizeOptionsContainer = document.getElementById('sizeOptions');
         const stockDisplay = document.getElementById('stockDisplay');
         const priceDisplay = document.getElementById('priceDisplay');
-        const productImageDisplay = document.getElementById('productImageDisplay');
+        const decreaseQuantityBtn = document.getElementById('decreaseQuantity');
+        const increaseQuantityBtn = document.getElementById('increaseQuantity');
+        const quantityInput = document.getElementById('quantityInput');
+        const quantityError = document.getElementById('quantityError');
+        const addToCartBtn = document.getElementById('addToCart');
+        const totalPriceDisplay = document.getElementById('totalPriceDisplay').querySelector('span');
 
         let productVariants = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Chitietsanphams));
+        let maxQuantity = 1;
 
-        // Xử lý khi chọn màu sắc
+        // Cập nhật tổng tiền
+        function updateTotalPrice() {
+            const price = parseFloat(priceDisplay.querySelector('span').textContent.replace(/[^0-9]/g, '')) || 0;
+            const quantity = parseInt(quantityInput.value, 10) || 0;
+            totalPriceDisplay.textContent = `${(price * quantity).toLocaleString()} VND`;
+        }
+
+        // Cập nhật sự kiện kích thước
+        function updateSizeEvents() {
+            const sizeOptions = document.querySelectorAll('.size-option');
+            sizeOptions.forEach(size => {
+                size.addEventListener('change', function () {
+                    const quantity = parseInt(this.dataset.quantity, 10);
+                    const price = this.dataset.price;
+
+                    stockDisplay.querySelector('span').textContent = quantity;
+                    priceDisplay.querySelector('span').textContent = `${parseInt(price).toLocaleString()} VND`;
+
+                    maxQuantity = quantity;
+                    quantityInput.value = 1;
+                    addToCartBtn.disabled = false;
+                    updateTotalPrice();
+                });
+            });
+        }
+
+        // Xử lý chọn màu sắc
         colorOptions.forEach(color => {
             color.addEventListener('change', function () {
                 const selectedColor = this.value;
-
-                // Lọc các kích thước liên quan đến màu sắc được chọn
                 const filteredVariants = productVariants.filter(variant => variant.TenMau === selectedColor);
 
-                // Render kích thước tương ứng
                 sizeOptionsContainer.innerHTML = '';
                 filteredVariants.forEach(variant => {
                     const sizeOption = `
@@ -78,24 +128,53 @@
                     sizeOptionsContainer.insertAdjacentHTML('beforeend', sizeOption);
                 });
 
-                // Cập nhật sự kiện khi chọn kích thước
                 updateSizeEvents();
             });
         });
 
-        // Hàm cập nhật sự kiện khi chọn kích thước
-        function updateSizeEvents() {
-            const sizeOptions = document.querySelectorAll('.size-option');
-            sizeOptions.forEach(size => {
-                size.addEventListener('change', function () {
-                    const quantity = this.dataset.quantity;
-                    const price = this.dataset.price;
+        // Xử lý giảm số lượng
+        decreaseQuantityBtn.addEventListener('click', function () {
+            let currentQuantity = parseInt(quantityInput.value, 10);
+            if (currentQuantity > 1) {
+                quantityInput.value = currentQuantity - 1;
+                quantityError.style.display = 'none';
+                updateTotalPrice();
+            } else {
+                quantityError.textContent = 'Số lượng không được nhỏ hơn 1!';
+                quantityError.style.display = 'block';
+            }
+        });
 
-                    // Hiển thị số lượng tồn và giá
-                    stockDisplay.querySelector('span').textContent = quantity;
-                    priceDisplay.querySelector('span').textContent = `${price} VND`;
-                });
-            });
-        }
+        // Xử lý tăng số lượng
+        increaseQuantityBtn.addEventListener('click', function () {
+            let currentQuantity = parseInt(quantityInput.value, 10);
+            if (currentQuantity < maxQuantity) {
+                quantityInput.value = currentQuantity + 1;
+                quantityError.style.display = 'none';
+                updateTotalPrice();
+            } else {
+                quantityError.textContent = 'Số lượng vượt quá tồn kho!';
+                quantityError.style.display = 'block';
+            }
+        });
+
+        // Xử lý nút đặt hàng
+        addToCartBtn.addEventListener('click', function () {
+            const selectedColor = document.querySelector('input[name="color"]:checked');
+            const selectedSize = document.querySelector('input[name="size"]:checked');
+
+            if (!selectedColor || !selectedSize) {
+                alert('Vui lòng chọn màu sắc và kích thước trước khi đặt hàng.');
+                return;
+            }
+
+            const quantity = parseInt(quantityInput.value, 10);
+            if (quantity < 1 || quantity > maxQuantity) {
+                alert('Số lượng không hợp lệ.');
+                return;
+            }
+
+            alert(`Đặt hàng thành công! Màu: ${selectedColor.value}, Kích thước: ${selectedSize.value}, Số lượng: ${quantity}`);
+        });
     });
 </script>

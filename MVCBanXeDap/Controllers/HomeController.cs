@@ -20,16 +20,23 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var list = new List<ProductVM>();
+            var list = new List<ProductVM2>();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + "Home/SanPhamBanChay");
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
-                var convertResponse = JsonConvert.DeserializeObject<List<ProductVM>>(data);
+                var convertResponse = JsonConvert.DeserializeObject<List<ProductVM2>>(data);
                 foreach(var item in convertResponse)
                 {
+                    var minPrice = Convert.ToDecimal(item.Chitietsanphams.Min(x => x.DonGia));  
+                    var maxPrice = Convert.ToDecimal(item.Chitietsanphams.Max(x => x.DonGia));
+
+                    // C?p nh?t MinPrice và MaxPrice
+                    item.MinPrice = minPrice;
+                    item.MaxPrice = maxPrice;
                     list.Add(item);
                 }
+                
             }
             return View(list);
         }
@@ -48,13 +55,21 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Product()
         {
-            var ListProducts = new List<ProductVM>();
+            var ListProducts = new List<ProductVM2>();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Home/GetAllProduct");
             if (response.IsSuccessStatusCode)
             {
                 string data = response.Content.ReadAsStringAsync().Result;
                 var ConvertResponseProduct = JsonConvert.DeserializeObject<JObject>(data);
-                ListProducts = ConvertResponseProduct["data"].ToObject<List<ProductVM>>();
+                ListProducts = ConvertResponseProduct["data"].ToObject<List<ProductVM2>>();
+                foreach (var product in ListProducts)
+                {
+                    if (product.Chitietsanphams != null && product.Chitietsanphams.Any())
+                    {
+                        product.MinPrice = Convert.ToDecimal(product.Chitietsanphams.Min(x => x.DonGia));
+                        product.MaxPrice = Convert.ToDecimal(product.Chitietsanphams.Max(x => x.DonGia));
+                    }
+                }
                 ViewBag.TotalPages = ConvertResponseProduct["totalPages"].Value<int>();
                 ViewBag.Page = ConvertResponseProduct["page"].Value<int>();
             };

@@ -47,7 +47,9 @@
                     <div class="product__item__pic set-bg">
                         <img src="/Hinh/SanPham/@product.Hinh" alt="@product.TenSp" style="border-radius: 10px" />
                         <div class="hover-overlay">
-                            <a href="@Url.Action("Details", "Home", new { id = product.MaSP })" class="btn btn-link btn-sm">Xem chi tiết</a>
+                            <a href="@Url.Action("Details", "Home", new { id = product.MaSP })" class="btn btn-danger btn-sm">
+                                Xem chi tiết
+                            </a>
                         </div>
                     </div>
                     <div class="product__item__text">
@@ -55,7 +57,7 @@
                         <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
 
 
-                        <h5>@product.KhoangGia VNĐ</h5>
+                        <h6 style="color:red;">@product.MinPrice VNĐ - @product.MaxPrice VNĐ</h6>
 
                     </div>
                 </div>
