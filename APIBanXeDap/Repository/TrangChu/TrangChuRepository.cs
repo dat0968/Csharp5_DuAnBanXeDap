@@ -103,7 +103,7 @@ namespace APIBanXeDap.Repository.TrangChu
                                       NhaCungCap = grouped.Select(p => p.MaSpNavigation.MaNhaCcNavigation.TenNhaCc).FirstOrDefault(),
                                       DanhMuc = grouped.Select(p => p.MaSpNavigation.MaDanhMucNavigation.TenDanhMuc).FirstOrDefault(),
                                       SoLuong = grouped.Select(p => p.MaSpNavigation.Chitietsanphams.Sum(p => p.SoLuongTon)).FirstOrDefault(),
-                                  }).OrderByDescending(p => p.TongSoLuongMua).Take(10).ToList();
+                                  }).OrderByDescending(p => p.TongSoLuongMua).Take(4).ToList();
             foreach(var item in sanphambanchay)
             {
                 var chitietsanphams = db.Chitietsanphams.Include(p => p.MaMauNavigation)

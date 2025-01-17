@@ -45,5 +45,20 @@ namespace MVCBanXeDap.Controllers
             };
             return View(ProductVM);
         }
+        [HttpGet]
+        public async Task<IActionResult> Product()
+        {
+            var ListProducts = new List<ProductVM>();
+            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Home/GetAllProduct");
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                var ConvertResponseProduct = JsonConvert.DeserializeObject<JObject>(data);
+                ListProducts = ConvertResponseProduct["data"].ToObject<List<ProductVM>>();
+                ViewBag.TotalPages = ConvertResponseProduct["totalPages"].Value<int>();
+                ViewBag.Page = ConvertResponseProduct["page"].Value<int>();
+            };
+            return View(ListProducts);
+        }
     }
 }
