@@ -60,7 +60,7 @@
 </div>
 <script>
         document.querySelectorAll('.modal').forEach(modal => {
-        const code = modal.id.split('-')[1]; // Lấy giá trị từ ID modal
+        const code = modal.id.split('-')[1]; 
         const soPhanTramGiam = modal.querySelector(`#SoPhanTramGiam_${code}`);
         const soTienGiam = modal.querySelector(`#SoTienGiam_${code}`);
         const giaToiThieu = modal.querySelector(`#GiaToiThieu_${code}`)
@@ -125,6 +125,15 @@
                 giaToiThieu.value = 1
             }
         })
+       
     });
-
+     document.getElementById("editCouponCodetForm_@Model.Code").addEventListener("submit", function(e){
+            e.preventDefault();
+            const cofirm = window.confirm("Bạn có muốn sửa thông tin mã coupon này không?")
+            if(cofirm){
+                this.submit()
+            }else{
+                return false;
+            }
+        })
 </script>

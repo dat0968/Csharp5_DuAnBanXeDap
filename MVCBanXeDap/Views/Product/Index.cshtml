@@ -70,9 +70,9 @@
                 </div>
                 <div class="col-md-3"> 
                     <select id="SortByPrice" class="form-select"> 
-                        <option selected="@(string.IsNullOrEmpty(ViewBag.Page.ToString()))" value="">Sắp xếp</option> 
-                        <option selected="@(ViewBag.Page.ToString() == "asc")" value="asc">Khoảng Giá: Thấp đến Cao</option>
-                        <option selected="@(ViewBag.Page.ToString() == "desc")" value="desc">Khoảng Giá: Cao đến Thấp</option>
+                        <option selected="@(string.IsNullOrEmpty(ViewBag.Sort))" value="">Sắp xếp</option>
+                        <option selected="@(ViewBag.Sort == "asc")" value="asc">Khoảng Giá: Thấp đến Cao</option>
+                        <option selected="@(ViewBag.Sort == "desc")" value="desc">Khoảng Giá: Cao đến Thấp</option>
                     </select>
                  </div>
             </div>

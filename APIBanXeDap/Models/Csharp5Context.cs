@@ -41,7 +41,7 @@ public partial class Csharp5Context : DbContext
     public virtual DbSet<Thuonghieu> Thuonghieus { get; set; }
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     public virtual DbSet<MaCoupon> MaCoupons { get; set; }
-
+    public virtual DbSet<Vanchuyen> Vanchuyens { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
        

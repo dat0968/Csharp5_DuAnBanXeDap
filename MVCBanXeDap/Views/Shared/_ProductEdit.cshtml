@@ -234,6 +234,7 @@
 
      document.getElementById('editProductForm_@Model.MaSP').addEventListener('submit', function (event)
      { 
+         event.preventDefault();
          // Lấy các hàng trong bảng thuộc tính 
          const rows = document.querySelectorAll('#attributeTableEdit_@Model.MaSP tr');
          const attributeSet = new Set(); 

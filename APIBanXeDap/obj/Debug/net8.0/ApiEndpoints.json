@@ -521,6 +521,85 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "APIBanXeDap.Controllers.ShippingsController",
+    "Method": "Create",
+    "RelativePath": "api/Shippings/CreateShipping",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "APIBanXeDap.ViewModels.ShippingVM",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ShippingsController",
+    "Method": "Delete",
+    "RelativePath": "api/Shippings/DeleteShipping/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ShippingsController",
+    "Method": "Edit",
+    "RelativePath": "api/Shippings/EditShipping",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "APIBanXeDap.ViewModels.ShippingVM",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ShippingsController",
+    "Method": "Get",
+    "RelativePath": "api/Shippings/GetAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keywords",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "priceFilter",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortByPrice",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIBanXeDap.Controllers.SizesController",
     "Method": "GetAllSize",
     "RelativePath": "api/Sizes/GetAllSize",

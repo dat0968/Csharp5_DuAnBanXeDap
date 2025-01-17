@@ -42,6 +42,15 @@ namespace APIBanXeDap.Repository.MaCoupon
         public List<MaCouponVM> GetAll(string? keywords, bool? status, string? sort)
         {
             var listCouponCode = db.MaCoupons.AsQueryable();
+            var expiredCoupons = listCouponCode.Where(c => c.NgayHetHan < DateTime.Now && c.TrangThai == true).ToList();
+            foreach (var coupon in expiredCoupons)
+            {
+                coupon.TrangThai = false;
+            }
+            db.UpdateRange(expiredCoupons);
+            db.SaveChanges();
+            var CovertToListMaCouponVM = new List<MaCouponVM>();
+            
             if (!string.IsNullOrEmpty(keywords))
             {
                 listCouponCode = listCouponCode.Where(p => p.Code.Contains(keywords));
@@ -67,14 +76,14 @@ namespace APIBanXeDap.Repository.MaCoupon
                     listCouponCode = listCouponCode.OrderByDescending(p => p.NgayTao);
                     break;
             }
-            var CovertToListMaCouponVM = new List<MaCouponVM>();
             foreach (var item in listCouponCode)
             {
-                if(item.NgayHetHan < DateTime.Now)
-                {
-                    item.TrangThai = false;
-                    db.SaveChanges();
-                }
+                //if (item.NgayHetHan < DateTime.Now)
+                //{
+                //    item.TrangThai = false;
+                //    db.MaCoupons.Update(item);
+                //    db.SaveChanges();
+                //}
                 CovertToListMaCouponVM.Add(new MaCouponVM
                 {
                     Code = item.Code,

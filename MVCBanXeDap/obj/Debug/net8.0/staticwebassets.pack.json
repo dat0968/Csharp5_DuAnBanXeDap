@@ -2113,6 +2113,10 @@
       "PackagePath": "staticwebassets\\img\\breadcrumb-bg.jpg"
     },
     {
+      "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\img\\clients\\1f430a36197347.57135ca19bbf5.gif",
+      "PackagePath": "staticwebassets\\img\\clients\\1f430a36197347.57135ca19bbf5.gif"
+    },
+    {
       "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\img\\clients\\client-1.png",
       "PackagePath": "staticwebassets\\img\\clients\\client-1.png"
     },

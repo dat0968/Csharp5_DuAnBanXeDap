@@ -115,6 +115,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a asp-action="Index" asp-controller="Shipping">
+                                <i class="fas fa-shipping-fast"></i> <!-- Icon vận chuyển -->
+                                QUẢN LÝ VẬN CHUYỂN
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#charts">
                                 <i class="fa fa-gift"></i> <!-- Icon combo -->
                                 QUẢN LÝ COMBO
@@ -612,7 +618,7 @@
 
 
     <!-- code chatbot-->
-    <div style="position: fixed; bottom: 20px; right: 20px; width: 700px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end;">
+      <div style="position: fixed; bottom: 20px; right: 20px; width: 700px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end;">
         <div id="tawk-bubble-container"
              role="button"
              tabindex="0"
@@ -729,7 +735,7 @@
 
             chatBody.scrollTop = chatBody.scrollHeight;
         }
-    </script>
+    </script> 
     <!--   Core JS Files   -->
     <script src="~/AdminTemplate/assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="~/AdminTemplate/assets/js/core/popper.min.js"></script>

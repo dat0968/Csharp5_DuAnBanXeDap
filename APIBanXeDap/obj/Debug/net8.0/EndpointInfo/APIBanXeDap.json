@@ -812,6 +812,135 @@
         }
       }
     },
+    "/api/Shippings/GetAll": {
+      "get": {
+        "tags": [
+          "Shippings"
+        ],
+        "parameters": [
+          {
+            "name": "keywords",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "priceFilter",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortByPrice",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Shippings/CreateShipping": {
+      "post": {
+        "tags": [
+          "Shippings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingVM"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingVM"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingVM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Shippings/EditShipping": {
+      "put": {
+        "tags": [
+          "Shippings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingVM"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingVM"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingVM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Shippings/DeleteShipping/{id}": {
+      "delete": {
+        "tags": [
+          "Shippings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Sizes/GetAllSize": {
       "get": {
         "tags": [
@@ -1022,6 +1151,32 @@
             "nullable": true
           },
           "matKhau": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShippingVM": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gia": {
+            "type": "number",
+            "format": "float"
+          },
+          "phuong": {
+            "type": "string",
+            "nullable": true
+          },
+          "quanHuyen": {
+            "type": "string",
+            "nullable": true
+          },
+          "thanhPho": {
             "type": "string",
             "nullable": true
           }

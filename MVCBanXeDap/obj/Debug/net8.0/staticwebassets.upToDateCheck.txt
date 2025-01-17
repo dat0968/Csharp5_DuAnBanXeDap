@@ -518,6 +518,7 @@ wwwroot\img\blog\blog-9.jpg
 wwwroot\img\blog\details\blog-author.jpg
 wwwroot\img\blog\details\blog-details.jpg
 wwwroot\img\breadcrumb-bg.jpg
+wwwroot\img\clients\1f430a36197347.57135ca19bbf5.gif
 wwwroot\img\clients\client-1.png
 wwwroot\img\clients\client-2.png
 wwwroot\img\clients\client-3.png

@@ -1,0 +1,221 @@
+﻿@using MVCBanXeDap.ViewModels
+@model ShippingVM
+<style type="text/css">
+    .css_select_div {
+        text-align: center;
+    }
+
+    .css_select {
+        display: inline-table;
+        width: 25%;
+        padding: 5px;
+        margin: 5px 2%;
+        border: solid 1px #686868;
+        border-radius: 5px;
+    }
+</style>
+<div class="modal fade" id="modal-@Model.Id-edit" data-tinh="@Model.ThanhPho" data-quan="@Model.QuanHuyen" data-phuong="@Model.Phuong" data-gia="@Model.Gia" tabindex="-1" aria-labelledby="editShippingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Sửa thông tin vận chuyển</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="IdVanChuyen_@Model.Id" value="@Model.Id">
+                <div class="mb-3">
+                    <label for="tinh" class="form-label">Tỉnh Thành</label>
+                    <select class="form-select" id="tinh_@Model.Id" name="tinh" title="Chọn Tỉnh Thành" required>
+                        <option value="0" selected disabled>Chọn Thành Phố</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="quan" class="form-label">Quận Huyện</label>
+                    <select class="form-select" id="quan_@Model.Id" name="quan" title="Chọn Quận Huyện" required>
+                        <option value="0" selected disabled>Chọn Quận Huyện</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phuong" class="form-label">Phường Xã</label>
+                    <select class="form-select" id="phuong_@Model.Id" name="phuong" title="Chọn Phường Xã" required>
+                        <option value="0" selected disabled>Chọn Phường Xã</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Gia" class="form-label">Giá Tối Thiểu</label>
+                    <input type="number" class="form-control" id="Gia_@Model.Id" name="Gia" min="0" required placeholder="Nhập giá vận chuyển">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="editShippingButton_@Model.Id">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://esgoo.net/scripts/jquery.js"></script>
+<script>
+    //Duyệt qua từng modal bởi mỗi modal có dữ liệu khác nhau và cần cập nhật độc lập
+    document.querySelectorAll('.modal').forEach(modal => {
+    const code = modal.id.split('-')[1];
+    var tinh = modal.dataset.tinh;
+    var quan = modal.dataset.quan;
+    var phuong = modal.dataset.phuong;
+    document.getElementById("Gia_@Model.Id").value = modal.dataset.gia
+    // Lấy tỉnh thành
+    $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+        if (data_tinh.error == 0) {
+            $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                if (tinh == val_tinh.full_name) {
+                    $(`#tinh_${code}`).append(
+                        '<option selected value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>'
+                    );
+                    var idtinh = val_tinh.id;
+                    // Lấy quận huyện
+                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
+                        if (data_quan.error == 0) {
+                            $.each(data_quan.data, function (key_quan, val_quan) {
+                                if (val_quan.full_name) {;
+                                    if (val_quan.full_name == quan) {
+                                        $(`#quan_${code}`).append(
+                                            '<option selected value="' + val_quan.id + '">' + val_quan.full_name + '</option>'
+                                        );
+                                        var idquan = val_quan.id;
+
+                                        // Lấy phường xã
+                                        $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
+                                            if (data_phuong.error == 0) {
+                                                $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                                    if (phuong == val_phuong.full_name) {
+                                                        $(`#phuong_${code}`).append(
+                                                            '<option selected value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>'
+                                                        );
+                                                    } else {
+                                                        $(`#phuong_${code}`).append(
+                                                            '<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>'
+                                                        );
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        $(`#quan_${code}`).append(
+                                            '<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>'
+                                        );
+                                    }
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    $(`#tinh_${code}`).append(
+                        '<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>'
+                    );
+                }
+            });
+
+            $(`#tinh_${code}`).change(function (e) {
+                var idtinh = $(this).val();
+
+                // Lấy quận huyện
+                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
+                    if (data_quan.error == 0) {
+                        $(`#quan_${code}`).html('<option value="0">Quận Huyện</option>');
+                        $(`#phuong_${code}`).html('<option value="0">Phường Xã</option>');
+
+                        $.each(data_quan.data, function (key_quan, val_quan) {
+                            if (val_quan.full_name) {
+                                console.log(val_quan.full_name + "-" + quan);
+                                $(`#quan_${code}`).append(
+                                    '<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>'
+                                );
+                            }
+                        });
+
+                        // Lấy phường xã
+                        $(`#quan_${code}`).change(function (e) {
+                            var idquan = $(this).val();
+                            $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
+                                if (data_phuong.error == 0) {
+                                    $(`#phuong_${code}`).html('<option value="0">Phường Xã</option>');
+                                    $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                        console.log(phuong + "-" + val_phuong.full_name);
+                                        $(`#phuong_${code}`).append(
+                                            '<option selected value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>'
+                                        );
+                                    });
+                                }
+                            });
+                        });
+                    }
+                });
+            });
+        }
+    });
+});
+    //Xử lí sửa thông tin vận chuyển
+        document.getElementById("editShippingButton_@Model.Id").addEventListener("click", function(){
+            const tinh = document.getElementById("tinh_@Model.Id");
+            const tinhSelected = tinh.options[tinh.selectedIndex].text;
+            const phuong = document.getElementById("phuong_@Model.Id");
+            const phuongSelected = phuong.options[phuong.selectedIndex].text;
+            const quan = document.getElementById("quan_@Model.Id");
+            const quanSelected = quan.options[quan.selectedIndex].text;
+            const gia = document.getElementById("Gia_@Model.Id");
+            const id = document.getElementById("IdVanChuyen_@Model.Id")
+            const model = {
+                id: id.value,
+                gia: gia.value,
+                phuong: phuongSelected,
+                quanHuyen: quanSelected,
+                thanhPho: tinhSelected
+            }
+            const isConfirm = window.confirm("Bạn có muốn sửa thông tin vận chuyển này không?")
+            if(!isConfirm){
+                return false;
+            }
+                fetch(`https://localhost:7137/api/Shippings/EditShipping`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(model)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                var message = data.message;
+                if (data.success) {
+                    sessionStorage.setItem("notification", JSON.stringify({ type: "success", message: message }));
+                    window.location.reload();
+                } else {
+                    toastr.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                toastr.error('Có lỗi xảy ra khi gửi yêu cầu.');
+            });
+        });
+        window.addEventListener("load", function () {
+        const notification = sessionStorage.getItem("notification");
+
+            if (notification) {
+                const { type, message } = JSON.parse(notification);
+
+                if (type === "success") {
+                    toastr.success(message);
+                }
+                sessionStorage.removeItem("notification");
+            }
+        });
+    
+</script>

@@ -35,16 +35,16 @@
                 </div>
                 <div class="col-md-3">
                     <select id="statusFilter" class="form-select">
-                        <option selected="@(ViewBag.Page == null)" value="">Lọc theo trạng thái</option>
-                        <option selected="@(ViewBag.Page == 1)" value="true">Còn hiệu lực</option>
-                        <option selected="@(ViewBag.Page == 0)" value="false">Hết hiệu lực</option>
+                        <option selected="@(ViewBag.Status == null)" value="">Lọc theo trạng thái</option>
+                        <option selected="@(ViewBag.Status == 1)" value="true">Còn hiệu lực</option>
+                        <option selected="@(ViewBag.Status == 0)" value="false">Hết hiệu lực</option>
                     </select>
                 </div>               
                 <div class="col-md-3">
                     <select id="SortByTime" class="form-select">
-                        <option value="">Sắp xếp</option>
-                        <option value="desc">Ngày tạo: Mới nhất (Mặc định)</option>
-                        <option value="asc">Ngày tạo: Cũ nhất</option>
+                        <option selected="@(string.IsNullOrEmpty(ViewBag.Sort))" value="">Sắp xếp</option>
+                        <option selected="@(ViewBag.Sort == "desc")" value="desc">Ngày tạo: Mới nhất (Mặc định)</option>
+                        <option selected="@(ViewBag.Sort == "asc")" value="asc">Ngày tạo: Cũ nhất</option>
                     </select>
                 </div>
             </div>
@@ -163,7 +163,7 @@
                             <td>
                                 <div class="btn-group" role="group">
                                     ${couponcode.trangThai
-                                        ? `<button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${couponcode.Code}-edit">
+                                        ? `<button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${couponcode.code}-edit">
                                             <i class="fas fa-edit"></i> Sửa
                                           </button>
                                           <partial name="_CouponCodeEdit" model="${couponcode}"></partial>`

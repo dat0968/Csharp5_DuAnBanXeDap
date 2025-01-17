@@ -11,7 +11,7 @@
                 <form asp-action="CreateCouponCode" asp-controller="CouponCode" id="addCouponCodeForm" method="post">
                     <div class="mb-3">
                         <label for="SoPhanTramGiam" class="form-label">Số phần trăm giảm</label>
-                        <input type="number" min="0" max="100" class="form-control" id="SoPhanTramGiam" name="SoPhanTramGiam" required>
+                        <input type="text" min="0" max="100" class="form-control" id="SoPhanTramGiam" name="SoPhanTramGiam" required>
                     </div>
                     <div class="mb-3">
                         <label for="SoTienGiam" class="form-label">Số tiền giảm</label>
@@ -54,10 +54,10 @@
             soTienGiam.value = ""; 
             validateFields()
         }
-        if(soPhanTramGiam.value < 0){
+        if(soPhanTramGiam.value < 0 || isNaN(soPhanTramGiam.value)){
             soPhanTramGiam.value = 1
         }
-        if(soPhanTramGiam.value > 100){
+        if(soPhanTramGiam.value > 100 || isNaN(soPhanTramGiam.value)){
             soPhanTramGiam.value = 1
         }
         
@@ -80,12 +80,13 @@
         }
     })
 
-    document.getElementById("addCouponCodeForm").addEventListener("submit", function(){
+    document.getElementById("addCouponCodeForm").addEventListener("submit", function(e){
+        e.preventDefault();
         const isConfirmed = window.confirm("Bạn có muốn thêm mã coupon này không?")
         if(isConfirmed){
             this.submit()
         }else{
-            return;
+            return false;
         }
     })
 </script>
