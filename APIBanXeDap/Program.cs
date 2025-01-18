@@ -1,5 +1,6 @@
 ﻿using APIBanXeDap.DbInitializer;
 using APIBanXeDap.Models;
+using APIBanXeDap.Repository.ChiTietHoaDon;
 using APIBanXeDap.Repository.ChiTietSanPham;
 using APIBanXeDap.Repository.DanhMuc;
 using APIBanXeDap.Repository.HinhAnhSanPham;
@@ -9,6 +10,7 @@ using APIBanXeDap.Repository.MaCoupon;
 using APIBanXeDap.Repository.MauSac;
 using APIBanXeDap.Repository.NhaCungCap;
 using APIBanXeDap.Repository.SanPham;
+using APIBanXeDap.Repository.ThongKe;
 using APIBanXeDap.Repository.ThuongHieu;
 using APIBanXeDap.Repository.Token;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -64,6 +66,8 @@ builder.Services.AddScoped<IProductDetailsRepository, ProductDetailsRepository>(
 builder.Services.AddScoped<IProductImagesRepository, ProductImagesRepository>();
 builder.Services.AddScoped<IMaCouponRepository, MaCouponRepository>();
 builder.Services.AddScoped<IHoaDonRepository, HoaDonRepository>();
+builder.Services.AddScoped<IThongKeRepository, ThongKeRepository>();
+builder.Services.AddScoped<IChiTietHoaDonRepository, ChiTietHoaDonRepository>();
 
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 

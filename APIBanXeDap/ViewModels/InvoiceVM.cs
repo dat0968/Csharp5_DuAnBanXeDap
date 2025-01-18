@@ -8,6 +8,8 @@
         public string TinhTrang { get; set; }
         public string HinhThucThanhToan { get; set; } // Hình thức thanh toán
         public string TenKhachHang { get; set; } // Họ tên khách hàng
+        public int MaNhanVien { get; set; }
+        public string TenNhanVien { get; set; }
         public string SoDienThoaiKhachHang { get; set; } // Số điện thoại khách hàng
         public string DiaChiKhachHang { get; set; } // Địa chỉ khách hàng
         public List<ChiTietHoaDonViewModel> Items { get; set; } = new List<ChiTietHoaDonViewModel>();
