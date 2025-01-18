@@ -1,14 +1,527 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="col-md-12">
-    <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">Trang chủ</h4>
+@section CSSs {
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+    <style>
+        .dashboard-section {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+        }
+
+        .card-title {
+            color: #333;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .time-range-buttons {
+            text-align: right;
+        }
+
+            .time-range-buttons button {
+                margin: 5px;
+                padding: 0.5rem 1rem;
+                font-size: 14px;
+                border-radius: 4px;
+                border: 1px solid #ddd;
+                background: #f9f9f9;
+                cursor: pointer;
+                outline: none;
+            }
+
+                .time-range-buttons button.active {
+                    background-color: #1d7af3;
+                    color: #fff;
+                    border: 1px solid #1d7af3;
+                }
+    </style>
+}
+
+
+
+<div class="container-fluid mt-3">
+    <!-- Tổng doanh thu -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body text-center bg-light">
+                    <h5 class="card-title mb-0">Tổng Doanh Thu (Số)</h5>
+                    <h2 class="mt-2" id="totalRevenue">0₫</h2>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
+    </div>
+
+    <!-- Hàng 1: Tình trạng nhân viên, khách hàng, đơn hàng và Không xác định -->
+    <div class="row mb-3">
+        <!-- Tình trạng đơn hàng -->
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-warning text-center">
+                    Tình trạng đơn hàng
+                </div>
+                <div class="card-body">
+                    <canvas id="orderChart" style="max-height: 150px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trạng thái nhân viên -->
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-center text-white">
+                    Trạng thái nhân viên
+                </div>
+                <div class="card-body">
+                    <canvas id="employeeStatusChart" style="max-height: 150px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trạng thái khách hàng -->
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-center text-white">
+                    Trạng thái khách hàng
+                </div>
+                <div class="card-body">
+                    <canvas id="customerStatusChart" style="max-height: 150px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Không xác định -->
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-light text-center">
+                    Không xác định
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center" style="height: 150px;">
+                    <span> - </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hàng 2: Biểu đồ lớn -->
+    <div class="row mb-3">
+        <!-- Doanh thu theo thời gian -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-center text-white">
+                    Doanh thu theo thời gian
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-2">
+                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="day">Ngày</button>
+                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="week">Tuần</button>
+                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="month">Tháng</button>
+                        <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="earningChart" data-range="year">Năm</button>
+                    </div>
+                    <canvas id="earningChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trạng thái đơn hàng -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-center text-white">
+                    Trạng thái đơn hàng
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-2">
+                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="day">Ngày</button>
+                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="week">Tuần</button>
+                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="month">Tháng</button>
+                        <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="orderStatusChart" data-range="year">Năm</button>
+                    </div>
+                    <canvas id="orderStatusChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hàng 3: Danh sách thống kê -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white text-center">
+                    Danh sách
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="tableSelect" class="form-label">Chọn bảng:</label>
+                        <select id="tableSelect" class="form-select" onchange="showTableFromDropdown()">
+                            <option value="coverTopProducts" selected>Sản phẩm bán chạy</option>
+                            <option value="coverTopColors">Thống kê theo màu sắc</option>
+                            <option value="coverTopSizes">Thống kê theo kích cỡ</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive">
+                        <div id="coverTopProducts">
+                            <table id="topProducts" class="table table-bordered table-striped"></table>
+                        </div>
+                        <div id="coverTopColors" class="d-none">
+                            <table id="topColors" class="table table-bordered table-striped"></table>
+                        </div>
+                        <div id="coverTopSizes" class="d-none">
+                            <table id="topSizes" class="table table-bordered table-striped"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
+
+@section Scripts {
+    <!-- Include Chart.js + Datatable.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+    <script>
+        const defaultRange = 'day';
+        const defaultAPI = "https://localhost:7137/api";
+        const chartConfigs = {
+            orderChart: {
+                url: defaultAPI + '/Dashboard/GetAllOrderData', // Sửa đổi API cho orderChart
+                chartInstance: null,
+                renderFunction: renderOrderChart
+            },
+            earningChart: {
+                url: defaultAPI + '/Dashboard/GetEarningData',
+                chartInstance: null,
+                renderFunction: renderEarningChart
+            },
+            orderStatusChart: {
+                url: defaultAPI + '/Dashboard/GetOrderStatusData',
+                chartInstance: null,
+                renderFunction: renderOrderStatusChart
+            }
+        };
+
+        $(document).ready(function () {
+            // Nút chuyển đổi timeRange
+            $('.time-range-btn').click(async function () {
+                const chartName = $(this).data('chart');
+                const timeRange = $(this).data('range');
+
+                // Đặt active button
+                $(`button[data-chart="${chartName}"]`).removeClass('active');
+                $(this).addClass('active');
+
+                // Get Chart Config
+                const config = chartConfigs[chartName];
+
+                // Fetch data và render lại biểu đồ
+                try {
+                    // Nếu chartName là orderChart, không cần dùng timeRange
+                    const apiUrl = chartName === 'orderChart' ? config.url : `${config.url}/${timeRange}`;
+                    const data = await fetchJson(apiUrl);
+                    config.chartInstance = config.renderFunction(data, chartName, config.chartInstance);
+                } catch (error) {
+                    const data = await fetchJson(config.url); // Lấy dữ liệu không có timeRange
+                    config.chartInstance = config.renderFunction(data, chartName, config.chartInstance);
+                    displayError(`Error fetching data for ${chartName}: ${error.message}`);
+                }
+            });
+
+            // Initialize Charts on page load
+            Object.keys(chartConfigs).forEach(async (chartName) => {
+                const config = chartConfigs[chartName];
+                try {
+                    const apiUrl = chartName === 'orderChart' ? config.url : `${config.url}/${defaultRange}`;
+                    const data = await fetchJson(apiUrl);
+                    config.chartInstance = config.renderFunction(data, chartName, config.chartInstance);
+                    $(`button[data-chart="${chartName}"][data-range="${defaultRange}"]`).addClass('active');
+                } catch (error) {
+                    displayError(`Error initializing chart ${chartName}: ${error.message}`);
+                }
+            });
+
+            // Load Pie Charts for User Status
+            loadUserStatusCharts();
+        });
+
+        async function fetchJson(url) {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data from ${url}: ${response.statusText}`);
+            }
+            const rawData = await response.json();
+            return typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+        }
+
+        function renderOrderChart(data, chartName, chartInstance) {
+            const ctx = document.getElementById(chartName).getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+            return new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Đã xác nhận', 'Chờ thanh toán', 'Đang xử lý'],
+                    datasets: [{
+                        data: [data.approved, data.pending, data.inAllProgress],
+                        backgroundColor: ['#1d7af3', '#f3545d', '#fdaf4b']
+                    }]
+                },
+                options: { responsive: true }
+            });
+        }
+
+        function renderEarningChart(data, chartName, chartInstance) {
+            const ctx = document.getElementById(chartName).getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.categories,
+                    datasets: [{
+                        label: 'Doanh thu',
+                        data: data.data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: false
+                    }]
+                },
+                options: { responsive: true }
+            });
+        }
+
+
+        function renderOrderStatusChart(data, chartName, chartInstance) {
+            const ctx = document.getElementById(chartName).getContext('2d');
+
+            // Nếu biểu đồ đã tồn tại, thì xoá đi và khởi tạo biểu đồ mới
+            if (chartInstance) chartInstance.destroy();
+
+            return new Chart(ctx, {
+                type: 'pie', // Kiểu biểu đồ Pie
+                data: {
+                    labels: data.labels, // Các nhãn của biểu đồ
+                    datasets: [{
+                        label: 'Tình trạng đơn hàng', // Tên của tập dữ liệu
+                        data: data.data, // Giá trị số liệu của từng nhãn
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.6)', // Xanh ngọc (Đã xác nhận)
+                            'rgba(54, 162, 235, 0.6)', // Xanh dương (Đã giao cho đơn vị vận chuyển)
+                            'rgba(255, 206, 86, 0.6)', // Vàng (Đang giao hàng)
+                            'rgba(153, 102, 255, 0.6)', // Tím (Chờ thanh toán)
+                            'rgba(255, 99, 132, 0.6)', // Đỏ (Hoàn trả/Hoàn tiền)
+                            'rgba(201, 203, 207, 0.6)', // Xám (Đã hủy)
+                            'rgba(255, 159, 64, 0.6)', // Cam (Chờ xác nhận)
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(201, 203, 207, 1)',
+                            'rgba(255, 159, 64, 1)',
+                        ],
+                        borderWidth: 1, // Độ rộng viền của từng phần
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom', // Dịch tiêu đề xuống phía dưới biểu đồ
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    const total = data.data.reduce((sum, value) => sum + value, 0);
+                                    const value = data.data[tooltipItem.dataIndex];
+                                    const percentage = ((value / total) * 100).toFixed(2);
+                                    return `${tooltipItem.label}: ${value} (${percentage}%)`;
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+        }
+
+        async function loadUserStatusCharts() {
+            try {
+                const data = await fetchJson(defaultAPI + '/Dashboard/GetStatUser');
+                const employeeStatusData = data.find(d => d.userType === "Employee");
+                const customerStatusData = data.find(d => d.userType === "Customer");
+
+                renderPieChart('employeeStatusChart', ['Hoạt động', 'Ngưng hoạt động'], [employeeStatusData.active, employeeStatusData.inactive], ['#1d7af3', '#f3545d']);
+                renderPieChart('customerStatusChart', ['Hoạt động', 'Ngưng hoạt động'], [customerStatusData.active, customerStatusData.inactive], ['#fdaf4b', '#f3545d']);
+            } catch (error) {
+                displayError('Error loading user status charts: ' + error.message);
+            }
+        }
+
+        function renderPieChart(chartId, labels, data, backgroundColors) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            if (Chart.getChart(chartId)) {
+                Chart.getChart(chartId).destroy();
+            }
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayError(message) {
+            // Hiển thị thông báo lỗi cho người dùng
+            toastr.info(message);
+        }
+    </script>
+
+
+    <!-- Mã Datatable -->
+    <script>
+        $(document).ready(function () {
+            loadTopSellingProductsData();
+        });
+
+        function loadTopSellingProductsData() {
+            $.ajax({
+                url: '/dashboard/GetTopSellingProducts',
+                method: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        renderTopProductsTable(response.data.topProducts);
+                        renderTopColorsTable(response.data.topColors);
+                        renderTopSizesTable(response.data.topSizes);
+                    } else {
+                        displayError(response.message);
+                    }
+                },
+                error: function (err) {
+                    displayError("Error when fetching data: " + err.message);
+                }
+            });
+        }
+
+        function renderTable(data, columns, tableId) {
+            $(tableId).DataTable({
+                data: data,
+                destroy: true,
+                columns: columns,
+                language: getDatatableLanguageSettings()
+            });
+        }
+
+        // Khởi tạo bảng Top Products
+        function renderTopProductsTable(data) {
+            const columns = [
+                { title: 'ID', data: 'maSp' },
+                { title: 'Tên Sản Phẩm', data: 'tenSp' },
+                { title: 'Màu', data: 'tenMau' },
+                { title: 'Kích Thước', data: 'tenKichThuoc' },
+                { title: 'Số Lượng', data: 'soLuong', className: 'text-center' },
+                { title: 'Thành Tiền', data: 'thanhTien', render: $.fn.dataTable.render.number(',', '.', 0, '₫') },
+                {
+                    title: 'Hình',
+                    data: 'hinh',
+                    render: function(data) {
+                        return `<img src="/hinh/sanpham/${data}" alt="Hình sản phẩm" style="width: 50px; height: auto;">`;
+                    }
+                }
+            ];
+            renderTable(data, columns, '#topProducts');
+        }
+
+        // Khởi tạo bảng Top Colors
+        function renderTopColorsTable(data) {
+            const columns = [
+                { title: 'Màu', data: 'tenMau' },
+                { title: 'Tên Sản Phẩm', data: 'tenSp' },
+                { title: 'Số Lượng', data: 'soLuong', className: 'text-center' },
+                { title: 'Thành Tiền', data: 'thanhTien', render: $.fn.dataTable.render.number(',', '.', 0, '₫') },
+                {
+                    title: 'Hình',
+                    data: 'hinh',
+                    render: function(data) {
+                        return `<img src="/hinh/sanpham/${data}" alt="Hình sản phẩm" style="width: 50px; height: auto;">`;
+                    }
+                }
+            ];
+            renderTable(data, columns, '#topColors');
+        }
+
+        // Khởi tạo bảng Top Sizes
+        function renderTopSizesTable(data) {
+            const columns = [
+                { title: 'Kích Thước', data: 'tenKichThuoc' },
+                { title: 'Tên Sản Phẩm', data: 'tenSp' },
+                { title: 'Số Lượng', data: 'soLuong', className: 'text-center' },
+                { title: 'Thành Tiền', data: 'thanhTien', render: $.fn.dataTable.render.number(',', '.', 0, '₫') },
+                {
+                    title: 'Hình',
+                    data: 'hinh',
+                    render: function(data) {
+                        return `<img src="/hinh/sanpham/${data}" alt="Hình sản phẩm" style="width: 50px; height: auto;">`;
+                    }
+                }
+            ];
+            renderTable(data, columns, '#topSizes');
+        }
+
+        function getDatatableLanguageSettings() {
+            return {
+                sSearch: "Tìm kiếm:",
+                lengthMenu: "Hiển thị _MENU_ mục",
+                info: "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<"
+                },
+                zeroRecords: `<div style="text-align: center;">Không tìm thấy kết quả nào.</div>`,
+                infoEmpty: "Không có mục nào để hiển thị",
+                infoFiltered: "(lọc từ _MAX_ mục)"
+            };
+        }
+
+        function showTableFromDropdown() {
+            const selectedTableId = document.getElementById('tableSelect').value;
+            const tables = ['coverTopProducts', 'coverTopColors', 'coverTopSizes'];
+
+            tables.forEach(tableId => {
+                document.getElementById(tableId).style.display = 'none';
+            });
+
+            document.getElementById(selectedTableId).style.display = '';
+        }
+
+    </script>
+}
