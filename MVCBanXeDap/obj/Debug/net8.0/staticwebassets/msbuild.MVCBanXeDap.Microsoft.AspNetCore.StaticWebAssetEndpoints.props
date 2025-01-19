@@ -7780,13 +7780,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\MVCBanXeDap.q9szcg5upm.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-IupQruumTa2ef\u002BE22HIYdU5H\u002BbBJ8FPUni3DZU3FP60="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1129"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022IupQruumTa2ef\u002BE22HIYdU5H\u002BbBJ8FPUni3DZU3FP60=\u0022"},{"Name":"Last-Modified","Value":"Wed, 25 Dec 2024 10:45:12 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1129"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022IupQruumTa2ef\u002BE22HIYdU5H\u002BbBJ8FPUni3DZU3FP60=\u0022"},{"Name":"Last-Modified","Value":"Sun, 19 Jan 2025 12:01:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/MVCBanXeDap/MVCBanXeDap.q9szcg5upm.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\MVCBanXeDap.q9szcg5upm.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"q9szcg5upm"},{"Name":"integrity","Value":"sha256-IupQruumTa2ef\u002BE22HIYdU5H\u002BbBJ8FPUni3DZU3FP60="},{"Name":"label","Value":"_content/MVCBanXeDap/MVCBanXeDap.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1129"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022IupQruumTa2ef\u002BE22HIYdU5H\u002BbBJ8FPUni3DZU3FP60=\u0022"},{"Name":"Last-Modified","Value":"Wed, 25 Dec 2024 10:45:12 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1129"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022IupQruumTa2ef\u002BE22HIYdU5H\u002BbBJ8FPUni3DZU3FP60=\u0022"},{"Name":"Last-Modified","Value":"Sun, 19 Jan 2025 12:01:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/MVCBanXeDap/readme.7dvirsxg20.txt">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\readme.txt'))</AssetFile>

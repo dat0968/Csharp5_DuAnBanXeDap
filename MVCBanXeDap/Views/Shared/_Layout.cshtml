@@ -12,7 +12,7 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
     rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Css Styles -->
     <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">
@@ -107,8 +107,8 @@
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="">Trang chủ</a></li>
-                            <li><a href="">Cửa hàng</a></li>
+                            <li class="active"><a asp-action="Index" asp-controller="Home">Trang chủ</a></li>
+                            <li><a asp-action="Product" asp-controller="Home">Cửa hàng</a></li>
                             @* <li> *@
                             @*     <a href="#">Pages</a> *@
                             @*     <ul class="dropdown"> *@
@@ -135,61 +135,9 @@
             <div class="canvas__open"><i class="fa fa-bars"></i></div>
         </div>
     </header>
-    <!-- Header Section End -->
-    <!-- Hero Section Begin -->
+ 
     @RenderBody()
-    <section class="hero">
-        <div class="hero__slider owl-carousel">
-            <div class="hero__items set-bg" data-setbg="img/hero/46-1.jpg">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-7 col-md-8">
-                            <div class="hero__text">
-                                <h6>Khám phá bộ sưu tập xe đạp</h6>
-                                <h2>Xe đạp hiện đại</h2>
-                                <p style="color: black" >
-                                    Chất lượng vượt trội, thiết kế tinh tế và phù hợp cho mọi nhu cầu. Khám phá các mẫu xe đạp với công nghệ mới nhất, mang đến sự thoải mái và hiệu suất tối ưu.
-                                </p>
-                                <a href="#" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
-                                @* <div class="hero__social"> *@
-                                @*     <a href="#"><i class="fa fa-facebook"></i></a> *@
-                                @*     <a href="#"><i class="fa fa-twitter"></i></a> *@
-                                @*     <a href="#"><i class="fa fa-pinterest"></i></a> *@
-                                @*     <a href="#"><i class="fa fa-instagram"></i></a> *@
-                                @* </div> *@
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hero__items set-bg" data-setbg="img/hero/dap-xe-co-tac-dung-gi-6.webp">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-7 col-md-8">
-                            <div class="hero__text">
-                                <h6>Khám phá bộ sưu tập xe đạp</h6>
-                                <h2>Xe đạp cao cấp</h2>
-                                <p style="color: black">
-                                    Những chiếc xe đạp tuyệt vời với thiết kế hiện đại và chất liệu cao cấp, phù hợp với tất cả mọi người, mang đến trải nghiệm tuyệt vời mỗi khi di chuyển.
-                                </p>
-                                <a href="#" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
-                                @* <div class="hero__social"> *@
-                                @*     <a href="#"><i class="fa fa-facebook"></i></a> *@
-                                @*     <a href="#"><i class="fa fa-twitter"></i></a> *@
-                                @*     <a href="#"><i class="fa fa-pinterest"></i></a> *@
-                                @*     <a href="#"><i class="fa fa-instagram"></i></a> *@
-                                @* </div> *@
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Hero Section End -->
-
-    <div class="container py-5">
+    @*<div class="container py-5">
         <h2 class="text-center mb-4">Sản phẩm bán chạy</h2>
         <div class="row">
             <!-- Product Item -->
@@ -197,12 +145,12 @@
                 <div class="product__item">
                     <div class="product__item__pic set-bg">
                         <img src="~/img/product/product-1.jpg" />
-                        @*<span class="label">Mới</span>*@
-                        @* <ul class="product__hover"> *@
-                        @*     <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> *@
-                        @*     <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> *@
-                        @*     <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> *@
-                        @* </ul> *@
+                        span class="label">Mới</span
+                         <ul class="product__hover"> 
+                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> 
+                             <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> 
+                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> 
+                         </ul> 
                     </div>
                     <div class="product__item__text">
                         <h6>Áo khoác biker Piqué</h6>
@@ -224,12 +172,12 @@
                 <div class="product__item">
                     <div class="product__item__pic set-bg">
                         <img src="~/img/product/product-1.jpg" />
-                        @*<span class="label">Mới</span>*@
-                        @* <ul class="product__hover"> *@
-                        @*     <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> *@
-                        @*     <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> *@
-                        @*     <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> *@
-                        @* </ul> *@
+                        <span class="label">Mới</span>
+                         <ul class="product__hover"> 
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> 
+                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> 
+                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> 
+                         </ul> 
                     </div>
                     <div class="product__item__text">
                         <h6>Áo khoác biker Piqué</h6>
@@ -251,12 +199,12 @@
                 <div class="product__item">
                     <div class="product__item__pic set-bg">
                         <img src="~/img/product/product-1.jpg" />
-                        @*<span class="label">Mới</span>*@
-                        @* <ul class="product__hover"> *@
-                        @*     <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> *@
-                        @*     <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> *@
-                        @*     <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> *@
-                        @* </ul> *@
+                        <span class="label">Mới</span>
+                         <ul class="product__hover"> 
+                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> 
+                             <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> 
+                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> 
+                         </ul> 
                     </div>
                     <div class="product__item__text">
                         <h6>Áo khoác biker Piqué</h6>
@@ -278,12 +226,12 @@
                 <div class="product__item">
                     <div class="product__item__pic set-bg">
                         <img src="~/img/product/product-1.jpg" />
-                        @*<span class="label">Mới</span>*@
-                        @* <ul class="product__hover"> *@
-                        @*     <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> *@
-                        @*     <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> *@
-                        @*     <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> *@
-                        @* </ul> *@
+                         <span class="label">Mới</span>
+                         <ul class="product__hover"> 
+                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li> 
+                             <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>So sánh</span></a></li> 
+                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li> 
+                         </ul> 
                     </div>
                     <div class="product__item__text">
                         <h6>Áo khoác biker Piqué</h6>
@@ -301,7 +249,7 @@
             </div>
         </div>
     </div>
-
+    *@
     
     
     <!-- Footer Section Begin -->
@@ -365,7 +313,7 @@
             </div>
         </div>
     </footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- Footer Section End -->
     <!-- Js Plugins -->
     <script src="~/js/jquery-3.3.1.min.js"></script>

@@ -10,6 +10,7 @@ using APIBanXeDap.Repository.SanPham;
 using APIBanXeDap.Repository.ThuongHieu;
 using APIBanXeDap.Repository.Token;
 using APIBanXeDap.Repository.VanChuyen;
+using APIBanXeDap.Repository.TrangChu;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,7 @@ builder.Services.AddScoped<IProductDetailsRepository, ProductDetailsRepository>(
 builder.Services.AddScoped<IProductImagesRepository, ProductImagesRepository>();
 builder.Services.AddScoped<IMaCouponRepository, MaCouponRepository>();
 builder.Services.AddScoped<IShippingRepository, ShippingRepository>();
+builder.Services.AddScoped<ITrangChuRepository, TrangChuRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyPolicy", options =>
