@@ -1,12 +1,11 @@
 {
   "Version": 1,
-  "Hash": "G7qZ9OmTUOpzLNftDJYz1TezEt7JvXEd9Vt6AIBY958=",
+  "Hash": "wJuCbKhB047u0sbDgeddVbxfzD90qpMjF+OjFUPC634=",
   "Source": "APIBanXeDap",
   "BasePath": "_content/APIBanXeDap",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "Assets": []
 }
