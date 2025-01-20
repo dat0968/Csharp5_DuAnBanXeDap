@@ -1,0 +1,73 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4.png",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\4.png"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-01-15 063250.png",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\Screenshot 2025-01-15 063250.png"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\download (1).jpg",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\download (1).jpg"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\download (2).jpg",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\download (2).jpg"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\download.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\download.jpg"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (1).jpg",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\images (1).jpg"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (2).jpg",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\images (2).jpg"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (3).jpg",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\images (3).jpg"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\n.jpg",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\n.jpg"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhNhanVien\\Screenshot 2024-12-31 141623.png",
+      "PackagePath": "staticwebassets\\Hinh\\AnhNhanVien\\Screenshot 2024-12-31 141623.png"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhNhanVien\\Screenshot 2024-12-31 144629.png",
+      "PackagePath": "staticwebassets\\Hinh\\AnhNhanVien\\Screenshot 2024-12-31 144629.png"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhNhanVien\\Screenshot 2024-12-31 210228.png",
+      "PackagePath": "staticwebassets\\Hinh\\AnhNhanVien\\Screenshot 2024-12-31 210228.png"
+    },
+    {
+      "Id": "D:\\FPT\\Light_Team\\Csharp5_DuAnBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhNhanVien\\Screenshot 2025-01-18 202223.png",
+      "PackagePath": "staticwebassets\\Hinh\\AnhNhanVien\\Screenshot 2025-01-18 202223.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.APIBanXeDap.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.APIBanXeDap.props",
+      "PackagePath": "build\\APIBanXeDap.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.APIBanXeDap.props",
+      "PackagePath": "buildMultiTargeting\\APIBanXeDap.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.APIBanXeDap.props",
+      "PackagePath": "buildTransitive\\APIBanXeDap.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -1,4 +1,5 @@
 using APIBanXeDap.Models;
+using APIBanXeDap.Repository;
 using APIBanXeDap.Repository.ChiTietSanPham;
 using APIBanXeDap.Repository.DanhMuc;
 using APIBanXeDap.Repository.HinhAnhSanPham;
@@ -9,6 +10,9 @@ using APIBanXeDap.Repository.NhaCungCap;
 using APIBanXeDap.Repository.SanPham;
 using APIBanXeDap.Repository.ThuongHieu;
 using APIBanXeDap.Repository.Token;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+
+//using APIBanXeDap.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +65,11 @@ builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<IProductDetailsRepository, ProductDetailsRepository>();
 builder.Services.AddScoped<IProductImagesRepository, ProductImagesRepository>();
 builder.Services.AddScoped<IMaCouponRepository, MaCouponRepository>();
+builder.Services.AddScoped<IKhachHangService, KhachHangService>();
+builder.Services.AddScoped<IKhachHangRepository, KhachHangRepository>();
+builder.Services.AddScoped<INhanVienService, NhanVienService>();
+builder.Services.AddScoped<INhanVienRepository, NhanVienRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyPolicy", options =>
@@ -82,7 +91,7 @@ app.UseCors("MyPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();

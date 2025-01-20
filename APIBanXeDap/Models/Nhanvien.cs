@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APIBanXeDap.Models;
 
@@ -34,6 +35,9 @@ public partial class Nhanvien
     public string? TinhTrang { get; set; }
 
     public bool? IsDelete { get; set; }
+    public string? Hinh { get; set; }
+    [NotMapped]
+    public IFormFile? Anh { get; set; }
 
     public virtual ICollection<Hoadon> Hoadons { get; set; } = new List<Hoadon>();
 }

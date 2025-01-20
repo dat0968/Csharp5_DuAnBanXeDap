@@ -9,93 +9,99 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MVCBanXeDap
 build_property.RootNamespace = MVCBanXeDap
-build_property.ProjectDir = F:\CSHARP_5\APIBanXeDap\MVCBanXeDap\
+build_property.ProjectDir = D:\FPT\Light_Team\Csharp5_DuAnBanXeDap\MVCBanXeDap\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = F:\CSHARP_5\APIBanXeDap\MVCBanXeDap
+build_property.MSBuildProjectDirectory = D:\FPT\Light_Team\Csharp5_DuAnBanXeDap\MVCBanXeDap
 build_property._RazorSourceGeneratorDebug = 
-build_property.EffectiveAnalysisLevelStyle = 8.0
-build_property.EnableCodeStyleSeverity = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Accounts/ForgotPasswordCustomer.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Accounts/ForgotPasswordCustomer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudHNcRm9yZ290UGFzc3dvcmRDdXN0b21lci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Accounts/ForgotPasswordStaff.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Accounts/ForgotPasswordStaff.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudHNcRm9yZ290UGFzc3dvcmRTdGFmZi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Accounts/LoginCustomer.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Accounts/LoginCustomer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudHNcTG9naW5DdXN0b21lci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Accounts/LoginStaff.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Accounts/LoginStaff.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudHNcTG9naW5TdGFmZi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Accounts/Register.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Accounts/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudHNcUmVnaXN0ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/CouponCode/Index.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/CouponCode/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cG9uQ29kZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Home/Index.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Home/Privacy.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Product/Index.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/KhachHang/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/NhanVien/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmhhblZpZW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Product/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Shared/Error.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Shared/_CouponCodeCreate.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Shared/_CouponCodeCreate.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Db3Vwb25Db2RlQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Shared/_CouponCodeEdit.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Shared/_CouponCodeEdit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Db3Vwb25Db2RlRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Shared/_LayoutAdmin.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Shared/_LayoutAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRBZG1pbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Shared/_ProductCreate.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Shared/_ProductCreate.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Qcm9kdWN0Q3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Shared/_ProductDetails.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Shared/_ProductDetails.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Qcm9kdWN0RGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Shared/_ProductEdit.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Shared/_ProductEdit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Qcm9kdWN0RWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/_ViewImports.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/_ViewStart.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/CSHARP_5/APIBanXeDap/MVCBanXeDap/Views/Shared/_Layout.cshtml]
+[D:/FPT/Light_Team/Csharp5_DuAnBanXeDap/MVCBanXeDap/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-gnojzkhcou

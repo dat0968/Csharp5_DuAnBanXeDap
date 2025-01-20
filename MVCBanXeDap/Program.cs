@@ -1,8 +1,15 @@
-using MVCBanXeDap.Services;
+﻿using MVCBanXeDap.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Đăng ký HttpClient
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7137/api");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+// Đăng ký các dịch vụ khác
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession(options =>
 {
@@ -10,14 +17,16 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// Đăng ký EmailService
 builder.Services.AddSingleton<EmailService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Cấu hình pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
