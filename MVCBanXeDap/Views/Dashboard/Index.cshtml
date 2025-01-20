@@ -61,76 +61,56 @@
             </div>
         </div>
 
-        <div class="row mb-3 justify-content-center">
-            @* <!-- Tổng doanh thu -->
-            <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-icon">
-                                <div class="icon-big text-center icon-info bubble-shadow-small">
-                                    <i class="fas fa-dollar-sign"></i>
-                                </div>
-                            </div>
-                            <div class="col col-stats ms-3 ms-sm-0">
-                                <div class="numbers">
-                                    <p class="card-category">Tổng Doanh Thu</p>
-                                    <h4 class="card-title" id="totalRevenue">0₫</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> *@
 
-            <!-- Tình trạng đơn hàng -->
-            <div class="col-sm-6 col-md-4">
-                <div class="card card-stats card-round h-100">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col col-stats ms-3 ms-sm-0">
-                                <div class="numbers">
-                                    <p class="card-category">Tình trạng đơn hàng</p>
-                                    <canvas id="orderChart" style="max-height: 150px;"></canvas>
-                                </div>
-                            </div>
+<div class="container-fluid mt-3">
+    <!-- Tình trạng đơn hàng -->
+    <div class="col-sm-6 col-md-4">
+        <div class="card card-stats card-round h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                            <p class="card-category">Tình trạng đơn hàng</p>
+                            <canvas id="orderChart" style="max-height: 150px;"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Trạng thái nhân viên -->
-            <div class="col-sm-6 col-md-4">
-                <div class="card card-stats card-round h-100">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col col-stats ms-3 ms-sm-0">
-                                <div class="numbers">
-                                    <p class="card-category">Trạng thái nhân viên</p>
-                                    <canvas id="employeeStatusChart" style="max-height: 150px;"></canvas>
-                                </div>
-                            </div>
+    <!-- Trạng thái nhân viên -->
+    <div class="col-sm-6 col-md-4">
+        <div class="card card-stats card-round h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                            <p class="card-category">Trạng thái nhân viên</p>
+                            <canvas id="employeeStatusChart" style="max-height: 150px;"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Trạng thái khách hàng -->
-            <div class="col-sm-6 col-md-4">
-                <div class="card card-stats card-round h-100">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col col-stats ms-3 ms-sm-0">
-                                <div class="numbers">
-                                    <p class="card-category">Trạng thái khách hàng</p>
-                                    <canvas id="customerStatusChart" style="max-height: 150px;"></canvas>
-                                </div>
+        <!-- Trạng thái khách hàng -->
+        <div class="col-sm-6 col-md-4">
+            <div class="card card-stats card-round h-100">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Trạng thái khách hàng</p>
+                                <canvas id="customerStatusChart" style="max-height: 150px;"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
         <div class="row mb-3">
             <div class="col-md-8">
                 <div class="card card-round">
@@ -138,14 +118,14 @@
                         <div class="card-head-row">
                             <div class="card-title">Trạng thái đơn hàng</div>
                             <div class="card-tools">
-                                <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @* <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-ellipsis-h"></i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item" href="#">Action</a>
                                     <a class="dropdown-item" href="#">Another action</a>
                                     <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
+                                </div> *@
                             </div>
                         </div>
                     </div>
@@ -166,14 +146,14 @@
                         <div class="card-head-row">
                             <div class="card-title">Doanh thu theo thời gian</div>
                             <div class="card-tools">
-                                <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @* <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-ellipsis-h"></i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item" href="#">Action</a>
                                     <a class="dropdown-item" href="#">Another action</a>
                                     <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
+                                </div> *@
                             </div>
                         </div>
                     </div>
@@ -196,14 +176,14 @@
                         <div class="card-head-row">
                             <div class="card-title">Danh sách</div>
                             <div class="card-tools">
-                                <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @* <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-ellipsis-h"></i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item" href="#">Action</a>
                                     <a class="dropdown-item" href="#">Another action</a>
                                     <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
+                                </div> *@
                             </div>
                         </div>
                     </div>

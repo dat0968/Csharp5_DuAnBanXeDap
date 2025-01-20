@@ -24,7 +24,7 @@ namespace APIBanXeDap.DbInitializer
             {
                 CreateTempStaff();
             }
-            if (_db.Hoadons.Count() < 100)
+            if (_db.Hoadons.Count() < 700)
             {
                 CreateOrderForCharts();
             }
