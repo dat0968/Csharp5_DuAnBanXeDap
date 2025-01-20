@@ -235,7 +235,7 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.BrandsController",
-    "Method": "GettAllBrand",
+    "Method": "GetAllBrand",
     "RelativePath": "api/Brands/GetAllBrand",
     "HttpMethod": "GET",
     "IsController": true,

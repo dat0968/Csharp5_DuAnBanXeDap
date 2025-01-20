@@ -14,7 +14,13 @@ namespace APIBanXeDap.Repository.NhaCungCap
         }
         public List<Nhacungcap> GetAllSupplier(string? keywords, string? sort)
         {
-            return db.Nhacungcaps.Where(ncc => ncc.IsDelete == false).ToList();
+            var listSupplier = db.Nhacungcaps.AsNoTracking().Where(ncc => ncc.IsDelete == false).AsQueryable();
+            if(!string.IsNullOrEmpty(keywords) )
+            {
+                listSupplier = listSupplier.Where(n => n.MaNhaCc.ToString().Contains(keywords) || n.TenNhaCc.Contains(keywords));
+            }
+            var list = listSupplier.ToList();
+            return list;
         }
         public SupplierEM CreateSupplier(SupplierEM supplier)
         {

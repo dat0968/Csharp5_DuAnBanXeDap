@@ -20,21 +20,32 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string? keywords, string? sort, int page = 1)
         {
-
             var ListBrand = new List<BrandVM>();
-            HttpResponseMessage responseBrand = await _client.GetAsync(_client.BaseAddress + $"Brands/GetAllBrand?keywords={keywords}&sort={sort}&page={page}");            
-            if (responseBrand.IsSuccessStatusCode)
+            try
             {
-                string data = await responseBrand.Content.ReadAsStringAsync();
-                ListBrand = JsonConvert.DeserializeObject<List<BrandVM>>(data);
-                ViewBag.Brand = ListBrand;
+                HttpResponseMessage responseBrand = await _client.GetAsync(_client.BaseAddress + $"Brands/GetAllBrand?keywords={keywords}&sort={sort}&page={page}");
+                if (responseBrand.IsSuccessStatusCode)
+                {
+                    string data = await responseBrand.Content.ReadAsStringAsync();
+                    var ConvertResponseSupplier = JsonConvert.DeserializeObject<JObject>(data);
+                    ListBrand = ConvertResponseSupplier["data"].ToObject<List<BrandVM>>();
+                    ViewBag.TotalPages = ConvertResponseSupplier["totalPages"].Value<int>();
+                    ViewBag.Page = ConvertResponseSupplier["page"].Value<int>();
+                    ViewBag.Keywords = keywords;
+                    ViewBag.Sort = sort;
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Không thể tải danh sách thương hiệu.";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Không thể tải danh sách thương hiệu.";
+                TempData["ErrorMessage"] = "Đã có lỗi xảy ra khi gọi API.";
             }
             return View(ListBrand);
         }
+
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {

@@ -18,21 +18,29 @@ namespace APIBanXeDap.Controllers
             this.SupplierRepository = SupplierRepository;
         }
         [HttpGet("GetAllSupplier")]
-        public IActionResult GetAllSupplier(string? keywords, string? sort, int page = 1)
+        public IActionResult GetAllSupplier(string? keywords, string? sort, int page)
         {
-            page = page < 1 ? 1 : page;
-            int pagesize = 10;
-            var ListSuppliers = SupplierRepository.GetAllSupplier(keywords, sort);
-            var pagedSupplier = ListSuppliers.Skip((page - 1) * pagesize).Take(pagesize).ToList();
-            var totalItems = ListSuppliers.Count();
-            var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
-            return Ok(new
+            if(page >= 1)
             {
-                Data = pagedSupplier,
-                TotalItems = totalItems,
-                TotalPages = totalPages,
-                Page = page,
-            });
+                int pagesize = 10;
+                var ListSuppliers = SupplierRepository.GetAllSupplier(keywords, sort);
+                var pagedSupplier = ListSuppliers.Skip((page - 1) * pagesize).Take(pagesize).ToList();
+                var totalItems = ListSuppliers.Count();
+                var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
+                return Ok(new
+                {
+                    Data = pagedSupplier,
+                    TotalItems = totalItems,
+                    TotalPages = totalPages,
+                    Page = page,
+                });
+            }
+            else
+            {
+                var ListSuppliers = SupplierRepository.GetAllSupplier(keywords, sort);
+                return Ok(ListSuppliers);
+            }
+           
         }
 
         // Lấy thông tin nhà cung cấp theo ID

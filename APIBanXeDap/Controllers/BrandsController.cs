@@ -20,21 +20,28 @@ namespace APIBanXeDap.Controllers
             this.BrandRepository = BrandRepository;
         }
         [HttpGet("GetAllBrand")]
-        public IActionResult GettAllBrand(string? keywords, string? sort, int page = 1)
+        public IActionResult GetAllBrand(string? keywords, string? sort, int page)
         {
-            page = page <1 ? 1 : page;
-            int pagesize = 10;
-            var ListBrands = BrandRepository.GetAllBrand(keywords, sort);
-            var pagedBrand = ListBrands.Skip((page - 1) * pagesize).Take(pagesize).ToList();
-            var totalItems = ListBrands.Count();
-            var totalPages = (int)Math.Ceiling((double)totalItems /pagesize);
-            return Ok(new
+            if(page >= 1)
             {
-                Data = pagedBrand,
-                TotalItems = totalItems,
-                TotalPages = totalPages,
-                Page = page,
-            });
+                int pagesize = 10;
+                var ListBrands = BrandRepository.GetAllBrand(keywords, sort);
+                var pagedBrand = ListBrands.Skip((page - 1) * pagesize).Take(pagesize).ToList();    
+                var totalItems = ListBrands.Count();
+                var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
+                return Ok(new
+                {
+                    Data = pagedBrand,
+                    TotalItems = totalItems,
+                    TotalPages = totalPages,
+                    Page = page,
+                });
+            }
+            else
+            {
+                var ListBrands = BrandRepository.GetAllBrand(keywords, sort);
+                return Ok(ListBrands);
+            }
         }
         [HttpGet("GetBrandById/{id}")]
         public IActionResult GetBrandById([FromRoute]int id)

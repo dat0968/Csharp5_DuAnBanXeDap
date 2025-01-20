@@ -29,18 +29,24 @@
         <div class="card-body">
             <!-- Tìm kiếm nhà cung cấp -->
             <div class="row mb-3">
-                <div class="col-md-4">
-                    <input id="keywords" name="keywords" type="text" class="form-control" placeholder="Tìm kiếm nhà cung cấp..." />
+                <div class="col-md-3">
+                    <input id="keywords" value="@ViewBag.Keywords" name="keywords" type="text" class="form-control" placeholder="Tìm kiếm nhà cung cấp..." />
+                </div>
+                <div class="col-md-3">
+                    <select id="SortByPrice" class="form-select">
+                        <option selected="@(string.IsNullOrEmpty(ViewBag.Sort))">Sắp xếp</option>
+                        <option value="@(ViewBag.Sort == "asc" ? "selected" : "")">Tên: A-Z</option>
+                        <option value="@(ViewBag.Sort == "desc" ? "selected" : "")">Tên: Z-A</option>
+                    </select>
                 </div>
             </div>
 
             <!-- Nút thêm nhà cung cấp -->
             <div class="d-flex justify-content-start mb-3">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
                     <i class="fas fa-plus"></i> Thêm nhà cung cấp
                 </button>
             </div>
-
             <!-- Danh sách nhà cung cấp -->
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
@@ -53,7 +59,7 @@
                             <th>Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="basic-datatables">
                         @foreach (var supplier in Model)
                         {
                             <tr>
@@ -88,7 +94,7 @@
 <!-- Modal Thêm Nhà Cung Cấp -->
 <partial name="_SupplierCreate"></partial>
 <!-- Phân trang -->
-@* <nav>
+<nav>
     <ul class="pagination">
         @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
         {
@@ -97,9 +103,82 @@
             </li>
         }
     </ul>
-</nav> *@
+</nav> 
 <script>
-    keywords.oninput = function () {
-        GenerateTableProduct()
-    };
+    const keywords = document.getElementById("keywords");
+    function GenerateTableSupplier() {
+        fetch(`https://localhost:7137/api/Suppliers/GetAllSupplier?keywords=${keywords.value}&sort=""&page=1`)
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector("#basic-datatables");
+                tbody.innerHTML = "";
+                if (data && data.data) {
+                    data.data.forEach(supplier => {
+                        const row = `
+                                    <tr>
+                                        <td>${supplier.tenNhaCc}</td>
+                                        <td>${supplier.diaChi}</td>
+                                        <td>${supplier.email}</td>
+                                        <td>${supplier.sdt}</td>
+                                            <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${supplier.maNhaCc}">
+                                                <i class="fas fa-eye"></i> Chi tiết
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${supplier.maNhaCc}-edit">
+                                                <i class="fas fa-edit"></i> Sửa
+                                            </button>
+                                                    <div class="modal fade" id="modal-${supplier.maNhaCc}-edit" tabindex="-1" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editSupplierModalLabel">Sửa thông tin nhà cung cấp</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                                <form <link href="_SupplierEdit" rel="stylesheet" /> method="post" enctype="multipart/form-data">
+                                                                    <input value="${supplier.maNhaCc}" type="hidden" class="form-control" id="MaNhaCc" name="MaNhaCc" readonly>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Tên nhà cung cấp </label>
+                                                                        <input value="${supplier.tenNhaCc}" type="text" class="form-control" id="TenNhaCc" name="TenNhaCc" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Địa chỉ nhà cung cấp </label>
+                                                                        <input value="${supplier.diaChi}" type="text" class="form-control" id="DiaChi" name="DiaChi" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Email nhà cung cấp </label>
+                                                                        <input value="${supplier.email}" type="text" class="form-control" id="Email" name="Email" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Số điện thoại nhà cung cấp </label>
+                                                                        <input value="${supplier.sdt}" type="text" class="form-control" id="Sdt" name="Sdt" required>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                            <button type="submit" class="btn btn-primary" form="editSupplierForm_${supplier.maNhaCc}">Lưu</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <form method="post" asp-action="DeleteSupplier" asp-controller="Supplier" asp-route-id="${supplier.maNhaCc}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhà cung cấp này không?')">
+                                                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                    </tr>
+                                `;
+                        tbody.innerHTML += row;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Lỗi khi tải dữ liệu:", error);
+            });
+    }
+    keywords.addEventListener("input", function () {
+        GenerateTableSupplier()
+    });
 </script>
