@@ -181,21 +181,20 @@ namespace APIBanXeDap.Controllers
                 data = orderStatuses.Values.ToList()
             });
         }
-
         /// <summary>
-        /// Dữ liệu thống kê đơn hàng theo thời gian, cung cấp cho dạng column + spakline
+        /// Dữ liệu thống kê đơn hàng theo thời gian, cung cấp cho dạng column + sparkline
         /// </summary>
         /// <param name="timeRange">Nhập thời gian day/week/month/year</param>
         /// <returns></returns>
         [HttpGet("{timeRange}")]
         public async Task<IActionResult> GetOrderOverViewData(string timeRange)
         {
-            var listOrders = (await _hd.GetAllHoadonVMAsync())
-                .Where(x => x.TinhTrang != null);
+            var listOrders = (await _hd.GetAllInvoiceDataAsync())
+                .Where(x => x.TinhTrang != null).ToList();
 
             var orderStatuses = new[] { "Đã xác nhận", "Đã giao cho đơn vị vận chuyển", "Đang giao hàng", "Chờ thanh toán", "Hoàn trả/Hoàn tiền", "Đã hủy", "Chờ xác nhận" };
 
-            var statusData = new Dictionary<string, List<int>>();
+            var statusData = new Dictionary<string, List<(int Count, decimal Revenue)>>();
             var categories = new List<string>();
 
             int amountOrders = 0;
@@ -208,10 +207,10 @@ namespace APIBanXeDap.Controllers
                     {
                         statusData[status] = daysOfWeek.Select(day =>
                         {
-                            amountOrders++;
-                            return listOrders
-                                .Where(x => x.TinhTrang == status && x.ThoiGianGiao.DayOfWeek.ToString().StartsWith(day.Substring(0, 3)))
-                                .Count();
+                            var filterOrder = listOrders
+                                .Where(x => x.TinhTrang == status && x.ThoiGianGiao.DayOfWeek.ToString().StartsWith(day.Substring(0, 3)));
+                            amountOrders += filterOrder.Count();
+                            return (filterOrder.Count(), filterOrder.Sum(x => x.Items.Sum(it => it.SoLuong * it.DonGia)));
                         }).ToList();
                     }
                     categories = daysOfWeek.ToList();
@@ -223,16 +222,17 @@ namespace APIBanXeDap.Controllers
                     {
                         statusData[status] = weeks.Select(week =>
                         {
-                            amountOrders++;
                             var tempDate = DateTime.Now.StartOfWeek(DayOfWeek.Sunday).AddDays(week - 1);
-                            var startDate = DateOnly.FromDateTime(tempDate);
-                            var endDate = DateOnly.FromDateTime(tempDate.AddDays(1));
-                            return listOrders
-                                .Where(x => x.TinhTrang == status && x.ThoiGianGiao >= startDate && x.ThoiGianGiao < endDate)
-                                .Count();
+                            var startDate = tempDate;
+                            var endDate = tempDate.AddDays(1);
+
+                            var filterOrder = listOrders
+                                .Where(x => x.TinhTrang == status && x.ThoiGianGiao >= startDate && x.ThoiGianGiao < endDate);
+                            amountOrders += filterOrder.Count();
+                            return (filterOrder.Count(), filterOrder.Sum(x => x.Items.Sum(it => it.SoLuong * it.DonGia)));
                         }).ToList();
                     }
-                    categories = weeks.Select(x => $"Ngày {x}").ToList(); // Tên cho các ngày
+                    categories = weeks.Select(x => $"Thứ {x}").ToList(); // Tên cho các ngày thứ
                     break;
 
                 case "month":
@@ -241,31 +241,33 @@ namespace APIBanXeDap.Controllers
                     {
                         statusData[status] = months.Select(month =>
                         {
-                            amountOrders++;
                             var tempDate = new DateTime(DateTime.Now.Year, month, 1);
-                            var startDate = DateOnly.FromDateTime(tempDate);
-                            var endDate = DateOnly.FromDateTime(tempDate.AddMonths(1));
-                            return listOrders
-                                .Where(x => x.TinhTrang == status && x.ThoiGianGiao >= startDate && x.ThoiGianGiao < endDate)
-                                .Count();
+                            var startDate = tempDate;
+                            var endDate = tempDate.AddMonths(1);
+
+                            var filterOrder = listOrders
+                                .Where(x => x.TinhTrang == status && x.ThoiGianGiao >= startDate && x.ThoiGianGiao < endDate);
+                            amountOrders += filterOrder.Count();
+                            return (filterOrder.Count(), filterOrder.Sum(x => x.Items.Sum(it => it.SoLuong * it.DonGia)));
                         }).ToList();
                     }
                     categories = months.Select(x => $"{x} tháng").ToList();
                     break;
 
                 case "year":
-                    var years = Enumerable.Range(DateTime.Now.Year, -5).ToList(); // Thời gian từ 5 năm trở đi
+                    var years = Enumerable.Range(DateTime.Now.Year - 5, 6).ToList(); // Thời gian từ 5 năm trở đi
                     foreach (var status in orderStatuses)
                     {
                         statusData[status] = years.Select(year =>
                         {
-                            amountOrders++;
                             var tempDate = new DateTime(year, 1, 1);
-                            var startDate = DateOnly.FromDateTime(tempDate);
-                            var endDate = DateOnly.FromDateTime(tempDate.AddYears(1));
-                            return listOrders
-                                .Where(x => x.TinhTrang == status && x.ThoiGianGiao >= startDate && x.ThoiGianGiao < endDate)
-                                .Count();
+                            var startDate = tempDate;
+                            var endDate = tempDate.AddYears(1);
+
+                            var filterOrder = listOrders
+                                .Where(x => x.TinhTrang == status && x.ThoiGianGiao >= startDate && x.ThoiGianGiao < endDate);
+                            amountOrders += filterOrder.Count();
+                            return (filterOrder.Count(), filterOrder.Sum(x => x.Items.Sum(it => it.SoLuong * it.DonGia)));
                         }).ToList();
                     }
                     categories = years.Select(x => $"{x}").ToList();
@@ -274,7 +276,7 @@ namespace APIBanXeDap.Controllers
                 default:
                     foreach (var status in orderStatuses)
                     {
-                        statusData[status] = new List<int> { 0 };
+                        statusData[status] = new List<(int Count, decimal Revenue)> { (0, 0m) };
                     }
                     categories = new List<string> { "Unknown" };
                     break;
@@ -283,17 +285,16 @@ namespace APIBanXeDap.Controllers
             var result = orderStatuses.Select(status => new
             {
                 name = status,
-                data = statusData[status]
+                data = statusData[status].Select(d => new { count = d.Count, revenue = d.Revenue }).ToList()
             }).ToList();
 
             return Ok(new
             {
-                data = result, //Kết quả dữ liệu tình trạng đơn hàng với số liệu đơn tương ứng
-                categories = categories, //Mục năm
-                amountOrders = amountOrders, //Tổng doanh thu tương ứng mỗi năm
+                data = result, // Kết quả dữ liệu tình trạng đơn hàng với số liệu đơn tương ứng
+                categories = categories, // Mục thời gian
+                amountOrders = amountOrders, // Tổng đơn tương ứng thời gian
             });
         }
-
 
         /// <summary>
         /// Dữ liệu thống kê sản phẩm theo được chọn nhiều nhất,...
@@ -382,11 +383,16 @@ namespace APIBanXeDap.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Dữ liệu thống kê danh sách nhân viên mang lại doanh thu nhiều nhất trong day/week/month/year
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetEmployeeOrderStats()
         {
-            List<NhanVienVM> nhanVienVMs = (await _tk.GetEmployeeOrderStatsAsync()).ToList();
-            List<InvoiceVM> hoadonVMs = (await _hd.GetAllInvoiceDataAsync()).ToList();
+            List<NhanVienVM> nhanVienVMs = [.. (await _tk.GetEmployeeOrderStatsAsync())];
+            List<InvoiceVM> hoadonVMs = [.. (await _hd.GetAllInvoiceDataAsync())];
 
             // Initialize revenue and order count for each employee
             foreach (var nhanVien in nhanVienVMs)
@@ -416,6 +422,11 @@ namespace APIBanXeDap.Controllers
 
             return Ok(nhanVienVMs);
         }
+
+        /// <summary>
+        /// Dữ liệu thống kê sản phẩm theo được chọn nhiều nhất,...
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetStatUserAsync()
         {

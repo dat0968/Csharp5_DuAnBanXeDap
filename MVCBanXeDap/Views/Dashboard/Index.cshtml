@@ -53,136 +53,183 @@
     </style>
 }
 
-
-
-<div class="container-fluid mt-3">
-    <!-- Tổng doanh thu -->
-    <div class="row mb-3">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-body text-center bg-light">
-                    <h5 class="card-title mb-0">Tổng Doanh Thu (Số)</h5>
-                    <h2 class="mt-2" id="totalRevenue">0₫</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hàng 1: Tình trạng nhân viên, khách hàng, đơn hàng và Không xác định -->
-    <div class="row mb-3">
-        <!-- Tình trạng đơn hàng -->
-        <div class="col-md-3 col-sm-6 mb-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-warning text-center">
-                    Tình trạng đơn hàng
-                </div>
-                <div class="card-body">
-                    <canvas id="orderChart" style="max-height: 150px;"></canvas>
-                </div>
+<div class="container">
+    <div class="page-inner">
+        <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+            <div>
+                <h3 class="fw-bold mb-3">Tổng quan</h3>
             </div>
         </div>
 
-        <!-- Trạng thái nhân viên -->
-        <div class="col-md-3 col-sm-6 mb-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-primary text-center text-white">
-                    Trạng thái nhân viên
-                </div>
-                <div class="card-body">
-                    <canvas id="employeeStatusChart" style="max-height: 150px;"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Trạng thái khách hàng -->
-        <div class="col-md-3 col-sm-6 mb-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-success text-center text-white">
-                    Trạng thái khách hàng
-                </div>
-                <div class="card-body">
-                    <canvas id="customerStatusChart" style="max-height: 150px;"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Không xác định -->
-        <div class="col-md-3 col-sm-6 mb-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-light text-center">
-                    Không xác định
-                </div>
-                <div class="card-body d-flex align-items-center justify-content-center" style="height: 150px;">
-                    <span> - </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hàng 2: Biểu đồ lớn -->
-    <div class="row mb-3">
-        <!-- Doanh thu theo thời gian -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-danger text-center text-white">
-                    Doanh thu theo thời gian
-                </div>
-                <div class="card-body">
-                    <div class="text-center mb-2">
-                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="day">Ngày</button>
-                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="week">Tuần</button>
-                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="month">Tháng</button>
-                        <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="earningChart" data-range="year">Năm</button>
-                    </div>
-                    <canvas id="earningChart" style="max-height: 300px;"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Trạng thái đơn hàng -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-info text-center text-white">
-                    Trạng thái đơn hàng
-                </div>
-                <div class="card-body">
-                    <div class="text-center mb-2">
-                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="day">Ngày</button>
-                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="week">Tuần</button>
-                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="month">Tháng</button>
-                        <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="orderStatusChart" data-range="year">Năm</button>
-                    </div>
-                    <canvas id="orderStatusChart" style="max-height: 300px;"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Hàng 3: Danh sách thống kê -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white text-center">
-                    Danh sách
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="tableSelect" class="form-label">Chọn bảng:</label>
-                        <select id="tableSelect" class="form-select" onchange="showTableFromDropdown()">
-                            <option value="coverTopProducts" selected>Sản phẩm bán chạy</option>
-                            <option value="coverTopColors">Thống kê theo màu sắc</option>
-                            <option value="coverTopSizes">Thống kê theo kích cỡ</option>
-                        </select>
-                    </div>
-                    <div class="table-responsive">
-                        <div id="coverTopProducts">
-                            <table id="topProducts" class="table table-bordered table-striped"></table>
+        <div class="row mb-3 justify-content-center">
+            @* <!-- Tổng doanh thu -->
+            <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-icon">
+                                <div class="icon-big text-center icon-info bubble-shadow-small">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                            <div class="col col-stats ms-3 ms-sm-0">
+                                <div class="numbers">
+                                    <p class="card-category">Tổng Doanh Thu</p>
+                                    <h4 class="card-title" id="totalRevenue">0₫</h4>
+                                </div>
+                            </div>
                         </div>
-                        <div id="coverTopColors" class="d-none">
-                            <table id="topColors" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div> *@
+
+            <!-- Tình trạng đơn hàng -->
+            <div class="col-sm-6 col-md-4">
+                <div class="card card-stats card-round h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col col-stats ms-3 ms-sm-0">
+                                <div class="numbers">
+                                    <p class="card-category">Tình trạng đơn hàng</p>
+                                    <canvas id="orderChart" style="max-height: 150px;"></canvas>
+                                </div>
+                            </div>
                         </div>
-                        <div id="coverTopSizes" class="d-none">
-                            <table id="topSizes" class="table table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trạng thái nhân viên -->
+            <div class="col-sm-6 col-md-4">
+                <div class="card card-stats card-round h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col col-stats ms-3 ms-sm-0">
+                                <div class="numbers">
+                                    <p class="card-category">Trạng thái nhân viên</p>
+                                    <canvas id="employeeStatusChart" style="max-height: 150px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trạng thái khách hàng -->
+            <div class="col-sm-6 col-md-4">
+                <div class="card card-stats card-round h-100">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col col-stats ms-3 ms-sm-0">
+                                <div class="numbers">
+                                    <p class="card-category">Trạng thái khách hàng</p>
+                                    <canvas id="customerStatusChart" style="max-height: 150px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <div class="card card-round">
+                    <div class="card-header">
+                        <div class="card-head-row">
+                            <div class="card-title">Trạng thái đơn hàng</div>
+                            <div class="card-tools">
+                                <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-2">
+                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="day">Ngày</button>
+                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="week">Tuần</button>
+                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="month">Tháng</button>
+                            <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="orderStatusChart" data-range="year">Năm</button>
+                        </div>
+                        <canvas id="orderStatusChart" style="max-height: 300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-round">
+                    <div class="card-header">
+                        <div class="card-head-row">
+                            <div class="card-title">Doanh thu theo thời gian</div>
+                            <div class="card-tools">
+                                <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-2">
+                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="day">Ngày</button>
+                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="week">Tuần</button>
+                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="month">Tháng</button>
+                            <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="earningChart" data-range="year">Năm</button>
+                        </div>
+                        <canvas id="earningChart" style="max-height: 300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card card-round">
+                    <div class="card-header">
+                        <div class="card-head-row">
+                            <div class="card-title">Danh sách</div>
+                            <div class="card-tools">
+                                <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="tableSelect" class="form-label">Chọn bảng:</label>
+                            <select id="tableSelect" class="form-select" onchange="showTableFromDropdown()">
+                                <option value="coverTopProducts">Sản phẩm bán chạy</option>
+                                <option value="coverTopColors">Thống kê theo màu sắc</option>
+                                <option value="coverTopSizes">Thống kê theo kích cỡ</option>
+                                <option value="coverTopEmployees">Thống kê nhân viên</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive">
+                            <div id="coverTopProducts">
+                                <table id="topProducts" class="table table-bordered table-striped"></table>
+                            </div>
+                            <div id="coverTopColors" class="" style="display: none">
+                                <table id="topColors" class="table table-bordered table-striped"></table>
+                            </div>
+                            <div id="coverTopSizes" class="" style="display: none">
+                                <table id="topSizes" class="table table-bordered table-striped"></table>
+                            </div>
+                            <div id="coverTopEmployees" class="" style="display: none">
+                                <table id="topEmployees" class="table table-bordered table-striped"></table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -191,12 +238,11 @@
     </div>
 </div>
 
-
-
 @section Scripts {
     <!-- Include Chart.js + Datatable.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
     <script>
         const defaultRange = 'day';
         const defaultAPI = "https://localhost:7137/api";
@@ -212,7 +258,7 @@
                 renderFunction: renderEarningChart
             },
             orderStatusChart: {
-                url: defaultAPI + '/Dashboard/GetOrderStatusData',
+                url: defaultAPI + '/Dashboard/GetOrderOverViewData',
                 chartInstance: null,
                 renderFunction: renderOrderStatusChart
             }
@@ -278,17 +324,35 @@
                 data: {
                     labels: ['Đã xác nhận', 'Chờ thanh toán', 'Đang xử lý'],
                     datasets: [{
-                        data: [data.approved, data.pending, data.inAllProgress],
-                        backgroundColor: ['#1d7af3', '#f3545d', '#fdaf4b']
+                        data: [data.approved, data.pending, data.inProgress],
+                        backgroundColor: ['#1d7AF3', '#F3545D', '#FDAF4B']
                     }]
                 },
-                options: { responsive: true }
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    const total = data.approved + data.pending + data.inProgress;
+                                    const value = data[tooltipItem.index];
+                                    const percentage = ((value / total) * 100).toFixed(2);
+                                    return `${tooltipItem.label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
             });
         }
 
         function renderEarningChart(data, chartName, chartInstance) {
             const ctx = document.getElementById(chartName).getContext('2d');
             if (chartInstance) chartInstance.destroy();
+
             return new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -296,68 +360,177 @@
                     datasets: [{
                         label: 'Doanh thu',
                         data: data.data,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        fill: false
+                        borderColor: '#1D7AF3',
+                        fill: true,
+                        backgroundColor: 'rgba(29, 122, 243, 0.2)',
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#1D7AF3',
+                        pointHoverBorderColor: '#1D7AF3',
+                        pointHoverBorderWidth: 2,
+                        pointHitRadius: 10,
+                        tension: 0.4 // Điều chỉnh mức độ cong của đường
                     }]
                 },
-                options: { responsive: true }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#fff',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#fff',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            bodySpacing: 4,
+                            mode: 'nearest',
+                            intersect: false,
+                            position: 'nearest',
+                            xPadding: 10,
+                            yPadding: 10,
+                            caretPadding: 10,
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return `Doanh thu: ${tooltipItem.parsed.y.toLocaleString()} ₫`;
+                                }
+                            }
+                        }
+                    }
+                }
             });
         }
 
 
         function renderOrderStatusChart(data, chartName, chartInstance) {
             const ctx = document.getElementById(chartName).getContext('2d');
-
-            // Nếu biểu đồ đã tồn tại, thì xoá đi và khởi tạo biểu đồ mới
             if (chartInstance) chartInstance.destroy();
 
-            return new Chart(ctx, {
-                type: 'pie', // Kiểu biểu đồ Pie
+            const colors = [
+                'rgba(75, 192, 192, 0.6)', // Xanh ngọc (Đã xác nhận)
+                'rgba(54, 162, 235, 0.6)', // Xanh dương (Đã giao cho đơn vị vận chuyển)
+                'rgba(255, 206, 86, 0.6)', // Vàng (Đang giao hàng)
+                'rgba(153, 102, 255, 0.6)', // Tím (Chờ thanh toán)
+                'rgba(255, 99, 132, 0.6)', // Đỏ (Hoàn trả/Hoàn tiền)
+                'rgba(201, 203, 207, 0.6)', // Xám (Đã hủy)
+                'rgba(255, 159, 64, 0.6)', // Cam (Chờ xác nhận)
+            ];
+
+            const barDatasets = data.data.map((status, index) => {
+                return {
+                    label: status.name,
+                    data: status.data.map(d => d.count),
+                    backgroundColor: colors[index],
+                    borderColor: colors[index].replace('0.6', '1'),
+                    borderWidth: 1
+                };
+            });
+
+            const lineDatasets = data.data.map((status, index) => {
+                return {
+                    label: status.name + ' (Doanh thu)',
+                    data: status.data.map(d => d.revenue),
+                    type: 'line',
+                    fill: false,
+                    borderColor: colors[index].replace('0.6', '1'),
+                    backgroundColor: colors[index],
+                    pointRadius: 0,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: colors[index].replace('0.6', '1'),
+                    pointHoverBorderColor: colors[index].replace('0.6', '1'),
+                    pointHoverBorderWidth: 2,
+                    pointHitRadius: 10,
+                    tension: 0.4 // Điều chỉnh mức độ cong của đường
+                };
+            });
+
+            const chart = new Chart(ctx, {
+                type: 'bar',
                 data: {
-                    labels: data.labels, // Các nhãn của biểu đồ
-                    datasets: [{
-                        label: 'Tình trạng đơn hàng', // Tên của tập dữ liệu
-                        data: data.data, // Giá trị số liệu của từng nhãn
-                        backgroundColor: [
-                            'rgba(75, 192, 192, 0.6)', // Xanh ngọc (Đã xác nhận)
-                            'rgba(54, 162, 235, 0.6)', // Xanh dương (Đã giao cho đơn vị vận chuyển)
-                            'rgba(255, 206, 86, 0.6)', // Vàng (Đang giao hàng)
-                            'rgba(153, 102, 255, 0.6)', // Tím (Chờ thanh toán)
-                            'rgba(255, 99, 132, 0.6)', // Đỏ (Hoàn trả/Hoàn tiền)
-                            'rgba(201, 203, 207, 0.6)', // Xám (Đã hủy)
-                            'rgba(255, 159, 64, 0.6)', // Cam (Chờ xác nhận)
-                        ],
-                        borderColor: [
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(201, 203, 207, 1)',
-                            'rgba(255, 159, 64, 1)',
-                        ],
-                        borderWidth: 1, // Độ rộng viền của từng phần
-                    }]
+                    labels: data.categories,
+                    datasets: [...barDatasets, ...lineDatasets]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#000',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#000',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
                     plugins: {
                         legend: {
-                            position: 'bottom', // Dịch tiêu đề xuống phía dưới biểu đồ
+                            position: 'bottom',
+                            labels: {
+                                filter: (legendItem, data) => {
+                                    // Chỉ hiển thị legend cho cột (bar datasets)
+                                    return legendItem.datasetIndex < data.datasets.length / 2;
+                                }
+                            }
                         },
                         tooltip: {
+                            mode: 'index',
+                            intersect: false,
                             callbacks: {
-                                label: function (tooltipItem) {
-                                    const total = data.data.reduce((sum, value) => sum + value, 0);
-                                    const value = data.data[tooltipItem.dataIndex];
-                                    const percentage = ((value / total) * 100).toFixed(2);
-                                    return `${tooltipItem.label}: ${value} (${percentage}%)`;
-                                },
-                            },
-                        },
-                    },
-                },
+                                label: function (tooltipItem, data) {
+                                    const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.dataIndex];
+                                    if (tooltipItem.datasetIndex < data.datasets.length / 2) {
+                                        const total = data.datasets[0].data.reduce((sum, value) => sum + value, 0);
+                                        const percentage = ((value / total) * 100).toFixed(2);
+                                        return `${data.datasets[tooltipItem.datasetIndex].label}: ${value} (${percentage}%)`;
+                                    } else {
+                                        return `${data.datasets[tooltipItem.datasetIndex].label}: ${value.toLocaleString()} VND`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             });
+
+            return chart;
         }
 
         async function loadUserStatusCharts() {
@@ -366,8 +539,8 @@
                 const employeeStatusData = data.find(d => d.userType === "Employee");
                 const customerStatusData = data.find(d => d.userType === "Customer");
 
-                renderPieChart('employeeStatusChart', ['Hoạt động', 'Ngưng hoạt động'], [employeeStatusData.active, employeeStatusData.inactive], ['#1d7af3', '#f3545d']);
-                renderPieChart('customerStatusChart', ['Hoạt động', 'Ngưng hoạt động'], [customerStatusData.active, customerStatusData.inactive], ['#fdaf4b', '#f3545d']);
+                renderPieChart('employeeStatusChart', ['Hoạt động', 'Ngưng hoạt động'], [employeeStatusData.active, employeeStatusData.inactive], ['#1D7AF3', '#F3545D']);
+                renderPieChart('customerStatusChart', ['Hoạt động', 'Ngưng hoạt động'], [customerStatusData.active, customerStatusData.inactive], ['#FDAF4B', '#F3545D']);
             } catch (error) {
                 displayError('Error loading user status charts: ' + error.message);
             }
@@ -392,6 +565,16 @@
                     plugins: {
                         legend: {
                             position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    const total = data.reduce((sum, value) => sum + value, 0);
+                                    const value = data[tooltipItem.dataIndex];
+                                    const percentage = ((value / total) * 100).toFixed(2);
+                                    return `${tooltipItem.label}: ${value} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }
@@ -404,11 +587,11 @@
         }
     </script>
 
-
     <!-- Mã Datatable -->
     <script>
         $(document).ready(function () {
             loadTopSellingProductsData();
+            loadTopEmployeesData();
         });
 
         function loadTopSellingProductsData() {
@@ -430,6 +613,19 @@
             });
         }
 
+        function loadTopEmployeesData() {
+            $.ajax({
+                url: 'https://localhost:7137/api/Dashboard/GetEmployeeOrderStats',
+                method: 'GET',
+                success: function (response) {
+                    renderTopEmployeesTable(response);
+                },
+                error: function (err) {
+                    displayError("Error when fetching data: " + err.message);
+                }
+            });
+        }
+
         function renderTable(data, columns, tableId) {
             $(tableId).DataTable({
                 data: data,
@@ -443,17 +639,26 @@
         function renderTopProductsTable(data) {
             const columns = [
                 { title: 'ID', data: 'maSp' },
-                { title: 'Tên Sản Phẩm', data: 'tenSp' },
-                { title: 'Màu', data: 'tenMau' },
-                { title: 'Kích Thước', data: 'tenKichThuoc' },
-                { title: 'Số Lượng', data: 'soLuong', className: 'text-center' },
-                { title: 'Thành Tiền', data: 'thanhTien', render: $.fn.dataTable.render.number(',', '.', 0, '₫') },
                 {
-                    title: 'Hình',
-                    data: 'hinh',
-                    render: function(data) {
-                        return `<img src="/hinh/sanpham/${data}" alt="Hình sản phẩm" style="width: 50px; height: auto;">`;
+                    title: 'Sản Phẩm',
+                    data: 'tenSp',
+                    render: function (data, type, row) {
+                        return `<div style="display: flex; align-items: center;">
+                                    <img src="/hinh/sanpham/${row.hinh}" alt="Hình sản phẩm" style="width: 50px; height: auto; margin-right: 10px;">
+                                    <div>
+                                        <span>${row.tenSp}</span><br>
+                                        <span>Màu: ${row.tenMau}</span><br>
+                                        <span>Kích thước: ${row.tenKichThuoc}</span><br>
+                                        <span>Giá: ${$.fn.dataTable.render.number(',', '.', 0, '₫').display(row.thanhTien)}</span>
+                                    </div>
+                                </div>`;
                     }
+                },
+                { title: 'Số Lượng', data: 'soLuong', className: 'text-center' },
+                {
+                    title: 'Thành Tiền',
+                    data: 'thanhTien',
+                    render: $.fn.dataTable.render.number(',', '.', 0, '₫')
                 }
             ];
             renderTable(data, columns, '#topProducts');
@@ -462,16 +667,27 @@
         // Khởi tạo bảng Top Colors
         function renderTopColorsTable(data) {
             const columns = [
-                { title: 'Màu', data: 'tenMau' },
-                { title: 'Tên Sản Phẩm', data: 'tenSp' },
-                { title: 'Số Lượng', data: 'soLuong', className: 'text-center' },
-                { title: 'Thành Tiền', data: 'thanhTien', render: $.fn.dataTable.render.number(',', '.', 0, '₫') },
+                { title: 'ID', data: 'maSp' },
                 {
-                    title: 'Hình',
-                    data: 'hinh',
-                    render: function(data) {
-                        return `<img src="/hinh/sanpham/${data}" alt="Hình sản phẩm" style="width: 50px; height: auto;">`;
+                    title: 'Sản Phẩm',
+                    data: 'tenSp',
+                    render: function (data, type, row) {
+                        return `<div style="display: flex; align-items: center;">
+                                    <img src="/hinh/sanpham/${row.hinh}" alt="Hình sản phẩm" style="width: 50px; height: auto; margin-right: 10px;">
+                                    <div>
+                                        <span>${row.tenSp}</span><br>
+                                        <span>Màu: ${row.tenMau}</span><br>
+                                        <span>Kích thước: ${row.tenKichThuoc}</span><br>
+                                        <span>Giá: ${$.fn.dataTable.render.number(',', '.', 0, '₫').display(row.thanhTien)}</span>
+                                    </div>
+                                </div>`;
                     }
+                },
+                { title: 'Số Lượng', data: 'soLuong', className: 'text-center' },
+                {
+                    title: 'Thành Tiền',
+                    data: 'thanhTien',
+                    render: $.fn.dataTable.render.number(',', '.', 0, '₫')
                 }
             ];
             renderTable(data, columns, '#topColors');
@@ -480,19 +696,45 @@
         // Khởi tạo bảng Top Sizes
         function renderTopSizesTable(data) {
             const columns = [
-                { title: 'Kích Thước', data: 'tenKichThuoc' },
-                { title: 'Tên Sản Phẩm', data: 'tenSp' },
-                { title: 'Số Lượng', data: 'soLuong', className: 'text-center' },
-                { title: 'Thành Tiền', data: 'thanhTien', render: $.fn.dataTable.render.number(',', '.', 0, '₫') },
+                { title: 'ID', data: 'maSp' },
                 {
-                    title: 'Hình',
-                    data: 'hinh',
-                    render: function(data) {
-                        return `<img src="/hinh/sanpham/${data}" alt="Hình sản phẩm" style="width: 50px; height: auto;">`;
+                    title: 'Sản Phẩm',
+                    data: 'tenSp',
+                    render: function (data, type, row) {
+                        return `<div style="display: flex; align-items: center;">
+                                    <img src="/hinh/sanpham/${row.hinh}" alt="Hình sản phẩm" style="width: 50px; height: auto; margin-right: 10px;">
+                                    <div>
+                                        <span>${row.tenSp}</span><br>
+                                        <span>Màu: ${row.tenMau}</span><br>
+                                        <span>Kích thước: ${row.tenKichThuoc}</span><br>
+                                        <span>Giá: ${$.fn.dataTable.render.number(',', '.', 0, '₫').display(row.thanhTien)}</span>
+                                    </div>
+                                </div>`;
                     }
+                },
+                { title: 'Số Lượng', data: 'soLuong', className: 'text-center' },
+                {
+                    title: 'Thành Tiền',
+                    data: 'thanhTien',
+                    render: $.fn.dataTable.render.number(',', '.', 0, '₫')
                 }
             ];
             renderTable(data, columns, '#topSizes');
+        }
+
+        // Khởi tạo bảng Top Employees
+        function renderTopEmployeesTable(data) {
+            const columns = [
+                { title: 'Mã NV', data: 'maNv' },
+                { title: 'Họ Tên', data: 'hoTen' },
+                { title: 'Số Đơn Xử Lý', data: 'soDonHangXuLy', className: 'text-center' },
+                {
+                    title: 'Doanh Thu',
+                    data: 'doanhThuMangLai',
+                    render: $.fn.dataTable.render.number(',', '.', 0, '₫')
+                }
+            ];
+            renderTable(data, columns, '#topEmployees');
         }
 
         function getDatatableLanguageSettings() {
@@ -514,7 +756,7 @@
 
         function showTableFromDropdown() {
             const selectedTableId = document.getElementById('tableSelect').value;
-            const tables = ['coverTopProducts', 'coverTopColors', 'coverTopSizes'];
+            const tables = ['coverTopProducts', 'coverTopColors', 'coverTopSizes', 'coverTopEmployees'];
 
             tables.forEach(tableId => {
                 document.getElementById(tableId).style.display = 'none';
@@ -522,6 +764,5 @@
 
             document.getElementById(selectedTableId).style.display = '';
         }
-
     </script>
 }
