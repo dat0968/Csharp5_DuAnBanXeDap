@@ -174,6 +174,7 @@ namespace APIBanXeDap.Repository.HoaDon
                 DiaChiNhanHang = invoiceData.DiaChiNhanHang,
                 TinhTrang = invoiceData.TinhTrang,
                 NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
+                ThoiGianGiao = invoiceData.ThoiGianGiao.ToDateTime(TimeOnly.MinValue),
                 HinhThucThanhToan = invoiceData.Httt,
                 TenKhachHang = invoiceData.MaKhNavigation.HoTen,
                 MaNhanVien = invoiceData.MaNv ?? 0,

@@ -5,6 +5,7 @@
         public int MaHoaDon { get; set; }
         public string DiaChiNhanHang { get; set; }
         public DateTime NgayTao { get; set; }
+        public DateTime ThoiGianGiao { get; set; }
         public string TinhTrang { get; set; }
         public string HinhThucThanhToan { get; set; } // Hình thức thanh toán
         public string TenKhachHang { get; set; } // Họ tên khách hàng

@@ -24,7 +24,7 @@ namespace APIBanXeDap.DbInitializer
             {
                 CreateTempStaff();
             }
-            if (_db.Hoadons.Count() < 100)
+            if (_db.Hoadons.Count() < 700)
             {
                 CreateOrderForCharts();
             }
@@ -66,6 +66,17 @@ namespace APIBanXeDap.DbInitializer
                 // Random generator
                 Random rand = new Random();
 
+                // Danh sách tình trạng đơn hàng
+                var tinhTrangs = new List<string>
+                {
+                    "Chờ xác nhận",
+                    "Đã xác nhận",
+                    "Đã giao cho đơn vị vận chuyển",
+                    "Đang giao hàng",
+                    "Hoàn trả/Hoàn tiền",
+                    "Đã hủy"
+                };
+
                 // Danh sách lưu hóa đơn và chi tiết hóa đơn để thêm vào DbContext
                 var hoaDons = new List<Hoadon>();
                 var chiTietHoaDons = new List<Chitiethoadon>();
@@ -76,16 +87,19 @@ namespace APIBanXeDap.DbInitializer
                     int maKhachHang = maKhachHangs[rand.Next(maKhachHangs.Count)];
                     int? maNhanVien = maNhanViens.Count > 0 ? maNhanViens[rand.Next(maNhanViens.Count)] : (int?)null;
 
+                    // Lấy ngẫu nhiên tình trạng đơn hàng
+                    string tinhTrang = tinhTrangs[rand.Next(tinhTrangs.Count)];
+
                     // Tạo hóa đơn
                     var hoaDon = new Hoadon
                     {
                         MaKh = maKhachHang,
                         MaNv = maNhanVien,
                         DiaChiNhanHang = $"Địa chỉ {i + 1}",
-                        NgayTao = DateOnly.FromDateTime(DateTime.Now.AddDays(-rand.Next(1, 365))),
+                        NgayTao = DateOnly.FromDateTime(DateTime.Now.AddDays(-rand.Next(1, 365 * 5))),
                         ThoiGianGiao = DateOnly.FromDateTime(DateTime.Now.AddDays(rand.Next(7, 365 * 5))),
                         Httt = rand.Next(0, 2) == 0 ? "COD" : "VNPAY", // Hình thức thanh toán
-                        TinhTrang = "Chờ xác nhận",
+                        TinhTrang = tinhTrang,
                         Hoten = $"Khách hàng {i + 1}",
                         Sdt = "0123456789",
                         MoTa = "Tạo tự động hóa đơn cho mục đích test"
