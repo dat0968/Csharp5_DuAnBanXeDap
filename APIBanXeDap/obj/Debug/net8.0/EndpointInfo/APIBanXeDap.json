@@ -1159,6 +1159,10 @@
           "trangThai": {
             "type": "boolean"
           },
+          "ngayTao": {
+            "type": "string",
+            "format": "date-time"
+          },
           "minimumOrderAmount": {
             "type": "number",
             "format": "double",

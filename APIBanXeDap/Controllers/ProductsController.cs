@@ -30,6 +30,10 @@ namespace APIBanXeDap.Controllers
             //Tổng số trang
             var totalItems = list.Count();
             var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
+            
+            
+            
+            
             return Ok(new
             {
                 Data = pagedProducts,

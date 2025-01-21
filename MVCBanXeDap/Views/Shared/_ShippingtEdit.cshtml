@@ -19,7 +19,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Sửa thông tin vận chuyển</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button id="closeModel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="IdVanChuyen_@Model.Id" value="@Model.Id">
@@ -59,163 +59,172 @@
 
 <script src="https://esgoo.net/scripts/jquery.js"></script>
 <script>
-    //Duyệt qua từng modal bởi mỗi modal có dữ liệu khác nhau và cần cập nhật độc lập
-    document.querySelectorAll('.modal').forEach(modal => {
-    const code = modal.id.split('-')[1];
-    var tinh = modal.dataset.tinh;
-    var quan = modal.dataset.quan;
-    var phuong = modal.dataset.phuong;
-    document.getElementById("Gia_@Model.Id").value = modal.dataset.gia
-    // Lấy tỉnh thành
-    $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
-        if (data_tinh.error == 0) {
-            $.each(data_tinh.data, function (key_tinh, val_tinh) {
-                if (tinh == val_tinh.full_name) {
-                    $(`#tinh_${code}`).append(
-                        '<option selected value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>'
-                    );
-                    var idtinh = val_tinh.id;
-                    // Lấy quận huyện
-                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
-                        if (data_quan.error == 0) {
-                            $.each(data_quan.data, function (key_quan, val_quan) {
-                                if (val_quan.full_name) {;
-                                    if (val_quan.full_name == quan) {
-                                        $(`#quan_${code}`).append(
-                                            '<option selected value="' + val_quan.id + '">' + val_quan.full_name + '</option>'
-                                        );
-                                        var idquan = val_quan.id;
+    // Xử lí sửa thông tin vận chuyển
+    document.getElementById("editShippingButton_@Model.Id").addEventListener("click", function () {
+        const tinh = document.getElementById("tinh_@Model.Id");
+        const tinhSelected = tinh.options[tinh.selectedIndex].text;
+        const phuong = document.getElementById("phuong_@Model.Id");
+        const phuongSelected = phuong.options[phuong.selectedIndex].text;
+        const quan = document.getElementById("quan_@Model.Id");
+        const quanSelected = quan.options[quan.selectedIndex].text;
+        const gia = document.getElementById("Gia_@Model.Id");
+        const id = document.getElementById("IdVanChuyen_@Model.Id");
 
-                                        // Lấy phường xã
-                                        $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
-                                            if (data_phuong.error == 0) {
-                                                $.each(data_phuong.data, function (key_phuong, val_phuong) {
-                                                    if (phuong == val_phuong.full_name) {
-                                                        $(`#phuong_${code}`).append(
-                                                            '<option selected value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>'
-                                                        );
-                                                    } else {
-                                                        $(`#phuong_${code}`).append(
-                                                            '<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>'
-                                                        );
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        $(`#quan_${code}`).append(
-                                            '<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>'
-                                        );
+        const model = {
+            id: id.value,
+            gia: gia.value,
+            phuong: phuongSelected,
+            quanHuyen: quanSelected,
+            thanhPho: tinhSelected
+        };
+
+        const isConfirm = window.confirm("Bạn có muốn sửa thông tin vận chuyển này không?");
+        if (!isConfirm) {
+            return false;
+        }
+
+        fetch(`https://localhost:7137/api/Shippings/EditShipping`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(model)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const message = data.message;
+            if (data.success) {
+                sessionStorage.setItem("notification", JSON.stringify({ type: "success", message: message }));
+                window.location.reload();
+            } else {
+                toastr.error(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            toastr.error('Có lỗi xảy ra khi gửi yêu cầu.');
+        });
+    });
+
+    // Hiển thị thông báo khi tải trang
+    window.addEventListener("load", function () {
+        const notification = sessionStorage.getItem("notification");
+
+        if (notification) {
+            const { type, message } = JSON.parse(notification);
+
+            if (type === "success") {
+                toastr.success(message);
+            }
+            sessionStorage.removeItem("notification");
+        }
+    });
+
+    // Duyệt qua từng modal bởi mỗi modal có dữ liệu khác nhau và cần cập nhật độc lập
+    document.querySelectorAll('.modal').forEach(modal => {
+        const code = modal.id.split('-')[1];
+        const tinh = modal.dataset.tinh;
+        const quan = modal.dataset.quan;
+        const phuong = modal.dataset.phuong;
+
+        document.getElementById(`Gia_${code}`).value = modal.dataset.gia;
+
+        // Lấy tỉnh thành
+        $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+            if (data_tinh.error == 0) {
+                $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                    if (tinh == val_tinh.full_name) {
+                        $(`#tinh_${code}`).append(
+                            `<option selected value="${val_tinh.id}">${val_tinh.full_name}</option>`
+                        );
+
+                        const idtinh = val_tinh.id;
+
+                        // Lấy quận huyện
+                        $.getJSON(`https://esgoo.net/api-tinhthanh/2/${idtinh}.htm`, function (data_quan) {
+                            if (data_quan.error == 0) {
+                                $.each(data_quan.data, function (key_quan, val_quan) {
+                                    if (val_quan.full_name) {
+                                        if (val_quan.full_name == quan) {
+                                            $(`#quan_${code}`).append(
+                                                `<option selected value="${val_quan.id}">${val_quan.full_name}</option>`
+                                            );
+
+                                            const idquan = val_quan.id;
+
+                                            // Lấy phường xã
+                                            $.getJSON(`https://esgoo.net/api-tinhthanh/3/${idquan}.htm`, function (data_phuong) {
+                                                if (data_phuong.error == 0) {
+                                                    $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                                        if (phuong == val_phuong.full_name) {
+                                                            $(`#phuong_${code}`).append(
+                                                                `<option selected value="${val_phuong.id}">${val_phuong.full_name}</option>`
+                                                            );
+                                                        } else {
+                                                            $(`#phuong_${code}`).append(
+                                                                `<option value="${val_phuong.id}">${val_phuong.full_name}</option>`
+                                                            );
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            $(`#quan_${code}`).append(
+                                                `<option value="${val_quan.id}">${val_quan.full_name}</option>`
+                                            );
+                                        }
                                     }
+                                });
+                            }
+                        });
+                    } else {
+                        $(`#tinh_${code}`).append(
+                            `<option value="${val_tinh.id}">${val_tinh.full_name}</option>`
+                        );
+                    }
+                });
+
+                // Sự kiện khi thay đổi tỉnh thành
+                $(`#tinh_${code}`).change(function () {
+                    const idtinh = $(this).val();
+
+                    // Lấy quận huyện
+                    $.getJSON(`https://esgoo.net/api-tinhthanh/2/${idtinh}.htm`, function (data_quan) {
+                        if (data_quan.error == 0) {
+                            $(`#quan_${code}`).html('<option value="0">Quận Huyện</option>');
+                            $(`#phuong_${code}`).html('<option value="0">Phường Xã</option>');
+
+                            $.each(data_quan.data, function (key_quan, val_quan) {
+                                if (val_quan.full_name) {
+                                    $(`#quan_${code}`).append(
+                                        `<option value="${val_quan.id}">${val_quan.full_name}</option>`
+                                    );
                                 }
+                            });
+
+                            // Lấy phường xã khi thay đổi quận huyện
+                            $(`#quan_${code}`).change(function () {
+                                const idquan = $(this).val();
+                                $.getJSON(`https://esgoo.net/api-tinhthanh/3/${idquan}.htm`, function (data_phuong) {
+                                    if (data_phuong.error == 0) {
+                                        $(`#phuong_${code}`).html('<option value="0">Phường Xã</option>');
+                                        $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                            $(`#phuong_${code}`).append(
+                                                `<option value="${val_phuong.id}">${val_phuong.full_name}</option>`
+                                            );
+                                        });
+                                    }
+                                });
                             });
                         }
                     });
-                } else {
-                    $(`#tinh_${code}`).append(
-                        '<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>'
-                    );
-                }
-            });
-
-            $(`#tinh_${code}`).change(function (e) {
-                var idtinh = $(this).val();
-
-                // Lấy quận huyện
-                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
-                    if (data_quan.error == 0) {
-                        $(`#quan_${code}`).html('<option value="0">Quận Huyện</option>');
-                        $(`#phuong_${code}`).html('<option value="0">Phường Xã</option>');
-
-                        $.each(data_quan.data, function (key_quan, val_quan) {
-                            if (val_quan.full_name) {
-                                console.log(val_quan.full_name + "-" + quan);
-                                $(`#quan_${code}`).append(
-                                    '<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>'
-                                );
-                            }
-                        });
-
-                        // Lấy phường xã
-                        $(`#quan_${code}`).change(function (e) {
-                            var idquan = $(this).val();
-                            $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
-                                if (data_phuong.error == 0) {
-                                    $(`#phuong_${code}`).html('<option value="0">Phường Xã</option>');
-                                    $.each(data_phuong.data, function (key_phuong, val_phuong) {
-                                        console.log(phuong + "-" + val_phuong.full_name);
-                                        $(`#phuong_${code}`).append(
-                                            '<option selected value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>'
-                                        );
-                                    });
-                                }
-                            });
-                        });
-                    }
                 });
-            });
-        }
+            }
+        });
     });
-});
-    //Xử lí sửa thông tin vận chuyển
-        document.getElementById("editShippingButton_@Model.Id").addEventListener("click", function(){
-            const tinh = document.getElementById("tinh_@Model.Id");
-            const tinhSelected = tinh.options[tinh.selectedIndex].text;
-            const phuong = document.getElementById("phuong_@Model.Id");
-            const phuongSelected = phuong.options[phuong.selectedIndex].text;
-            const quan = document.getElementById("quan_@Model.Id");
-            const quanSelected = quan.options[quan.selectedIndex].text;
-            const gia = document.getElementById("Gia_@Model.Id");
-            const id = document.getElementById("IdVanChuyen_@Model.Id")
-            const model = {
-                id: id.value,
-                gia: gia.value,
-                phuong: phuongSelected,
-                quanHuyen: quanSelected,
-                thanhPho: tinhSelected
-            }
-            const isConfirm = window.confirm("Bạn có muốn sửa thông tin vận chuyển này không?")
-            if(!isConfirm){
-                return false;
-            }
-                fetch(`https://localhost:7137/api/Shippings/EditShipping`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(model)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                var message = data.message;
-                if (data.success) {
-                    sessionStorage.setItem("notification", JSON.stringify({ type: "success", message: message }));
-                    window.location.reload();
-                } else {
-                    toastr.error(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-                toastr.error('Có lỗi xảy ra khi gửi yêu cầu.');
-            });
-        });
-        window.addEventListener("load", function () {
-        const notification = sessionStorage.getItem("notification");
-
-            if (notification) {
-                const { type, message } = JSON.parse(notification);
-
-                if (type === "success") {
-                    toastr.success(message);
-                }
-                sessionStorage.removeItem("notification");
-            }
-        });
-    
 </script>

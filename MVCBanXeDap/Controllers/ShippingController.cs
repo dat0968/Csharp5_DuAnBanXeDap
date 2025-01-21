@@ -86,5 +86,10 @@ namespace MVCBanXeDap.Controllers
             }
             return RedirectToAction("index");
         }
+        [HttpPost]
+        public IActionResult GetPartialViewEdit([FromBody] ShippingVM model)
+        {
+            return PartialView("~/Views/Shared/_ShippingtEdit.cshtml", model);
+        }
     }
 }

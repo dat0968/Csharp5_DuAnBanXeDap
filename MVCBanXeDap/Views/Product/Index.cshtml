@@ -148,7 +148,10 @@
 </nav>
 <!-- Modal Thêm sản phẩm -->
 <partial name="_ProductCreate"></partial>
- 
+@*  Modal Sửa sản phẩm *@
+<div id="EditModal">
+
+</div>
 <script>
     const keywords = document.getElementById("keywords");
     var paginationContainer  = document.querySelector(".pagination")
@@ -156,6 +159,68 @@
     const categoryFilter = document.getElementById("categoryFilter");
     const brandFilter = document.getElementById("brandFilter");
     const SortByPrice = document.getElementById("SortByPrice");
+    // Hàm gọi tới và hiển thị partialview
+    function generateEditModal(element){
+        var productData = element.getAttribute('data-product')
+        var maSP = JSON.parse(productData).maSP
+        $.ajax({
+            url: 'https://localhost:7029/Product/GetPartialViewEdit',
+            type: 'POST',
+            contentType: 'application/json',
+            data: productData,
+            success: function(data){
+                console.log(data)
+                $('#EditModal').html(data)
+
+
+                //Khởi tạo lại modal sau khi thêm vào DOM
+                const modalElement = document.querySelector(`#modal-${maSP}-edit`);
+                if(modalElement){
+                    const modalInstance = new bootstrap.Modal(modalElement);
+                    modalInstance.show();
+                    document.getElementById("closeModel").addEventListener("click", function() {
+                        modalElement.remove();
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error Status: ", status);
+                console.error("Error Message: ", error);
+                console.error("Response Text: ", xhr.responseText);
+            }
+        })
+    }
+    //Hàm hiển thị thông tin chi tiết sản phẩm
+    function generateDetailsModal(element){
+        var productData = element.getAttribute('data-product')
+        var maSP = JSON.parse(productData).maSP
+        $.ajax({
+            url: 'https://localhost:7029/Product/GetPartialViewDetails',
+            type: 'POST',
+            contentType: 'application/json',
+            data: productData,
+            success: function(data){
+                console.log(data)
+                $('#EditModal').html(data)
+
+
+                //Khởi tạo lại modal sau khi thêm vào DOM
+                const modalElement = document.querySelector(`#modal-${maSP}`);
+                if(modalElement){
+                    const modalInstance = new bootstrap.Modal(modalElement);
+                    modalInstance.show();
+                    document.getElementById("closeModel").addEventListener("click", function() {
+                        modalElement.remove();
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error Status: ", status);
+                console.error("Error Message: ", error);
+                console.error("Response Text: ", xhr.responseText);
+            }
+        })
+    }
     //Hàm hiển thị và reload table sản phẩm
     function GenerateTableProduct(){
         function updatePagination(currentPage, totalPages) {
@@ -169,6 +234,7 @@
                 paginationContainer.innerHTML += pageLink
             }
         }
+        
         fetch(`https://localhost:7137/api/Products/GetAllProduct?keywords=${keywords.value}&MaDanhMuc=${categoryFilter.value}&MaThuongHieu=${brandFilter.value}&sort=${SortByPrice.value}`)
         .then(response => response.json())
         .then(data => {
@@ -186,21 +252,22 @@
                         <td>${product.soLuong}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-info btn-sm">
+                                <button data-product='${JSON.stringify(product)}' onclick="generateDetailsModal(this)" type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${product.maSP}">
                                     <i class="fas fa-eye"></i> Chi tiết
                                 </button>
-                                <button type="button" class="btn btn-warning btn-sm">
+                                <button data-product='${JSON.stringify(product)}' onclick="generateEditModal(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${product.maSP}-edit">
                                     <i class="fas fa-edit"></i> Sửa
                                 </button>
-                                <button type="button" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-trash"></i> Xóa
-                                </button>
+                                <form method="post" action="/Product/DeleteProduct/${product.maSP}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')">
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
+                                </form>
                             </div>
                         </td>
                     </tr>
                 `;
                 tbody.innerHTML += row;
             });
+            
             updatePagination(data.page, data.totalPages);
             const paginationLinks = document.querySelectorAll(".page-link");
             if (keywords && paginationLinks) {

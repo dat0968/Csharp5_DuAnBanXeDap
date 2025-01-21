@@ -24,9 +24,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editProductModalLabel">Sửa thông tin mã coupon</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" id="closeModel" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+             <div class="modal-body">
                 <form asp-action="EditCouponCode" asp-controller="CouponCode" id="editCouponCodetForm_@Model.Code" method="post">
                     <div class="mb-3">
                         <label asp-for="Code" class="form-label">Mã</label>
@@ -49,8 +49,14 @@
                         <label asp-for="MinimumOrderAmount" class="form-label">Áp dụng cho sản phẩm có giá tối thiểu</label>
                         <input asp-for="MinimumOrderAmount" min="1" type="number" class="form-control" id="GiaToiThieu_@Model.Code" required>
                     </div>
+                    <div class="mb-3">
+                        <input asp-for="TrangThai" type="hidden" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="NgayTao" type="hidden" class="form-control" readonly>
+                    </div>
                 </form>
-            </div>
+            </div>            
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                 <button type="submit" class="btn btn-primary" form="editCouponCodetForm_@Model.Code">Lưu</button>
@@ -59,6 +65,15 @@
     </div>
 </div>
 <script>
+        document.getElementById("editCouponCodetForm_@Model.Code").addEventListener("submit", function(e){
+            e.preventDefault();
+            const cofirm = window.confirm("Bạn có muốn sửa thông tin mã coupon này không?")
+            if(cofirm){
+                this.submit()
+            }else{
+                return false;
+            }
+        })
         document.querySelectorAll('.modal').forEach(modal => {
         const code = modal.id.split('-')[1]; 
         const soPhanTramGiam = modal.querySelector(`#SoPhanTramGiam_${code}`);
@@ -127,13 +142,5 @@
         })
        
     });
-     document.getElementById("editCouponCodetForm_@Model.Code").addEventListener("submit", function(e){
-            e.preventDefault();
-            const cofirm = window.confirm("Bạn có muốn sửa thông tin mã coupon này không?")
-            if(cofirm){
-                this.submit()
-            }else{
-                return false;
-            }
-        })
-</script>
+     
+</script> 

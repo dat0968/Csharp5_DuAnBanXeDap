@@ -105,5 +105,12 @@ namespace MVCBanXeDap.Controllers
             }
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public IActionResult GetPartialView([FromBody] MaCouponVM model)
+        {
+            return PartialView("~/Views/Shared/_CouponCodeEdit.cshtml", model);
+        }
+
+
     }
 }

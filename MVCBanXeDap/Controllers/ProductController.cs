@@ -384,5 +384,58 @@ namespace MVCBanXeDap.Controllers
             }
             return RedirectToAction("index", "Product");
         }
+        [HttpPost]
+        public IActionResult GetPartialViewEdit([FromBody] ProductVM model)
+        {
+            var ListBrand = new List<BrandVM>();
+            HttpResponseMessage responseBrand = _client.GetAsync(_client.BaseAddress + "Brands/GettAllBrand").Result;
+            if (responseBrand.IsSuccessStatusCode)
+            {
+                string data = responseBrand.Content.ReadAsStringAsync().Result;
+                ListBrand = JsonConvert.DeserializeObject<List<BrandVM>>(data);
+                ViewBag.Brand = ListBrand;
+            }
+
+            var ListSupplier = new List<SupplierVM>();
+            HttpResponseMessage responseSupplier = _client.GetAsync(_client.BaseAddress + "Suppliers/GetAllSupplier").Result;
+            if (responseSupplier.IsSuccessStatusCode)
+            {
+                string data = responseSupplier.Content.ReadAsStringAsync().Result;
+                ListSupplier = JsonConvert.DeserializeObject<List<SupplierVM>>(data);
+                ViewBag.Supplier = ListSupplier;
+            }
+
+            var ListColor = new List<ColorVM>();
+            HttpResponseMessage responseColor = _client.GetAsync(_client.BaseAddress + "Colors/GetAllColor").Result;
+            if (responseColor.IsSuccessStatusCode)
+            {
+                string data = responseColor.Content.ReadAsStringAsync().Result;
+                ListColor = JsonConvert.DeserializeObject<List<ColorVM>>(data);
+                ViewBag.Color = ListColor;
+            }
+            var ListSize = new List<SizeVM>();
+            HttpResponseMessage responseSize = _client.GetAsync(_client.BaseAddress + "Sizes/GetAllSize").Result;
+            if (responseSize.IsSuccessStatusCode)
+            {
+                string data = responseSize.Content.ReadAsStringAsync().Result;
+                ListSize = JsonConvert.DeserializeObject<List<SizeVM>>(data);
+                ViewBag.Size = ListSize;
+            }
+            var ListCategory = new List<DanhmucVM>();
+            HttpResponseMessage responseCategory = _client.GetAsync(_client.BaseAddress + "Categories/GetAllCategory").Result;
+            if (responseCategory.IsSuccessStatusCode)
+            {
+                string data = responseCategory.Content.ReadAsStringAsync().Result;
+                ListCategory = JsonConvert.DeserializeObject<List<DanhmucVM>>(data);
+                ViewBag.Category = ListCategory;
+            }
+            return PartialView("~/Views/Shared/_ProductEdit.cshtml", model);
+        }
+        [HttpPost]
+        public IActionResult GetPartialViewDetails([FromBody] ProductVM model)
+        {
+            
+            return PartialView("~/Views/Shared/_ProductDetails.cshtml", model);
+        }
     }
 }

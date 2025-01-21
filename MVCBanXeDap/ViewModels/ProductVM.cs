@@ -22,5 +22,7 @@ namespace MVCBanXeDap.ViewModels
         public string KhoangGia { get; set; }
         public List<DetailsProductVM> Chitietsanphams { get; set; }
         public List<ImgProductVM> Hinhanhs { get; set; }
+        public decimal MinPrice { get; set; }
+        public decimal MaxPrice { get; set; }
     }
 }

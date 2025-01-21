@@ -108,6 +108,7 @@
         }
     </ul>
 </nav> 
+<div id="partialContainer"></div>
 <!-- Modal Thêm sản phẩm -->
 <partial name="_ShippingCreate"></partial>
 <script>
@@ -149,7 +150,37 @@
         });
     });
 
+    function GeneratePartialViewEdit(element){
+        var dataShipping = element.getAttribute('data-shipping')
+        var shippingID = JSON.parse(dataShipping).id
+        $.ajax({
+            url: 'https://localhost:7029/Shipping/GetPartialViewEdit',
+            type: 'POST',
+            contentType: 'application/json',
+            data: dataShipping,
+            success: function (data) {
+                console.log("Dữ liệu trả về:", data);
+                $('#partialContainer').html(data);
+                console.log("Thành công");
 
+                // Khởi tạo lại modal sau khi thêm vào DOM
+                const modalElement = document.querySelector(`#modal-${shippingID}-edit`); // Thay #modalId bằng ID của modal trong data
+                if (modalElement) {
+                    const modalInstance = new bootstrap.Modal(modalElement);
+                    modalInstance.show(); // Hiển thị modal
+
+                    document.getElementById("closeModel").addEventListener("click", function() {
+                        modalElement.remove();
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error Status: ", status);
+                console.error("Error Message: ", error);
+                console.error("Response Text: ", xhr.responseText);
+            }
+        });
+    }
 
 
     function GenerateShipping(){
@@ -174,10 +205,9 @@
                         <td>${ship.gia}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${ship.id}-edit">
+                                <button data-shipping='${JSON.stringify(ship)}' onclick="GeneratePartialViewEdit(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${ship.id}-edit">
                                     <i class="fas fa-edit"></i> Sửa
                                 </button>
-                                <partial name="_ShippingtEdit" model="${ship}" />
                                 <form method="post" asp-action="Delete" asp-controller="Shipping" asp-route-id="${ship.id}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa thông tin vận chuyển này không?')">
                                     <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
                                 </form>

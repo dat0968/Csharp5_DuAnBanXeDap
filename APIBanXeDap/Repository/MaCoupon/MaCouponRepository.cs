@@ -91,6 +91,7 @@ namespace APIBanXeDap.Repository.MaCoupon
                     SoTienGiam = item.SoTienGiam,
                     NgayHetHan = item.NgayHetHan,
                     TrangThai = item.TrangThai,
+                    NgayTao = item.NgayTao,
                     MinimumOrderAmount = item.MinimumOrderAmount,
                 });
             }
@@ -102,10 +103,11 @@ namespace APIBanXeDap.Repository.MaCoupon
             var editCouponCode = new APIBanXeDap.Models.MaCoupon
             {
                 Code = maCoupon.Code,
-                PhanTramGiam = maCoupon.PhanTramGiam,
-                SoTienGiam = maCoupon.SoTienGiam,
+                SoTienGiam = maCoupon.SoTienGiam > 0 ? maCoupon.SoTienGiam : null,
+                PhanTramGiam = maCoupon.PhanTramGiam > 0 ? maCoupon.PhanTramGiam : null,
                 NgayHetHan = maCoupon.NgayHetHan,
                 TrangThai = maCoupon.TrangThai,
+                NgayTao = maCoupon.NgayTao,
                 MinimumOrderAmount = maCoupon.MinimumOrderAmount,
             };
             db.MaCoupons.Update(editCouponCode);

@@ -7,6 +7,7 @@
         public float? PhanTramGiam { get; set; }
         public DateTime NgayHetHan { get; set; }
         public bool TrangThai { get; set; } = true;
+        public DateTime NgayTao { get; set; }
         public decimal? MinimumOrderAmount { get; set; }
     }
 }

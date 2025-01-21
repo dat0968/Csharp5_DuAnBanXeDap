@@ -20,12 +20,12 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var list = new List<ProductVM2>();
+            var list = new List<ProductVM>();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + "Home/SanPhamBanChay");
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
-                var convertResponse = JsonConvert.DeserializeObject<List<ProductVM2>>(data);
+                var convertResponse = JsonConvert.DeserializeObject<List<ProductVM>>(data);
                 foreach(var item in convertResponse)
                 {
                     var minPrice = Convert.ToDecimal(item.Chitietsanphams.Min(x => x.DonGia));  
@@ -55,13 +55,13 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Product()
         {
-            var ListProducts = new List<ProductVM2>();
+            var ListProducts = new List<ProductVM>();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Home/GetAllProduct");
             if (response.IsSuccessStatusCode)
             {
                 string data = response.Content.ReadAsStringAsync().Result;
                 var ConvertResponseProduct = JsonConvert.DeserializeObject<JObject>(data);
-                ListProducts = ConvertResponseProduct["data"].ToObject<List<ProductVM2>>();
+                ListProducts = ConvertResponseProduct["data"].ToObject<List<ProductVM>>();
                 foreach (var product in ListProducts)
                 {
                     if (product.Chitietsanphams != null && product.Chitietsanphams.Any())
