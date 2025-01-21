@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj": {}
+    "D:\\FPT\\C#5\\WebBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj": {}
   },
   "projects": {
-    "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj": {
+    "D:\\FPT\\C#5\\WebBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj",
+        "projectUniqueName": "D:\\FPT\\C#5\\WebBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj",
         "projectName": "APIBanXeDap",
-        "projectPath": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj",
+        "projectPath": "D:\\FPT\\C#5\\WebBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj",
         "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\obj\\",
+        "outputPath": "D:\\FPT\\C#5\\WebBanXeDap\\APIBanXeDap\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -105,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.2.24474.11/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

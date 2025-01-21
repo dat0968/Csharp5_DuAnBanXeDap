@@ -107,8 +107,12 @@
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a asp-action="Index" asp-controller="Home">Trang chủ</a></li>
-                            <li><a asp-action="Product" asp-controller="Home">Cửa hàng</a></li>
+                            <li class="@((ViewContext.RouteData.Values["controller"].ToString() == "Home" && ViewContext.RouteData.Values["action"].ToString() == "Index") ? "active" : "")">
+                                <a asp-action="Index" asp-controller="Home">Trang chủ</a>
+                            </li>
+                            <li class="@((ViewContext.RouteData.Values["controller"].ToString() == "Home" && ViewContext.RouteData.Values["action"].ToString() == "Product") ? "active" : "")">
+                                <a asp-action="Product" asp-controller="Home">Cửa hàng</a>
+                            </li>
                             @* <li> *@
                             @*     <a href="#">Pages</a> *@
                             @*     <ul class="dropdown"> *@

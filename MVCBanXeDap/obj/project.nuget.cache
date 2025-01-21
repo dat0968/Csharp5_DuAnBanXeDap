@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JVogPfKjEuA=",
+  "dgSpecHash": "vN+O8mTnuus=",
   "success": true,
-  "projectFilePath": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\MVCBanXeDap.csproj",
+  "projectFilePath": "D:\\FPT\\C#5\\WebBanXeDap\\MVCBanXeDap\\MVCBanXeDap.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\bouncycastle.cryptography\\2.5.0\\bouncycastle.cryptography.2.5.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using MVCBanXeDap.Models;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
@@ -53,10 +54,10 @@ namespace MVCBanXeDap.Controllers
             return View(ProductVM);
         }
         [HttpGet]
-        public async Task<IActionResult> Product()
+        public async Task<IActionResult> Product(int? maThuongHieu, string? timKiem, int? maDanhMuc, string? sapXep, int page = 1)
         {
             var ListProducts = new List<ProductVM2>();
-            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Home/GetAllProduct");
+            HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + $"Products/GetAllProduct?keywords={timKiem}&MaDanhMuc={maDanhMuc}&MaThuongHieu={maThuongHieu}&sort={sapXep}&page={page}").Result;
             if (response.IsSuccessStatusCode)
             {
                 string data = response.Content.ReadAsStringAsync().Result;
@@ -73,6 +74,27 @@ namespace MVCBanXeDap.Controllers
                 ViewBag.TotalPages = ConvertResponseProduct["totalPages"].Value<int>();
                 ViewBag.Page = ConvertResponseProduct["page"].Value<int>();
             };
+            
+            ViewBag.MaThuongHieu = maThuongHieu;
+            ViewBag.TimKiem = timKiem;
+            ViewBag.MaDanhMuc = maDanhMuc;
+            ViewBag.SapXep = sapXep;
+            var ListCategory = new List<DanhmucVM>();
+            HttpResponseMessage responseCategory = _client.GetAsync(_client.BaseAddress + "Categories/GetAllCategory").Result;
+            if (responseCategory.IsSuccessStatusCode)
+            {
+                string data = responseCategory.Content.ReadAsStringAsync().Result;
+                ListCategory = JsonConvert.DeserializeObject<List<DanhmucVM>>(data);
+                ViewBag.Category = ListCategory;
+            }
+            var ListBrand = new List<BrandVM>();
+            HttpResponseMessage responseBrand = _client.GetAsync(_client.BaseAddress + "Brands/GettAllBrand").Result;
+            if (responseBrand.IsSuccessStatusCode)
+            {
+                string data = responseBrand.Content.ReadAsStringAsync().Result;
+                ListBrand = JsonConvert.DeserializeObject<List<BrandVM>>(data);
+                ViewBag.Brand = ListBrand;
+            }
             return View(ListProducts);
         }
     }
