@@ -50,6 +50,27 @@
                     color: #fff;
                     border: 1px solid #1d7af3;
                 }
+/* //Căn chỉnh giao diện thành phần của Datatable */
+        div.dt-info {
+            margin-top: 0.5em;
+            text-align: center;
+        }
+
+        div.dt-search {
+            margin-top: 0.5em;
+            float: left;
+        }
+
+        div.dt-length {
+            margin-top: 0.5em;
+            float: right;
+        }
+
+        div.dt-paging {
+            clear: both;
+            text-align: left;
+            margin-top: 0.5em;
+        }
     </style>
 }
 
@@ -62,112 +83,115 @@
         </div>
 
 
-<div class="container-fluid mt-3">
-    <!-- Tình trạng đơn hàng -->
-    <div class="col-sm-6 col-md-4">
-        <div class="card card-stats card-round h-100">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                            <p class="card-category">Tình trạng đơn hàng</p>
-                            <canvas id="orderChart" style="max-height: 150px;"></canvas>
+        <div class="container-fluid mb-3">
+            <div class="row">
+                <!-- Tình trạng đơn hàng -->
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-round h-100">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Tình trạng đơn hàng</p>
+                                        <canvas id="orderChart" style="max-height: 350px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trạng thái nhân viên -->
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-round h-100">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Trạng thái nhân viên</p>
+                                        <canvas id="employeeStatusChart" style="max-height: 350px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trạng thái khách hàng -->
+                <div class="col-sm-6 col-md-4">
+                    <div class="card card-stats card-round h-100">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Trạng thái khách hàng</p>
+                                        <canvas id="customerStatusChart" style="max-height: 350px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Trạng thái nhân viên -->
-    <div class="col-sm-6 col-md-4">
-        <div class="card card-stats card-round h-100">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                            <p class="card-category">Trạng thái nhân viên</p>
-                            <canvas id="employeeStatusChart" style="max-height: 150px;"></canvas>
-                        </div>
+<div class="row mb-3">
+    <div class="col-md-8">
+        <div class="card card-round">
+            <div class="card-header">
+                <div class="card-head-row">
+                    <div class="card-title">Trạng thái đơn hàng</div>
+                    <div class="card-tools">
+                        @* <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div> *@
                     </div>
                 </div>
             </div>
+            <div class="card-body">
+                <div class="text-center mb-2">
+                    <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="day">Ngày</button>
+                    <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="week">Tuần</button>
+                    <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="month">Tháng</button>
+                    <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="orderStatusChart" data-range="year">Năm</button>
+                </div>
+                <canvas id="orderStatusChart" style="max-height: 300px;"></canvas>
+            </div>
         </div>
-    </div>
-
-        <!-- Trạng thái khách hàng -->
-        <div class="col-sm-6 col-md-4">
-            <div class="card card-stats card-round h-100">
+        </div>
+        <div class="col-md-4">
+            <div class="card card-round">
+                <div class="card-header">
+                    <div class="card-head-row">
+                        <div class="card-title">Doanh thu theo thời gian</div>
+                        <div class="card-tools">
+                            @* <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div> *@
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col col-stats ms-3 ms-sm-0">
-                            <div class="numbers">
-                                <p class="card-category">Trạng thái khách hàng</p>
-                                <canvas id="customerStatusChart" style="max-height: 150px;"></canvas>
-                            </div>
-                        </div>
+                    <div class="text-center mb-2">
+                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="day">Ngày</button>
+                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="week">Tuần</button>
+                        <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="month">Tháng</button>
+                        <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="earningChart" data-range="year">Năm</button>
                     </div>
+                    <canvas id="earningChart" style="max-height: 300px;"></canvas>
                 </div>
             </div>
         </div>
-    </div>
-        <div class="row mb-3">
-            <div class="col-md-8">
-                <div class="card card-round">
-                    <div class="card-header">
-                        <div class="card-head-row">
-                            <div class="card-title">Trạng thái đơn hàng</div>
-                            <div class="card-tools">
-                                @* <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div> *@
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center mb-2">
-                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="day">Ngày</button>
-                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="week">Tuần</button>
-                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="orderStatusChart" data-range="month">Tháng</button>
-                            <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="orderStatusChart" data-range="year">Năm</button>
-                        </div>
-                        <canvas id="orderStatusChart" style="max-height: 300px;"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-round">
-                    <div class="card-header">
-                        <div class="card-head-row">
-                            <div class="card-title">Doanh thu theo thời gian</div>
-                            <div class="card-tools">
-                                @* <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div> *@
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center mb-2">
-                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="day">Ngày</button>
-                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="week">Tuần</button>
-                            <button class="btn btn-outline-light btn-sm me-1 time-range-btn" data-chart="earningChart" data-range="month">Tháng</button>
-                            <button class="btn btn-outline-light btn-sm time-range-btn" data-chart="earningChart" data-range="year">Năm</button>
-                        </div>
-                        <canvas id="earningChart" style="max-height: 300px;"></canvas>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="row mb-3">
             <div class="col-12">
@@ -299,12 +323,13 @@
         function renderOrderChart(data, chartName, chartInstance) {
             const ctx = document.getElementById(chartName).getContext('2d');
             if (chartInstance) chartInstance.destroy();
+            console.log(data);
             return new Chart(ctx, {
                 type: 'pie',
                 data: {
                     labels: ['Đã xác nhận', 'Chờ thanh toán', 'Đang xử lý'],
                     datasets: [{
-                        data: [data.approved, data.pending, data.inProgress],
+                        data: [data.approved, data.pending, data.inAllProgress],
                         backgroundColor: ['#1d7AF3', '#F3545D', '#FDAF4B']
                     }]
                 },
@@ -317,8 +342,9 @@
                         tooltip: {
                             callbacks: {
                                 label: function (tooltipItem) {
-                                    const total = data.approved + data.pending + data.inProgress;
-                                    const value = data[tooltipItem.index];
+                                    console.log(tooltipItem);
+                                    const total = data.approved + data.pending + data.inAllProgress;
+                                    const value = tooltipItem.parsed;
                                     const percentage = ((value / total) * 100).toFixed(2);
                                     return `${tooltipItem.label}: ${value} (${percentage}%)`;
                                 }
@@ -544,7 +570,7 @@
                     responsive: true,
                     plugins: {
                         legend: {
-                            position: 'top'
+                            position: 'bottom'
                         },
                         tooltip: {
                             callbacks: {
@@ -611,7 +637,8 @@
                 data: data,
                 destroy: true,
                 columns: columns,
-                language: getDatatableLanguageSettings()
+                language: getDatatableLanguageSettings(),
+                "dom": '<"top"pf<"clear">rt<"clear"> <"bottom"p<"clear">>' // Thêm thanh phân trang cả trên và dưới
             });
         }
 

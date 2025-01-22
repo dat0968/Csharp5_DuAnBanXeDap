@@ -9,24 +9,28 @@
     <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
 
     <style>
-    div.dt-info {
-        text-align: center;
+        /* //Căn chỉnh giao diện thành phần của Datatable */
+        div.dt-info {
+            margin-top: 0.5em;
+            text-align: center;
         }
 
         div.dt-search {
+            margin-top: 0.5em;
             float: left;
         }
 
         div.dt-length {
+            margin-top: 0.5em;
             float: right;
         }
 
         div.dt-paging {
             clear: both;
-            text-align: center;
+            text-align: left;
             margin-top: 0.5em;
         }
-        </style>
+    </style>
 }
 
 <div class="col-md-12">
@@ -152,7 +156,7 @@
                     "infoEmpty": "Không có mục nào để hiển thị",
                     "infoFiltered": "(lọc từ _MAX_ mục)"
                 },
-                "dom": '<"top"lf<"clear">rt<"clear"> <"bottom"ip<"clear">>' // Thêm thanh phân trang cả trên và dưới
+                "dom": '<"top"pf<"clear">rt<"clear"> <"bottom"p<"clear">>' // Thêm thanh phân trang cả trên và dưới
             });
         }
 
