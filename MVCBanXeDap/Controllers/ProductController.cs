@@ -23,7 +23,7 @@ namespace MVCBanXeDap.Controllers
             _client.BaseAddress = baseAddress;
         }
         [HttpGet]
-        public IActionResult Index(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, int page = 1)
+        public async Task<IActionResult> Index(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, int page = 1)
         {
             var ListProducts = new List<ProductVM>();
             HttpResponseMessage responseProduct = _client.GetAsync(_client.BaseAddress + $"Products/GetAllProduct?keywords={keywords}&MaDanhMuc={MaDanhMuc}&MaThuongHieu={MaThuongHieu}&sort={sort}&page={page}").Result;
@@ -34,16 +34,17 @@ namespace MVCBanXeDap.Controllers
                 ListProducts = ConvertResponseProduct["data"].ToObject<List<ProductVM>>();
                 ViewBag.TotalPages = ConvertResponseProduct["totalPages"].Value<int>();
                 ViewBag.Page = ConvertResponseProduct["page"].Value<int>();
+                ViewBag.Keywords = keywords;
+                ViewBag.MaDanhMuc = MaDanhMuc;
+                ViewBag.MaThuongHieu = MaThuongHieu;
+                ViewBag.Sort = sort;
             };
-            ViewBag.Keywords = keywords;
-            ViewBag.MaDanhMuc = MaDanhMuc;
-            ViewBag.MaThuongHieu = MaThuongHieu;
-            ViewBag.Sort = sort;
+            
             var ListBrand = new List<BrandVM>();
-            HttpResponseMessage responseBrand = _client.GetAsync(_client.BaseAddress + "Brands/GettAllBrand").Result;
+            HttpResponseMessage responseBrand = await _client.GetAsync(_client.BaseAddress + "Brands/GetAllBrand");
             if (responseBrand.IsSuccessStatusCode)
             {
-                string data = responseBrand.Content.ReadAsStringAsync().Result;
+                string data = await responseBrand.Content.ReadAsStringAsync();
                 ListBrand = JsonConvert.DeserializeObject<List<BrandVM>>(data);
                 ViewBag.Brand = ListBrand;
             }

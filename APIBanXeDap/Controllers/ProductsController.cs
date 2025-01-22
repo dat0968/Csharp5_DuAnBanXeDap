@@ -89,7 +89,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
-        [HttpPut("DeleteProduct/{id}")]
+        [HttpPut("{id}")]
         public IActionResult DeleteProduct([FromRoute] int id)
         {
             try

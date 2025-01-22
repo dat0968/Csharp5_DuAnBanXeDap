@@ -1,0 +1,142 @@
+﻿@using MVCBanXeDap.ViewModels
+@model IEnumerable<BrandVM>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    .input-number {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+    }
+
+    .input-number:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    }
+</style>
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Danh sách thương hiệu</h4>
+        </div>
+        <div class="card-body">
+            <!-- Tìm kiếm, Bộ lọc, và Sắp xếp -->
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input id="keywords" value="@ViewBag.Keywords" name="keywords" type="text" class="form-control" placeholder="Tìm kiếm thương hiệu..." />
+                </div>
+                <div class="col-md-3">
+                    <select id="SortByPrice" class="form-select">
+                        <option selected="@(string.IsNullOrEmpty(ViewBag.Sort))">Sắp xếp</option>
+                        <option value="@(ViewBag.Sort == "asc" ? "selected" : "")">Tên: A-Z</option>
+                        <option value="@(ViewBag.Sort == "desc" ? "selected" : "")">Tên: Z-A</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Nút Thêm sản phẩm -->
+            <div class="d-flex justify-content-start mb-3">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+                    <i class="fas fa-plus"></i> Thêm thương hiệu
+                </button>
+            </div>
+
+            <!-- Danh sách sản phẩm -->
+            <div class="table-responsive">
+                <table id="basic-datatables" class="display table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tên Thương Hiệu</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="basic-datatables">
+                        @foreach (var brand in Model)
+                        {
+                            <tr>
+                                <td>@brand.TenThuongHieu</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@brand.MaThuongHieu">
+                                            <i class="fas fa-eye"></i> Chi tiết
+                                        </button>
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@brand.MaThuongHieu-edit">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </button>
+                                        <partial name="_BrandEdit" model="@brand"></partial>
+                                        <form method="post" asp-action="DeleteBrand" asp-controller="Brand" asp-route-id="@brand.MaThuongHieu" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')">
+                                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Phân trang -->
+<nav>
+    <ul id="paginationContainer" class="pagination">
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(ViewBag.Page == i ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<!-- Modal Thêm sản phẩm -->
+<partial name="_BrandCreate"></partial>
+
+<script>
+    const keywords = document.getElementById("keywords");
+    function GenerateTableBrand() {
+        fetch(`https://localhost:7137/api/Brands/GetAllBrand?keywords=${keywords.value}&sort=""&page=1`)
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector("#basic-datatables");
+                tbody.innerHTML = "";
+                if (data && data.data) {
+                    data.data.forEach(brand => {
+                        const row = `
+                                <tr>
+                                    <td>${brand.tenThuongHieu}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-info btn-sm">
+                                                <i class="fas fa-eye"></i> Chi tiết
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i> Sửa
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Xóa
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        tbody.innerHTML += row;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Lỗi khi tải dữ liệu:", error);
+            });
+    }
+    keywords.addEventListener("input", function () {
+        GenerateTableBrand()
+    });
+</script>

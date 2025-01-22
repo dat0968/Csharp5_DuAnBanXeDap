@@ -1,0 +1,33 @@
+﻿@using MVCBanXeDap.ViewModels
+<div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSupplierModalLabel">Thêm Nhà Cung Cấp</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="CreateSupplier">
+                    <div class="mb-3">
+                        <label for="TenNhaCc" class="form-label">Tên Nhà Cung Cấp</label>
+                        <input type="text" class="form-control" id="TenNhaCc" name="TenNhaCc" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="DiaChi" class="form-label">Địa Chỉ</label>
+                        <input type="text" class="form-control" id="DiaChi" name="DiaChi" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="Email" name="Email" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Sdt" class="form-label">Số Điện Thoại</label>
+                        <input type="text" class="form-control" id="Sdt" name="Sdt" required />
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-success">Lưu</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

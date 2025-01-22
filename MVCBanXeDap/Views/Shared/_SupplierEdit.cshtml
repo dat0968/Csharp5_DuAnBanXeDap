@@ -1,0 +1,166 @@
+﻿@using MVCBanXeDap.ViewModels
+@model SupplierVM
+<style>
+    table.table td,
+    table.table th {
+    text-align: left;
+    vertical-align: middle; /* Giúp căn giữa theo chiều dọc */
+    }
+</style>
+
+<div class="modal fade" id="modal-@Model.MaNhaCc-edit" tabindex="-1" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSupplierModalLabel">Sửa thông tin nhà cung cấp</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="EditSupplier" asp-controller="Supplier" id="editSupplierForm_@Model.MaNhaCc" method="post" enctype="multipart/form-data">
+                    <input value="@Model.MaNhaCc" type="hidden" class="form-control" id="MaNhaCc" name="MaNhaCc" readonly>
+                    <div class="mb-3">
+                        <label class="form-label">Tên nhà cung cấp </label>
+                        <input value="@Model.TenNhaCc" type="text" class="form-control" id="TenNhaCc" name="TenNhaCc" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ nhà cung cấp </label>
+                        <input value="@Model.DiaChi" type="text" class="form-control" id="DiaChi" name="DiaChi" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email nhà cung cấp </label>
+                        <input value="@Model.Email" type="text" class="form-control" id="Email" name="Email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại nhà cung cấp </label>
+                        <input value="@Model.Sdt" type="text" class="form-control" id="Sdt" name="Sdt" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-primary" form="editSupplierForm_@Model.MaNhaCc">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* <script>
+
+    function addRow_EditForm(maSP) {
+         const tableEdit = document.querySelector(`#attributeTableEdit_${maSP}`);
+         let index = parseInt(tableEdit.dataset.index, 10);
+         const newRow = tableEdit.insertRow();
+         newRow.innerHTML = `
+             <td>
+                 <select class="form-select" name="Attributes[${index}].MaMau" required>
+                     <option value="">-- Chọn màu --</option>
+    @foreach (var color in ViewBag.Color as List<ColorVM>)
+    {
+                            <option value="@color.MaMau">@color.TenMau</option>
+    }
+                 </select>
+             </td>
+             <td>
+                 <select class="form-select" name="Attributes[${index}].MaKichThuoc" required>
+                     <option value="">-- Chọn kích thước --</option>
+    @foreach (var size in ViewBag.Size as List<SizeVM>)
+    {
+                            <option value="@size.MaKichThuoc">@size.TenKichThuoc</option>
+    }
+                 </select>
+             </td>
+             <td>
+                 <input oninput="validateSl_Dg(this)" name="Attributes[${index}].SoLuongTon" min="1" class="input-number" type="number" required>
+            </td>
+            <td>
+                 <input oninput="validateSl_Dg(this)" name="Attributes[${index}].DonGia" min="1" class="input-number" type="number"  required>
+            </td>
+             <td>
+                 <button type="button" class="btn btn-danger btn-sm" onclick="removeRow_EditForm(this)">Xóa</button>
+             </td>
+         `;
+         tableEdit.dataset.index = index + 1;
+     }
+
+     function removeRow_EditForm(button) {
+         const row = button.closest('tr');
+         row.remove();
+     }
+
+
+
+
+
+     document.getElementById('editProductForm_@Model.MaSP').addEventListener('submit', function (event)
+     {
+         // Lấy các hàng trong bảng thuộc tính
+         const rows = document.querySelectorAll('#attributeTableEdit_@Model.MaSP tr');
+         const attributeSet = new Set();
+         let isDuplicate = false;
+
+         rows.forEach(row => {
+             const color = row.querySelector('[name*=".MaMau"]').value;
+             const size = row.querySelector('[name*=".MaKichThuoc"]').value;
+
+             // Tạo cặp giá trị để kiểm tra trùng lặp
+             const attributeKey = `${color}-${size}`;
+
+             if (attributeSet.has(attributeKey)) {
+                 isDuplicate = true;
+             } else {
+                 attributeSet.add(attributeKey);
+             }
+         });
+
+         if (isDuplicate) {
+             event.preventDefault(); // Ngăn form được gửi đi
+             alert('Không thể chọn các cặp thuộc tính trùng lặp, vui lòng chọn lại!');
+         }
+         else{
+            const isConfirmed = window.confirm("Bạn có chắc chắn muốn chỉnh sửa thông tin sản phẩm này?");
+            if (isConfirmed) {
+                this.submit();
+            } else {
+                return false;
+            }
+        }
+     });
+
+
+     function validateSl_Dg(element){
+         if(element.value <= 0){
+             element.value = 1
+         }
+     }
+
+
+         function DeleteDetailsProduct(MaSP, MaMau, MaKichThuoc, button) {
+            const isConfirmed = window.confirm("Bạn có chắc chắn muốn xóa thuộc tính này của sản phẩm?");
+            if (isConfirmed) {
+                const row = button.closest('tr');
+
+                const url = `https://localhost:7137/api/ProductDetails/DeleteDetailsProduct?MaSP=${MaSP}&MaMau=${MaMau}&MaKichThuoc=${MaKichThuoc}`;
+
+                fetch(url, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Xóa không thành công!');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    row.remove();
+                    alert('Xóa thành công!');
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert('Không thể xóa thuộc tính, vui lòng thử lại!');
+                });
+            } else {
+                return false;
+            }
+
+    }
+
+</script>  *@
