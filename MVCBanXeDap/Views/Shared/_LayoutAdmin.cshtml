@@ -29,6 +29,7 @@
           },
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="~/AdminTemplate/assets/css/bootstrap.min.css" />
@@ -130,7 +131,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#">
+                            <a asp-action="Index" asp-controller="KhachHang">
                                 <i class="fa fa-users"></i> <!-- Icon khách hàng -->
                                 QUẢN LÝ KHÁCH HÀNG
                             </a>
@@ -142,7 +143,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#">
+                            <a asp-action="Index" asp-controller="NhanVien">
                                 <i class="fa fa-user-tie"></i> <!-- Icon nhân viên -->
                                 QUẢN LÝ NHÂN VIÊN
                             </a>

@@ -1,5 +1,7 @@
 ﻿using APIBanXeDap.DbInitializer;
 using APIBanXeDap.Models;
+using APIBanXeDap.Repository;
+using APIBanXeDap.Repository.ChiTietHoaDon;
 using APIBanXeDap.Repository.ChiTietSanPham;
 using APIBanXeDap.Repository.DanhMuc;
 using APIBanXeDap.Repository.HinhAnhSanPham;
@@ -9,10 +11,13 @@ using APIBanXeDap.Repository.MaCoupon;
 using APIBanXeDap.Repository.MauSac;
 using APIBanXeDap.Repository.NhaCungCap;
 using APIBanXeDap.Repository.SanPham;
+using APIBanXeDap.Repository.ThongKe;
 using APIBanXeDap.Repository.ThuongHieu;
 using APIBanXeDap.Repository.Token;
 using APIBanXeDap.Repository.VanChuyen;
 using APIBanXeDap.Repository.TrangChu;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+//using APIBanXeDap.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -68,7 +73,13 @@ builder.Services.AddScoped<IMaCouponRepository, MaCouponRepository>();
 builder.Services.AddScoped<IShippingRepository, ShippingRepository>();
 builder.Services.AddScoped<ITrangChuRepository, TrangChuRepository>();
 builder.Services.AddScoped<IHoaDonRepository, HoaDonRepository>();
+builder.Services.AddScoped<IThongKeRepository, ThongKeRepository>();
+builder.Services.AddScoped<IChiTietHoaDonRepository, ChiTietHoaDonRepository>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+builder.Services.AddScoped<IKhachHangService, KhachHangService>();
+builder.Services.AddScoped<IKhachHangRepository, KhachHangRepository>();
+builder.Services.AddScoped<INhanVienService, NhanVienService>();
+builder.Services.AddScoped<INhanVienRepository, NhanVienRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyPolicy", options =>
@@ -90,7 +101,7 @@ app.UseCors("MyPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseStaticFiles();
 app.MapControllers();
 
 SeedDb();

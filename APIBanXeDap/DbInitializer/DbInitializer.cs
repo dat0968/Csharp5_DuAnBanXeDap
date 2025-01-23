@@ -1,4 +1,5 @@
 ﻿using APIBanXeDap.Models;
+using APIBanXeDap.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace APIBanXeDap.DbInitializer
@@ -23,6 +24,10 @@ namespace APIBanXeDap.DbInitializer
             {
                 CreateTempStaff();
             }
+            if (_db.Hoadons.Count() < 700)
+            {
+                CreateOrderForCharts();
+            }
         }
         public void CreateTempStaff()
         {
@@ -46,5 +51,114 @@ namespace APIBanXeDap.DbInitializer
             _db.Add(nhanvien);
             _db.SaveChanges();
         }
+
+        public void CreateOrderForCharts()
+        {
+            try
+            {
+                // Lấy danh sách khách hàng và nhân viên
+                var maKhachHangs = _db.Khachhangs.Select(x => x.MaKh).ToList();
+                var maNhanViens = _db.Nhanviens.Select(x => x.MaNv).ToList();
+
+                // Lấy danh sách sản phẩm
+                var sanPhams = _db.Chitietsanphams.ToList();
+
+                // Random generator
+                Random rand = new Random();
+
+                // Danh sách tình trạng đơn hàng
+                var tinhTrangs = new List<string>
+                {
+                    "Chờ xác nhận",
+                    "Đã xác nhận",
+                    "Đã giao cho đơn vị vận chuyển",
+                    "Đang giao hàng",
+                    "Hoàn trả/Hoàn tiền",
+                    "Đã hủy"
+                };
+
+                // Danh sách lưu hóa đơn và chi tiết hóa đơn để thêm vào DbContext
+                var hoaDons = new List<Hoadon>();
+                var chiTietHoaDons = new List<Chitiethoadon>();
+
+                for (int i = 0; i < 500; i++) // Tạo 500 hóa đơn
+                {
+                    // Lấy ngẫu nhiên khách hàng và nhân viên
+                    int maKhachHang = maKhachHangs[rand.Next(maKhachHangs.Count)];
+                    int? maNhanVien = maNhanViens.Count > 0 ? maNhanViens[rand.Next(maNhanViens.Count)] : (int?)null;
+
+                    // Lấy ngẫu nhiên tình trạng đơn hàng
+                    string tinhTrang = tinhTrangs[rand.Next(tinhTrangs.Count)];
+
+                    // Tạo hóa đơn
+                    var hoaDon = new Hoadon
+                    {
+                        MaKh = maKhachHang,
+                        MaNv = maNhanVien,
+                        DiaChiNhanHang = $"Địa chỉ {i + 1}",
+                        NgayTao = DateOnly.FromDateTime(DateTime.Now.AddDays(-rand.Next(1, 365 * 5))),
+                        ThoiGianGiao = DateOnly.FromDateTime(DateTime.Now.AddDays(rand.Next(7, 365 * 5))),
+                        Httt = rand.Next(0, 2) == 0 ? "COD" : "VNPAY", // Hình thức thanh toán
+                        TinhTrang = tinhTrang,
+                        Hoten = $"Khách hàng {i + 1}",
+                        Sdt = "0123456789",
+                        MoTa = "Tạo tự động hóa đơn cho mục đích test"
+                    };
+
+                    // Thêm hóa đơn vào danh sách
+                    hoaDons.Add(hoaDon);
+
+
+                }
+
+                // Thêm toàn bộ danh sách hóa đơn và chi tiết hóa đơn vào DbContext
+                _db.Hoadons.AddRange(hoaDons);
+
+                // Lưu tất cả thay đổi cùng một lúc (1)
+                _db.SaveChanges();
+
+                foreach (var hoaDon in hoaDons)
+                {
+                    // Tạo chi tiết hóa đơn cho hóa đơn này
+                    int soLuongSanPham = rand.Next(1, 5); // Mỗi hóa đơn có 1-5 sản phẩm
+                    for (int j = 0; j < soLuongSanPham; j++)
+                    {
+                        var sanPham = sanPhams[rand.Next(sanPhams.Count)];
+
+                        // Kiểm tra số lượng tồn kho của sản phẩm
+                        if (sanPham.SoLuongTon > 0)
+                        {
+                            int soLuongMua = rand.Next(1, Math.Min(5, sanPham.SoLuongTon + 1)); // Đặt giới hạn mua
+                            var chiTiet = new Chitiethoadon
+                            {
+                                MaSp = sanPham.MaSp,
+                                MaHoaDon = hoaDon.MaHoaDon, // Gán MaHoaDon sau khi lưu hoaDon
+                                MaMau = sanPham.MaMau,
+                                MaKichThuoc = sanPham.MaKichThuoc,
+                                SoLuong = soLuongMua,
+                                Gia = (decimal)sanPham.DonGia,
+                                ThanhTien = soLuongMua * (decimal)sanPham.DonGia
+                            };
+
+                            // Giảm số lượng tồn kho và thêm chi tiết hóa đơn vào danh sách
+                            sanPham.SoLuongTon -= soLuongMua;
+                            chiTietHoaDons.Add(chiTiet);
+                        }
+                    }
+                }
+                _db.Chitiethoadons.AddRange(chiTietHoaDons);
+
+                // Lưu tất cả thay đổi cùng một lúc (2)
+                _db.SaveChanges();
+
+                Console.WriteLine("Tạo hóa đơn và chi tiết hóa đơn thành công!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Đã xảy ra lỗi khi tạo hóa đơn: {ex.Message}");
+            }
+        }
+
+
     }
 }

@@ -230,6 +230,9 @@ namespace APIBanXeDap.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
 
+                    b.Property<string>("Hinh")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("HoTen")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -307,8 +310,8 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON001",
                             MinimumOrderAmount = 200000m,
-                            NgayHetHan = new DateTime(2025, 2, 14, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1718),
-                            NgayTao = new DateTime(2025, 1, 15, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1700),
+                            NgayHetHan = new DateTime(2025, 2, 22, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6172),
+                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6156),
                             SoTienGiam = 50000m,
                             TrangThai = true
                         },
@@ -316,8 +319,8 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON002",
                             MinimumOrderAmount = 300000m,
-                            NgayHetHan = new DateTime(2025, 1, 30, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1732),
-                            NgayTao = new DateTime(2025, 1, 15, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1728),
+                            NgayHetHan = new DateTime(2025, 2, 7, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6183),
+                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6181),
                             PhanTramGiam = 10f,
                             TrangThai = true
                         },
@@ -325,8 +328,8 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON003",
                             MinimumOrderAmount = 500000m,
-                            NgayHetHan = new DateTime(2025, 2, 4, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1738),
-                            NgayTao = new DateTime(2025, 1, 15, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1737),
+                            NgayHetHan = new DateTime(2025, 2, 12, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6188),
+                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6187),
                             SoTienGiam = 100000m,
                             TrangThai = false
                         },
@@ -334,8 +337,8 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON004",
                             MinimumOrderAmount = 400000m,
-                            NgayHetHan = new DateTime(2025, 1, 25, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1759),
-                            NgayTao = new DateTime(2025, 1, 15, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1757),
+                            NgayHetHan = new DateTime(2025, 2, 2, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6193),
+                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6191),
                             PhanTramGiam = 20f,
                             TrangThai = true
                         },
@@ -343,8 +346,8 @@ namespace APIBanXeDap.Migrations
                         {
                             Code = "COUPON005",
                             MinimumOrderAmount = 600000m,
-                            NgayHetHan = new DateTime(2025, 2, 9, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1764),
-                            NgayTao = new DateTime(2025, 1, 15, 8, 24, 38, 277, DateTimeKind.Local).AddTicks(1762),
+                            NgayHetHan = new DateTime(2025, 2, 17, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6275),
+                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6274),
                             SoTienGiam = 150000m,
                             TrangThai = true
                         });
@@ -451,6 +454,9 @@ namespace APIBanXeDap.Migrations
                         .IsRequired()
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("Hinh")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HoTen")
                         .IsRequired()

@@ -135,6 +135,7 @@ namespace APIBanXeDap.Repository.HoaDon
                 NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
                 HinhThucThanhToan = invoiceData.Httt,
                 TenKhachHang = invoiceData.MaKhNavigation.HoTen,
+                MaNhanVien = invoiceData.MaNv ?? 0,
                 SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
                 DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
                 Items = invoiceItems.Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
@@ -173,8 +174,10 @@ namespace APIBanXeDap.Repository.HoaDon
                 DiaChiNhanHang = invoiceData.DiaChiNhanHang,
                 TinhTrang = invoiceData.TinhTrang,
                 NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
+                ThoiGianGiao = invoiceData.ThoiGianGiao.ToDateTime(TimeOnly.MinValue),
                 HinhThucThanhToan = invoiceData.Httt,
                 TenKhachHang = invoiceData.MaKhNavigation.HoTen,
+                MaNhanVien = invoiceData.MaNv ?? 0,
                 SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
                 DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
                 Items = invoiceItems.Where(ct => ct.MaHoaDon == invoiceData.MaHoaDon).Select(ct => new InvoiceVM.ChiTietHoaDonViewModel

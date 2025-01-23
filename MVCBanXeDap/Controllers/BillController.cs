@@ -1,4 +1,4 @@
-﻿using iText.IO.Font;
+using iText.IO.Font;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
@@ -10,7 +10,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
-using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
 using System.Security.Claims;
 using System.Text;
@@ -22,6 +21,7 @@ namespace MVCBanXeDap.Controllers
         Uri baseAddress = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
         private readonly IjwtToken jwtToken;
+
         public BillController(IjwtToken jwtToken)
         {
             _client = new HttpClient();
@@ -36,28 +36,26 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status, string? idStaffChanged)
         {
-            // Kiểm tra tính hiệu lực của accesstoken được lưu trong session
             var accessToken = HttpContext.Session.GetString("AccessToken");
             var refreshToken = HttpContext.Session.GetString("RefreshToken");
-            if(accessToken == null || refreshToken == null)
-            {
-                return Json(new { success = false, message = "Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại." });
-            }
             string? idStaff = null;
-            var validateAccessToken = jwtToken.ValidateAccessToken(accessToken, refreshToken); 
-            if (validateAccessToken.Result == null)
+            if (accessToken == null || refreshToken == null)
             {
-                return Json(new { success = false, message = "Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại." });
+                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại." });
             }
-            var handler = new JwtSecurityTokenHandler();
-            if (handler.CanReadToken(validateAccessToken.Result))
+            var ValidateAccessToken = jwtToken.ValidateAccessToken(accessToken, refreshToken);
+            if(ValidateAccessToken.Result == null)
             {
-                var jwtToken = handler.ReadJwtToken(validateAccessToken.Result);
-                idStaff = jwtToken.Claims.FirstOrDefault(p => p.Type == JwtRegisteredClaimNames.Sub)?.Value;
+                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại." });
+            }
+            else
+            {
+                HttpContext.Session.SetString("AccessToken", ValidateAccessToken.Result);
+                idStaff = ValidateAccessToken.Result;
             }
             if (String.IsNullOrEmpty(idStaff))
             {
-                return Json(new { success = false, message = "Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại." });
+                return Json(new { success = false, message = "Không tìm thấy mã người dùng đăng nhập, vui lòng liên hệ nhà phát triển để được hỗ trợ." });
             }
 
             var paramsChange = new Dictionary<string, string>
@@ -70,7 +68,7 @@ namespace MVCBanXeDap.Controllers
 
             string queryString = string.Join("&", paramsChange.Select(x => $"{x.Key}={Uri.EscapeUriString(x.Value)}"));
             var content = new StringContent("", Encoding.UTF8, "application/x-www-form-urlencoded");
-            HttpResponseMessage httpResponse = await _client.PutAsync(_client.BaseAddress + "bill/update/?" + queryString, content);
+            HttpResponseMessage httpResponse = await _client.PutAsync(_client.BaseAddress + "bill/ChangeStatusOrder?" + queryString, content);
 
             // Xử lý dữ liệu trả về từ API
             if (httpResponse.IsSuccessStatusCode)
@@ -85,6 +83,25 @@ namespace MVCBanXeDap.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Detail(string idOrder)
+        {
+            InvoiceVM invoice = null;
+
+            // Gọi API để lấy thông tin hóa đơn
+            HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + $"Bill/GetInvoiceData/{idOrder}");
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                string data = await httpResponseMessage.Content.ReadAsStringAsync();
+                invoice = JsonConvert.DeserializeObject<InvoiceVM>(data);
+            }
+
+            if (invoice == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy hóa đơn" });
+            }
+            return PartialView(invoice);
+        }
         public async Task<IActionResult> TakeInvoice(string maHoaDon)
         {
             InvoiceVM invoice = null;
@@ -322,3 +339,4 @@ namespace MVCBanXeDap.Controllers
         #endregion
     }
 }
+

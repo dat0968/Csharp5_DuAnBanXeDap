@@ -142,14 +142,15 @@
 <!-- Phân trang -->
 <nav>
     <ul class="pagination">
-        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++) 
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
         {
-             <li class="page-item @(ViewBag.Page == i ? "active" : "")">
+            <li class="page-item @(ViewBag.Page == i ? "active" : "")">
                 <a class="page-link" data-page="@i" href="@Url.Action("Index", new { keywords = ViewBag.Keywords, MaDanhMuc = ViewBag.MaDanhMuc, page = i })">@i</a>
-            </li> 
-         } 
+            </li>
+        }
     </ul>
 </nav>
+
 <!-- Modal Thêm sản phẩm -->
 <partial name="_ProductCreate"></partial>
 @*  Modal Sửa sản phẩm *@
