@@ -138,7 +138,7 @@
                     `);
                     $(row).find('.status-select').change(function() {
                         const newStatus = $(this).val();
-                        console.table(data);
+                        console.table(data); //Note
                         changeOrderStatus(data.maHoaDon, newStatus, data.maNv);
                     });
                 },
@@ -174,11 +174,13 @@
             $.ajax({
                 url: url,
                 type: 'GET',
-                success: function(result) {
+                success: function(response) {
+                    const result = convertJsonData(response);
+                    console.log(result); //Note
                     if (result.success) {
                         toastr.success(result.message, 'Thành công');
                     } else {
-                        toastr.info(result.message, 'Lỗi');
+                        toastr.info(result.message, 'Lỗi'); //Note
                     }
                     datatable.ajax.reload();
                     return { success: true, message: result.message };
@@ -226,6 +228,10 @@
         //Hàm load datatable đơn giản
         function loadDT() {
             datatable.ajax.reload();
+        }
+        //Hàm load lại dữ liệu Json
+        function convertJsonData(response) {
+            return typeof response === 'string' ? JSON.parse(response) : response;
         }
         $(document).ready(function(){
             loadDatatable();

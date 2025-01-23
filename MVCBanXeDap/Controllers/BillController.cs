@@ -48,7 +48,7 @@ namespace MVCBanXeDap.Controllers
 
             string queryString = string.Join("&", paramsChange.Select(x => $"{x.Key}={Uri.EscapeUriString(x.Value)}"));
             var content = new StringContent("", Encoding.UTF8, "application/x-www-form-urlencoded");
-            HttpResponseMessage httpResponse = await _client.PutAsync(_client.BaseAddress + "bill/update/?" + queryString, content);
+            HttpResponseMessage httpResponse = await _client.PutAsync(_client.BaseAddress + "bill/ChangeStatusOrder?" + queryString, content);
 
             // Xử lý dữ liệu trả về từ API
             if (httpResponse.IsSuccessStatusCode)
