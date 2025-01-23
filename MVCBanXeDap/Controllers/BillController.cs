@@ -63,6 +63,25 @@ namespace MVCBanXeDap.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Detail(string idOrder)
+        {
+            InvoiceVM invoice = null;
+
+            // Gọi API để lấy thông tin hóa đơn
+            HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + $"Bill/GetInvoiceData/{idOrder}");
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                string data = await httpResponseMessage.Content.ReadAsStringAsync();
+                invoice = JsonConvert.DeserializeObject<InvoiceVM>(data);
+            }
+
+            if (invoice == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy hóa đơn" });
+            }
+            return PartialView(invoice);
+        }
         public async Task<IActionResult> TakeInvoice(string maHoaDon)
         {
             InvoiceVM invoice = null;

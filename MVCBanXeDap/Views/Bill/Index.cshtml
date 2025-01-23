@@ -87,9 +87,27 @@
     </div>
 </div>
 
+<div id="coverContentDetailOrder" class="modal fade" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceModalLabel">Thông tin chi tiết đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js" asp-append-version="true"></script>
     <script>
+        const defaultAPI = "https://localhost:7137/api";
+
         let datatable;
         // Khởi tạo datatable
         function loadDatatable() {
@@ -117,9 +135,11 @@
                             return `
                                 <div class="d-flex justify-content-start mb-3">
                                     <a class="btn btn-primary" onclick="takeInvoice(${data})">
-                                        <i class="fas fa-plus"></i>
-                                        Xuất hóa đơn
+                                         <i class="fas fa-download"></i>
                                     </a>
+                                    <button type="button" class="btn btn-info" onclick="loadDetailOrderToModal(${data})" data-bs-toggle="modal" data-bs-target="#coverContentDetailOrder">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
                                 </div> `},
                         width: '10%' }
                 ],
@@ -190,6 +210,30 @@
                     datatable.ajax.reload();
                     toastr.error(errorMessage, 'Thất bại');
                     return { success: false, message: errorMessage };
+                }
+            });
+        }
+
+        //Hàm hiển thị chi tiết thông tin đơn hàng
+        function loadDetailOrderToModal(idOrder) {
+            $.ajax({
+                url: "/Bill/Detail",
+                method: "GET",
+                data: { idOrder: idOrder },
+                success: (response) => {
+                    $('#coverContentDetailOrder .modal-body').html(response);
+                    $('#coverContentDetailOrder').modal('show');
+                    },
+                error: (xhr) => {
+                    // Tạo một phần tử mới và căn giữa với biểu tượng tải
+                    const errorHtml = `
+                        <div class="text-center">
+                            <i class="fas fa-spinner fa-spin fa-3x"></i><br />
+                            <p>Hiện không thể hiển thị thông tin đơn hàng mang mã ${idOrder}!</p>
+                        </div>
+                    `;
+                    $('#coverContentDetailOrder .modal-body').html(errorHtml);
+                    $('#coverContentDetailOrder').modal('show');
                 }
             });
         }

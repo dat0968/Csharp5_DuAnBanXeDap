@@ -1,0 +1,89 @@
+﻿@model MVCBanXeDap.ViewModels.InvoiceVM
+<div class="row mb-3">
+    <div class="col-md-6">
+        <h4>Thông tin đơn hàng</h4>
+        <div class="mb-3">
+            <label><strong>Mã đơn hàng:</strong></label>
+            <input type="text" class="form-control" value="@Model.MaHoaDon" readonly />
+        </div>
+        <div class="mb-3">
+            <label><strong>Ngày tạo:</strong></label>
+            <input type="text" class="form-control" value="@Model.NgayTao.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+        </div>
+        <div class="mb-3">
+            <label><strong>Tình trạng:</strong></label>
+            <input type="text" class="form-control" value="@Model.TinhTrang" readonly />
+        </div>
+        <div class="mb-3">
+            <label><strong>Hình thức thanh toán:</strong></label>
+            <input type="text" class="form-control" value="@Model.HinhThucThanhToan" readonly />
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h4>Thông tin khách hàng</h4>
+        <div class="mb-3">
+            <label><strong>Tên khách hàng:</strong></label>
+            <input type="text" class="form-control" value="@Model.TenKhachHang" readonly />
+        </div>
+        <div class="mb-3">
+            <label><strong>Số điện thoại khách hàng:</strong></label>
+            <input type="text" class="form-control" value="@Model.SoDienThoaiKhachHang" readonly />
+        </div>
+        <div class="mb-3">
+            <label><strong>Địa chỉ khách hàng:</strong></label>
+            <input type="text" class="form-control" value="@Model.DiaChiKhachHang" readonly />
+        </div>
+        <div class="mb-3">
+            <label><strong>Địa chỉ nhận hàng:</strong></label>
+            <input type="text" class="form-control" value="@Model.DiaChiNhanHang" readonly />
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">Chi tiết đơn hàng</h4> <!-- Tiêu đề -->
+            <a href="bill/TakeInvoice?maHoaDon=@Model.MaHoaDon" class="btn btn-link" title="Tải hóa đơn">
+                <i class="fas fa-download fa-2x"></i> <!-- Biểu tượng tải hóa đơn -->
+            </a>
+        </div>
+
+
+        <div class="mb-3" style="max-height: 300px; overflow-y: auto;">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Tổng tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.TenSanPham</td>
+                            <td class="text-center">@item.SoLuong</td>
+                            <td class="text-success text-right">@item.DonGia.ToString("N0") VNĐ</td>
+                            <td class="text-danger text-right">@item.Tong.ToString("N0") VNĐ</td>
+                        </tr>
+                    }
+
+                    @if (Model.Items.Count == 0)
+                    {
+                        <tr>
+                            <td class="text-center" colspan="4">Không có sản phẩm nào trong đơn hàng.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-3 d-flex flex-column align-items-end">
+            <strong class="h3">Tổng tiền đơn hàng:</strong>
+            <p class="h5 text-primary">@Model.TongTien.ToString("N0") VNĐ</p>
+        </div>
+    </div>
+</div>
