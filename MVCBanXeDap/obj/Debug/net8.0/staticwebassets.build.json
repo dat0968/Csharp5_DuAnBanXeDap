@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "j69UCjm45Ep5uqnvJ3TEb5VH2IgOQq1LH/elGCFY9cQ=",
+  "Hash": "5HRGXpC75qQo4tQ87rSNgyVlW+gQAQmxNEu0F+Ftu50=",
   "Source": "MVCBanXeDap",
   "BasePath": "_content/MVCBanXeDap",
   "Mode": "Default",
@@ -9549,6 +9549,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\fonts\\fontawesome-webfont.woff2"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\fonts\\Merriweather-Regular.ttf",
+      "SourceId": "MVCBanXeDap",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\",
+      "BasePath": "_content/MVCBanXeDap",
+      "RelativePath": "fonts/Merriweather-Regular#[.{fingerprint}]?.ttf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ymskoyn1ck",
+      "Integrity": "BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fonts\\Merriweather-Regular.ttf"
     },
     {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\366760000_968465774368418_3331979115163731096_n.jpg",
@@ -51384,6 +51405,88 @@
       ]
     },
     {
+      "Route": "fonts/Merriweather-Regular.ttf",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\fonts\\Merriweather-Regular.ttf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "149120"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/x-font-ttf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 22 Jan 2025 13:44:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k="
+        }
+      ]
+    },
+    {
+      "Route": "fonts/Merriweather-Regular.ymskoyn1ck.ttf",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\fonts\\Merriweather-Regular.ttf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "149120"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/x-font-ttf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 22 Jan 2025 13:44:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ymskoyn1ck"
+        },
+        {
+          "Name": "label",
+          "Value": "fonts/Merriweather-Regular.ttf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k="
+        }
+      ]
+    },
+    {
       "Route": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.4y2gn89k0t.jpg",
       "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\366760000_968465774368418_3331979115163731096_n.jpg",
       "Selectors": [],
@@ -67478,7 +67581,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 22 Jan 2025 11:23:01 GMT"
+          "Value": "Wed, 22 Jan 2025 13:48:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -67515,7 +67618,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 22 Jan 2025 11:23:01 GMT"
+          "Value": "Wed, 22 Jan 2025 13:48:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -67560,7 +67663,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 22 Jan 2025 11:23:01 GMT"
+          "Value": "Wed, 22 Jan 2025 13:48:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -67605,7 +67708,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 22 Jan 2025 11:23:01 GMT"
+          "Value": "Wed, 22 Jan 2025 13:48:34 GMT"
         },
         {
           "Name": "Cache-Control",

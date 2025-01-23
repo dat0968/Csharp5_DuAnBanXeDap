@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using MVCBanXeDap.Services;
+using MVCBanXeDap.Services.Email;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace MVCBanXeDap.Controllers
 {

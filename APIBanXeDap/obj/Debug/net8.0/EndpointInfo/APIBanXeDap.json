@@ -170,17 +170,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TokenResponse"
+                "type": "string"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/TokenResponse"
+                "type": "string"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/TokenResponse"
+                "type": "string"
               }
             }
           }
@@ -271,6 +271,120 @@
       "get": {
         "tags": [
           "Accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Bill/Get": {
+      "get": {
+        "tags": [
+          "Bill"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Bill/Get/{maHoadon}": {
+      "get": {
+        "tags": [
+          "Bill"
+        ],
+        "parameters": [
+          {
+            "name": "maHoadon",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Bill/ChangeStatusOrder": {
+      "put": {
+        "tags": [
+          "Bill"
+        ],
+        "parameters": [
+          {
+            "name": "idOrder",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idStaff",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "statusOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idStaffChanged",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Bill/GetInvoiceData/{maHoaDon}": {
+      "get": {
+        "tags": [
+          "Bill"
+        ],
+        "parameters": [
+          {
+            "name": "maHoaDon",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Bill/GetAllInvoiceData": {
+      "get": {
+        "tags": [
+          "Bill"
         ],
         "responses": {
           "200": {
@@ -1582,20 +1696,6 @@
           },
           "isDelete": {
             "type": "boolean",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "TokenResponse": {
-        "type": "object",
-        "properties": {
-          "accessToken": {
-            "type": "string",
-            "nullable": true
-          },
-          "refreshToken": {
-            "type": "string",
             "nullable": true
           }
         },

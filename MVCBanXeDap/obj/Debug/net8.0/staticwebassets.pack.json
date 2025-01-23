@@ -2005,6 +2005,10 @@
       "PackagePath": "staticwebassets\\fonts\\FontAwesome.otf"
     },
     {
+      "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\fonts\\Merriweather-Regular.ttf",
+      "PackagePath": "staticwebassets\\fonts\\Merriweather-Regular.ttf"
+    },
+    {
       "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\fonts\\fontawesome-webfont.eot",
       "PackagePath": "staticwebassets\\fonts\\fontawesome-webfont.eot"
     },

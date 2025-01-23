@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using APIBanXeDap.Repository.Token;
+using System.Security.Principal;
 
 namespace APIBanXeDap.Controllers
 {
@@ -88,6 +89,7 @@ namespace APIBanXeDap.Controllers
             {
                 Success = true,
                 Message = "Login successfully",
+                IDCustomer = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sub),
                 Data = new TokenResponse
                 {
                     AccessToken = AccessToken,
@@ -210,12 +212,10 @@ namespace APIBanXeDap.Controllers
             });
         }
         [HttpPost("RenewAccessToken")]
-        public async Task<IActionResult> RenewToken(TokenResponse token)
+        public async Task<IActionResult> RenewToken([FromBody] string RefreshToken)
         {
-            var checkRefreshToken = await db.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(p => p.Token == token.RefreshToken);
+            var checkRefreshToken = await db.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(p => p.Token == RefreshToken);
             var JwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-            var ReadAccessToken = JwtSecurityTokenHandler.ReadToken(token.AccessToken) as JwtSecurityToken;
-            var ExpAccessToken = ReadAccessToken.Claims.SingleOrDefault(p => p.Type == "exp")?.Value;
             if ((checkRefreshToken == null) || (checkRefreshToken != null && checkRefreshToken.ExpiredAt < DateTime.UtcNow))
             {
                 return Ok(new
@@ -223,18 +223,6 @@ namespace APIBanXeDap.Controllers
                     Success = false,
                     Message = "RefreshToken has expired. Login again",
                 });
-            }
-            if(ExpAccessToken != null && long.TryParse(ExpAccessToken, out long exp))
-            {
-                var expiryDateTime = DateTimeOffset.FromUnixTimeSeconds(exp).UtcDateTime;
-                if(expiryDateTime > DateTime.UtcNow)
-                {
-                    return Ok(new
-                    {
-                        Success = false,
-                        Message = "AccessToken has not expired"
-                    });
-                }
             }
             var GenerateAccessToken = TokenServices.GenerateAccessToken(checkRefreshToken.UserId);
             return Ok(new
@@ -244,7 +232,7 @@ namespace APIBanXeDap.Controllers
                 Data = new TokenResponse
                 {
                     AccessToken = GenerateAccessToken,
-                    RefreshToken = token.RefreshToken,
+                    RefreshToken = RefreshToken,
                 }
             });
         }

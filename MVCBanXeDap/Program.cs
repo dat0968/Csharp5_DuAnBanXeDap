@@ -1,4 +1,5 @@
-using MVCBanXeDap.Services;
+using MVCBanXeDap.Services.Email;
+using MVCBanXeDap.Services.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddSingleton<EmailService>();
+builder.Services.AddScoped<IjwtToken, JwtToken>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

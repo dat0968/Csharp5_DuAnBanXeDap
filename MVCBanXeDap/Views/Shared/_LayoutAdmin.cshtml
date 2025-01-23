@@ -73,8 +73,11 @@
             transition: transform 0.2s ease; /* Hiệu ứng mượt */
         }
 
-    </style>
+    </style >
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+    @RenderSection("CSSs", required: false)
+
 </head>
 <body>
     <div class="wrapper">
@@ -157,7 +160,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#maps">
+                            <a href="/bill">
                                 <i class="fa fa-shopping-cart"></i> <!-- Icon đơn hàng -->
                                 QUẢN LÝ ĐƠN HÀNG
                             </a>
@@ -821,5 +824,6 @@
             }
         });
     </script>
+        @RenderSection("Scripts", required: false)
 </body>
 </html>

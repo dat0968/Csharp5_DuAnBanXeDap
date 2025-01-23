@@ -1,7 +1,9 @@
+﻿using APIBanXeDap.DbInitializer;
 using APIBanXeDap.Models;
 using APIBanXeDap.Repository.ChiTietSanPham;
 using APIBanXeDap.Repository.DanhMuc;
 using APIBanXeDap.Repository.HinhAnhSanPham;
+using APIBanXeDap.Repository.HoaDon;
 using APIBanXeDap.Repository.KichThuoc;
 using APIBanXeDap.Repository.MaCoupon;
 using APIBanXeDap.Repository.MauSac;
@@ -65,6 +67,8 @@ builder.Services.AddScoped<IProductImagesRepository, ProductImagesRepository>();
 builder.Services.AddScoped<IMaCouponRepository, MaCouponRepository>();
 builder.Services.AddScoped<IShippingRepository, ShippingRepository>();
 builder.Services.AddScoped<ITrangChuRepository, TrangChuRepository>();
+builder.Services.AddScoped<IHoaDonRepository, HoaDonRepository>();
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyPolicy", options =>
@@ -89,4 +93,23 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+SeedDb();
+
 app.Run();
+
+void SeedDb()
+{
+    using (var scope = app.Services.CreateScope()) {
+        {
+            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+            try
+            {
+                dbInitializer.Initializer();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Gặp lỗi khi khởi tại dữ liệu: " + ex.Message);
+            }
+        }
+    }
+}

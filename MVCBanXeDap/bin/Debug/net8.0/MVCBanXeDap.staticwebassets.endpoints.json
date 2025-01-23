@@ -38733,7 +38733,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 22 Jan 2025 11:23:01 GMT"
+          "Value": "Wed, 22 Jan 2025 13:48:34 GMT"
         }
       ],
       "EndpointProperties": [
@@ -38778,7 +38778,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 22 Jan 2025 11:23:01 GMT"
+          "Value": "Wed, 22 Jan 2025 13:48:34 GMT"
         }
       ],
       "EndpointProperties": [
@@ -41081,6 +41081,88 @@
         {
           "Name": "label",
           "Value": "fonts/FontAwesome.otf"
+        }
+      ]
+    },
+    {
+      "Route": "fonts/Merriweather-Regular.ttf",
+      "AssetFile": "fonts/Merriweather-Regular.ttf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "149120"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/x-font-ttf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 22 Jan 2025 13:44:34 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k="
+        }
+      ]
+    },
+    {
+      "Route": "fonts/Merriweather-Regular.ymskoyn1ck.ttf",
+      "AssetFile": "fonts/Merriweather-Regular.ttf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "149120"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/x-font-ttf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 22 Jan 2025 13:44:34 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ymskoyn1ck"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k="
+        },
+        {
+          "Name": "label",
+          "Value": "fonts/Merriweather-Regular.ttf"
         }
       ]
     },
