@@ -2,6 +2,7 @@
 {
     public interface IjwtToken
     {
-        Task<string?> ValidateAccessToken(string accessToken, string refreshToken);
+        Task<string?> ValidateAccessToken(string accessToken, string refreshToken); 
+        string GetUserIdFromToken(string accessToken);
     }
 }

@@ -34,26 +34,29 @@ namespace MVCBanXeDap.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status, string? idStaffChanged)
+        public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status)
         {
             var accessToken = HttpContext.Session.GetString("AccessToken");
             var refreshToken = HttpContext.Session.GetString("RefreshToken");
-            string? idStaff = null;
+
             if (accessToken == null || refreshToken == null)
             {
-                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại." });
+                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
             }
-            var ValidateAccessToken = jwtToken.ValidateAccessToken(accessToken, refreshToken);
-            if(ValidateAccessToken.Result == null)
+
+            var ValidateAccessToken = await jwtToken.ValidateAccessToken(accessToken, refreshToken);
+            if (ValidateAccessToken == null)
             {
-                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại." });
+                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
             }
             else
             {
-                HttpContext.Session.SetString("AccessToken", ValidateAccessToken.Result);
-                idStaff = ValidateAccessToken.Result;
+                HttpContext.Session.SetString("AccessToken", ValidateAccessToken);
             }
-            if (String.IsNullOrEmpty(idStaff))
+
+            var idStaff = jwtToken.GetUserIdFromToken(ValidateAccessToken); // Lấy idStaff từ token
+
+            if (string.IsNullOrEmpty(idStaff))
             {
                 return Json(new { success = false, message = "Không tìm thấy mã người dùng đăng nhập, vui lòng liên hệ nhà phát triển để được hỗ trợ." });
             }
@@ -62,15 +65,18 @@ namespace MVCBanXeDap.Controllers
             {
                 { "idOrder", idOrder },
                 { "idStaff", idStaff },
-                { "statusOrder", status },
-                { "idStaffChanged", idStaffChanged } // Gửi idStaffChanged
+                { "statusOrder", status }
             };
 
-            string queryString = string.Join("&", paramsChange.Select(x => $"{x.Key}={Uri.EscapeUriString(x.Value)}"));
+            string queryString = string.Join("&",
+                paramsChange.Where(x => !string.IsNullOrEmpty(x.Value))
+                            .Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
+
+            Console.WriteLine(queryString);
+
             var content = new StringContent("", Encoding.UTF8, "application/x-www-form-urlencoded");
             HttpResponseMessage httpResponse = await _client.PutAsync(_client.BaseAddress + "bill/ChangeStatusOrder?" + queryString, content);
 
-            // Xử lý dữ liệu trả về từ API
             if (httpResponse.IsSuccessStatusCode)
             {
                 string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
