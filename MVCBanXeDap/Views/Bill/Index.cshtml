@@ -7,6 +7,30 @@
 
 @section CSSs {
     <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+
+    <style>
+        /* //Căn chỉnh giao diện thành phần của Datatable */
+        div.dt-info {
+            margin-top: 0.5em;
+            text-align: center;
+        }
+
+        div.dt-search {
+            margin-top: 0.5em;
+            float: left;
+        }
+
+        div.dt-length {
+            margin-top: 0.5em;
+            float: right;
+        }
+
+        div.dt-paging {
+            clear: both;
+            text-align: left;
+            margin-top: 0.5em;
+        }
+    </style>
 }
 
 <div class="col-md-12">
@@ -63,9 +87,27 @@
     </div>
 </div>
 
+<div id="coverContentDetailOrder" class="modal fade" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceModalLabel">Thông tin chi tiết đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js" asp-append-version="true"></script>
     <script>
+        const defaultAPI = "https://localhost:7137/api";
+
         let datatable;
         // Khởi tạo datatable
         function loadDatatable() {
@@ -87,17 +129,24 @@
                     { title: 'Họ Tên', data: 'hoten', width: '15%', className: 'text-center' },
                     { title: 'Số Điện Thoại', data: 'sdt', width: '10%', className: 'text-center' },
                     { title: 'Thời Gian Giao', data: 'thoiGianGiao', width: '15%', className: 'text-center' },
+<<<<<<< HEAD
                     { title: 'Thao tác', 
                         data: 'maHoaDon', 
+=======
+                    { title: 'Thao tác',
+                        data: 'maHoaDon',
+>>>>>>> origin/TTT_ThongKe
                         "render": function(data) {
                             return `
                                 <div class="d-flex justify-content-start mb-3">
                                     <a class="btn btn-primary" onclick="takeInvoice(${data})">
-                                        <i class="fas fa-plus"></i>
-                                        Xuất hóa đơn
+                                         <i class="fas fa-download"></i>
                                     </a>
-                                </div> `}, 
-                        width: '10%' }                
+                                    <button type="button" class="btn btn-info" onclick="loadDetailOrderToModal(${data})" data-bs-toggle="modal" data-bs-target="#coverContentDetailOrder">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                </div> `},
+                        width: '10%' }
                 ],
                 createdRow: function(row, data, dataIndex) {
                     // Thêm sự kiện onchange cho select trong cột tình trạng
@@ -114,7 +163,7 @@
                     `);
                     $(row).find('.status-select').change(function() {
                         const newStatus = $(this).val();
-                        console.table(data);
+                        console.table(data); //Note
                         changeOrderStatus(data.maHoaDon, newStatus, data.maNv);
                     });
                 },
@@ -131,7 +180,8 @@
                     "zeroRecords": `<div style="text-align: center;">Không tìm thấy kết quả nào.</div>`,
                     "infoEmpty": "Không có mục nào để hiển thị",
                     "infoFiltered": "(lọc từ _MAX_ mục)"
-                }
+                },
+                "dom": '<"top"pf<"clear">rt<"clear"> <"bottom"p<"clear">>' // Thêm thanh phân trang cả trên và dưới
             });
         }
 
@@ -140,7 +190,7 @@
             const paramsChange = {
                 idOrder: idOrder,
                 status: status,
-                idStaffChanged:idStaffChanged
+                idStaffChanged: idStaffChanged
             };
 
             const queryString = $.param(paramsChange);
@@ -149,15 +199,20 @@
             $.ajax({
                 url: url,
                 type: 'GET',
-                // contentType: 'application/x-www-form-urlencoded',
-                success: function(result) {
+                success: function(response) {
+                    const result = convertJsonData(response);
+                    console.log(result); //Note
                     if (result.success) {
                         toastr.success(result.message, 'Thành công');
                     } else {
+<<<<<<< HEAD
                         toastr.info(result.message, 'Lỗi');
                         setTimeout(function(){
                             window.location.href = '/Home/Index'
                         }, 2000)
+=======
+                        toastr.info(result.message, 'Lỗi'); //Note
+>>>>>>> origin/TTT_ThongKe
                     }
                     datatable.ajax.reload();
                     return { success: true, message: result.message };
@@ -171,6 +226,30 @@
             });
         }
 
+        //Hàm hiển thị chi tiết thông tin đơn hàng
+        function loadDetailOrderToModal(idOrder) {
+            $.ajax({
+                url: "/Bill/Detail",
+                method: "GET",
+                data: { idOrder: idOrder },
+                success: (response) => {
+                    $('#coverContentDetailOrder .modal-body').html(response);
+                    $('#coverContentDetailOrder').modal('show');
+                    },
+                error: (xhr) => {
+                    // Tạo một phần tử mới và căn giữa với biểu tượng tải
+                    const errorHtml = `
+                        <div class="text-center">
+                            <i class="fas fa-spinner fa-spin fa-3x"></i><br />
+                            <p>Hiện không thể hiển thị thông tin đơn hàng mang mã ${idOrder}!</p>
+                        </div>
+                    `;
+                    $('#coverContentDetailOrder .modal-body').html(errorHtml);
+                    $('#coverContentDetailOrder').modal('show');
+                }
+            });
+        }
+
         //Hàm xuất hóa đơn
         function takeInvoice(maHoaDon) {
             $.ajax({
@@ -180,7 +259,6 @@
                 },
                 error: (xhr, status, error) => {
                     console.error("Error occurred:", xhr, status, error); // Log lỗi ra console
-                    // toastr.info(`Hiện không thể xuất hóa đơn mã ${maHoaDon}!`, "Xuất hóa đơn"); // Bug ở đây
                 }
             });
         }
@@ -199,7 +277,6 @@
                 },
                 error: (xhr, status, error) => {
                     console.error("Error occurred:", xhr, status, error); // Log lỗi ra console
-                    // toastr.error("Không thể lấy danh sách hóa đơn!", "Lỗi"); //Bug ở đây
                 }
             });
         }
@@ -207,6 +284,10 @@
         //Hàm load datatable đơn giản
         function loadDT() {
             datatable.ajax.reload();
+        }
+        //Hàm load lại dữ liệu Json
+        function convertJsonData(response) {
+            return typeof response === 'string' ? JSON.parse(response) : response;
         }
         $(document).ready(function(){
             loadDatatable();

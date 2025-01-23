@@ -1,4 +1,6 @@
 ﻿using APIBanXeDap.Models;
+using APIBanXeDap.Models.ViewModels;
+
 //using APIBanXeDap.Repository.NhanVien;
 using APIBanXeDap.ViewModels;
 

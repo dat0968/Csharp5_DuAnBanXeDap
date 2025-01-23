@@ -1,4 +1,5 @@
 ﻿using APIBanXeDap.Models;
+using APIBanXeDap.Models.ViewModels;
 using APIBanXeDap.ViewModels;
 public interface INhanVienRepository
     {

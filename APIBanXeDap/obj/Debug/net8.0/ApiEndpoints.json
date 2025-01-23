@@ -379,6 +379,94 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "GetAllOrderData",
+    "RelativePath": "api/Dashboard/GetAllOrderData",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "GetEarningData",
+    "RelativePath": "api/Dashboard/GetEarningData/{timeRange}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "timeRange",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "GetEmployeeOrderStats",
+    "RelativePath": "api/Dashboard/GetEmployeeOrderStats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "GetOrderOverViewData",
+    "RelativePath": "api/Dashboard/GetOrderOverViewData/{timeRange}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "timeRange",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "GetOrderStatusData",
+    "RelativePath": "api/Dashboard/GetOrderStatusData/{timeRange}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "timeRange",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "GetStatUserAsync",
+    "RelativePath": "api/Dashboard/GetStatUser",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "GetTopSellingProducts",
+    "RelativePath": "api/Dashboard/GetTopSellingProducts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIBanXeDap.Controllers.GeminiController",
     "Method": "GetResponseAsync",
     "RelativePath": "api/Gemini",
@@ -936,6 +1024,16 @@
         "Name": "Anh",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
+      },
+      {
+        "Name": "SoDonHangXuLy",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "DoanhThuMangLai",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -1188,6 +1286,16 @@
       {
         "Name": "Anh",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "SoDonHangXuLy",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "DoanhThuMangLai",
+        "Type": "System.Int32",
         "IsRequired": false
       }
     ],

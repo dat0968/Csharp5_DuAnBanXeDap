@@ -561,6 +561,120 @@
         }
       }
     },
+    "/api/Dashboard/GetEarningData/{timeRange}": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "parameters": [
+          {
+            "name": "timeRange",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Dashboard/GetAllOrderData": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Dashboard/GetOrderStatusData/{timeRange}": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "parameters": [
+          {
+            "name": "timeRange",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Dashboard/GetOrderOverViewData/{timeRange}": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "parameters": [
+          {
+            "name": "timeRange",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Dashboard/GetTopSellingProducts": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Dashboard/GetEmployeeOrderStats": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Dashboard/GetStatUser": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Gemini": {
       "post": {
         "tags": [
@@ -1393,6 +1507,14 @@
                   "Anh": {
                     "type": "string",
                     "format": "binary"
+                  },
+                  "SoDonHangXuLy": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "DoanhThuMangLai": {
+                    "type": "integer",
+                    "format": "int32"
                   }
                 }
               },
@@ -1446,6 +1568,12 @@
                   "style": "form"
                 },
                 "Anh": {
+                  "style": "form"
+                },
+                "SoDonHangXuLy": {
+                  "style": "form"
+                },
+                "DoanhThuMangLai": {
                   "style": "form"
                 }
               }
@@ -1536,6 +1664,14 @@
                   "Anh": {
                     "type": "string",
                     "format": "binary"
+                  },
+                  "SoDonHangXuLy": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "DoanhThuMangLai": {
+                    "type": "integer",
+                    "format": "int32"
                   }
                 }
               },
@@ -1589,6 +1725,12 @@
                   "style": "form"
                 },
                 "Anh": {
+                  "style": "form"
+                },
+                "SoDonHangXuLy": {
+                  "style": "form"
+                },
+                "DoanhThuMangLai": {
                   "style": "form"
                 }
               }
