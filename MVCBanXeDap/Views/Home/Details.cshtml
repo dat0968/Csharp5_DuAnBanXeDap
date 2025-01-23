@@ -67,7 +67,35 @@
         </div>
     </div>
 </div>
+<div class="container py-5">
 
+
+    <h2 class="text-center mb-4">Sản phẩm liên quan</h2>
+
+    <div class="row">
+        @foreach (var product in ViewBag.RelatedProducts)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="/Hinh/SanPham/@product.Hinh" alt="@product.TenSp" style="border-radius: 10px" />
+                        <div class="hover-overlay">
+                            <a href="@Url.Action("Details", "Home", new { id = product.MaSP })" class="btn btn-danger btn-sm">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>@product.TenSp</h6>
+                        <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
+
+                        <h6 style="color:red;">@product.MinPrice VNĐ - @product.MaxPrice VNĐ</h6>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const colorOptions = document.querySelectorAll('.color-option');
@@ -178,3 +206,58 @@
         });
     });
 </script>
+<style scoped>
+    .nav-item {
+        margin-bottom: 15px; /* Khoảng cách giữa các dropdown */
+    }
+
+    select {
+        z-index: 1050;
+        position: relative;
+        min-width: 200px; /* Đảm bảo kích thước tối thiểu */
+    }
+
+    .nav {
+        overflow: visible !important; /* Đảm bảo không bị cắt */
+    }
+
+    .product__item__pic {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hover-overlay {
+        border-radius: 10px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+    }
+
+    .hover-text {
+        color: #fff;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .product__item__pic:hover .hover-overlay {
+        opacity: 1;
+    }
+
+    .dropdown-container {
+        width: 100%;
+        position: relative;
+        z-index: 1000;
+        justify-content: center;
+    }
+</style>

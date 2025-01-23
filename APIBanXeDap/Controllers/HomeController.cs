@@ -36,6 +36,12 @@ namespace APIBanXeDap.Controllers
             var detail = productRepository.GetProductById(id);
             return Ok(detail);
         }
+        [HttpGet("GetSanPhamLienQuan/{dm}")]
+        public IActionResult GetSanPhamLienQuan([FromRoute] string dm)
+        {
+            var detail = trangChuRepository.GetSanphamLienQuan(dm);
+            return Ok(detail);
+        }
         [HttpGet("GetAllProduct")]
         public IActionResult GetAllProduct(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, int page = 1)
         {

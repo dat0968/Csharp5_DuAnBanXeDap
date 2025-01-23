@@ -4,14 +4,18 @@
 }
 
 <style scoped>
-    .dropdown {
-        position: relative;
-        z-index: 1000; /* Đặt z-index cao hơn các phần tử khác */
+    .nav-item {
+        margin-bottom: 15px; /* Khoảng cách giữa các dropdown */
     }
 
-    .dropdown-menu {
-        position: absolute;
-        z-index: 1000; /* Đặt z-index cao hơn các phần tử khác */
+    select {
+        z-index: 1050;
+        position: relative;
+        min-width: 200px; /* Đảm bảo kích thước tối thiểu */
+    }
+
+    .nav {
+        overflow: visible !important; /* Đảm bảo không bị cắt */
     }
     .product__item__pic {
         position: relative;
@@ -46,79 +50,28 @@
         opacity: 1;
     }
 
-    .filter-container {
-        margin-bottom: 30px;
-    }
-
-    .filter-nav {
-        display: flex;
-        justify-content: center; /* Căn giữa */
-        margin-bottom: 30px;
-    }
-
-    .filter-nav .nav-pills {
-        display: flex;
-        justify-content: space-between;
+    .dropdown-container {
         width: 100%;
-        max-width: 1200px;
-    }
-
-    .filter-nav .nav-item {
-        flex: 1; /* Căn đều các phần tử trong mỗi hàng */
-        margin-right: 15px;
-    }
-
-    .filter-nav .form-group {
-        display: flex;
-        align-items: center;
-        width: 100%; /* Đảm bảo nhóm lọc có chiều rộng bằng nhau */
-        margin-right: 20px;
-    }
-
-    .filter-nav .form-label {
-        margin-right: 10px;
-    }
-
-    .filter-nav .form-select, .filter-nav .form-control {
-        width: 100%; /* Đảm bảo các dropdown có chiều rộng đồng đều */
-        max-width: 200px; /* Giới hạn chiều rộng tối đa */
-    }
-
-    .select-wrapper {
-        display: inline-block;
         position: relative;
+        z-index: 1000;
+        justify-content: center;
     }
-
-    .select-wrapper select {
-        -webkit-appearance: none; /* Loại bỏ mũi tên mặc định của trình duyệt */
-        -moz-appearance: none;
-        appearance: none;
-        padding-right: 30px; /* Đảm bảo mũi tên không che mất nội dung */
-    }
-
-    .select-wrapper:after {
-        content: '▼';
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none;
-        font-size: 18px;
-    }
+    
 </style>
-<div class="filter-nav">
+<nav class="p-3 bg-light">
     <form method="get" action="/Home/Product" id="filterForm">
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <ul class="nav nav-pills mb-3 d-flex justify-content-between align-items-center flex-wrap gap-3" id="pills-tab" role="tablist">
             <!-- Tìm kiếm -->
-            <li class="nav-item form-group d-flex align-items-center" role="presentation">
-                <label for="timKiem" class="form-label me-4">Tìm kiếm:</label>
-                <input type="text" id="timKiem" name="timKiem" class="form-control" value="@ViewBag.TimKiem" placeholder="Nhập tên sản phẩm" oninput="submitForm()" />
+            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
+                <label for="timKiem" class="form-label me-2">Tìm kiếm:</label>
+                <input type="text" id="timKiem" name="timKiem" class="form-control" value="@ViewBag.TimKiem" placeholder="Nhập tên sản phẩm" />
             </li>
 
             <!-- Danh mục -->
-            <li class="nav-item form-group d-flex align-items-center" role="presentation">
-                <label for="maDanhMuc" class="form-label me-4">Danh mục:</label>
-                <select id="maDanhMuc" name="maDanhMuc" class="form-select" onchange="submitForm()">
+            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
+                <label for="maDanhMuc" class="form-label me-2">Danh mục:</label>
+                <div class="dropdown-container">
+                <select id="maDanhMuc" name="maDanhMuc" class="w-100">
                     <option value="">Tất cả</option>
                     @foreach (var category in ViewBag.Category as List<DanhmucVM>)
                     {
@@ -132,12 +85,14 @@
                         }
                     }
                 </select>
+                </div>
             </li>
 
             <!-- Thương hiệu -->
-            <li class="nav-item form-group d-flex align-items-center" role="presentation">
-                <label for="maThuongHieu" class="form-label me-4">Thương hiệu:</label>
-                <select id="maThuongHieu" name="maThuongHieu" class="form-select" onchange="submitForm()">
+            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
+                <label for="maThuongHieu" class="form-label me-2">Thương hiệu:</label>
+                <div class="dropdown-container">
+                <select id="maThuongHieu" name="maThuongHieu" class="w-100" >
                     <option value="">Tất cả</option>
                     @foreach (var brand in ViewBag.Brand as List<BrandVM>)
                     {
@@ -151,12 +106,14 @@
                         }
                     }
                 </select>
+                </div>
             </li>
 
             <!-- Sắp xếp -->
-            <li class="nav-item form-group d-flex align-items-center" role="presentation">
-                <label for="sapXep" class="form-label me-4">Sắp xếp:</label>
-                <select id="sapXep" name="sapXep" class="form-select" onchange="submitForm()">
+            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
+                <label for="sapXep" class="form-label me-2">Sắp xếp:</label>
+                <div class="dropdown-container">
+                <select id="sapXep" name="sapXep" class="w-100">
                     @if (ViewBag.SapXep == "asc")
                     {
                         <option selected value="asc">Giá tăng dần</option>
@@ -168,13 +125,17 @@
                         <option selected value="desc">Giá giảm dần</option>
                     }
                 </select>
+                </div>
             </li>
-            <li class="nav-item form-group d-flex align-items-center" role="presentation">
-                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+
+            <!-- Nút Tìm kiếm -->
+            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
+                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-check-lg"></i></button>
             </li>
         </ul>
     </form>
-</div>
+</nav>
+
 <div class="container py-5">
     
 

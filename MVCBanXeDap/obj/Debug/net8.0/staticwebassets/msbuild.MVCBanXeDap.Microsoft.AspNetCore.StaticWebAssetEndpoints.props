@@ -5224,13 +5224,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\nice-select.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-RTLMLgOdAwZMgXXrn4l8MS7MwVM8GLA/aIusi0CWfNo="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"4145"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022RTLMLgOdAwZMgXXrn4l8MS7MwVM8GLA/aIusi0CWfNo=\u0022"},{"Name":"Last-Modified","Value":"Mon, 20 Jan 2025 04:15:40 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"4145"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022RTLMLgOdAwZMgXXrn4l8MS7MwVM8GLA/aIusi0CWfNo=\u0022"},{"Name":"Last-Modified","Value":"Thu, 23 Jan 2025 14:24:29 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/MVCBanXeDap/css/nice-select.ty6ck0vg85.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\nice-select.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ty6ck0vg85"},{"Name":"integrity","Value":"sha256-RTLMLgOdAwZMgXXrn4l8MS7MwVM8GLA/aIusi0CWfNo="},{"Name":"label","Value":"_content/MVCBanXeDap/css/nice-select.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"4145"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022RTLMLgOdAwZMgXXrn4l8MS7MwVM8GLA/aIusi0CWfNo=\u0022"},{"Name":"Last-Modified","Value":"Mon, 20 Jan 2025 04:15:40 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"4145"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022RTLMLgOdAwZMgXXrn4l8MS7MwVM8GLA/aIusi0CWfNo=\u0022"},{"Name":"Last-Modified","Value":"Thu, 23 Jan 2025 14:24:29 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/MVCBanXeDap/css/owl.carousel.min.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\owl.carousel.min.css'))</AssetFile>

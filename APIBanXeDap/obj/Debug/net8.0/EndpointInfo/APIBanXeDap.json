@@ -381,6 +381,28 @@
         }
       }
     },
+    "/api/Home/GetSanPhamLienQuan/{dm}": {
+      "get": {
+        "tags": [
+          "Home"
+        ],
+        "parameters": [
+          {
+            "name": "dm",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Home/GetAllProduct": {
       "get": {
         "tags": [

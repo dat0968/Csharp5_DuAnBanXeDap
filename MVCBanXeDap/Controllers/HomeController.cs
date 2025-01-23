@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MVCBanXeDap.Models;
 using MVCBanXeDap.ViewModels;
@@ -32,7 +32,7 @@ namespace MVCBanXeDap.Controllers
                     var minPrice = Convert.ToDecimal(item.Chitietsanphams.Min(x => x.DonGia));  
                     var maxPrice = Convert.ToDecimal(item.Chitietsanphams.Max(x => x.DonGia));
 
-                    // C?p nh?t MinPrice v� MaxPrice
+                    // C?p nh?t MinPrice và MaxPrice
                     item.MinPrice = minPrice;
                     item.MaxPrice = maxPrice;
                     list.Add(item);
@@ -51,6 +51,30 @@ namespace MVCBanXeDap.Controllers
                 string data = await response.Content.ReadAsStringAsync();
                 ProductVM = JsonConvert.DeserializeObject<ProductVM>(data);
             };
+            string ten = ProductVM.DanhMuc;
+            var relatedProducts = await _client.GetAsync(_client.BaseAddress + $"Home/GetSanPhamLienQuan/{ten}");
+            List<ProductVM2> relatedProductsList = new List<ProductVM2>();
+
+            if (relatedProducts.IsSuccessStatusCode)
+            {
+                string relatedData = await relatedProducts.Content.ReadAsStringAsync();
+                relatedProductsList = JsonConvert.DeserializeObject<List<ProductVM2>>(relatedData);
+                foreach (var item in relatedProductsList)
+                {
+                    if (item.Chitietsanphams != null && item.Chitietsanphams.Any())
+                    {
+                        var minPrice = Convert.ToDecimal(item.Chitietsanphams.Min(x => x.DonGia));
+                        var maxPrice = Convert.ToDecimal(item.Chitietsanphams.Max(x => x.DonGia));
+
+                        // Cập nhật MinPrice và MaxPrice cho sản phẩm liên quan
+                        item.MinPrice = minPrice;
+                        item.MaxPrice = maxPrice;
+                    }
+                }
+            }
+
+            // Truyền dữ liệu sản phẩm liên quan vào ViewBag hoặc View
+            ViewBag.RelatedProducts = relatedProductsList;
             return View(ProductVM);
         }
         [HttpGet]

@@ -285,6 +285,22 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.HomeController",
+    "Method": "GetSanPhamLienQuan",
+    "RelativePath": "api/Home/GetSanPhamLienQuan/{dm}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dm",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.HomeController",
     "Method": "GetSanPhamBanChay",
     "RelativePath": "api/Home/SanPhamBanChay",
     "HttpMethod": "GET",
