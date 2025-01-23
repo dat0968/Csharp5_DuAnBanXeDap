@@ -4,6 +4,7 @@ using APIBanXeDap.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIBanXeDap.Migrations
 {
     [DbContext(typeof(Csharp5Context))]
-    partial class Csharp5ContextModelSnapshot : ModelSnapshot
+    [Migration("20250109114056_createMaCouponTable")]
+    partial class createMaCouponTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,9 +233,6 @@ namespace APIBanXeDap.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
 
-                    b.Property<string>("Hinh")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HoTen")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -289,9 +289,6 @@ namespace APIBanXeDap.Migrations
                     b.Property<DateTime>("NgayHetHan")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NgayTao")
-                        .HasColumnType("datetime2");
-
                     b.Property<float?>("PhanTramGiam")
                         .HasColumnType("real");
 
@@ -304,53 +301,6 @@ namespace APIBanXeDap.Migrations
                     b.HasKey("Code");
 
                     b.ToTable("MaCoupons");
-
-                    b.HasData(
-                        new
-                        {
-                            Code = "COUPON001",
-                            MinimumOrderAmount = 200000m,
-                            NgayHetHan = new DateTime(2025, 2, 22, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6172),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6156),
-                            SoTienGiam = 50000m,
-                            TrangThai = true
-                        },
-                        new
-                        {
-                            Code = "COUPON002",
-                            MinimumOrderAmount = 300000m,
-                            NgayHetHan = new DateTime(2025, 2, 7, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6183),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6181),
-                            PhanTramGiam = 10f,
-                            TrangThai = true
-                        },
-                        new
-                        {
-                            Code = "COUPON003",
-                            MinimumOrderAmount = 500000m,
-                            NgayHetHan = new DateTime(2025, 2, 12, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6188),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6187),
-                            SoTienGiam = 100000m,
-                            TrangThai = false
-                        },
-                        new
-                        {
-                            Code = "COUPON004",
-                            MinimumOrderAmount = 400000m,
-                            NgayHetHan = new DateTime(2025, 2, 2, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6193),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6191),
-                            PhanTramGiam = 20f,
-                            TrangThai = true
-                        },
-                        new
-                        {
-                            Code = "COUPON005",
-                            MinimumOrderAmount = 600000m,
-                            NgayHetHan = new DateTime(2025, 2, 17, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6275),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6274),
-                            SoTienGiam = 150000m,
-                            TrangThai = true
-                        });
                 });
 
             modelBuilder.Entity("APIBanXeDap.Models.Mausac", b =>
@@ -454,9 +404,6 @@ namespace APIBanXeDap.Migrations
                         .IsRequired()
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
-
-                    b.Property<string>("Hinh")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HoTen")
                         .IsRequired()
@@ -640,34 +587,6 @@ namespace APIBanXeDap.Migrations
                         .HasName("PK__THUONGHI__A3733E2C4364572B");
 
                     b.ToTable("THUONGHIEU", (string)null);
-                });
-
-            modelBuilder.Entity("APIBanXeDap.Models.Vanchuyen", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<float>("Gia")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Phuong")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuanHuyen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ThanhPho")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Vanchuyens");
                 });
 
             modelBuilder.Entity("APIBanXeDap.Models.Chitiethoadon", b =>

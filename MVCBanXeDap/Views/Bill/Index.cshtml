@@ -129,13 +129,8 @@
                     { title: 'Họ Tên', data: 'hoten', width: '15%', className: 'text-center' },
                     { title: 'Số Điện Thoại', data: 'sdt', width: '10%', className: 'text-center' },
                     { title: 'Thời Gian Giao', data: 'thoiGianGiao', width: '15%', className: 'text-center' },
-<<<<<<< HEAD
                     { title: 'Thao tác', 
                         data: 'maHoaDon', 
-=======
-                    { title: 'Thao tác',
-                        data: 'maHoaDon',
->>>>>>> origin/TTT_ThongKe
                         "render": function(data) {
                             return `
                                 <div class="d-flex justify-content-start mb-3">
@@ -205,14 +200,10 @@
                     if (result.success) {
                         toastr.success(result.message, 'Thành công');
                     } else {
-<<<<<<< HEAD
                         toastr.info(result.message, 'Lỗi');
                         setTimeout(function(){
                             window.location.href = '/Home/Index'
                         }, 2000)
-=======
-                        toastr.info(result.message, 'Lỗi'); //Note
->>>>>>> origin/TTT_ThongKe
                     }
                     datatable.ajax.reload();
                     return { success: true, message: result.message };

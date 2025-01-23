@@ -7,6 +7,7 @@ using iText.Layout.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using System.IO.Compression;
@@ -19,10 +20,13 @@ namespace MVCBanXeDap.Controllers
     {
         Uri baseAddress = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
-        public BillController()
+        private readonly IjwtToken jwtToken;
+
+        public BillController(IjwtToken jwtToken)
         {
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
+            this.jwtToken = jwtToken;
         }
         public IActionResult Index()
         {
@@ -32,7 +36,23 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status, string? idStaffChanged)
         {
-            string? idStaff = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var accessToken = HttpContext.Session.GetString("AccessToken");
+            var refreshToken = HttpContext.Session.GetString("RefreshToken");
+            string? idStaff = null;
+            if (accessToken == null || refreshToken == null)
+            {
+                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại." });
+            }
+            var ValidateAccessToken = jwtToken.ValidateAccessToken(accessToken, refreshToken);
+            if(ValidateAccessToken.Result == null)
+            {
+                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại." });
+            }
+            else
+            {
+                HttpContext.Session.SetString("AccessToken", ValidateAccessToken.Result);
+                idStaff = ValidateAccessToken.Result;
+            }
             if (String.IsNullOrEmpty(idStaff))
             {
                 return Json(new { success = false, message = "Không tìm thấy mã người dùng đăng nhập, vui lòng liên hệ nhà phát triển để được hỗ trợ." });

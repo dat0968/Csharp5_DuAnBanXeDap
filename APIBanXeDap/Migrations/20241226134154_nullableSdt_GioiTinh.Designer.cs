@@ -4,6 +4,7 @@ using APIBanXeDap.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIBanXeDap.Migrations
 {
     [DbContext(typeof(Csharp5Context))]
-    partial class Csharp5ContextModelSnapshot : ModelSnapshot
+    [Migration("20241226134154_nullableSdt_GioiTinh")]
+    partial class nullableSdt_GioiTinh
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,9 +233,6 @@ namespace APIBanXeDap.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
 
-                    b.Property<string>("Hinh")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HoTen")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -244,6 +244,7 @@ namespace APIBanXeDap.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("MatKhau")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
@@ -277,80 +278,28 @@ namespace APIBanXeDap.Migrations
                     b.ToTable("KHACHHANG", (string)null);
                 });
 
-            modelBuilder.Entity("APIBanXeDap.Models.MaCoupon", b =>
+            modelBuilder.Entity("APIBanXeDap.Models.Kichthuoc", b =>
                 {
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("MaKichThuoc")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<decimal?>("MinimumOrderAmount")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaKichThuoc"));
+
+                    b.Property<bool?>("IsDelete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("TenKichThuoc")
                         .IsRequired()
-                        .HasColumnType("decimal(18,2)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime>("NgayHetHan")
-                        .HasColumnType("datetime2");
+                    b.HasKey("MaKichThuoc")
+                        .HasName("PK__KICHTHUO__22BFD6648B50E9DC");
 
-                    b.Property<DateTime>("NgayTao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float?>("PhanTramGiam")
-                        .HasColumnType("real");
-
-                    b.Property<decimal?>("SoTienGiam")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("TrangThai")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("MaCoupons");
-
-                    b.HasData(
-                        new
-                        {
-                            Code = "COUPON001",
-                            MinimumOrderAmount = 200000m,
-                            NgayHetHan = new DateTime(2025, 2, 22, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6172),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6156),
-                            SoTienGiam = 50000m,
-                            TrangThai = true
-                        },
-                        new
-                        {
-                            Code = "COUPON002",
-                            MinimumOrderAmount = 300000m,
-                            NgayHetHan = new DateTime(2025, 2, 7, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6183),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6181),
-                            PhanTramGiam = 10f,
-                            TrangThai = true
-                        },
-                        new
-                        {
-                            Code = "COUPON003",
-                            MinimumOrderAmount = 500000m,
-                            NgayHetHan = new DateTime(2025, 2, 12, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6188),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6187),
-                            SoTienGiam = 100000m,
-                            TrangThai = false
-                        },
-                        new
-                        {
-                            Code = "COUPON004",
-                            MinimumOrderAmount = 400000m,
-                            NgayHetHan = new DateTime(2025, 2, 2, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6193),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6191),
-                            PhanTramGiam = 20f,
-                            TrangThai = true
-                        },
-                        new
-                        {
-                            Code = "COUPON005",
-                            MinimumOrderAmount = 600000m,
-                            NgayHetHan = new DateTime(2025, 2, 17, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6275),
-                            NgayTao = new DateTime(2025, 1, 23, 17, 13, 18, 248, DateTimeKind.Local).AddTicks(6274),
-                            SoTienGiam = 150000m,
-                            TrangThai = true
-                        });
+                    b.ToTable("KICHTHUOC", (string)null);
                 });
 
             modelBuilder.Entity("APIBanXeDap.Models.Mausac", b =>
@@ -454,9 +403,6 @@ namespace APIBanXeDap.Migrations
                         .IsRequired()
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
-
-                    b.Property<string>("Hinh")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HoTen")
                         .IsRequired()
@@ -594,30 +540,6 @@ namespace APIBanXeDap.Migrations
                     b.ToTable("SANPHAM", (string)null);
                 });
 
-            modelBuilder.Entity("APIBanXeDap.Models.SizeVM", b =>
-                {
-                    b.Property<int>("MaKichThuoc")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaKichThuoc"));
-
-                    b.Property<bool?>("IsDelete")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("TenKichThuoc")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("MaKichThuoc")
-                        .HasName("PK__KICHTHUO__22BFD6648B50E9DC");
-
-                    b.ToTable("KICHTHUOC", (string)null);
-                });
-
             modelBuilder.Entity("APIBanXeDap.Models.Thuonghieu", b =>
                 {
                     b.Property<int>("MaThuongHieu")
@@ -642,34 +564,6 @@ namespace APIBanXeDap.Migrations
                     b.ToTable("THUONGHIEU", (string)null);
                 });
 
-            modelBuilder.Entity("APIBanXeDap.Models.Vanchuyen", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<float>("Gia")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Phuong")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuanHuyen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ThanhPho")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Vanchuyens");
-                });
-
             modelBuilder.Entity("APIBanXeDap.Models.Chitiethoadon", b =>
                 {
                     b.HasOne("APIBanXeDap.Models.Hoadon", "MaHoaDonNavigation")
@@ -678,7 +572,7 @@ namespace APIBanXeDap.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__CHITIETHO__MaHoa__09A971A2");
 
-                    b.HasOne("APIBanXeDap.Models.SizeVM", "MaKichThuocNavigation")
+                    b.HasOne("APIBanXeDap.Models.Kichthuoc", "MaKichThuocNavigation")
                         .WithMany()
                         .HasForeignKey("MaKichThuoc")
                         .IsRequired()
@@ -707,7 +601,7 @@ namespace APIBanXeDap.Migrations
 
             modelBuilder.Entity("APIBanXeDap.Models.Chitietsanpham", b =>
                 {
-                    b.HasOne("APIBanXeDap.Models.SizeVM", "MaKichThuocNavigation")
+                    b.HasOne("APIBanXeDap.Models.Kichthuoc", "MaKichThuocNavigation")
                         .WithMany("Chitietsanphams")
                         .HasForeignKey("MaKichThuoc")
                         .IsRequired()
@@ -798,6 +692,11 @@ namespace APIBanXeDap.Migrations
                     b.Navigation("Hoadons");
                 });
 
+            modelBuilder.Entity("APIBanXeDap.Models.Kichthuoc", b =>
+                {
+                    b.Navigation("Chitietsanphams");
+                });
+
             modelBuilder.Entity("APIBanXeDap.Models.Mausac", b =>
                 {
                     b.Navigation("Chitietsanphams");
@@ -818,11 +717,6 @@ namespace APIBanXeDap.Migrations
                     b.Navigation("Chitietsanphams");
 
                     b.Navigation("Hinhanhs");
-                });
-
-            modelBuilder.Entity("APIBanXeDap.Models.SizeVM", b =>
-                {
-                    b.Navigation("Chitietsanphams");
                 });
 
             modelBuilder.Entity("APIBanXeDap.Models.Thuonghieu", b =>
