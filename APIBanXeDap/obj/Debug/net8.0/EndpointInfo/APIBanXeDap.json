@@ -680,6 +680,498 @@
         }
       }
     },
+    "/api/KhachHang/GetAll": {
+      "get": {
+        "tags": [
+          "KhachHang"
+        ],
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/KhachHang/Add": {
+      "post": {
+        "tags": [
+          "KhachHang"
+        ],
+        "parameters": [
+          {
+            "name": "MaKh",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "HoTen",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Cccd",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "pattern": "^0\\d{11}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Sdt",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "pattern": "^0\\d{9}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          {
+            "name": "TenTaiKhoan",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "pattern": "^[a-zA-Z0-9]*$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "MatKhau",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "GioiTinh",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "NgaySinh",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "DiaChi",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "TinhTrang",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Hinh",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IsDelete",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Anh": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Anh": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/KhachHang/Update/{id}": {
+      "put": {
+        "tags": [
+          "KhachHang"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "Cccd",
+                  "Email",
+                  "HoTen",
+                  "MatKhau",
+                  "Sdt",
+                  "TenTaiKhoan"
+                ],
+                "type": "object",
+                "properties": {
+                  "MaKh": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "HoTen": {
+                    "type": "string"
+                  },
+                  "Cccd": {
+                    "pattern": "^0\\d{11}$",
+                    "type": "string"
+                  },
+                  "Sdt": {
+                    "pattern": "^0\\d{9}$",
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "TenTaiKhoan": {
+                    "pattern": "^[a-zA-Z0-9]*$",
+                    "type": "string"
+                  },
+                  "MatKhau": {
+                    "type": "string"
+                  },
+                  "GioiTinh": {
+                    "type": "string"
+                  },
+                  "NgaySinh": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "DiaChi": {
+                    "type": "string"
+                  },
+                  "TinhTrang": {
+                    "type": "string"
+                  },
+                  "Hinh": {
+                    "type": "string"
+                  },
+                  "Anh": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "IsDelete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "MaKh": {
+                  "style": "form"
+                },
+                "HoTen": {
+                  "style": "form"
+                },
+                "Cccd": {
+                  "style": "form"
+                },
+                "Sdt": {
+                  "style": "form"
+                },
+                "Email": {
+                  "style": "form"
+                },
+                "TenTaiKhoan": {
+                  "style": "form"
+                },
+                "MatKhau": {
+                  "style": "form"
+                },
+                "GioiTinh": {
+                  "style": "form"
+                },
+                "NgaySinh": {
+                  "style": "form"
+                },
+                "DiaChi": {
+                  "style": "form"
+                },
+                "TinhTrang": {
+                  "style": "form"
+                },
+                "Hinh": {
+                  "style": "form"
+                },
+                "Anh": {
+                  "style": "form"
+                },
+                "IsDelete": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/KhachHang/ToggleStatus/{id}": {
+      "post": {
+        "tags": [
+          "KhachHang"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/KhachHang/ToggleIsDelete/{id}": {
+      "post": {
+        "tags": [
+          "KhachHang"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/KhachHang/Search": {
+      "get": {
+        "tags": [
+          "KhachHang"
+        ],
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/KhachHang/GetKhachHangById/{id}": {
+      "get": {
+        "tags": [
+          "KhachHang"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/KhachHang/ImportExcel": {
+      "post": {
+        "tags": [
+          "KhachHang"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/KhachHang/GetPaged": {
+      "get": {
+        "tags": [
+          "KhachHang"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/MaCoupons/GetAllCouponCode": {
       "get": {
         "tags": [
@@ -794,6 +1286,513 @@
         "parameters": [
           {
             "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/GetAll": {
+      "get": {
+        "tags": [
+          "NhanVien"
+        ],
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/Add": {
+      "post": {
+        "tags": [
+          "NhanVien"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "MaNv": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "HoTen": {
+                    "type": "string"
+                  },
+                  "GioiTinh": {
+                    "type": "string"
+                  },
+                  "NgaySinh": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "DiaChi": {
+                    "type": "string"
+                  },
+                  "Cccd": {
+                    "type": "string"
+                  },
+                  "Sdt": {
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string"
+                  },
+                  "NgayVaoLam": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "Luong": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VaiTro": {
+                    "type": "string"
+                  },
+                  "TenTaiKhoan": {
+                    "type": "string"
+                  },
+                  "MatKhau": {
+                    "type": "string"
+                  },
+                  "TinhTrang": {
+                    "type": "string"
+                  },
+                  "IsDelete": {
+                    "type": "boolean"
+                  },
+                  "Hinh": {
+                    "type": "string"
+                  },
+                  "Anh": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "MaNv": {
+                  "style": "form"
+                },
+                "HoTen": {
+                  "style": "form"
+                },
+                "GioiTinh": {
+                  "style": "form"
+                },
+                "NgaySinh": {
+                  "style": "form"
+                },
+                "DiaChi": {
+                  "style": "form"
+                },
+                "Cccd": {
+                  "style": "form"
+                },
+                "Sdt": {
+                  "style": "form"
+                },
+                "Email": {
+                  "style": "form"
+                },
+                "NgayVaoLam": {
+                  "style": "form"
+                },
+                "Luong": {
+                  "style": "form"
+                },
+                "VaiTro": {
+                  "style": "form"
+                },
+                "TenTaiKhoan": {
+                  "style": "form"
+                },
+                "MatKhau": {
+                  "style": "form"
+                },
+                "TinhTrang": {
+                  "style": "form"
+                },
+                "IsDelete": {
+                  "style": "form"
+                },
+                "Hinh": {
+                  "style": "form"
+                },
+                "Anh": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/Update/{id}": {
+      "put": {
+        "tags": [
+          "NhanVien"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "MaNv": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "HoTen": {
+                    "type": "string"
+                  },
+                  "GioiTinh": {
+                    "type": "string"
+                  },
+                  "NgaySinh": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "DiaChi": {
+                    "type": "string"
+                  },
+                  "Cccd": {
+                    "type": "string"
+                  },
+                  "Sdt": {
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string"
+                  },
+                  "NgayVaoLam": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "Luong": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VaiTro": {
+                    "type": "string"
+                  },
+                  "TenTaiKhoan": {
+                    "type": "string"
+                  },
+                  "MatKhau": {
+                    "type": "string"
+                  },
+                  "TinhTrang": {
+                    "type": "string"
+                  },
+                  "IsDelete": {
+                    "type": "boolean"
+                  },
+                  "Hinh": {
+                    "type": "string"
+                  },
+                  "Anh": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "MaNv": {
+                  "style": "form"
+                },
+                "HoTen": {
+                  "style": "form"
+                },
+                "GioiTinh": {
+                  "style": "form"
+                },
+                "NgaySinh": {
+                  "style": "form"
+                },
+                "DiaChi": {
+                  "style": "form"
+                },
+                "Cccd": {
+                  "style": "form"
+                },
+                "Sdt": {
+                  "style": "form"
+                },
+                "Email": {
+                  "style": "form"
+                },
+                "NgayVaoLam": {
+                  "style": "form"
+                },
+                "Luong": {
+                  "style": "form"
+                },
+                "VaiTro": {
+                  "style": "form"
+                },
+                "TenTaiKhoan": {
+                  "style": "form"
+                },
+                "MatKhau": {
+                  "style": "form"
+                },
+                "TinhTrang": {
+                  "style": "form"
+                },
+                "IsDelete": {
+                  "style": "form"
+                },
+                "Hinh": {
+                  "style": "form"
+                },
+                "Anh": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/ToggleStatus/{id}": {
+      "post": {
+        "tags": [
+          "NhanVien"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/ToggleIsDelete/{id}": {
+      "post": {
+        "tags": [
+          "NhanVien"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/Search": {
+      "get": {
+        "tags": [
+          "NhanVien"
+        ],
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/GetNhanVienById/{id}": {
+      "get": {
+        "tags": [
+          "NhanVien"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/ImportExcel": {
+      "post": {
+        "tags": [
+          "NhanVien"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/ExportExcel": {
+      "get": {
+        "tags": [
+          "NhanVien"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/NhanVien/GetPaged": {
+      "get": {
+        "tags": [
+          "NhanVien"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
             "in": "query",
             "schema": {
               "type": "string"

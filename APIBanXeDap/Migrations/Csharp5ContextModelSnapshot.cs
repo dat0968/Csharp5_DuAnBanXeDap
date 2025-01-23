@@ -230,6 +230,9 @@ namespace APIBanXeDap.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
 
+                    b.Property<string>("Hinh")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("HoTen")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -451,6 +454,9 @@ namespace APIBanXeDap.Migrations
                         .IsRequired()
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("Hinh")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HoTen")
                         .IsRequired()

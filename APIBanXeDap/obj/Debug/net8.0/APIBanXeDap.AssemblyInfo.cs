@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("APIBanXeDap")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+22117861f5ebcb2f26187727e8a9cf5588be4c6c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39167acbf5dee80c704e8af9558b7f85ba7ca77f")]
 [assembly: System.Reflection.AssemblyProductAttribute("APIBanXeDap")]
 [assembly: System.Reflection.AssemblyTitleAttribute("APIBanXeDap")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,238 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\4.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/4.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>6c2q89yecj</Fingerprint>
+      <Integrity>Vvpe/cQjYKpZLyde1An94VEY6QwFhNA5bhESBtrYbCM=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\4.png'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\download (1).jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/download (1).jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>49b92io3b4</Fingerprint>
+      <Integrity>OKsIvG/O7EB64MrW4JdJHhziy9asHNi0JWF7klx6wd8=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\download (1).jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\download (2).jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/download (2).jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>5spi3a1a1h</Fingerprint>
+      <Integrity>+9Eo6S25F2CEQ3MD9JxWgiD2PJrjYK6+2g9dPIlAIUE=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\download (2).jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\download.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/download.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>ytxetf4e82</Fingerprint>
+      <Integrity>OsSqS/VlAK7EpKMAG8Jryd3tku/nGLZqhPc2jqclDu0=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\download.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\images (1).jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/images (1).jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>aldko4cevu</Fingerprint>
+      <Integrity>MpaMHariY1Tzea7lN1NVc6GTUSB6GtabzFB8LR7eamo=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\images (1).jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\images (2).jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/images (2).jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>r3sky5gbj8</Fingerprint>
+      <Integrity>RyFc2LNHhH0y2I66Jh2ZFCY69lCFudQTtAJ8rO59/xc=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\images (2).jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\images (3).jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/images (3).jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>wsjkj79k7t</Fingerprint>
+      <Integrity>wF+gaz2xBBStDMpZu/d5mQX7riMZMmQqGH1ysWrZkRc=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\images (3).jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\n.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/n.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>49b92io3b4</Fingerprint>
+      <Integrity>OKsIvG/O7EB64MrW4JdJHhziy9asHNi0JWF7klx6wd8=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\n.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\Screenshot 2025-01-15 063250.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/Screenshot 2025-01-15 063250.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>ktiog39k53</Fingerprint>
+      <Integrity>SAFhJMM6B2c/WOXLVU++Ig/ZBAqj3GKfb2tBttDhlws=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\Screenshot 2025-01-15 063250.png'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhNhanVien\Screenshot 2024-12-31 141623.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhNhanVien/Screenshot 2024-12-31 141623.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>gyuk29rrh8</Fingerprint>
+      <Integrity>uE8qe34yeRwNtI5dy8D01uJxp3mnSS+T3UEUPDg8XQI=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhNhanVien\Screenshot 2024-12-31 141623.png'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhNhanVien\Screenshot 2024-12-31 144629.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhNhanVien/Screenshot 2024-12-31 144629.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>l1z4uq3mat</Fingerprint>
+      <Integrity>lz/iVOuLvLPC1FvXnrSgeJKHHJ9Ac5KCoGuAVu8MJlE=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhNhanVien\Screenshot 2024-12-31 144629.png'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhNhanVien\Screenshot 2024-12-31 210228.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhNhanVien/Screenshot 2024-12-31 210228.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>v9rj7hra0q</Fingerprint>
+      <Integrity>LXTMBPpVbbDxo9j1ZM6QALXB3zvNVkwu2H+bcBUxpRA=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhNhanVien\Screenshot 2024-12-31 210228.png'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhNhanVien\Screenshot 2025-01-18 202223.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>APIBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/APIBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhNhanVien/Screenshot 2025-01-18 202223.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>r4jpg9hukr</Fingerprint>
+      <Integrity>G5H34PYE5esRG2W7cjkDvrvYiVnyNA3CE9UTxTSTyls=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhNhanVien\Screenshot 2025-01-18 202223.png'))</OriginalItemSpec>
+    </StaticWebAsset>
+  </ItemGroup>
+</Project>

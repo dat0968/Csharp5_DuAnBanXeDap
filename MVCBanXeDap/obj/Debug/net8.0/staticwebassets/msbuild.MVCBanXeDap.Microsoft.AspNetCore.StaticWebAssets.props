@@ -8154,6 +8154,24 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fonts\Merriweather-Regular.ttf'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\images (3).jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>MVCBanXeDap</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/MVCBanXeDap</BasePath>
+      <RelativePath>Hinh/AnhKhachHang/images (3).jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>wsjkj79k7t</Fingerprint>
+      <Integrity>wF+gaz2xBBStDMpZu/d5mQX7riMZMmQqGH1ysWrZkRc=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\AnhKhachHang\images (3).jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Hinh\SanPham\366760000_968465774368418_3331979115163731096_n.jpg'))">
       <SourceType>Package</SourceType>
       <SourceId>MVCBanXeDap</SourceId>

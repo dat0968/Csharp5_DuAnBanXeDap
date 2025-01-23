@@ -12,5 +12,6 @@ namespace APIBanXeDap.Repository.SanPham
         public void UpdateProduct(ProductEM product);
         public void DeleteProduct(int id);
 
+
     }
 }

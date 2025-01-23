@@ -1709,6 +1709,10 @@
       "PackagePath": "staticwebassets\\AdminTemplate\\widgets.html"
     },
     {
+      "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (3).jpg",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\images (3).jpg"
+    },
+    {
       "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\SanPham\\366760000_968465774368418_3331979115163731096_n.jpg",
       "PackagePath": "staticwebassets\\Hinh\\SanPham\\366760000_968465774368418_3331979115163731096_n.jpg"
     },

@@ -1,0 +1,628 @@
+﻿@model MVCBanXeDap.ViewModels.PagedResult<MVCBanXeDap.ViewModels.NhanVienVM>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Nhân Viên";
+}
+
+<div class="container">
+    <h2>Danh Sách Nhân Viên</h2>
+
+    <div class="row mt-3 mb-3">
+        <div class="col-md-3">
+            <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm nhân viên">
+        </div>
+        <div class="col-md-3">
+            <select id="sortSelect" class="form-control">
+                <option value="asc">Sắp xếp A-Z</option>
+                <option value="desc">Sắp xếp Z-A</option>
+            </select>
+        </div>
+
+        <div class="col-md-3 text-right">
+            <button id="exportExcel" class="btn btn-success btn-sm">Xuất Excel</button>
+            <button id="openModalCreate" class="btn btn-primary btn-sm">Thêm Nhân Viên</button>
+        </div>
+        <div class="col-md-2">
+            <form asp-action="ImportExcel" method="post" enctype="multipart/form-data" class="d-inline">
+                <input type="file" id="importFile" name="file" class="form-control-file d-inline">
+                <button type="submit" class="btn btn-success btn-sm">Nhập từ Excel</button>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="dropzone edit-zone" data-action="edit">
+                <i class="fas fa-edit"></i>
+                <h5>Kéo vào đây để sửa thông tin</h5>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="dropzone delete-zone" data-action="delete">
+                <i class="fas fa-trash"></i>
+                <h5>Kéo vào đây để ẩn khỏi danh sách</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-1">
+        <div class="col-md-1">
+            <label for="pageSizeSelect">Hiển thị:</label>
+            <select id="pageSizeSelect" class="form-control">
+                @if (ViewBag.PageSize == 5)
+                {
+                    <option value="5" selected>5</option>
+                }
+                else
+                {
+                    <option value="5">5</option>
+                }
+
+                @if (ViewBag.PageSize == 10)
+                {
+                    <option value="10" selected>10</option>
+                }
+                else
+                {
+                    <option value="10">10</option>
+                }
+
+                @if (ViewBag.PageSize == 15)
+                {
+                    <option value="15" selected>15</option>
+                }
+                else
+                {
+                    <option value="15">15</option>
+                }
+
+                @if (ViewBag.PageSize == 20)
+                {
+                    <option value="20" selected>20</option>
+                }
+                else
+                {
+                    <option value="20">20</option>
+                }
+
+                @if (ViewBag.PageSize == 50)
+                {
+                    <option value="50" selected>50</option>
+                }
+                else
+                {
+                    <option value="50">50</option>
+                }
+            </select>
+        </div>
+    </div>
+    <!-- Bảng danh sách nhân viên -->
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered table-hover" id="employeeTable">
+            <thead class="thead-light">
+                <tr>
+                    <th>Ảnh</th>
+                    <th>Họ và Tên</th>
+                    <th>Email</th>
+                    <th>Số Điện Thoại</th>
+                    <th>Tài Khoản</th>
+                    <th>Vài trò</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="employeeRows">
+                @foreach (var nhanVien in Model.Items)
+                {
+                    <tr class="draggable-row" data-id="@nhanVien.MaNv" data-status="@nhanVien.TinhTrang" draggable="true">
+                        <td>
+                            <img src="@(string.IsNullOrEmpty(nhanVien.Hinh)
+        ? "https://localhost:7137/Hinh/AnhNhanVien/default.jpg"
+        : $"https://localhost:7137{nhanVien.Hinh}")"
+                                 alt="Avatar" style="height: 50px; width: 50px; object-fit: cover;">
+                        </td>
+                        <td>@nhanVien.HoTen</td>
+                        <td>@nhanVien.Email</td>
+                        <td>@nhanVien.Sdt</td>
+                        <td>@nhanVien.TenTaiKhoan</td>
+                        <td>@nhanVien.VaiTro</td>
+                        
+                        <td>
+                            @if (nhanVien.TinhTrang == "Đang hoạt động")
+                            {
+                                <span class="badge badge-success">Đang hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Đã tạm khóa</span>
+                            }
+                        </td>
+                        <td>
+                            <!-- Nút Sửa -->
+                            <button class="btn btn-sm btn-primary btn-edit" data-id="@nhanVien.MaNv">Sửa</button>
+                            <!-- Nút Ẩn -->
+                            <button class="btn btn-sm btn-danger btn-hide" data-id="@nhanVien.MaNv">Ẩn</button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="?pageNumber=@i&pageSize=@Model.PageSize">
+                        <div class="rounded-square @(i == Model.PageNumber ? "bg-primary text-white" : "bg-light text-dark")">
+                            @i
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+    <div class="modal" id="createEditModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg custom-modal-width" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm/Sửa Nhân Viên</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formCreateEdit" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <!-- Cột trái -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="HoTen">Họ và tên</label>
+                                    <input type="text" class="form-control" id="HoTen" name="HoTen" required>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Email</label>
+                                    <input type="email" class="form-control" id="Email" name="Email" required>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Sdt">Số điện thoại</label>
+                                    <input type="text" class="form-control" id="Sdt" name="Sdt" required>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Luong">Lương</label>
+                                    <input type="number" class="form-control" id="Luong" name="Luong" min="0" required>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="VaiTro">Vai trò</label>
+                                    <select class="form-control" id="VaiTro" name="VaiTro" required>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Nhân Viên">Nhân Viên</option>
+                                    </select>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="DiaChi">Địa chỉ</label>
+                                    <input type="text" class="form-control" id="DiaChi" name="DiaChi" required>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="GioiTinh">Giới tính</label>
+                                    <select class="form-control" id="GioiTinh" name="GioiTinh" required>
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nữ">Nữ</option>
+                                    </select>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                            <!-- Cột phải -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="NgaySinh">Ngày sinh</label>
+                                    <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" required>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Cccd">CCCD</label>
+                                    <input type="text" class="form-control" id="Cccd" name="Cccd">
+                                    <span class="text-danger"></span> <!-- Hiển thị lỗi -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="NgayBatDau">Ngày bắt đầu làm việc</label>
+                                    <input type="date" class="form-control" id="NgayBatDau" name="NgayBatDau" required>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="TenTaiKhoan">Tên tài khoản</label>
+                                    <input type="text" class="form-control" id="TenTaiKhoan" name="TenTaiKhoan" required>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="MatKhau">Mật khẩu</label>
+                                    <input type="password" class="form-control" id="MatKhau" name="MatKhau" required>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="TinhTrang">Tình trạng</label>
+                                    <select class="form-control" id="TinhTrang" name="TinhTrang">
+                                        <option value="Đang hoạt động">Hoạt động</option>
+                                        <option value="Đã tạm khoá">tạm khoá</option>
+                                    </select>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Anh">Ảnh</label>
+                                    <input type="file" class="form-control" id="Anh" name="Anh">
+                                    <div class="mt-3">
+                                        <img id="imagePreview" src="" alt="Preview ảnh" class="img-fluid img-thumbnail" style="max-height: 200px; display: none;">
+                                    </div>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-right">
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+<script>
+
+    $(document).ready(function () {
+        // Mở modal để thêm khách hàng
+        $('#openModalCreate').on('click', function () {
+            $('#createEditModal').modal('show');
+            $('#formCreateEdit')[0].reset(); // Reset form
+            $('#formCreateEdit').attr('action', '/NhanVien/Create');
+            $('#imagePreview').hide(); // Ẩn preview ảnh nếu không có ảnh
+        });
+        $(document).on('click', '.btn-edit', function () {
+            const id = $(this).data('id'); // Lấy ID từ nút Sửa
+            openEditModal(id); // Gọi hàm mở modal
+        });
+        $('.btn-hide').on('click', function () {
+            const id = $(this).data('id');
+            toggleIsDelete(id); // Hàm xử lý ẩn khách hàng
+        });
+        $('#formCreateEdit').on('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var actionUrl = $(this).attr('action');
+
+            // Xóa thông báo lỗi cũ
+            $('.text-danger').text('');
+
+            $.ajax({
+                url: actionUrl,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: response.message,
+                            confirmButtonColor: '#007bff'
+                        });
+
+                        setTimeout(() => {
+                            $('#createEditModal').modal('hide');
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        if (response.errors) {
+                            // Hiển thị lỗi dưới từng trường input
+                            for (var fieldName in response.errors) {
+                                var errorMessages = response.errors[fieldName];
+                                $(`[name="${fieldName}"]`).siblings('.text-danger').text(errorMessages.join(', '));
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Thất bại!',
+                                text: response.message,
+                                confirmButtonColor: '#dc3545'
+                            });
+                        }
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: 'Có lỗi xảy ra!',
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            });
+        });
+
+
+        // Tìm kiếm và sắp xếp
+        $('#searchInput, #sortSelect').on('input change', function () {
+            var keyword = $('#searchInput').val().toLowerCase();
+            var sort = $('#sortSelect').val();
+
+            var rows = $('#employeeRows tr');
+
+            rows.each(function () {
+                var name = $(this).find('td:nth-child(2)').text().toLowerCase();
+                var matchesKeyword = name.includes(keyword);
+                $(this).toggle(matchesKeyword);
+            });
+
+            // Sắp xếp theo tên
+            var sortedRows = rows.sort(function (a, b) {
+                var nameA = $(a).find('td:nth-child(2)').text().toLowerCase();
+                var nameB = $(b).find('td:nth-child(2)').text().toLowerCase();
+                return sort === "asc" ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+            });
+
+            // Hiển thị các row đã được sắp xếp
+            $('#employeeRows').html(sortedRows);
+        });
+
+        // Xử lý kéo thả
+        const rows = document.querySelectorAll('.draggable-row');
+        const dropzones = document.querySelectorAll('.dropzone');
+
+        rows.forEach(row => {
+            row.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('id', row.dataset.id); // Truyền ID khách hàng qua drag event
+            });
+        });
+
+        dropzones.forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                zone.classList.add('dragover');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('dragover');
+            });
+
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+
+                const id = e.dataTransfer.getData('id'); // Lấy ID khách hàng
+                const action = zone.dataset.action; // Lấy hành động từ dropzone
+
+                if (action === 'edit') {
+                    openEditModal(id); // Mở modal chỉnh sửa
+                } else if (action === 'delete') {
+                    toggleIsDelete(id); // Hiển thị xác nhận trước khi ẩn khách hàng
+                }
+            });
+        });
+
+        // Hàm gọi API để ẩn khách hàng (IsDelete = true) sau khi xác nhận
+        function toggleIsDelete(id) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn?',
+                text: 'Khách hàng sẽ bị ẩn khỏi danh sách!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#007bff',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Có, ẩn khách hàng!',
+                cancelButtonText: 'Hủy bỏ'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Gửi yêu cầu tới API nếu người dùng xác nhận
+                    $.ajax({
+                        url: `/NhanVien/ToggleIsDelete/${id}`,
+                        type: 'POST',
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Thành công!',
+                                    text: response.message,
+                                    confirmButtonColor: '#007bff'
+                                });
+
+                                setTimeout(() => {
+                                    location.reload(); // Tải lại trang sau 2 giây
+                                }, 2000);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Thất bại!',
+                                    text: response.message,
+                                    confirmButtonColor: '#dc3545'
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi!',
+                                text: 'Có lỗi xảy ra!',
+                                confirmButtonColor: '#dc3545'
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        // Hàm mở modal chỉnh sửa
+        function openEditModal(id) {
+            $.get(`/NhanVien/GetNhanVienById/${id}`, function (data) {
+                if (data.success) {
+                    $('#HoTen').val(data.data.hoTen ? data.data.hoTen.trim() : '');
+                    $('#Email').val(data.data.email ? data.data.email.trim() : '');
+                    $('#Sdt').val(data.data.sdt ? data.data.sdt.trim() : '');
+                    $('#Cccd').val(data.data.cccd ? data.data.cccd.trim() : '');
+                    $('#DiaChi').val(data.data.diaChi ? data.data.diaChi.trim() : '');
+                    $('#GioiTinh').val(data.data.gioiTinh ? data.data.gioiTinh.trim() : '');
+                    $('#NgaySinh').val(data.data.ngaySinh ? data.data.ngaySinh.trim() : '');
+                    $('#TinhTrang').val(data.data.tinhTrang ? data.data.tinhTrang.trim() : '');
+                    $('#TenTaiKhoan').val(data.data.tenTaiKhoan ? data.data.tenTaiKhoan.trim() : '');
+                    $('#MatKhau').val(data.data.matKhau ? data.data.matKhau.trim() : '');
+                    $('#Role').val(data.data.vaiTro ? data.data.vaiTro.trim() : '');
+                    $('#Luong').val(data.data.luong ? data.data.luong: 0);
+                    $('#NgayBatDau').val(data.data.ngayBatDau ? data.data.ngayBatDau.trim() : '');
+
+                    if (data.data.hinh) {
+                        $('#imagePreview').attr('src', 'https://localhost:7137' + data.data.hinh).show();
+                    } else {
+                        $('#imagePreview').hide();
+                    }
+
+
+                    $('#formCreateEdit').attr('action', `/NhanVien/Edit/${id}`);
+                    $('#createEditModal').modal('show');
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: data.message,
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            });
+        }
+
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: message,
+                confirmButtonColor: '#007bff'
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: message,
+                confirmButtonColor: '#dc3545'
+            });
+        }
+    });
+    $('#exportExcel').on('click', function () {
+        window.location.href = '/NhanVien/ExportToExcel';
+    });
+    $(document).ready(function () {
+        // Xác thực khi nhập tệp Excel
+        $('form[asp-action="ImportExcel"]').on('submit', function (e) {
+            e.preventDefault(); // Gọi đúng phương thức preventDefault()
+
+            const fileInput = $('#importFile')[0]; // Lấy phần tử input file
+            console.log("File input:", fileInput);
+
+            const file = fileInput.files[0]; // Lấy tệp được chọn
+            console.log("File:", file);
+
+            // Kiểm tra định dạng tệp
+            if (file && !file.name.match(/\.(xls|xlsx)$/)) {
+                alert("Vui lòng chọn tệp Excel hợp lệ (.xls, .xlsx)!");
+                return; // Dừng lại nếu tệp không hợp lệ
+            }
+
+            // Nếu tệp hợp lệ, tiến hành gửi form
+            this.submit();
+        });
+
+
+
+        // File preview logic for create/edit modal
+        $('#Anh').on('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').attr('src', e.target.result).show();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                $('#imagePreview').hide();
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        // Khi thay đổi số lượng hiển thị
+        $('#pageSizeSelect').on('change', function () {
+            const pageSize = $(this).val();
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('pageSize', pageSize);
+            urlParams.set('pageNumber', 1); // Reset về trang đầu tiên
+            window.location.search = urlParams.toString();
+        });
+
+        $('#exportExcel').on('click', function () {
+            window.location.href = '/NhanVien/ExportToExcel';
+        });
+    });
+
+</script>
+<style>
+    .custom-modal-width {
+        max-width: 80%;
+    }
+
+    .modal-dialog {
+        max-width: 80%;
+        margin: 30px auto;
+    }
+
+    .table {
+        font-size: 14px;
+    }
+
+    .draggable-row {
+        cursor: move;
+    }
+
+    .dropzone {
+        border: 2px dashed #007bff;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        transition: background-color 0.3s;
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .dropzone.dragover {
+            background-color: #e7f1ff;
+        }
+
+        .dropzone h5 {
+            margin: 0;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .dropzone i {
+            font-size: 48px;
+            color: #007bff;
+        }
+</style>

@@ -457,6 +457,315 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
+    "Method": "Add",
+    "RelativePath": "api/KhachHang/Add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "MaKh",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "HoTen",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cccd",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Sdt",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TenTaiKhoan",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "MatKhau",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "GioiTinh",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NgaySinh",
+        "Type": "System.Nullable\u00601[[System.DateOnly, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "DiaChi",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TinhTrang",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Hinh",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Anh",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsDelete",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
+    "Method": "GetAll",
+    "RelativePath": "api/KhachHang/GetAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sort",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
+    "Method": "GetKhachHangById",
+    "RelativePath": "api/KhachHang/GetKhachHangById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
+    "Method": "GetPaged",
+    "RelativePath": "api/KhachHang/GetPaged",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sort",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
+    "Method": "ImportExcel",
+    "RelativePath": "api/KhachHang/ImportExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
+    "Method": "Search",
+    "RelativePath": "api/KhachHang/Search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sort",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
+    "Method": "ToggleIsDelete",
+    "RelativePath": "api/KhachHang/ToggleIsDelete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
+    "Method": "ToggleStatus",
+    "RelativePath": "api/KhachHang/ToggleStatus/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
+    "Method": "Update",
+    "RelativePath": "api/KhachHang/Update/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "MaKh",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "HoTen",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cccd",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Sdt",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TenTaiKhoan",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "MatKhau",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "GioiTinh",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NgaySinh",
+        "Type": "System.Nullable\u00601[[System.DateOnly, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "DiaChi",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TinhTrang",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Hinh",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Anh",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsDelete",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
     "Method": "Create",
     "RelativePath": "api/MaCoupons/Create",
@@ -531,6 +840,355 @@
         "Name": "model",
         "Type": "APIBanXeDap.ViewModels.MaCouponVM",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "Add",
+    "RelativePath": "api/NhanVien/Add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "MaNv",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "HoTen",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "GioiTinh",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NgaySinh",
+        "Type": "System.Nullable\u00601[[System.DateOnly, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "DiaChi",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cccd",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Sdt",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NgayVaoLam",
+        "Type": "System.DateOnly",
+        "IsRequired": false
+      },
+      {
+        "Name": "Luong",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VaiTro",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TenTaiKhoan",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "MatKhau",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TinhTrang",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsDelete",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Hinh",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Anh",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "ExportExcel",
+    "RelativePath": "api/NhanVien/ExportExcel",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "GetAll",
+    "RelativePath": "api/NhanVien/GetAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sort",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "GetNhanVienById",
+    "RelativePath": "api/NhanVien/GetNhanVienById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "GetPaged",
+    "RelativePath": "api/NhanVien/GetPaged",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sort",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "ImportExcel",
+    "RelativePath": "api/NhanVien/ImportExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "Search",
+    "RelativePath": "api/NhanVien/Search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sort",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "ToggleIsDelete",
+    "RelativePath": "api/NhanVien/ToggleIsDelete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "ToggleStatus",
+    "RelativePath": "api/NhanVien/ToggleStatus/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
+    "Method": "Update",
+    "RelativePath": "api/NhanVien/Update/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "MaNv",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "HoTen",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "GioiTinh",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NgaySinh",
+        "Type": "System.Nullable\u00601[[System.DateOnly, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "DiaChi",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cccd",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Sdt",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NgayVaoLam",
+        "Type": "System.DateOnly",
+        "IsRequired": false
+      },
+      {
+        "Name": "Luong",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VaiTro",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TenTaiKhoan",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "MatKhau",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TinhTrang",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsDelete",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Hinh",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Anh",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

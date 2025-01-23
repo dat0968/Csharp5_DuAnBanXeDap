@@ -34935,6 +34935,88 @@
       ]
     },
     {
+      "Route": "Hinh/AnhKhachHang/images (3).jpg",
+      "AssetFile": "Hinh/AnhKhachHang/images (3).jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4187"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wF+gaz2xBBStDMpZu/d5mQX7riMZMmQqGH1ysWrZkRc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 23 Jan 2025 08:23:37 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-wF+gaz2xBBStDMpZu/d5mQX7riMZMmQqGH1ysWrZkRc="
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/AnhKhachHang/images (3).wsjkj79k7t.jpg",
+      "AssetFile": "Hinh/AnhKhachHang/images (3).jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4187"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wF+gaz2xBBStDMpZu/d5mQX7riMZMmQqGH1ysWrZkRc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 23 Jan 2025 08:23:37 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "wsjkj79k7t"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-wF+gaz2xBBStDMpZu/d5mQX7riMZMmQqGH1ysWrZkRc="
+        },
+        {
+          "Name": "label",
+          "Value": "Hinh/AnhKhachHang/images (3).jpg"
+        }
+      ]
+    },
+    {
       "Route": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.4y2gn89k0t.jpg",
       "AssetFile": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.jpg",
       "Selectors": [],
@@ -38733,7 +38815,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 22 Jan 2025 13:48:34 GMT"
+          "Value": "Thu, 23 Jan 2025 08:33:48 GMT"
         }
       ],
       "EndpointProperties": [
@@ -38778,7 +38860,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 22 Jan 2025 13:48:34 GMT"
+          "Value": "Thu, 23 Jan 2025 08:33:48 GMT"
         }
       ],
       "EndpointProperties": [

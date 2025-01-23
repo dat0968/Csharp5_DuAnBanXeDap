@@ -451,6 +451,7 @@ wwwroot\fonts\fontawesome-webfont.ttf
 wwwroot\fonts\fontawesome-webfont.woff
 wwwroot\fonts\fontawesome-webfont.woff2
 wwwroot\fonts\Merriweather-Regular.ttf
+wwwroot\Hinh\AnhKhachHang\images (3).jpg
 wwwroot\Hinh\SanPham\366760000_968465774368418_3331979115163731096_n.jpg
 wwwroot\Hinh\SanPham\4-VANG.png
 wwwroot\Hinh\SanPham\anh-mat-truoc-tui-gucci-marmont-sieu-cap-chup-gan.jpg
