@@ -2,12 +2,6 @@ using MVCBanXeDap.Services.Email;
 using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.Services;
 var builder = WebApplication.CreateBuilder(args);
-// Đăng ký HttpClient
-builder.Services.AddHttpClient("ApiClient", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7137/api");
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-});
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession(options =>
@@ -18,6 +12,12 @@ builder.Services.AddSession(options =>
 });
 builder.Services.AddSingleton<EmailService>();
 builder.Services.AddScoped<IjwtToken, JwtToken>();
+// Đăng ký HttpClient
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7137/api");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
