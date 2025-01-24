@@ -24,7 +24,7 @@ namespace APIBanXeDap.DbInitializer
             {
                 CreateTempStaff();
             }
-            if (_db.Hoadons.Count() < 700)
+            if (_db.Hoadons.Count() < 50)
             {
                 CreateOrderForCharts();
             }
@@ -73,6 +73,8 @@ namespace APIBanXeDap.DbInitializer
                     "Đã xác nhận",
                     "Đã giao cho đơn vị vận chuyển",
                     "Đang giao hàng",
+                    "Chờ thanh toán",
+                    "Đã thanh toán",
                     "Hoàn trả/Hoàn tiền",
                     "Đã hủy"
                 };
@@ -141,7 +143,7 @@ namespace APIBanXeDap.DbInitializer
                             };
 
                             // Giảm số lượng tồn kho và thêm chi tiết hóa đơn vào danh sách
-                            sanPham.SoLuongTon -= soLuongMua;
+                            // sanPham.SoLuongTon -= soLuongMua; // Bỏ mã này vì lí do vì là dữ liệu test
                             chiTietHoaDons.Add(chiTiet);
                         }
                     }
