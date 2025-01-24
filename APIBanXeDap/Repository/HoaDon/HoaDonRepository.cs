@@ -94,19 +94,34 @@ namespace APIBanXeDap.Repository.HoaDon
             };
             return hoadonVM;
         }
-        public async Task ChangStatusOrder(int idOrder, int idStaff, string statusOrder)
+        public async Task<string?> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder)
         {
             var originHoadon = await _db.Hoadons.FirstOrDefaultAsync(x => x.MaHoaDon == idOrder);
+            if (originHoadon == null)
+            {
+                // Xử lý trường hợp không tìm thấy hóa đơn (nếu cần)
+                return null; // Trả về null nếu không tìm thấy hóa đơn
+            }
+
+            // Kiểm tra xem nhân viên có quyền thay đổi không
+            if (!String.IsNullOrEmpty(originHoadon.MaNv.ToString()) && originHoadon.MaNv != idStaff)
+            {
+                return null; // Trả về null nếu nhân viên không có quyền thay đổi
+            }
+
             originHoadon.TinhTrang = statusOrder;
             originHoadon.MaNv = idStaff;
 
+            // Cập nhật thời gian giao hàng nếu cần
             if (statusOrder == "Đã xác nhận")
             {
-                originHoadon.ThoiGianGiao = DateOnly.FromDateTime(DateTime.Today.Date);
+                originHoadon.ThoiGianGiao = DateOnly.FromDateTime(DateTime.Today);
             }
 
             _db.Update(originHoadon);
             await _db.SaveChangesAsync();
+
+            return originHoadon.TinhTrang; // Trả về tình trạng mới của hóa đơn
         }
         public async Task<InvoiceVM> GetInvoiceDataAsync(int maHoaDon)
         {
