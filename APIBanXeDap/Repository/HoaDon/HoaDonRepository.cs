@@ -135,6 +135,8 @@ namespace APIBanXeDap.Repository.HoaDon
             {
                 throw new Exception("Hóa đơn không tồn tại.");
             }
+            // Lấy thông tin nhân viên đảm nhiệm công việc
+            var staffForce = await _db.Nhanviens.FirstOrDefaultAsync(nv => nv.MaNv == invoiceData.MaNv);
 
             // Truy vấn chi tiết hóa đơn
             var invoiceItems = await _db.Chitiethoadons
@@ -148,9 +150,11 @@ namespace APIBanXeDap.Repository.HoaDon
                 DiaChiNhanHang = invoiceData.DiaChiNhanHang,
                 TinhTrang = invoiceData.TinhTrang,
                 NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
+                ThoiGianGiao = invoiceData.ThoiGianGiao.ToDateTime(TimeOnly.MinValue),
                 HinhThucThanhToan = invoiceData.Httt,
                 TenKhachHang = invoiceData.MaKhNavigation.HoTen,
                 MaNhanVien = invoiceData.MaNv ?? 0,
+                TenNhanVien = staffForce?.HoTen ?? "Đơn hàng chưa có nhân viên phụ trách",
                 SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
                 DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
                 Items = invoiceItems.Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
@@ -177,6 +181,9 @@ namespace APIBanXeDap.Repository.HoaDon
             {
                 throw new Exception("Không tìm thấy hóa đơn nào.");
             }
+            // Lấy thông tin danh sách nhân viên đảm nhiệm đơn hàng
+            var idsStaff = invoicesData.DistinctBy(iv => iv.MaNv).Select(iv => iv.MaNv);
+            var staffsForce = await _db.Nhanviens.Where(nv => idsStaff.Contains(nv.MaNv)).ToListAsync();
 
             // Truy vấn chi tiết hóa đơn
             var invoiceItems = await _db.Chitiethoadons
@@ -193,6 +200,7 @@ namespace APIBanXeDap.Repository.HoaDon
                 HinhThucThanhToan = invoiceData.Httt,
                 TenKhachHang = invoiceData.MaKhNavigation.HoTen,
                 MaNhanVien = invoiceData.MaNv ?? 0,
+                TenNhanVien = staffsForce.FirstOrDefault(sf => sf.MaNv == invoiceData.MaNv)?.TenTaiKhoan ?? "Đơn hàng chưa có nhân viên phụ trách",
                 SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
                 DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
                 Items = invoiceItems.Where(ct => ct.MaHoaDon == invoiceData.MaHoaDon).Select(ct => new InvoiceVM.ChiTietHoaDonViewModel

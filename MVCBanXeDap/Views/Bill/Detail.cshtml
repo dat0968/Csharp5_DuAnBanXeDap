@@ -2,21 +2,33 @@
 <div class="row mb-3">
     <div class="col-md-6">
         <h4>Thông tin đơn hàng</h4>
-        <div class="mb-3">
-            <label><strong>Mã đơn hàng:</strong></label>
-            <input type="text" class="form-control" value="@Model.MaHoaDon" readonly />
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label><strong>Mã đơn hàng:</strong></label>
+                <input type="text" class="form-control" value="@Model.MaHoaDon" readonly />
+            </div>
+            <div class="col-md-6">
+                <label><strong>Hình thức thanh toán:</strong></label>
+                <input type="text" class="form-control" value="@(Model?.HinhThucThanhToan ?? "Chưa lựa chọn")" readonly />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label><strong>Ngày tạo:</strong></label>
+                <input type="text" class="form-control" value="@Model.NgayTao.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+            </div>
+            <div class="col-md-6">
+                <label><strong>Ngày giao hàng:</strong></label>
+                <input type="text" class="form-control" value="@Model.ThoiGianGiao.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+            </div>
         </div>
         <div class="mb-3">
-            <label><strong>Ngày tạo:</strong></label>
-            <input type="text" class="form-control" value="@Model.NgayTao.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+            <label><strong>Nhân viên phụ trách đơn hàng: <span class="fw-bold text-secondary">[ID: @(Model?.MaNhanVien ?? 0)]</span></strong></label>
+            <input type="text" class="form-control mt-1" value="@(Model?.TenNhanVien ?? "Đơn hàng chưa có nhân viên phụ trách")" readonly />
         </div>
         <div class="mb-3">
             <label><strong>Tình trạng:</strong></label>
-            <input type="text" class="form-control" value="@Model.TinhTrang" readonly />
-        </div>
-        <div class="mb-3">
-            <label><strong>Hình thức thanh toán:</strong></label>
-            <input type="text" class="form-control" value="@Model.HinhThucThanhToan" readonly />
+            <input type="text" class="form-control" value="@(Model?.TinhTrang ?? "Chờ xác nhận")" readonly />
         </div>
     </div>
 

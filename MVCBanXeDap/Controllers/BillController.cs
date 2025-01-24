@@ -2,6 +2,7 @@ using iText.IO.Font;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
+using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Authorization;
@@ -313,7 +314,6 @@ namespace MVCBanXeDap.Controllers
 
             return File(outputStream.ToArray(), "application/pdf", "Tổng_hợp_hóa_đơn_LightTeam.pdf");
         }
-
         #region//GET API
         [HttpGet]
         public async Task<IActionResult> GetAll(

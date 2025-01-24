@@ -47,7 +47,7 @@ namespace APIBanXeDap.Controllers
 
             if (result == null)
             {
-                return Conflict(new { success = false, message = "Đơn hàng đã được quản lý bởi nhân viên khác." });
+                return Conflict(new { success = false, message = "Đơn hàng đã được quản lý bởi nhân viên khác. Đơn hàng chỉ có thể thay đổi bởi người xác nhận đơn hàng" });
             }
 
             return Ok(new { success = true, message = "Đã thay đổi tình trạng đơn hàng thành công." });
@@ -71,16 +71,22 @@ namespace APIBanXeDap.Controllers
         private bool IsValidNextState(string currentStatus, string nextStatus)
         {
             var validNextStatesMap = new Dictionary<string, List<string>>
-                {
-                    { "Chờ xác nhận", new List<string> { "Đã xác nhận", "Đã hủy" } },
-                    { "Đã xác nhận", new List<string> { "Đã giao cho đơn vị vận chuyển", "Đã hủy" } },
-                    { "Đã giao cho đơn vị vận chuyển", new List<string> { "Đang giao hàng", "Đã hủy" } },
-                    { "Đang giao hàng", new List<string> { "Đã giao cho khách", "Hoàn trả/Hoàn tiền", "Đã hủy" } },
-                    { "Chờ thanh toán", new List<string> { "Đã xác nhận", "Đã hủy" } },
-                    { "Đã thanh toán", new List<string> { "Chờ xác nhận", "Đã xác nhận", "Đã giao cho đơn vị vận chuyển", "Đã hủy" } },
-                    { "Hoàn trả/Hoàn tiền", new List<string> { } },
-                    { "Đã hủy", new List<string> { } }
-                };
+            {
+                { "Chờ xác nhận", new List<string> { "Đã xác nhận", "Đã hủy" } },
+                { "Đã xác nhận", new List<string> { "Đã giao cho đơn vị vận chuyển", "Đã hủy" } },
+                { "Đã giao cho đơn vị vận chuyển", new List<string> { "Đang giao hàng", "Đã hủy" } },
+                { "Đang giao hàng", new List<string> { "Đã giao cho khách", "Hoàn trả/Hoàn tiền", "Đã hủy" } },
+                { "Chờ thanh toán", new List<string> { "Đã xác nhận", "Đã hủy" } },
+                { "Đã thanh toán", new List<string> { "Đã hủy", "Hoàn trả/Hoàn tiền" } },
+                { "Hoàn trả/Hoàn tiền", new List<string> { } },
+                { "Đã hủy", new List<string> { } }
+            };
+
+            // Loại bỏ khả năng quay về trạng thái "Chờ xác nhận" cho trạng thái "Đã thanh toán"
+            if (currentStatus == "Đã thanh toán" && nextStatus == "Chờ xác nhận")
+            {
+                return false;
+            }
 
             return validNextStatesMap.ContainsKey(currentStatus) && validNextStatesMap[currentStatus].Contains(nextStatus);
         }
