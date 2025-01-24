@@ -1,0 +1,30 @@
+﻿@using MVCBanXeDap.ViewModels
+@model SupplierVM
+
+<!-- Modal -->
+<div class="modal fade" id="modal-@Model.MaNhaCc" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">Thông tin chi tiết thương hiệu</h5>
+                <button id="closeModel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h4>@Model.TenNhaCc</h4>
+                        <p><strong>Mã thương hiệu:</strong> @Model.MaNhaCc</p>
+                        <p><strong>Tên thương hiệu:</strong> @Model.TenNhaCc</p>
+                        <p><strong>Địa chỉ:</strong> @Model.DiaChi</p>
+                        <p><strong>Email:</strong> @Model.Email</p>
+                        <p><strong>Số điện thoại:</strong> @Model.Sdt</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+

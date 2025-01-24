@@ -23,6 +23,20 @@ namespace APIBanXeDap.Repository.ThuongHieu
             {
                 list = list.Where(p => p.MaThuongHieu.ToString().Contains(keywords) || p.TenThuongHieu.Contains(keywords));
             }
+            switch (sort)
+            {
+                case "asc":
+                    // Sắp xếp theo giá tên thương hiệu A-Z
+                    list = list.OrderBy(p => p.TenThuongHieu);
+                    break;
+                case "desc":
+                    // Sắp xếp theo giá tên thương hiệu Z-A
+                    list = list.OrderByDescending(p => p.TenThuongHieu);
+                    break;
+                default:
+                    list = list.OrderByDescending(p => p.TenThuongHieu);
+                    break;
+            }
             var lists = list.ToList();
             return lists;
         }

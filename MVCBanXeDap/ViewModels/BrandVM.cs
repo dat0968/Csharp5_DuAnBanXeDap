@@ -1,9 +1,10 @@
 ﻿using System;
+using MVCBanXeDap.Models;
 using System.Collections.Generic;
 
 namespace MVCBanXeDap.Models;
 
-public partial class BrandVM
+public class BrandVM
 {
     public int MaThuongHieu { get; set; }
 
