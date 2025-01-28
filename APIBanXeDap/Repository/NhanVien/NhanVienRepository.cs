@@ -14,13 +14,23 @@ namespace APIBanXeDap.Repository
             _context = context;
         }
 
-        public List<Nhanvien> GetAll(string? keyword, string? sort)
+        public List<Nhanvien> GetAll(string? keyword, string? sort, string? status, string? gender)
         {
             var query = _context.Nhanviens.Where(nv => nv.IsDelete == false);
 
             if (!string.IsNullOrEmpty(keyword))
             {
                 query = query.Where(nv => nv.HoTen.Contains(keyword) || nv.TenTaiKhoan.Contains(keyword));
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(nv => nv.TinhTrang == status);
+            }
+
+            if (!string.IsNullOrEmpty(gender))
+            {
+                query = query.Where(nv => nv.GioiTinh == gender);
             }
 
             if (sort == "asc")
@@ -34,6 +44,8 @@ namespace APIBanXeDap.Repository
 
             return query.ToList();
         }
+
+
 
         public Nhanvien Add(Nhanvien nhanVien)
         {
@@ -61,6 +73,7 @@ namespace APIBanXeDap.Repository
                 nhanVien.TinhTrang = nhanVienVM.TinhTrang;
                 nhanVien.VaiTro = nhanVienVM.VaiTro;
                 nhanVien.Luong = nhanVienVM.Luong;
+                nhanVien.NgayVaoLam = nhanVienVM.NgayVaoLam;
 
                 if (nhanVienVM.Anh != null)
                 {
@@ -97,17 +110,32 @@ namespace APIBanXeDap.Repository
                 throw new Exception("Không tìm thấy nhân viên.");
             }
 
-            nhanVien.IsDelete = !nhanVien.IsDelete;
+            nhanVien.IsDelete = true;
+            nhanVien.Email = null;
+            nhanVien.TenTaiKhoan = null;
+            nhanVien.MatKhau = null;
+
             _context.SaveChanges();
         }
 
-        public List<Nhanvien> GetPaged(int pageNumber, int pageSize, string? keyword, string? sort)
+
+        public List<Nhanvien> GetPaged(int pageNumber, int pageSize, string? keyword, string? sort, string? status, string? gender)
         {
             var query = _context.Nhanviens.Where(nv => nv.IsDelete == false);
 
             if (!string.IsNullOrEmpty(keyword))
             {
                 query = query.Where(nv => nv.HoTen.Contains(keyword) || nv.TenTaiKhoan.Contains(keyword));
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(nv => nv.TinhTrang == status);
+            }
+
+            if (!string.IsNullOrEmpty(gender))
+            {
+                query = query.Where(nv => nv.GioiTinh == gender);
             }
 
             if (sort == "asc")

@@ -3,7 +3,8 @@ using APIBanXeDap.Models.ViewModels;
 using APIBanXeDap.ViewModels;
 public interface INhanVienRepository
     {
-        List<Nhanvien> GetAll(string? keyword, string? sort);
+     List<Nhanvien> GetAll(string? keyword, string? sort, string? status, string? gender);
+
         //Nhanvien Add(NhanVienVM nhanVienVM);
     Nhanvien Add(Nhanvien nhanVien);
 
@@ -11,8 +12,8 @@ public interface INhanVienRepository
         Nhanvien GetNhanVienById(int id);
         void ToggleStatus(int id, string isActive);
         void ToggleIsDelete(int id);
-        List<Nhanvien> GetPaged(int pageNumber, int pageSize, string? keyword, string? sort);
-        int GetTotalCount(string? keyword);
+    List<Nhanvien> GetPaged(int pageNumber, int pageSize, string? keyword, string? sort, string? status, string? gender);
+    int GetTotalCount(string? keyword);
         bool IsCccdExists(string cccd);
         bool IsSdtExists(string sdt);
         bool IsEmailExists(string email);

@@ -80,6 +80,7 @@ builder.Services.AddScoped<IKhachHangService, KhachHangService>();
 builder.Services.AddScoped<IKhachHangRepository, KhachHangRepository>();
 builder.Services.AddScoped<INhanVienService, NhanVienService>();
 builder.Services.AddScoped<INhanVienRepository, NhanVienRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyPolicy", options =>

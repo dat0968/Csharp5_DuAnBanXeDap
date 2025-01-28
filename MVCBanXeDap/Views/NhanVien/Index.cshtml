@@ -8,29 +8,66 @@
     <h2>Danh Sách Nhân Viên</h2>
 
     <div class="row mt-3 mb-3">
-        <div class="col-md-3">
-            <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm nhân viên">
+        <!-- Tìm kiếm khách hàng -->
+        <div class="col-md-4">
+            <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm khách hàng" value="@ViewBag.Keyword">
         </div>
-        <div class="col-md-3">
-            <select id="sortSelect" class="form-control">
-                <option value="asc">Sắp xếp A-Z</option>
-                <option value="desc">Sắp xếp Z-A</option>
+
+        <!-- Lọc theo tình trạng -->
+        <div class="col-md-2">
+            <select id="statusFilter" class="form-control">
+                <option value="">-- Chọn Tình Trạng --</option>
+                <option value="Đang hoạt động" selected="@(ViewBag.Status == "Đang hoạt động" ? "selected" : null)">Đang hoạt động</option>
+                <option value="Đã tạm khoá" selected="@(ViewBag.Status == "Đã tạm khoá" ? "selected" : null)">Đã tạm khoá</option>
             </select>
         </div>
 
-        <div class="col-md-3 text-right">
-            <button id="exportExcel" class="btn btn-success btn-sm">Xuất Excel</button>
-            <button id="openModalCreate" class="btn btn-primary btn-sm">Thêm Nhân Viên</button>
-        </div>
+        <!-- Lọc theo giới tính -->
         <div class="col-md-2">
-            <form asp-action="ImportExcel" method="post" enctype="multipart/form-data" class="d-inline">
-                <input type="file" id="importFile" name="file" class="form-control-file d-inline">
-                <button type="submit" class="btn btn-success btn-sm">Nhập từ Excel</button>
-            </form>
+            <select id="genderFilter" class="form-control">
+                <option value="">-- Chọn Giới Tính --</option>
+                <option value="Nam" selected="@(ViewBag.Gender == "Nam" ? "selected" : null)">Nam</option>
+                <option value="Nữ" selected="@(ViewBag.Gender == "Nữ" ? "selected" : null)">Nữ</option>
+            </select>
+        </div>
 
+        <!-- Sắp xếp -->
+        <div class="col-md-2">
+            <select id="sortSelect" class="form-control">
+                <option value="asc" selected="@(ViewBag.Sort == "asc" ? "selected" : null)">Sắp xếp A-Z</option>
+                <option value="desc" selected="@(ViewBag.Sort == "desc" ? "selected" : null)">Sắp xếp Z-A</option>
+            </select>
+        </div>
+
+        <!-- Nút áp dụng bộ lọc -->
+        <div class="col-md-2">
+            <button id="applyFilters" class="btn btn-primary btn-block">Lọc</button>
         </div>
     </div>
 
+    <div class="row mt-3">
+        <!-- Nút xuất Excel -->
+        <div class="col-md-4">
+            <button id="exportExcel" class="btn btn-success btn-sm btn-block">Xuất Excel</button>
+        </div>
+
+        <!-- Nút thêm nhân viên -->
+        <div class="col-md-4">
+            <button id="openModalCreate" class="btn btn-primary btn-sm btn-block">Thêm Nhân Viên</button>
+        </div>
+
+        <!-- Import Excel -->
+        <div class="col-md-4">
+            <form asp-action="ImportExcel" method="post" enctype="multipart/form-data" class="d-inline">
+                <div class="input-group">
+                    <input type="file" id="importFile" name="file" class="form-control form-control-sm">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-success btn-sm">Nhập từ Excel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row mt-4">
         <div class="col-md-6">
             <div class="dropzone edit-zone" data-action="edit">
@@ -152,7 +189,7 @@
 
     </div>
     <nav>
-        <ul class="pagination justify-content-center">
+        <ul class="pagination justify-content">
             @for (int i = 1; i <= Model.TotalPages; i++)
             {
                 <li class="page-item @(i == Model.PageNumber ? "active" : "")">
@@ -170,9 +207,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Thêm/Sửa Nhân Viên</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+           
                 </div>
                 <div class="modal-body">
                     <form id="formCreateEdit" method="post" enctype="multipart/form-data">
@@ -225,7 +260,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="NgaySinh">Ngày sinh</label>
-                                    <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" required>
+                                    <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" >
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -234,10 +269,11 @@
                                     <span class="text-danger"></span> <!-- Hiển thị lỗi -->
                                 </div>
                                 <div class="form-group">
-                                    <label for="NgayBatDau">Ngày bắt đầu làm việc</label>
-                                    <input type="date" class="form-control" id="NgayBatDau" name="NgayBatDau" required>
+                                    <label for="NgayVaoLam">Ngày vào làm</label>
+                                    <input type="date" class="form-control" id="NgayVaoLam" name="NgayVaoLam">
                                     <span class="text-danger"></span>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="TenTaiKhoan">Tên tài khoản</label>
                                     <input type="text" class="form-control" id="TenTaiKhoan" name="TenTaiKhoan" required>
@@ -268,6 +304,7 @@
                         </div>
                         <div class="form-group text-right">
                             <button type="submit" class="btn btn-primary">Lưu</button>
+                            <button type="button" class="btn btn-secondary btn-cancel">Hủy</button>
                         </div>
                     </form>
                 </div>
@@ -355,29 +392,39 @@
             });
         });
 
-
-        // Tìm kiếm và sắp xếp
+        // Tìm kiếm và sắp xếp khách hàng
         $('#searchInput, #sortSelect').on('input change', function () {
-            var keyword = $('#searchInput').val().toLowerCase();
-            var sort = $('#sortSelect').val();
+            const keyword = $('#searchInput').val().toLowerCase();
+            const sort = $('#sortSelect').val();
+            const rows = $('#customerRows tr');
 
-            var rows = $('#employeeRows tr');
-
+            // Lọc khách hàng theo từ khóa
             rows.each(function () {
-                var name = $(this).find('td:nth-child(2)').text().toLowerCase();
-                var matchesKeyword = name.includes(keyword);
-                $(this).toggle(matchesKeyword);
+                const name = $(this).find('td:nth-child(2)').text().toLowerCase();
+                $(this).toggle(name.includes(keyword));
             });
 
-            // Sắp xếp theo tên
-            var sortedRows = rows.sort(function (a, b) {
-                var nameA = $(a).find('td:nth-child(2)').text().toLowerCase();
-                var nameB = $(b).find('td:nth-child(2)').text().toLowerCase();
+            // Sắp xếp khách hàng theo tên
+            const sortedRows = rows.sort(function (a, b) {
+                const nameA = $(a).find('td:nth-child(2)').text().toLowerCase();
+                const nameB = $(b).find('td:nth-child(2)').text().toLowerCase();
                 return sort === "asc" ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
             });
 
-            // Hiển thị các row đã được sắp xếp
-            $('#employeeRows').html(sortedRows);
+            $('#customerRows').html(sortedRows);
+        });
+        $(document).ready(function () {
+            $('#applyFilters').on('click', function () {
+                const keyword = $('#searchInput').val();
+                const status = $('#statusFilter').val();
+                const gender = $('#genderFilter').val();
+
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('keyword', keyword);
+                urlParams.set('status', status);
+                urlParams.set('gender', gender);
+                window.location.search = urlParams.toString();
+            });
         });
 
         // Xử lý kéo thả
@@ -476,13 +523,22 @@
                     $('#Cccd').val(data.data.cccd ? data.data.cccd.trim() : '');
                     $('#DiaChi').val(data.data.diaChi ? data.data.diaChi.trim() : '');
                     $('#GioiTinh').val(data.data.gioiTinh ? data.data.gioiTinh.trim() : '');
-                    $('#NgaySinh').val(data.data.ngaySinh ? data.data.ngaySinh.trim() : '');
+                    // Xử lý ngày sinh
+                    if (data.data.ngaySinh) {
+                        const ngaySinhDate = new Date(data.data.ngaySinh); // Chuyển chuỗi thành đối tượng Date
+                        const ngaySinhFormatted = `${ngaySinhDate.getFullYear()}-${String(ngaySinhDate.getMonth() + 1).padStart(2, '0')}-${String(ngaySinhDate.getDate()).padStart(2, '0')}`;
+                        $('#NgaySinh').val(ngaySinhFormatted); // Đặt giá trị ngày vào input
+                    } else {
+                        $('#NgaySinh').val('');
+                    }
                     $('#TinhTrang').val(data.data.tinhTrang ? data.data.tinhTrang.trim() : '');
-                    $('#TenTaiKhoan').val(data.data.tenTaiKhoan ? data.data.tenTaiKhoan.trim() : '');
-                    $('#MatKhau').val(data.data.matKhau ? data.data.matKhau.trim() : '');
+                    $('#TenTaiKhoan').val(data.data.tenTaiKhoan ? data.data.tenTaiKhoan.trim() : '').prop('readonly', true);
+                    $('#MatKhau').val(data.data.matKhau ? data.data.matKhau.trim() : '').parent().hide();
                     $('#Role').val(data.data.vaiTro ? data.data.vaiTro.trim() : '');
                     $('#Luong').val(data.data.luong ? data.data.luong: 0);
-                    $('#NgayBatDau').val(data.data.ngayBatDau ? data.data.ngayBatDau.trim() : '');
+                    $('#NgayVaoLam').val(data.data.ngayBatDau ? data.data.ngayBatDau.trim() : '').parent().hide();
+
+
 
                     if (data.data.hinh) {
                         $('#imagePreview').attr('src', 'https://localhost:7137' + data.data.hinh).show();
@@ -577,7 +633,11 @@
             window.location.href = '/NhanVien/ExportToExcel';
         });
     });
-
+    document.querySelector('.btn-cancel').addEventListener('click', function () {
+        const modal = document.getElementById('createEditModal');
+        const bootstrapModal = bootstrap.Modal.getInstance(modal);
+        bootstrapModal.hide(); // Đóng modal
+    });
 </script>
 <style>
     .custom-modal-width {

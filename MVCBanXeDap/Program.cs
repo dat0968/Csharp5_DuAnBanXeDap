@@ -1,6 +1,7 @@
 using MVCBanXeDap.Services.Email;
 using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.Services;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 var builder = WebApplication.CreateBuilder(args);
 // Đăng ký HttpClient
 builder.Services.AddHttpClient("ApiClient", client =>
@@ -18,7 +19,9 @@ builder.Services.AddSession(options =>
 });
 builder.Services.AddSingleton<EmailService>();
 builder.Services.AddScoped<IjwtToken, JwtToken>();
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

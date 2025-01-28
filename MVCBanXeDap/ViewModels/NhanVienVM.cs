@@ -43,7 +43,7 @@ namespace MVCBanXeDap.ViewModels
         [Required(ErrorMessage = "Lương không được để trống")]
         [Range(0, int.MaxValue, ErrorMessage = "Lương phải là số không âm")]
         public int Luong { get; set; }
-
+        public DateTime? NgayVaoLam { get; set; }
         public string? TinhTrang { get; set; }
         public string? Hinh { get; set; }
         public IFormFile? Anh { get; set; }

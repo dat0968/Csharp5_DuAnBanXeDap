@@ -22,12 +22,17 @@ namespace MVCBanXeDap.Controllers
             };
         }
 
-        // GET: NhanVien
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, string? keyword = null, string? sort = "asc")
+        public async Task<IActionResult> Index(
+           int pageNumber = 1,
+           int pageSize = 10,
+           string? keyword = null,
+           string? sort = "asc",
+           string? status = null,
+           string? gender = null)
         {
             try
             {
-                var response = await _client.GetAsync($"NhanVien/GetPaged?pageNumber={pageNumber}&pageSize={pageSize}&keyword={keyword}&sort={sort}");
+                var response = await _client.GetAsync($"NhanVien/GetPaged?pageNumber={pageNumber}&pageSize={pageSize}&keyword={keyword}&sort={sort}&status={status}&gender={gender}");
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await response.Content.ReadAsStringAsync();
@@ -38,6 +43,8 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.Keyword = keyword;
                     ViewBag.Sort = sort;
                     ViewBag.PageSize = pageSize;
+                    ViewBag.Status = status;
+                    ViewBag.Gender = gender;
 
                     return View(pagedResult);
                 }
@@ -129,7 +136,7 @@ namespace MVCBanXeDap.Controllers
                     formData.Add(new StringContent(model.TinhTrang.ToString()), "TinhTrang");
                     formData.Add(new StringContent(model.DiaChi ?? ""), "DiaChi");
                     formData.Add(new StringContent(model.NgaySinh.HasValue ? model.NgaySinh.Value.ToString("yyyy-MM-dd") : ""), "NgaySinh");
-
+                    formData.Add(new StringContent(model.NgayVaoLam.HasValue ? model.NgayVaoLam.Value.ToString("yyyy-MM-dd") : ""), "NgayBatDau");
 
 
                     if (Anh != null)
@@ -230,29 +237,23 @@ namespace MVCBanXeDap.Controllers
             }
         }
         // Phương thức ExportToExcel bổ sung cột Lương
-        public async Task<IActionResult> ExportToExcel()
+        public async Task<IActionResult> ExportToExcel(string? keyword = null, string? sort = null, string? status = null, string? gender = null)
         {
             try
             {
-                // Lấy danh sách nhân viên từ API
-                var response = await _client.GetAsync("NhanVien/GetAll?isDelete=false"); // Chỉ lấy nhân viên IsDelete = false
+                var response = await _client.GetAsync($"NhanVien/GetAll?keyword={keyword}&sort={sort}&status={status}&gender={gender}");
                 if (!response.IsSuccessStatusCode)
                 {
+                    TempData["ErrorMessage"] = "Không thể xuất dữ liệu!";
                     return RedirectToAction("Index");
                 }
 
                 var data = await response.Content.ReadAsStringAsync();
                 var nhanViens = JsonConvert.DeserializeObject<List<NhanVienVM>>(data);
 
-                // Tạo workbook Excel
                 using var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("DanhSachNhanVien");
 
-                // Cấu hình font và cỡ chữ toàn bộ worksheet
-                worksheet.Style.Font.FontName = "Times New Roman";
-                worksheet.Style.Font.FontSize = 14;
-
-                // Tiêu đề cột
                 worksheet.Cell(1, 1).Value = "Họ và Tên";
                 worksheet.Cell(1, 2).Value = "Giới Tính";
                 worksheet.Cell(1, 3).Value = "Ngày Sinh";
@@ -263,15 +264,6 @@ namespace MVCBanXeDap.Controllers
                 worksheet.Cell(1, 8).Value = "Vai Trò";
                 worksheet.Cell(1, 9).Value = "Lương";
 
-                // Định dạng tiêu đề
-                var titleRow = worksheet.Range("A1:I1");
-                titleRow.Style.Font.Bold = true;
-                titleRow.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                titleRow.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                titleRow.Style.Fill.BackgroundColor = XLColor.LightGray;
-                titleRow.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                // Đổ dữ liệu vào Excel
                 for (int i = 0; i < nhanViens.Count; i++)
                 {
                     var nv = nhanViens[i];
@@ -286,27 +278,19 @@ namespace MVCBanXeDap.Controllers
                     worksheet.Cell(i + 2, 9).Value = nv.Luong;
                 }
 
-                // Tạo bảng rõ ràng
-                var dataRange = worksheet.Range(1, 1, nhanViens.Count + 1, 9);
-                dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                // Tự động điều chỉnh kích thước cột
-                worksheet.Columns().AdjustToContents();
-
-                // Lưu file Excel vào MemoryStream
                 using var stream = new MemoryStream();
                 workbook.SaveAs(stream);
                 var content = stream.ToArray();
 
-                // Trả về file Excel
                 return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DanhSachNhanVien.xlsx");
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Lỗi khi xuất file Excel: " + ex.Message });
+                TempData["ErrorMessage"] = $"Lỗi khi xuất file Excel: {ex.Message}";
+                return RedirectToAction("Index");
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> ImportExcel(IFormFile file)

@@ -67,9 +67,9 @@ public class NhanVienService : INhanVienService
         };
     }
 
-    public List<NhanVienVM> GetAllNhanVien(string? keyword, string? sort)
+    public List<NhanVienVM> GetAllNhanVien(string? keyword, string? sort, string? status, string? gender)
     {
-        return _repository.GetAll(keyword, sort)
+        return _repository.GetAll(keyword, sort, status, gender)
             .Select(nv => new NhanVienVM
             {
                 MaNv = nv.MaNv,
@@ -84,9 +84,9 @@ public class NhanVienService : INhanVienService
                 Luong = nv.Luong,
                 TenTaiKhoan = nv.TenTaiKhoan,
                 TinhTrang = nv.TinhTrang,
-                Hinh = nv.Hinh
-            })
-            .ToList();
+                Hinh = nv.Hinh,
+                NgayVaoLam = nv.NgayVaoLam,
+            }).ToList();
     }
 
     public NhanVienVM UpdateNhanVien(int id, NhanVienVM nhanVienVM)
@@ -132,7 +132,8 @@ public class NhanVienService : INhanVienService
             TenTaiKhoan = nhanVien.TenTaiKhoan,
             TinhTrang = nhanVien.TinhTrang,
             Hinh = nhanVien.Hinh,
-            MatKhau = nhanVien.MatKhau
+            MatKhau = nhanVien.MatKhau,
+            NgayVaoLam = nhanVien.NgayVaoLam
         };
     }
 
@@ -183,10 +184,10 @@ public class NhanVienService : INhanVienService
 
 
 
-    public PagedResult<NhanVienVM> GetPagedNhanVien(int pageNumber, int pageSize, string? keyword, string? sort)
+    public PagedResult<NhanVienVM> GetPagedNhanVien(int pageNumber, int pageSize, string? keyword, string? sort, string? status, string? gender)
     {
-        var totalItems = _repository.GetTotalCount(keyword);
-        var nhanViens = _repository.GetPaged(pageNumber, pageSize, keyword, sort)
+        var totalItems = _repository.GetAll(keyword, sort, status, gender).Count;
+        var nhanViens = _repository.GetPaged(pageNumber, pageSize, keyword, sort, status, gender)
             .Select(nv => new NhanVienVM
             {
                 MaNv = nv.MaNv,
@@ -202,8 +203,7 @@ public class NhanVienService : INhanVienService
                 TenTaiKhoan = nv.TenTaiKhoan,
                 TinhTrang = nv.TinhTrang,
                 Hinh = nv.Hinh
-            })
-            .ToList();
+            }).ToList();
 
         return new PagedResult<NhanVienVM>
         {

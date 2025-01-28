@@ -21,4 +21,8 @@
     <Folder Include="wwwroot\Hinh\AnhKhachHang\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\APIBanXeDap\APIBanXeDap.csproj" />
+  </ItemGroup>
+
 </Project>

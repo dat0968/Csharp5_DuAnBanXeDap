@@ -3,34 +3,77 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Khách Hàng";
 }
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <div class="container">
     <h2>Danh Sách Khách Hàng</h2>
 
     <div class="row mt-3 mb-3">
-        <div class="col-md-3">
-            <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm khách hàng">
+        <!-- Tìm kiếm khách hàng -->
+        <div class="col-md-4">
+            <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm khách hàng" value="@ViewBag.Keyword">
         </div>
-        <div class="col-md-3">
-            <select id="sortSelect" class="form-control">
-                <option value="asc">Sắp xếp A-Z</option>
-                <option value="desc">Sắp xếp Z-A</option>
+
+        <!-- Lọc theo tình trạng -->
+        <div class="col-md-2">
+            <select id="statusFilter" class="form-control">
+                <option value="">-- Chọn Tình Trạng --</option>
+                <option value="Đang hoạt động" selected="@(ViewBag.Status == "Đang hoạt động" ? "selected" : null)">Đang hoạt động</option>
+                <option value="Đã tạm khoá" selected="@(ViewBag.Status == "Đã tạm khoá" ? "selected" : null)">Đã tạm khoá</option>
             </select>
         </div>
-    
-           <div class="col-md-3 text-right">
-            <button id="exportExcel" class="btn btn-success btn-sm">Xuất Excel</button>
-            <button id="openModalCreate" class="btn btn-primary btn-sm">Thêm Nhân Viên</button>
-        </div>
+
+        <!-- Lọc theo giới tính -->
         <div class="col-md-2">
-<form asp-action="ImportExcel" method="post" enctype="multipart/form-data" class="d-inline">
-    <input type="file" id="importFile" name="file" class="form-control-file d-inline">
-    <button type="submit" class="btn btn-success btn-sm">Nhập từ Excel</button>
-</form>
-
+            <select id="genderFilter" class="form-control">
+                <option value="">-- Chọn Giới Tính --</option>
+                <option value="Nam" selected="@(ViewBag.Gender == "Nam" ? "selected" : null)">Nam</option>
+                <option value="Nữ" selected="@(ViewBag.Gender == "Nữ" ? "selected" : null)">Nữ</option>
+            </select>
         </div>
 
+        <!-- Sắp xếp -->
+        <div class="col-md-2">
+            <select id="sortSelect" class="form-control">
+                <option value="asc" selected="@(ViewBag.Sort == "asc" ? "selected" : null)">Sắp xếp A-Z</option>
+                <option value="desc" selected="@(ViewBag.Sort == "desc" ? "selected" : null)">Sắp xếp Z-A</option>
+            </select>
+        </div>
+
+        <!-- Nút áp dụng bộ lọc -->
+        <div class="col-md-2">
+            <button id="applyFilters" class="btn btn-primary btn-block">Lọc</button>
+        </div>
     </div>
+
+    <div class="row mt-3">
+        <!-- Nút xuất Excel -->
+        <div class="col-md-4">
+            <button id="exportExcel" class="btn btn-success btn-sm btn-block">Xuất Excel</button>
+        </div>
+
+        <!-- Nút thêm nhân viên -->
+        <div class="col-md-4">
+            <button id="openModalCreate" class="btn btn-primary btn-sm btn-block">Thêm Nhân Viên</button>
+        </div>
+
+        <!-- Import Excel -->
+        <div class="col-md-4">
+            <form asp-action="ImportExcel" method="post" enctype="multipart/form-data" class="d-inline">
+                <div class="input-group">
+                    <input type="file" id="importFile" name="file" class="form-control form-control-sm">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-success btn-sm">Nhập từ Excel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
 
 
@@ -156,7 +199,7 @@
 
     </div>
     <nav>
-        <ul class="pagination justify-content-center">
+        <ul class="pagination justify-content">
             @for (int i = 1; i <= Model.TotalPages; i++)
             {
                 <li class="page-item @(i == Model.PageNumber ? "active" : "")">
@@ -179,13 +222,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Thêm/Sửa Khách Hàng</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+       
+
+
             </div>
             <div class="modal-body">
                 <form id="formCreateEdit" method="post" enctype="multipart/form-data">
                     <div class="row">
+                        <input type="hidden" id="IsDelete" name="IsDelete" value="false">
+
                         <!-- Cột trái -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -236,7 +281,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="NgaySinh">Ngày sinh</label>
-                                <input type="date" class="form-control" id="NgaySinh" name="NgaySinh">
+                                <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" />
                             </div>
                             <div class="form-group">
                                 <label for="TinhTrang">Tình trạng</label>
@@ -259,6 +304,7 @@
                     </div>
                     <div class="form-group text-right">
                         <button type="submit" class="btn btn-primary">Lưu</button>
+                        <button type="button" class="btn btn-secondary btn-cancel">Hủy</button>
                     </div>
                 </form>
             </div>
@@ -338,6 +384,19 @@
 
         $('#customerRows').html(sortedRows);
     });
+        $(document).ready(function () {
+            $('#applyFilters').on('click', function () {
+                const keyword = $('#searchInput').val();
+                const status = $('#statusFilter').val();
+                const gender = $('#genderFilter').val();
+
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('keyword', keyword);
+                urlParams.set('status', status);
+                urlParams.set('gender', gender);
+                window.location.search = urlParams.toString();
+            });
+        });
 
     // Xử lý kéo thả khách hàng
     initializeDragAndDrop();
@@ -446,10 +505,22 @@
         $('#Cccd').val(data.cccd ? data.cccd.trim() : '');
         $('#DiaChi').val(data.diaChi ? data.diaChi.trim() : '');
         $('#GioiTinh').val(data.gioiTinh ? data.gioiTinh.trim() : '');
-        $('#NgaySinh').val(data.ngaySinh ? data.ngaySinh.trim() : '');
+            if (data.ngaySinh) {
+                const dateObj = new Date(data.ngaySinh); // Tạo đối tượng ngày từ chuỗi ngày
+                const yyyy = dateObj.getFullYear();
+                const mm = String(dateObj.getMonth() + 1).padStart(2, '0'); // Tháng (0-based)
+                const dd = String(dateObj.getDate()).padStart(2, '0'); // Ngày
+
+                const formattedDate = `${yyyy}-${mm}-${dd}`; // Định dạng yyyy-MM-dd
+                $('#NgaySinh').val(formattedDate); // Đặt giá trị ngày vào input type="date"
+            } else {
+                $('#NgaySinh').val(''); // Nếu không có ngày, đặt giá trị rỗng
+            }
+
+
         $('#TinhTrang').val(data.tinhTrang ? data.tinhTrang.trim() : '');
-        $('#TenTaiKhoan').val(data.tenTaiKhoan ? data.tenTaiKhoan.trim() : '');
-        $('#MatKhau').val(data.matKhau ? data.matKhau.trim() : '');
+            $('#TenTaiKhoan').val(data.tenTaiKhoan ? data.tenTaiKhoan.trim() : '').prop('readonly', true);
+            $('#MatKhau').val(data.matKhau ? data.matKhau.trim() : '').parent().hide();
 
         if (data.hinh) {
             $('#imagePreview').attr('src', 'https://localhost:7137' + data.hinh).show();
@@ -457,6 +528,13 @@
             $('#imagePreview').hide();
         }
     }
+        // Hàm chuyển đổi yyyy-MM-dd -> mm/dd/yyyy
+        function formatDateToMMDDYYYY(dateString) {
+            if (!dateString) return ''; // Trả về chuỗi rỗng nếu ngày trống
+
+            const [year, month, day] = dateString.split('-'); // Tách năm, tháng, ngày
+            return `${month}/${day}/${year}`; // Kết hợp lại thành mm/dd/yyyy
+        }
 
     // Hàm xử lý ẩn khách hàng
     function toggleIsDelete(id) {
@@ -522,6 +600,11 @@
         });
     }
 });
+    document.querySelector('.btn-cancel').addEventListener('click', function () {
+        const modal = document.getElementById('createEditModal');
+        const bootstrapModal = bootstrap.Modal.getInstance(modal);
+        bootstrapModal.hide(); // Đóng modal
+    });
 
 </script>
 <style>
@@ -600,4 +683,41 @@
             font-size: 48px;
             color: #007bff;
         }
+    /* Container */
+    .container {
+        padding: 20px;
+    }
+
+    /* Tiêu đề */
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Bộ lọc (3 phần trên) */
+    .row.mt-3.mb-3 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .row.mt-3.mb-3 .col-md-3,
+        .row.mt-3.mb-3 .col-md-2 {
+            display: flex;
+            align-items: center;
+        }
+
+            .row.mt-3.mb-3 .col-md-3 input,
+            .row.mt-3.mb-3 .col-md-2 select {
+                width: 100%;
+            }
+
+            .row.mt-3.mb-3 .col-md-2 button {
+                width: 100%;
+            }
+
+            .row.mt-3.mb-3 .col-md-3.text-right button {
+                margin-left: 10px;
+            }
 </style>

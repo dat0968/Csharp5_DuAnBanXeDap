@@ -10,5 +10,6 @@ public interface IKhachHangService
     void ToggleIsDelete(int id);
     KhachHangVM GetKhachHangById(int id);
     void ImportKhachHangs(List<KhachHangVM> khachHangList);
-    PagedResult<KhachHangVM> GetPagedKhachHang(int pageNumber, int pageSize, string? keyword, string? sort);
+    PagedResult<KhachHangVM> GetPagedKhachHang(int pageNumber, int pageSize, string? keyword, string? sort, string? status, string? gender);
+
 }

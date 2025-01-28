@@ -45,7 +45,7 @@ public class KhachHangService : IKhachHangService
 
     public List<KhachHangVM> GetAllKhachHang(string? keyword, string? sort)
     {
-        return _repository.GetAll(keyword, sort)
+        return _repository.GetAll(keyword, sort, null, null) // Truyền null cho status và gender
             .Select(kh => new KhachHangVM
             {
                 MaKh = kh.MaKh,
@@ -63,49 +63,105 @@ public class KhachHangService : IKhachHangService
             .ToList();
     }
 
+
     public KhachHangVM UpdateKhachHang(int id, KhachHangVM khachHangVM)
     {
-        // Validate các trường cần thiết
-        var khachHang = _repository.Update(id, khachHangVM);
+        // Nếu IsDelete là true, đặt các trường cần thiết thành null
+        if (khachHangVM.IsDelete == true)
+        {
+            khachHangVM.TenTaiKhoan = null;
+            khachHangVM.MatKhau = null;
+            khachHangVM.Email = null;
+        }
+
+        // Chuyển đổi từ string về DateOnly?
+        var ngaySinh = khachHangVM.NgaySinh;
+
+        var khachHang = _repository.Update(id, new KhachHangVM
+        {
+            HoTen = khachHangVM.HoTen,
+            GioiTinh = khachHangVM.GioiTinh,
+            NgaySinh = ngaySinh,
+            DiaChi = khachHangVM.DiaChi,
+            Cccd = khachHangVM.Cccd,
+            Sdt = khachHangVM.Sdt,
+            Email = khachHangVM.Email,
+            TenTaiKhoan = khachHangVM.TenTaiKhoan,
+            MatKhau = khachHangVM.MatKhau,
+            TinhTrang = khachHangVM.TinhTrang,
+            Hinh = khachHangVM.Hinh,
+            IsDelete = khachHangVM.IsDelete
+        });
+        if (khachHangVM.IsDelete != null)
+        {
+            khachHang.IsDelete = khachHangVM.IsDelete;
+        }
         return new KhachHangVM
         {
             HoTen = khachHang.HoTen,
             Email = khachHang.Email
         };
     }
-    public void ToggleIsDelete(int id)
+
+
+   public void ToggleIsDelete(int id)
+{
+    var khachHang = _repository.GetKhachHangById(id);
+    if (khachHang == null)
     {
-        _repository.ToggleIsDelete(id);
+        throw new Exception("Không tìm thấy khách hàng");
     }
+
+    // Cập nhật IsDelete và xóa thông tin nhạy cảm
+    var updatedKhachHang = new KhachHangVM
+    {
+        HoTen = khachHang.HoTen,
+        GioiTinh = khachHang.GioiTinh,
+        NgaySinh = khachHang.NgaySinh,
+        DiaChi = khachHang.DiaChi,
+        Cccd = khachHang.Cccd,
+        Sdt = khachHang.Sdt,
+        Email = null, // Xóa email
+        TenTaiKhoan = null, // Xóa tài khoản
+        MatKhau = null, // Xóa mật khẩu
+        TinhTrang = khachHang.TinhTrang,
+        Hinh = khachHang.Hinh,
+        IsDelete = true // Đặt IsDelete là true
+    };
+
+    _repository.Update(id, updatedKhachHang);
+}
+
+
     public void ToggleStatus(int id, string isActive)
     {
         _repository.ToggleStatus(id, isActive);
     }
-    public KhachHangVM GetKhachHangById(int id)
-    {
-        var khachHang = _repository.GetKhachHangById(id);
-        if (khachHang == null)
+        public KhachHangVM GetKhachHangById(int id)
         {
-            return null;
+            var khachHang = _repository.GetKhachHangById(id);
+            if (khachHang == null)
+            {
+                return null;
+            }
+
+            return new KhachHangVM
+            {
+                MaKh = khachHang.MaKh,
+                HoTen = khachHang.HoTen,
+                GioiTinh = khachHang.GioiTinh,
+                NgaySinh = khachHang.NgaySinh, // Convert DateOnly? to string
+                DiaChi = khachHang.DiaChi,  
+                Cccd = khachHang.Cccd,
+                Sdt = khachHang.Sdt,
+                Email = khachHang.Email,
+                TenTaiKhoan = khachHang.TenTaiKhoan,
+                TinhTrang = khachHang.TinhTrang,
+                Hinh = khachHang.Hinh,
+                MatKhau = khachHang.MatKhau,
+            };
         }
-        var t =
-         new KhachHangVM
-        {
-            MaKh = khachHang.MaKh,
-            HoTen = khachHang.HoTen,
-            GioiTinh = khachHang.GioiTinh,
-            NgaySinh = khachHang.NgaySinh,
-            DiaChi = khachHang.DiaChi,
-            Cccd = khachHang.Cccd,
-            Sdt = khachHang.Sdt,
-            Email = khachHang.Email,
-            TenTaiKhoan = khachHang.TenTaiKhoan,
-            TinhTrang = khachHang.TinhTrang,
-            Hinh = khachHang.Hinh,
-            MatKhau = khachHang.MatKhau,
-        };
-        return t;
-    }
+
     public void ImportKhachHangs(List<KhachHangVM> khachHangList)
     {
         foreach (var khachHangVM in khachHangList)
@@ -148,10 +204,13 @@ public class KhachHangService : IKhachHangService
             _repository.Add(khachHang);
         }
     }
-    public PagedResult<KhachHangVM> GetPagedKhachHang(int pageNumber, int pageSize, string? keyword, string? sort)
+    public PagedResult<KhachHangVM> GetPagedKhachHang(int pageNumber, int pageSize, string? keyword, string? sort, string? status, string? gender)
     {
-        var totalItems = _repository.GetTotalCount(keyword);
-        var khachHangs = _repository.GetPaged(pageNumber, pageSize, keyword, sort)
+        // Lấy tổng số lượng khách hàng
+        var totalItems = _repository.GetTotalCount(keyword, status, gender);
+
+        // Lấy danh sách khách hàng
+        var khachHangs = _repository.GetPaged(pageNumber, pageSize, keyword, sort, status, gender)
             .Select(kh => new KhachHangVM
             {
                 MaKh = kh.MaKh,
@@ -176,6 +235,8 @@ public class KhachHangService : IKhachHangService
             PageSize = pageSize
         };
     }
+
+
 
 
 
