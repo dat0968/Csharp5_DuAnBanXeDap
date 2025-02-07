@@ -24,27 +24,29 @@
     <link rel="stylesheet" href="~/css/style.css" type="text/css">
     @* Toastr *@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    @RenderSection("CSSs", required: false)
+    <style>
+        .brand-logo {
+            font-family: 'Roboto', sans-serif; /* Chọn font chữ đẹp */
+            font-size: 36px; /* Kích thước chữ lớn */
+            font-weight: 700; /* Chữ đậm */
+            color: #000; /* Màu đen */
+            text-transform: uppercase; /* Viết hoa toàn bộ */
+            text-decoration: none; /* Bỏ gạch chân */
+            letter-spacing: 1px; /* Khoảng cách giữa các chữ */
+            display: inline-block;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Tạo bóng chữ nhẹ */
+            transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease; /* Hiệu ứng hover */
+            cursor: pointer;
+        }
+
+            .brand-logo:hover {
+                color: #333; /* Đổi sang màu xám đậm khi hover */
+                transform: scale(1.05); /* Phóng to nhẹ khi hover */
+                text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.2); /* Bóng chữ đậm hơn khi hover */
+            }
+    </style>
 </head>
-<style>
-    .brand-logo {
-    font-family: 'Roboto', sans-serif; /* Chọn font chữ đẹp */
-    font-size: 36px; /* Kích thước chữ lớn */
-    font-weight: 700; /* Chữ đậm */
-    color: #000; /* Màu đen */
-    text-transform: uppercase; /* Viết hoa toàn bộ */
-    text-decoration: none; /* Bỏ gạch chân */
-    letter-spacing: 1px; /* Khoảng cách giữa các chữ */
-    display: inline-block;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Tạo bóng chữ nhẹ */
-    transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease; /* Hiệu ứng hover */
-    cursor: pointer;
-    }
-    .brand-logo:hover {
-    color: #333; /* Đổi sang màu xám đậm khi hover */
-    transform: scale(1.05); /* Phóng to nhẹ khi hover */
-    text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.2); /* Bóng chữ đậm hơn khi hover */
-    }
-</style>
 <body>
     <!-- Page Preloder -->
     <div id="preloder">
@@ -135,8 +137,9 @@
             <div class="canvas__open"><i class="fa fa-bars"></i></div>
         </div>
     </header>
- 
-    @RenderBody()
+    <div class="container py-5">
+        @RenderBody()
+    </div>
     @*<div class="container py-5">
         <h2 class="text-center mb-4">Sản phẩm bán chạy</h2>
         <div class="row">
@@ -313,6 +316,9 @@
             </div>
         </div>
     </footer>
+
+    <!-- Thanh xem sản phẩm so sánh nhanh -->
+    <div id="coverQuickBarComparetion"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- Footer Section End -->
     <!-- Js Plugins -->
@@ -342,6 +348,45 @@
             }
         });       
     </script>
+    <!-- Mã load thanh xem sản phẩm so sánh nhanh -->
+    <script>
+        function loadQuickCompare() {
+            $.ajax({
+                url: "/compareProducts/QuickBarComparesProducts",
+                method: "GET",
+                success: (response) => {
+                    $("#coverQuickBarComparetion").html(response);
+
+                    const quickCompareSection = $("#quickCompareSection");
+                    const toggleQuickCompareBtn = $("#toggleQuickCompare");
+
+                    // Đảm bảo phần tử tồn tại trước khi thay đổi
+                    if (quickCompareSection.length === 0 || toggleQuickCompareBtn.length === 0) return;
+
+                    const hasProducts = quickCompareSection.data("has-products") === true;
+
+                    if (hasProducts) {
+                        quickCompareSection.show();
+                        toggleQuickCompareBtn.hide();
+                        localStorage.setItem("compareVisible", "True");
+                    } else {
+                        quickCompareSection.hide();
+                        toggleQuickCompareBtn.show();
+                        localStorage.setItem("compareVisible", "False");
+                    }
+                },
+                error: (xhr) => {
+                    console.error("Lỗi khi tải dữ liệu thanh so sánh:", xhr);
+                }
+            });
+        }
+
+
+        $(document).ready(function() {
+            loadQuickCompare();
+        })
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
