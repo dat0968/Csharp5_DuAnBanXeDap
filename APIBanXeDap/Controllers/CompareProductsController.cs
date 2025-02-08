@@ -16,7 +16,7 @@ namespace APIBanXeDap.Controllers
             _productRepo = ProductRepository;
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> AddProductToCoparetion(int id)
+        public async Task<IActionResult> AddProductToCopare(int id)
         {
             CompareProductVM? productVM = await _productRepo.GetCompareProductVmByIdAsync(id);
             if (productVM == null)

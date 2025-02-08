@@ -38,88 +38,95 @@
         }
     </style>
 }
-
-<div class="text-center my-4">
-    <h2>So sánh sản phẩm</h2>
-</div>
-
-@if (Model == null || !Model.Any(m => m != null))
-{
-    <div class="text-center">
-        <h5>Hiện tại không có sản phẩm nào để so sánh.</h5>
-        <a href="/" class="btn btn-primary">Quay về trang chủ</a>
+<div class="shadow-sm">
+    <div class="text-center mb-4">
+        <h2 class="text-dark fw-bolder">So sánh sản phẩm</h2>
     </div>
-}
-else if (Model.Count == 1)
-{
-    <div class="text-center">
-        <h5>Bạn cần chọn thêm ít nhất 1 sản phẩm để so sánh.</h5>
-        <a href="/" class="btn btn-primary">Quay về trang chủ</a>
-    </div>
-}
-else
-{
-    <div class="row justify-content-center">
-        @foreach (var product in Model)
-        {
-            if (product == null) continue;
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="/hinh/sanpham/@product.Hinh" alt="@product.TenSp" class="product-img">
-                    <div class="card-header text-center">
-                        <h5 class="card-title">@product.TenSp</h5>
-                        <h6 class="card-subtitle text-muted">@product.TenThuongHieu</h6>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Mô tả:</strong> @product.MoTa</p>
-                        <p><strong>Ngày sản xuất:</strong> @product.NgaySanXuat.ToString("dd/MM/yyyy")</p>
-                        <p><strong>Nhà cung cấp:</strong> @product.TenNhaCc</p>
-                        <p><strong>Danh mục:</strong> @product.TenDanhMuc</p>
 
-                        <!-- Kích cỡ -->
-                        <div class="mb-2">
-                            <strong>Kích cỡ:</strong>
-                            <div class="btn-group" role="group">
-                                @foreach (var size in product.Chitietsanphams.Select(c => new { c.MaKichThuoc, c.TenKichThuoc }).Distinct())
-                                {
-                                    <button type="button" class="btn btn-outline-primary btn-size"
-                                            data-masp="@product.MaSp" data-size="@size.MaKichThuoc">
-                                        @size.TenKichThuoc
-                                    </button>
-                                }
+    @if (Model == null || !Model.Any(m => m != null))
+    {
+        <div class="alert alert-info text-dark text-center">
+            <h5>Hiện tại không có sản phẩm nào để so sánh.</h5>
+            <a href="/" class="btn btn-dark mt-3">Quay về trang chủ</a>
+        </div>
+    }
+    else if (Model.Count == 1)
+    {
+        <div class="alert alert-warning text-dark text-center">
+            <h5>Bạn cần chọn thêm ít nhất 1 sản phẩm để so sánh.</h5>
+            <a href="/" class="btn btn-dark mt-3">Quay về trang chủ</a>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            @foreach (var product in Model)
+            {
+                if (product == null) continue;
+
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-light">
+                        <a href="@Url.Action("Details", "Home", new { id = product.MaSp })">
+                            <img src="/hinh/sanpham/@product.Hinh" alt="@product.TenSp" class="card-img-top product-img">
+                        </a>
+                        <div class="card-body">
+                            <a href="@Url.Action("Details", "Home", new { id = product.MaSp })" class="text-decoration-none text-dark">
+                                <h5 class="card-title text-center">@product.TenSp</h5>
+                                <h6 class="card-subtitle text-muted text-center">@product.TenThuongHieu</h6>
+                            </a>
+                            <p><strong>Mô tả:</strong> @product.MoTa</p>
+                            <p><strong>Ngày sản xuất:</strong> @product.NgaySanXuat.ToString("dd/MM/yyyy")</p>
+                            <p><strong>Nhà cung cấp:</strong> @product.TenNhaCc</p>
+                            <p><strong>Danh mục:</strong> @product.TenDanhMuc</p>
+                            <hr class="bg-dark" />
+
+                            <!-- Kích cỡ -->
+                            <div class="mb-2">
+                                <strong>Kích cỡ:</strong>
+                                <div class="btn-group" role="group">
+                                    @foreach (var size in product.Chitietsanphams.Select(c => new { c.MaKichThuoc, c.TenKichThuoc }).Distinct())
+                                    {
+                                        <button type="button" class="btn btn-outline-dark btn-size"
+                                                data-masp="@product.MaSp" data-size="@size.MaKichThuoc">
+                                            @size.TenKichThuoc
+                                        </button>
+                                    }
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Màu sắc -->
-                        <div class="mb-2">
-                            <strong>Màu sắc:</strong>
-                            <div class="btn-group" role="group">
-                                @foreach (var color in product.Chitietsanphams.Select(c => new { c.MaMau, c.TenMau }).Distinct())
-                                {
-                                    <button type="button" class="btn btn-outline-secondary btn-color"
-                                            data-masp="@product.MaSp" data-color="@color.MaMau">
-                                        @color.TenMau
-                                    </button>
-                                }
+                            <!-- Màu sắc -->
+                            <div class="mb-2">
+                                <strong>Màu sắc:</strong>
+                                <div class="btn-group" role="group">
+                                    @foreach (var color in product.Chitietsanphams.Select(c => new { c.MaMau, c.TenMau }).Distinct())
+                                    {
+                                        <button type="button" class="btn btn-outline-dark btn-color"
+                                                data-masp="@product.MaSp" data-color="@color.MaMau">
+                                            @color.TenMau
+                                        </button>
+                                    }
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Kết quả so sánh -->
-                        <div class="product-details" id="product-details-@product.MaSp">
-                            <p><strong>Số lượng tồn:</strong> <span class="so-luong">-</span></p>
-                            <p><strong>Giá:</strong> <span class="gia">-</span> VND</p>
-                        </div>
+                            <hr class="" />
 
-                        <!-- Dữ liệu JSON ẩn -->
-                        <script type="application/json" id="data-@product.MaSp">
-                            @Html.Raw(Json.Serialize(product.Chitietsanphams))
-                        </script>
+                            <!-- Kết quả so sánh -->
+                            <div class="product-details" id="product-details-@product.MaSp">
+                                <p><strong>Số lượng tồn:</strong> <span class="so-luong">-</span></p>
+                                <p><strong>Giá:</strong> <span class="gia">-</span> VND</p>
+                            </div>
+
+                            <!-- Dữ liệu JSON ẩn -->
+                            <script type="application/json" id="data-@product.MaSp">
+                                @Html.Raw(Json.Serialize(product.Chitietsanphams))
+                            </script>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+</div>
 
 @section Scripts {
     <script>

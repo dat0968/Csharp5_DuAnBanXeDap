@@ -20,24 +20,27 @@
             <button id="closeQuickCompare" class="btn btn-outline-danger btn-sm rounded-circle">✖</button>
         </div>
 
+        <!-- Developer Button -->
+        <!--
         <div class="input-group mb-3">
             <input type="number" id="productIdInput" class="form-control" placeholder="Nhập ID sản phẩm" />
             <button id="addProductButton" class="btn btn-success">Thêm</button>
         </div>
+        -->
 
         <div class="d-flex justify-content-between align-items-center gap-2">
             @for (int i = 0; i < 3; i++)
             {
                 var isProductAvailable = Model != null && Model.Count() > i && Model[i] != null;
-                <div class="card border-@((isProductAvailable) ? "primary" : "secondary") shadow-sm flex-fill text-center"
-                     style="min-width: 30%; max-width: 32%; height: 120px;">
+                <div class="card border-@((isProductAvailable) ? "primary" : "secondary") shadow-sm flex-fill text-center overflow-auto"
+                     style="min-width: 30%; max-width: 32%; height: 150px;">
                     @if (isProductAvailable)
                     {
                         var product = Model[i];
                         <div class="d-flex flex-column align-items-center justify-content-between h-100 p-2">
                             <img src="/hinh/sanpham/@product.Hinh" class="rounded" alt="@product.TenSp"
                                  style="height: 50px; object-fit: cover;" />
-                            <h6 class="text-truncate fs-6 m-1">@product.TenSp</h6>
+                            <h6 class="text-truncate fs-6 m-1 w-100">@product.TenSp</h6>
                             <div class="d-flex justify-content-center gap-1">
                                 <a href="@Url.Action("Details", "Home", new { id = product.MaSp })" class="btn btn-primary btn-sm">Chi tiết</a>
                                 <button class="btn btn-danger btn-sm" onclick="removeProductFromCompare(@product.MaSp)">Xóa</button>
@@ -81,7 +84,6 @@
         transform: translateX(-50%);
         z-index: 1100;
         font-weight: bold;
-        display: block !important;
         opacity: 1;
         transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
     }
@@ -151,20 +153,29 @@
         function updateVisibility() {
             const isVisible = localStorage.getItem("compareVisible") === "True";
             quickCompareSection.toggle(isVisible);
-            toggleQuickCompareBtn.toggleClass("hidden", isVisible);
+            if (isVisible) {
+                toggleQuickCompareBtn.css("display", "none");  // Ẩn phần tử
+            } else {
+                toggleQuickCompareBtn.css("display", "block"); // Hiện phần tử
+            }
         }
 
         function toggleQuickCompareSection() {
             const isCurrentlyVisible = quickCompareSection.is(":visible");
             quickCompareSection.toggle(!isCurrentlyVisible);
-            toggleQuickCompareBtn.toggleClass("hidden", !isCurrentlyVisible);
+            if (!isCurrentlyVisible) {
+                toggleQuickCompareBtn.css("display", "none");  // Ẩn phần tử
+            } else {
+                toggleQuickCompareBtn.css("display", "block"); // Hiện phần tử
+            }
             localStorage.setItem("compareVisible", isCurrentlyVisible ? "False" : "True");
         }
 
-        $("#addProductButton").on("click", function () {
-            const productId = $("#productIdInput").val();
-            addProductToCompare(productId);
-        });
+        // Developer function to button
+        // $("#addProductButton").on("click", function () {
+        //     const productId = $("#productIdInput").val();
+        //     addProductToCompare(productId);
+        // });
 
         closeQuickCompareBtn.on("click", toggleQuickCompareSection);
         toggleQuickCompareBtn.on("click", toggleQuickCompareSection);
