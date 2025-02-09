@@ -7,13 +7,13 @@ using MVCBanXeDap.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Drawing;
 using ClosedXML.Excel;
-
 namespace MVCBanXeDap.Controllers
 {
     public class KhachHangController : Controller
     {
         private readonly HttpClient _client;
         private readonly Uri _baseAddress;
+        private readonly IKhachHangService _khachHangService;
 
         public KhachHangController()
         {
@@ -22,24 +22,27 @@ namespace MVCBanXeDap.Controllers
             {
                 BaseAddress = _baseAddress
             };
+
         }
 
-        // GET: KhachHang
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, string? keyword = null, string? sort = "asc")
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 5, string? keyword = null, string? sort = "asc", string? status = null, string? gender = null)
         {
             try
             {
-                var response = await _client.GetAsync($"KhachHang/GetPaged?pageNumber={pageNumber}&pageSize={pageSize}&keyword={keyword}&sort={sort}");
+                var response = await _client.GetAsync($"KhachHang/GetPaged?pageNumber={pageNumber}&pageSize={pageSize}&keyword={keyword}&sort={sort}&status={status}&gender={gender}");
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await response.Content.ReadAsStringAsync();
                     var pagedResult = JsonConvert.DeserializeObject<PagedResult<KhachHangVM>>(data);
 
+                    // Lưu lại trạng thái các bộ lọc
                     ViewBag.Page = pageNumber;
                     ViewBag.TotalPages = pagedResult.TotalPages;
                     ViewBag.Keyword = keyword;
                     ViewBag.Sort = sort;
                     ViewBag.PageSize = pageSize;
+                    ViewBag.Status = status;
+                    ViewBag.Gender = gender;
 
                     return View(pagedResult);
                 }
@@ -53,6 +56,8 @@ namespace MVCBanXeDap.Controllers
                 return View(new PagedResult<KhachHangVM>());
             }
         }
+
+
 
 
         // POST: KhachHang/Create
@@ -130,9 +135,15 @@ namespace MVCBanXeDap.Controllers
                     formData.Add(new StringContent(model.TenTaiKhoan ?? ""), "TenTaiKhoan");
                     formData.Add(new StringContent(model.MatKhau ?? ""), "MatKhau");
                     formData.Add(new StringContent(model.GioiTinh ?? ""), "GioiTinh");
-                    formData.Add(new StringContent(model.NgaySinh?.ToString("MM-dd-yyyy") ?? ""), "NgaySinh");
+                    if (model.NgaySinh != null)
+                    {
+                        formData.Add(new StringContent(model.NgaySinh.Value.ToString("yyyy-MM-dd")), "NgaySinh");
+                    }
+
                     formData.Add(new StringContent(model.DiaChi ?? ""), "DiaChi");
                     formData.Add(new StringContent(model.TinhTrang.ToString()), "TinhTrang");
+                    formData.Add(new StringContent(model.IsDelete?.ToString() ?? "false"), "IsDelete");
+
 
 
                     // Xử lý file nếu có
@@ -243,6 +254,8 @@ namespace MVCBanXeDap.Controllers
                 return Json(new { success = false, message = "Lỗi hệ thống: " + ex.Message });
             }
         }
+
+
         public async Task<IActionResult> ExportToExcel()
         {
             try

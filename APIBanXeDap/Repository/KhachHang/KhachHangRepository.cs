@@ -38,14 +38,26 @@ namespace APIBanXeDap.Repository
             return _context.Khachhangs.Any(x => x.TenTaiKhoan == tenTaiKhoan);
         }
 
-        public List<Khachhang> GetAll(string? keyword, string? sort)
+        public List<Khachhang> GetAll(string? keyword, string? sort, string? status, string? gender)
         {
-            var query = _context.Khachhangs.Where(k => k.IsDelete == false); // Chỉ lấy các bản ghi có IsDelete = false
-                                                                             // Chỉ lấy khách hàng chưa bị xóa
+            var query = _context.Khachhangs.Where(k => k.IsDelete == false); // Chỉ lấy khách hàng chưa bị xóa
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(x => x.HoTen.Contains(keyword) || x.TenTaiKhoan.Contains(keyword));
+                query = query.Where(x =>
+                    (x.HoTen != null && x.HoTen.Contains(keyword)) ||
+                    (x.TenTaiKhoan != null && x.TenTaiKhoan.Contains(keyword))
+                );
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(x => x.TinhTrang == status);
+            }
+
+            if (!string.IsNullOrEmpty(gender))
+            {
+                query = query.Where(x => x.GioiTinh == gender);
             }
 
             if (sort == "asc")
@@ -60,6 +72,20 @@ namespace APIBanXeDap.Repository
             return query.ToList();
         }
 
+        public int GetTotalCount(string? keyword)
+        {
+            var query = _context.Khachhangs.Where(k => k.IsDelete == false); // Sửa lỗi IsDelete nullable
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                query = query.Where(x =>
+                    (x.HoTen != null && x.HoTen.Contains(keyword)) ||
+                    (x.TenTaiKhoan != null && x.TenTaiKhoan.Contains(keyword))
+                );
+            }
+
+            return query.Count();
+        }
 
         public Khachhang Add(KhachHangVM khachHangVM)
         {
@@ -98,27 +124,31 @@ namespace APIBanXeDap.Repository
 
         public Khachhang Update(int id, KhachHangVM khachHangVM)
         {
-            var khachHang = _context.Khachhangs.FirstOrDefault(x => x.MaKh == id);
-            if (khachHang != null)
+            var khachHang = _context.Khachhangs.FirstOrDefault(kh => kh.MaKh == id);
+            if (khachHang == null)
             {
-                khachHang.HoTen = khachHangVM.HoTen;
-                khachHang.GioiTinh = khachHangVM.GioiTinh;
-                khachHang.NgaySinh = khachHangVM.NgaySinh;
-                khachHang.DiaChi = khachHangVM.DiaChi;
-                khachHang.Cccd = khachHangVM.Cccd;
-                khachHang.Sdt = khachHangVM.Sdt;
-                khachHang.Email = khachHangVM.Email;
-                khachHang.TenTaiKhoan = khachHangVM.TenTaiKhoan;
-                khachHang.MatKhau = khachHangVM.MatKhau;
-                khachHang.TinhTrang = khachHangVM.TinhTrang;
-                if (khachHangVM.Anh != null)
-                {
-                    khachHang.Hinh = SaveImage(khachHangVM.Anh);
-                }
-                _context.SaveChanges();
+                throw new Exception("Không tìm thấy khách hàng");
             }
+
+            // Cập nhật các trường
+            khachHang.HoTen = khachHangVM.HoTen;
+            khachHang.GioiTinh = khachHangVM.GioiTinh;
+            khachHang.NgaySinh = khachHangVM.NgaySinh;
+            khachHang.DiaChi = khachHangVM.DiaChi;
+            khachHang.Cccd = khachHangVM.Cccd;
+            khachHang.Sdt = khachHangVM.Sdt;
+            khachHang.Email = khachHangVM.Email;
+            khachHang.TenTaiKhoan = khachHangVM.TenTaiKhoan;
+            khachHang.MatKhau = khachHangVM.MatKhau;
+            khachHang.TinhTrang = khachHangVM.TinhTrang;
+            khachHang.IsDelete = khachHangVM.IsDelete;
+
+            _context.SaveChanges();
             return khachHang;
         }
+
+
+
 
         public enum TinhTrangKhachHang
         {
@@ -190,13 +220,26 @@ namespace APIBanXeDap.Repository
             return _context.Khachhangs.FirstOrDefault(kh => kh.MaKh == id && kh.IsDelete == false);
         }
 
-        public List<Khachhang> GetPaged(int pageNumber, int pageSize, string? keyword, string? sort)
+        public List<Khachhang> GetPaged(int pageNumber, int pageSize, string? keyword, string? sort, string? status, string? gender)
         {
             var query = _context.Khachhangs.Where(k => k.IsDelete == false);
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(x => x.HoTen.Contains(keyword) || x.TenTaiKhoan.Contains(keyword));
+                query = query.Where(x =>
+                    (x.HoTen != null && x.HoTen.Contains(keyword)) ||
+                    (x.TenTaiKhoan != null && x.TenTaiKhoan.Contains(keyword))
+                );
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(x => x.TinhTrang == status);
+            }
+
+            if (!string.IsNullOrEmpty(gender))
+            {
+                query = query.Where(x => x.GioiTinh == gender);
             }
 
             if (sort == "asc")
@@ -211,17 +254,32 @@ namespace APIBanXeDap.Repository
             return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
 
-        public int GetTotalCount(string? keyword)
+        public int GetTotalCount(string? keyword, string? status, string? gender)
         {
             var query = _context.Khachhangs.Where(k => k.IsDelete == false);
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(x => x.HoTen.Contains(keyword) || x.TenTaiKhoan.Contains(keyword));
+                query = query.Where(x =>
+                    (x.HoTen != null && x.HoTen.Contains(keyword)) ||
+                    (x.TenTaiKhoan != null && x.TenTaiKhoan.Contains(keyword))
+                );
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(x => x.TinhTrang == status);
+            }
+
+            if (!string.IsNullOrEmpty(gender))
+            {
+                query = query.Where(x => x.GioiTinh == gender);
             }
 
             return query.Count();
         }
+
+
 
     }
 }

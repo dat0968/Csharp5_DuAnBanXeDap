@@ -18,12 +18,11 @@ namespace APIBanXeDap.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll(string? keyword, string? sort)
+        public IActionResult GetAll(string? keyword, string? sort, string? status, string? gender)
         {
-            var result = _nhanVienService.GetAllNhanVien(keyword, sort);
+            var result = _nhanVienService.GetAllNhanVien(keyword, sort, status, gender);
             return Ok(result);
         }
-
         [HttpPost("Add")]
         public IActionResult Add([FromForm] NhanVienVM nhanVienVM)
         {
@@ -77,7 +76,7 @@ namespace APIBanXeDap.Controllers
             try
             {
                 _nhanVienService.ToggleIsDelete(id);
-                return Ok(new { success = true, message = "Đổi trạng thái IsDelete thành công." });
+                return Ok(new { success = true, message = "Đổi trạng thái IsDelete và xóa thông tin tài khoản thành công." });
             }
             catch (Exception ex)
             {
@@ -85,12 +84,14 @@ namespace APIBanXeDap.Controllers
             }
         }
 
+
         [HttpGet("Search")]
-        public IActionResult Search(string keyword, string? sort)
+        public IActionResult Search(string keyword, string? sort, string? status = null, string? gender = null)
         {
-            var result = _nhanVienService.GetAllNhanVien(keyword, sort);
+            var result = _nhanVienService.GetAllNhanVien(keyword, sort, status, gender);
             return Ok(result);
         }
+
 
         [HttpGet("GetNhanVienById/{id}")]
         public IActionResult GetNhanVienById(int id)
@@ -164,11 +165,11 @@ namespace APIBanXeDap.Controllers
 
 
         [HttpGet("ExportExcel")]
-        public IActionResult ExportExcel()
+        public IActionResult ExportExcel(string? keyword = null, string? sort = null, string? status = null, string? gender = null)
         {
             try
             {
-                var nhanViens = _nhanVienService.GetAllNhanVien(null, null);
+                var nhanViens = _nhanVienService.GetAllNhanVien(keyword, sort, status, gender);
 
                 using (var workbook = new XLWorkbook())
                 {
@@ -211,10 +212,11 @@ namespace APIBanXeDap.Controllers
             }
         }
 
+
         [HttpGet("GetPaged")]
-        public IActionResult GetPaged(int pageNumber, int pageSize, string? keyword, string? sort)
+        public IActionResult GetPaged(int pageNumber, int pageSize, string? keyword, string? sort, string? status, string? gender)
         {
-            var result = _nhanVienService.GetPagedNhanVien(pageNumber, pageSize, keyword, sort);
+            var result = _nhanVienService.GetPagedNhanVien(pageNumber, pageSize, keyword, sort, status, gender);
             return Ok(result);
         }
     }

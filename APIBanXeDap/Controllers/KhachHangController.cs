@@ -169,11 +169,12 @@ namespace APIBanXeDap.Controllers
         }
 
         [HttpGet("GetPaged")]
-        public IActionResult GetPaged(int pageNumber, int pageSize, string? keyword, string? sort)
+        public IActionResult GetPaged(int pageNumber, int pageSize, string? keyword, string? sort, string? status, string? gender)
         {
-            var result = _khachHangService.GetPagedKhachHang(pageNumber, pageSize, keyword, sort);
+            var result = _khachHangService.GetPagedKhachHang(pageNumber, pageSize, keyword, sort, status, gender);
             return Ok(result);
         }
+
 
     }
 }
