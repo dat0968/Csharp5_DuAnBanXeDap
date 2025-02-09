@@ -24,11 +24,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using VNPAY.NET;
+using APIBanXeDap.Repository.ThanhToan;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -80,6 +89,8 @@ builder.Services.AddScoped<IKhachHangService, KhachHangService>();
 builder.Services.AddScoped<IKhachHangRepository, KhachHangRepository>();
 builder.Services.AddScoped<INhanVienService, NhanVienService>();
 builder.Services.AddScoped<INhanVienRepository, NhanVienRepository>();
+builder.Services.AddScoped<IVnpay, Vnpay>();
+builder.Services.AddScoped<ICheckoutRepository, CheckoutRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyPolicy", options =>
@@ -99,6 +110,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("MyPolicy");
 app.UseHttpsRedirection();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();

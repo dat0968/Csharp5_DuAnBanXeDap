@@ -140,7 +140,9 @@ namespace APIBanXeDap.Repository.SanPham
                 DanhMuc = Product.MaDanhMucNavigation.TenDanhMuc,
                 Chitietsanphams = Product.Chitietsanphams.Select(ct => new DetailsProductVM
                 {
+                    MaMau = ct.MaMau,
                     TenMau = ct.MaMauNavigation.TenMau,
+                    MaKichThuoc = ct.MaKichThuoc,
                     TenKichThuoc = ct.MaKichThuocNavigation.TenKichThuoc,
                     SoLuongTon = ct.SoLuongTon,
                     DonGia = ct.DonGia,

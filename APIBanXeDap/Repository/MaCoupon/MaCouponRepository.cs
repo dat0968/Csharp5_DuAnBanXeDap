@@ -41,8 +41,8 @@ namespace APIBanXeDap.Repository.MaCoupon
 
         public List<MaCouponVM> GetAll(string? keywords, bool? status, string? sort)
         {
-            var listCouponCode = db.MaCoupons.AsQueryable();
-            var expiredCoupons = listCouponCode.Where(c => c.NgayHetHan < DateTime.Now && c.TrangThai == true).ToList();
+            var listCouponCode = db.MaCoupons.AsEnumerable();
+            var expiredCoupons = listCouponCode.Where(c => (c.NgayHetHan < DateTime.Now || c.DaSuDung == true )&& c.TrangThai == true).ToList();
             foreach (var coupon in expiredCoupons)
             {
                 coupon.TrangThai = false;
@@ -93,6 +93,7 @@ namespace APIBanXeDap.Repository.MaCoupon
                     TrangThai = item.TrangThai,
                     NgayTao = item.NgayTao,
                     MinimumOrderAmount = item.MinimumOrderAmount,
+                    DaSuDung = item.DaSuDung,
                 });
             }
             return CovertToListMaCouponVM;

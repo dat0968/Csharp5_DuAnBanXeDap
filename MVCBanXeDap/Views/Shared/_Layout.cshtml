@@ -7,8 +7,8 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>URANI&SHOP</title>
-
+    <title>LIGHT&SHOP</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
     rel="stylesheet">
@@ -24,32 +24,33 @@
     <link rel="stylesheet" href="~/css/style.css" type="text/css">
     @* Toastr *@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <style>
+        .brand-logo {
+            font-family: 'Roboto', sans-serif; /* Chọn font chữ đẹp */
+            font-size: 36px; /* Kích thước chữ lớn */
+            font-weight: 700; /* Chữ đậm */
+            color: #000; /* Màu đen */
+            text-transform: uppercase; /* Viết hoa toàn bộ */
+            text-decoration: none; /* Bỏ gạch chân */
+            letter-spacing: 1px; /* Khoảng cách giữa các chữ */
+            display: inline-block;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Tạo bóng chữ nhẹ */
+            transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease; /* Hiệu ứng hover */
+            cursor: pointer;
+        }
+
+        .brand-logo:hover {
+            color: #333; /* Đổi sang màu xám đậm khi hover */
+            transform: scale(1.05); /* Phóng to nhẹ khi hover */
+            text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.2); /* Bóng chữ đậm hơn khi hover */
+        }
+
+    </style>
 </head>
-<style>
-    .brand-logo {
-    font-family: 'Roboto', sans-serif; /* Chọn font chữ đẹp */
-    font-size: 36px; /* Kích thước chữ lớn */
-    font-weight: 700; /* Chữ đậm */
-    color: #000; /* Màu đen */
-    text-transform: uppercase; /* Viết hoa toàn bộ */
-    text-decoration: none; /* Bỏ gạch chân */
-    letter-spacing: 1px; /* Khoảng cách giữa các chữ */
-    display: inline-block;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Tạo bóng chữ nhẹ */
-    transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease; /* Hiệu ứng hover */
-    cursor: pointer;
-    }
-    .brand-logo:hover {
-    color: #333; /* Đổi sang màu xám đậm khi hover */
-    transform: scale(1.05); /* Phóng to nhẹ khi hover */
-    text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.2); /* Bóng chữ đậm hơn khi hover */
-    }
-</style>
+
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
+      
+
     <!-- Header Section Begin -->
     <header class="header">
         <div class="header__top">
@@ -101,14 +102,18 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__logo">
-                        <a href="" class="brand-logo">URANISHOP</a>
+                        <a asp-action="Index" asp-controller="Home" class="brand-logo">LIGHT TEAM</a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a asp-action="Index" asp-controller="Home">Trang chủ</a></li>
-                            <li><a asp-action="Product" asp-controller="Home">Cửa hàng</a></li>
+                            <li class="@((ViewContext.RouteData.Values["controller"].ToString() == "Home" && ViewContext.RouteData.Values["action"].ToString() == "Index") ? "active" : "")">
+                                <a asp-action="Index" asp-controller="Home">Trang chủ</a>
+                            </li>
+                            <li class="@((ViewContext.RouteData.Values["controller"].ToString() == "Home" && ViewContext.RouteData.Values["action"].ToString() == "Product") ? "active" : "")">
+                                <a asp-action="Product" asp-controller="Home">Cửa hàng</a>
+                            </li>
                             @* <li> *@
                             @*     <a href="#">Pages</a> *@
                             @*     <ul class="dropdown"> *@
@@ -125,10 +130,10 @@
                     </nav>
                 </div>
                 <div class="col-lg-3 col-md-3">
-                    <div class="header__nav__option">                     
+                    <div id="IconCart" class="header__nav__option">                     
                         @* <a href="#"><img src="img/icon/heart.png" alt=""></a> *@
-                        <a href="#"><img src="~/img/icon/cart.png" alt=""> <span>0</span></a>
-                        <div class="price">0.00 VNĐ </div>
+                        <a asp-action="Index" asp-controller="Cart"><img src="~/img/icon/cart.png" alt=""><span></span></a>
+                        <div class="price"></div>
                     </div>
                 </div>
             </div>
@@ -259,7 +264,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__logo">
-                            <a style="color: white" href="" class="brand-logo">URANISHOP</a>
+                            <a style="color: white" asp-action="Index" asp-controller="Home" class="brand-logo">LIGHT TEAM</a>
                         </div>
                         <p>Khách hàng là trung tâm trong mô hình kinh doanh độc đáo của chúng tôi.</p>
                     </div>
@@ -305,7 +310,7 @@
                             <script>
                                 document.write(new Date().getFullYear());
                             </script>2020
-                            Tất cả các quyền được bảo lưu | Mẫu website này được tạo bởi <i class="fa fa-heart-o" aria-hidden="true"></i> bởi <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                            Tất cả các quyền được bảo lưu bởi <i class="fa fa-heart-o" aria-hidden="true"></i> bởi <a href="https://www.facebook.com/HOANG0NG" target="_blank">Saber</a>
                         </p>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </div>
@@ -329,8 +334,10 @@
     <!-- Bootstrap JS -->
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
     <script>
         $(document).ready(function() {
+
             var successMessage = '@TempData["SuccessMessage"]';
             if (successMessage) {
                 toastr.success(successMessage);
@@ -340,7 +347,20 @@
             if (errorMessage) {
                 toastr.error(errorMessage);
             }
-        });       
+        });     
+        
+
+        //Xử lí hiển thị số lượng và giá trị giỏ hàng
+        fetch('/Cart/GetCartCount')
+        .then(response => response.json())
+        .then(data => {
+            const header__nav__option = document.getElementById("IconCart")
+            const spancount = header__nav__option.querySelector('span')
+            const totalAmout = header__nav__option.querySelector('.price')
+            spancount.textContent = data.count
+            totalAmout.textContent = `${data.totalAmount} VNĐ`
+        })
+        
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

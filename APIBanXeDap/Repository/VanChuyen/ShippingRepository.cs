@@ -105,5 +105,15 @@ namespace APIBanXeDap.Repository.VanChuyen
             
             return listShip;
         }
+
+        public float? GetShippingFee(string pho, string quan, string phuong)
+        {
+            var findShippingfee = db.Vanchuyens.FirstOrDefault(p => p.ThanhPho == pho && p.QuanHuyen == quan && p.Phuong == phuong);
+            if(findShippingfee != null)
+            {
+                return findShippingfee.Gia;
+            }
+            return 0;
+        }
     }
 }

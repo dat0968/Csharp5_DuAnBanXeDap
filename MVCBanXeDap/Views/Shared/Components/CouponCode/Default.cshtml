@@ -1,0 +1,148 @@
+﻿@using MVCBanXeDap.Helper
+@using MVCBanXeDap.ViewModels
+@model IEnumerable<MaCouponVM>
+@{
+    var DetailsCart = Context.Session.Get<DetailsCart>("MYCART") ?? new DetailsCart();
+    var listCartItem = DetailsCart.ListCartItem ?? new List<CartItem>();
+    var thanhtien = listCartItem != null && listCartItem.Count() > 0 ? listCartItem.Sum(p => p.ThanhTien) : 0;
+    var macoupon = DetailsCart.MaCoupon;
+}
+<!-- Coupon Section -->
+<div class="cart__discount mb-4">
+    <h6 class="mb-3">Áp dụng mã coupon</h6>
+    <div class="input-group">
+        <input id="CouponCode" value="@macoupon" readonly type="text" class="form-control" placeholder="Mã coupon">
+        <button class="btn btn-dark" id="ButtonCouponCode" disabled="@(listCartItem != null && listCartItem.Count() == 0 || !listCartItem.Any())" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Lấy mã coupon</button>
+    </div>
+</div>
+
+<!-- Coupon Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="couponModalLabel">Danh sách mã Coupon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 20%;">Mã Coupon</th>
+                            <th scope="col" style="width: 15%;">Số tiền giảm / phần trăm giảm</th>
+                            <th scope="col" style="width: 20%;">Đơn hàng tối thiểu (VNĐ)</th>
+                            <th scope="col" style="width: 15%;">Ngày bắt đầu</th>
+                            <th scope="col" style="width: 15%;">Ngày kết thúc</th>
+                            <th scope="col" style="width: 15%;">Trạng thái</th>
+                            <th scope="col" style="width: 10%;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int index = 1;
+                        }
+                        @foreach (var coupon in Model)
+                        {
+                            <tr>
+                                <th scope="row">@index</th>
+                                <td>@coupon.Code</td>
+                                <td>
+                                    @if (coupon.SoTienGiam != null)
+                                    {
+                                        @($"{coupon.SoTienGiam.Value} VNĐ")
+                                    }
+                                    else if (coupon.PhanTramGiam != null)
+                                    {
+                                        @($"{coupon.PhanTramGiam.Value} %")
+                                    }
+                                    else
+                                    {
+                                        <span>Không có ưu đãi</span>
+                                    }
+                                </td>
+                                <td id="MinimumOrderAmount_@coupon.Code" data-MinimumOrderAmount_="@coupon.MinimumOrderAmount">@($"{coupon.MinimumOrderAmount} VNĐ")</td>
+                                <td>
+                                    @coupon.NgayTao.ToString("dd-MM-yyyy")
+                                </td>
+                                <td>
+                                    @coupon.NgayHetHan.ToString("dd-MM-yyyy")
+                                </td>
+                                <td class="@((coupon.TrangThai == true ? "text-success fw-bold" : "text-danger fw-bold"))">
+                                    @(coupon.TrangThai == true ? "Còn hiệu lực" : "Hết hiệu lực")
+                                </td>
+                                @if (coupon.TrangThai == true)
+                                {
+                                    @if (coupon.MinimumOrderAmount > thanhtien)
+                                    {
+                                        <td class="text-danger fw-bold">
+                                            Chưa đủ điều kiện
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <button data-code="@coupon.Code" data-SoTienGiam="@coupon.SoTienGiam" data-PhanTramGiam="@coupon.PhanTramGiam" type="button" class="ApplyCouponCode btn btn-dark btn-sm w-100 btn-apply">
+                                                Áp dụng
+                                            </button>
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                            index++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const CouponCode = document.getElementById("CouponCode").value
+    const ButtonCouponCode = document.getElementById("ButtonCouponCode")
+    if(CouponCode != ""){
+        ButtonCouponCode.textContent = "";
+        ButtonCouponCode.textContent = "Hủy"
+        ButtonCouponCode.addEventListener("click", async function(){
+            var params = {
+                MaCoupon: null,
+                sotiengiam: null,
+                phantramgiam: null,
+            }
+            var param = $.param(params)
+            const fetchAPI = await fetch(`/Cart/HandlerCouponCode?${param}`, {
+                method: 'GET',
+            });
+            const result = await fetchAPI.json();
+            window.location.reload();
+        })
+    }
+    var ApplyCouponCode = document.querySelectorAll(".ApplyCouponCode")
+    ApplyCouponCode.forEach(element => {
+        element.addEventListener('click', async function(){
+            var sotiengiam = parseInt(element.getAttribute('data-SoTienGiam'))
+            var phantramgiam = parseFloat(element.getAttribute('data-PhanTramGiam'))
+            var code = element.getAttribute('data-code')
+            sotiengiam = isNaN(sotiengiam) ? null : sotiengiam
+            phantramgiam = isNaN(phantramgiam) ? null : phantramgiam
+            console.log(code + "-" + phantramgiam + "-" + sotiengiam)
+            var params = {
+                MaCoupon: code,
+                sotiengiam: sotiengiam,
+                phantramgiam: phantramgiam,
+            }
+            var param = $.param(params)
+            const fetchAPI = await fetch(`/Cart/HandlerCouponCode?${param}`, {
+                method: 'GET',
+            });
+            const result = await fetchAPI.json();
+            toastr.success(result.message);
+            setTimeout(function(){
+                window.location.reload();
+            }, 1500)
+            
+        })
+    })
+</script>

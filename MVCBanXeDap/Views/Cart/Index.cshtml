@@ -1,0 +1,175 @@
+﻿@model MVCBanXeDap.ViewModels.DetailsCart
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .input-group {
+        width: 120px; /* Tùy chỉnh chiều rộng theo ý muốn */
+    }
+
+    .form-control {
+        width: 60px; /* Đảm bảo input không bị quá to */
+        padding: 0.5rem;
+    }
+
+    button:disabled {
+        opacity: 0.5; /* Độ mờ */
+        cursor: not-allowed; /* Thay đổi con trỏ */
+    }
+</style>
+
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>SẢN PHẨM</th>
+                                <th>SỐ LƯỢNG</th>
+                                <th>THÀNH TIỀN</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in Model.ListCartItem)
+                            {
+                                <tr>
+                                    <td class="product__cart__item">
+                                        <div class="product__cart__item__pic">
+                                            <img src="~/Hinh/SanPham/@item.HinhAnh" style="width: 100px; height: 100px;" alt="">
+                                        </div>
+                                        <div class="product__cart__item__text">
+                                            <h6>@item.TenSP</h6>
+                                            <span>(@item.Mau, @item.KichThuoc)</span>
+                                            <h5>@item.DonGia VNĐ</h5>
+                                        </div>
+                                    </td>
+                                    <td class="quantity__item">
+                                        <div class="input-group">
+                                            <button class="btn btn-outline-secondary" data-ItemCart='@Html.Raw(Json.Serialize(item))' type="button" onclick="updateQuantity(this, -1)">-</button>
+                                            <input type="number" class="form-control text-center" data-ItemCart='@Html.Raw(Json.Serialize(item))' data-maxquantity="@item.SoLuongToiDa" value="@item.SoLuong" min="1" onchange="ConfirmQuantity(this)" oninput="validateQuantity(this)">
+                                            <button class="btn btn-outline-secondary" data-ItemCart='@Html.Raw(Json.Serialize(item))' type="button" onclick="updateQuantity(this, 1)">+</button>
+                                        </div>
+                                    </td>
+
+                                    <td class="cart__price">@item.ThanhTien VNĐ</td>
+                                    <td class="cart__close"><i class="fa fa-close" data-ItemCart='@Html.Raw(Json.Serialize(item))'></i></td>
+                                </tr>
+                            }                                                    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-4">               
+                <div class="cart__total">
+                    <ul>
+                        <li>TỔNG GIÁ TRỊ <span> @Model.GiaGoc VNĐ</span></li>
+                    </ul>
+                    <button style="width: 100%" type="button" disabled="@(Model.ListCartItem.Count() == 0 || !Model.ListCartItem.Any())" onclick="window.location.href='/Cart/Checkout'" class="primary-btn">ĐẶT HÀNG</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shopping Cart Section End -->
+
+<script>
+    function validateQuantity(element){
+        if(element.value < 1 || isNaN(element.value) ){
+            element.value = 1
+        }
+        if(element.dataset.maxquantity < element.value){
+            element.value = parseInt(element.dataset.maxquantity)
+        }
+    }
+
+    function ConfirmQuantity(element){
+        var itemCart = element.dataset.itemcart;
+        itemCart = JSON.parse(itemCart);
+        itemCart.soLuong = element.value - itemCart.soLuong;
+        const url = '/Cart/AddToCart'
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify(itemCart),
+            success: function(data){
+                if(data.success){
+                    window.location.reload()
+                }else{
+                    var message = data.message
+                    toastr.error(message)
+                    console.log(message)
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error Status: ", status);
+                console.error("Error Message: ", error);
+                console.error("Response Text: ", xhr.responseText);
+            }
+        })
+    }
+
+    function updateQuantity(element, quantity){
+        var itemCart = element.dataset.itemcart;
+        itemCart = JSON.parse(itemCart)
+        itemCart.soLuong = quantity; 
+        console.log(itemCart);
+        const url = '/Cart/AddToCart'
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify(itemCart),
+            success: function(data){
+                if(data.success){
+                    window.location.reload()
+                }else{
+                    var message = data.message
+                    toastr.error(message)
+                    console.log(message)
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error Status: ", status);
+                console.error("Error Message: ", error);
+                console.error("Response Text: ", xhr.responseText);
+            }
+        })
+    }
+
+    document.querySelectorAll('.cart__close i').forEach(element => {
+        element.addEventListener('click', function(){
+            var itemCart = element.dataset.itemcart;
+            const url = '/Cart/RemoveCart'
+            $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: "application/json",
+                data: itemCart,
+                success: function(data){
+                    if(data.success){
+                        var message = data.message
+                        toastr.success(message)
+                        setTimeout(function(){
+                            window.location.reload()
+                        }, 700)
+                    }else{
+                        var message = data.message
+                        toastr.error(message)
+                        console.log(message)
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error Status: ", status);
+                    console.error("Error Message: ", error);
+                    console.error("Response Text: ", xhr.responseText);
+                }
+            })
+        })      
+    })
+
+</script>

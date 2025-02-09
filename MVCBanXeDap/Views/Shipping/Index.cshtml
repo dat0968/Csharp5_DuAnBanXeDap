@@ -154,7 +154,7 @@
         var dataShipping = element.getAttribute('data-shipping')
         var shippingID = JSON.parse(dataShipping).id
         $.ajax({
-            url: 'https://localhost:7029/Shipping/GetPartialViewEdit',
+            url: '/Shipping/GetPartialViewEdit',
             type: 'POST',
             contentType: 'application/json',
             data: dataShipping,

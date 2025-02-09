@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APIBanXeDap.ViewModels
 {
@@ -11,5 +12,7 @@ namespace APIBanXeDap.ViewModels
         public bool TrangThai { get; set; } = true;
         public DateTime NgayTao { get; set; }
         public decimal? MinimumOrderAmount { get; set; }
+        [Column("DaSuDung")]
+        public bool DaSuDung { get; set;} = false;
     }
 }

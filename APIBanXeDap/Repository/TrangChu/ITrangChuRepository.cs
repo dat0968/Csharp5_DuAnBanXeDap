@@ -5,7 +5,7 @@ namespace APIBanXeDap.Repository.TrangChu
 {
     public interface ITrangChuRepository
     {
-        //public List<Sanpham> GetSanphams();
+        public List<ProductVM> GetSanphamLienQuan(string tenDM);
         public List<ProductVM> GetSanPhamBanChay();
     }   
 }

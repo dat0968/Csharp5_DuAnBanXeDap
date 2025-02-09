@@ -15,6 +15,7 @@ namespace APIBanXeDap.Models
         public decimal? MinimumOrderAmount { get; set; }
         [Required]
         public DateTime NgayTao { get; set; } = DateTime.Now;
-        
+        [Required]
+        public bool DaSuDung = false;
     }
 }

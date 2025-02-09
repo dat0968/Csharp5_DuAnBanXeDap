@@ -1,11 +1,65 @@
 ﻿@model MVCBanXeDap.ViewModels.ProductVM
+<style scoped>
+    .nav-item {
+        margin-bottom: 15px; /* Khoảng cách giữa các dropdown */
+    }
 
+    select {
+        z-index: 1050;
+        position: relative;
+        min-width: 200px; /* Đảm bảo kích thước tối thiểu */
+    }
+
+    .nav {
+        overflow: visible !important; /* Đảm bảo không bị cắt */
+    }
+
+    .product__item__pic {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hover-overlay {
+        border-radius: 10px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+    }
+
+    .hover-text {
+        color: #fff;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .product__item__pic:hover .hover-overlay {
+        opacity: 1;
+    }
+
+    .dropdown-container {
+        width: 100%;
+        position: relative;
+        z-index: 1000;
+        justify-content: center;
+    }
+</style>
 <div class="container mt-4">
     <div class="row">
         <!-- Phần trái: Slide hình ảnh sản phẩm -->
         <div class="col-md-6">
             <div class="border rounded p-3 bg-white shadow-sm">
-                <div id="productImage" class="text-center">
+                <div id="productImage" data-img="@Model.Hinh" class="text-center">
                     <img src="/Hinh/SanPham/@Model.Hinh" alt="Hình ảnh sản phẩm" class="img-fluid rounded" id="productImageDisplay">
                 </div>
             </div>
@@ -25,11 +79,11 @@
                 <div class="mb-4">
                     <label class="form-label"><strong>Màu sắc:</strong></label>
                     <div>
-                        @foreach (var colorGroup in Model.Chitietsanphams.GroupBy(x => x.TenMau))
+                        @foreach (var colorGroup in Model.Chitietsanphams.GroupBy(p => p.TenMau))
                         {
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input color-option" type="radio" name="color" id="color-@colorGroup.Key" value="@colorGroup.Key" />
-                                <label class="form-check-label btn btn-outline-secondary rounded-pill me-1" for="color-@colorGroup.Key">@colorGroup.Key</label>
+                                <input class="form-check-input color-option" type="radio" name="color" id="color-@colorGroup.Select(p => p.MaMau).FirstOrDefault()" data-nameColor="@colorGroup.Key" value="@colorGroup.Select(p => p.MaMau).FirstOrDefault()" />
+                                <label class="form-check-label btn btn-outline-secondary rounded-pill me-1" for="color-@colorGroup.Select(p => p.MaMau).FirstOrDefault()">@colorGroup.Key</label>
                             </div>
                         }
                     </div>
@@ -43,14 +97,14 @@
 
                 <!-- Thông tin tồn kho và giá -->
                 <p id="stockDisplay" class="mb-2"><strong>Số lượng tồn:</strong> <span class="text-muted"></span></p>
-                <p id="priceDisplay" class="mb-4"><strong>Đơn giá:</strong> <span class="text-success"></span></p>
+                <p id="priceDisplay" name="dongia" class="mb-4"><strong>Đơn giá:</strong> <span class="text-success"></span></p>
 
                 <!-- Số lượng -->
                 <div class="mb-4">
                     <label class="form-label"><strong>Số lượng:</strong></label>
                     <div class="input-group" style="width: 200px;">
                         <button class="btn btn-outline-danger" type="button" id="decreaseQuantity">-</button>
-                        <input type="number" class="form-control text-center border-danger" id="quantityInput" value="1" min="1"  />
+                        <input name="quantity" type="number" class="form-control text-center border-danger" id="quantityInput" value="1" min="1" />
                         <button class="btn btn-outline-danger" type="button" id="increaseQuantity">+</button>
                     </div>
                     <small id="quantityError" class="text-danger" style="display: none;">Số lượng không hợp lệ!</small>
@@ -61,13 +115,43 @@
 
                 <!-- Nút đặt hàng -->
                 <div class="mt-4">
-                    <button class="btn btn-danger btn-lg w-100" id="addToCart" disabled>Đặt hàng</button>
+                    <button class="btn btn-danger btn-lg w-100" id="addToCart" disabled>Thêm vào giỏ</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div class="container py-5">
 
+
+    <h2 class="text-center mb-4">Sản phẩm liên quan</h2>
+
+    <div class="row">
+        @foreach (var product in ViewBag.RelatedProducts)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="/Hinh/SanPham/@product.Hinh" alt="@product.TenSp" style="border-radius: 10px" />
+                        <div class="hover-overlay">
+                            <a href="@Url.Action("Details", "Home", new { id = product.MaSP })" class="btn btn-danger btn-sm">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>@product.TenSp</h6>
+                        <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
+
+                        <h6 style="color:red;">@product.MinPrice VNĐ - @product.MaxPrice VNĐ</h6>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<input value="@Model.MaSP" type="hidden" id="MaSP" />
+<input value="@Model.TenSp" type="hidden" id="TenSP" />
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const colorOptions = document.querySelectorAll('.color-option');
@@ -80,14 +164,16 @@
         const quantityError = document.getElementById('quantityError');
         const addToCartBtn = document.getElementById('addToCart');
         const totalPriceDisplay = document.getElementById('totalPriceDisplay').querySelector('span');
-
+        var price = 0;
+        var quantity = 0
         let productVariants = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Chitietsanphams));
+
         let maxQuantity = 1;
 
         // Cập nhật tổng tiền
         function updateTotalPrice() {
-            const price = parseFloat(priceDisplay.querySelector('span').textContent.replace(/[^0-9]/g, '')) || 0;
-            const quantity = parseInt(quantityInput.value, 10) || 0;
+            price = parseFloat(priceDisplay.querySelector('span').textContent.replace(/[^0-9]/g, '')) || 0;
+            quantity = parseInt(quantityInput.value, 10) || 0;
             totalPriceDisplay.textContent = `${(price * quantity).toLocaleString()} VND`;
         }
 
@@ -114,15 +200,14 @@
         colorOptions.forEach(color => {
             color.addEventListener('change', function () {
                 const selectedColor = this.value;
-                const filteredVariants = productVariants.filter(variant => variant.TenMau === selectedColor);
-
+                const filteredVariants = productVariants.filter(variant => variant.MaMau == selectedColor);
                 sizeOptionsContainer.innerHTML = '';
                 filteredVariants.forEach(variant => {
                     const sizeOption = `
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input size-option" type="radio" name="size" id="size-${variant.TenKichThuoc}" value="${variant.TenKichThuoc}"
+                            <input class="form-check-input size-option" type="radio" name="size" id="size-${variant.MaKichThuoc}" data-nameSize="${variant.TenKichThuoc}" value="${variant.MaKichThuoc}"
                                 data-quantity="${variant.SoLuongTon}" data-price="${variant.DonGia}" />
-                            <label class="form-check-label" for="size-${variant.TenKichThuoc}">${variant.TenKichThuoc}</label>
+                            <label class="form-check-label" for="size-${variant.MaKichThuoc}">${variant.TenKichThuoc}</label>
                         </div>
                     `;
                     sizeOptionsContainer.insertAdjacentHTML('beforeend', sizeOption);
@@ -157,24 +242,71 @@
                 quantityError.style.display = 'block';
             }
         });
-
+        //Xử lí nhập số lượng
+        quantityInput.addEventListener('input', function(){
+            if(quantityInput.value < 1 || isNaN(quantityInput.value)){
+                quantityInput.value = 1
+            }
+            if(quantityInput.value > maxQuantity){
+                quantityInput.value = maxQuantity
+            }
+            updateTotalPrice();
+        })
         // Xử lý nút đặt hàng
         addToCartBtn.addEventListener('click', function () {
+            const MaSP = document.getElementById("MaSP");
+            const TenSP = document.getElementById("TenSP");
             const selectedColor = document.querySelector('input[name="color"]:checked');
             const selectedSize = document.querySelector('input[name="size"]:checked');
+            const TenMau = selectedColor.getAttribute("data-nameColor")
+            const TenKichThuoc = selectedSize.getAttribute("data-nameSize")
+            const ImgProduct = document.getElementById("productImage").getAttribute("data-img")
+            // if (!selectedColor || !selectedSize) {
+            //     alert('Vui lòng chọn màu sắc và kích thước trước khi thêm vào giỏ hàng.');
+            //     return;
+            // }
 
-            if (!selectedColor || !selectedSize) {
-                alert('Vui lòng chọn màu sắc và kích thước trước khi đặt hàng.');
-                return;
-            }
-
-            const quantity = parseInt(quantityInput.value, 10);
-            if (quantity < 1 || quantity > maxQuantity) {
-                alert('Số lượng không hợp lệ.');
-                return;
-            }
-
-            alert(`Đặt hàng thành công! Màu: ${selectedColor.value}, Kích thước: ${selectedSize.value}, Số lượng: ${quantity}`);
+            // if (quantity < 1 || quantity > maxQuantity) {
+            //     alert('Số lượng không hợp lệ.');
+            //     return;
+            // }
+            const model = {
+                MaSP: MaSP.value,
+                MaMau: selectedColor.value,
+                MaKichThuoc: selectedSize.value,
+                TenSP: TenSP.value,
+                Mau: TenMau,
+                KichThuoc: TenKichThuoc,
+                SoLuong: quantity,
+                SoLuongToiDa: maxQuantity,
+                DonGia: price,
+                HinhAnh: ImgProduct
+            };
+            const url = `/Cart/AddToCart`
+            $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(model),
+                success: function(data){
+                    if(data.success){
+                        toastr.success(`Thêm vào giỏ hàng thành công! Màu: ${selectedColor.value}, Kích thước: ${selectedSize.value}, Số lượng: ${quantity}`)      
+                        setTimeout(function(){
+                            window.location.reload()
+                        }, 1000)
+                    }else{
+                        var message = data.message
+                        toastr.error(message)
+                        console.log(message)
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error Status: ", status);
+                    console.error("Error Message: ", error);
+                    console.error("Response Text: ", xhr.responseText);
+                }
+            })
+            
         });
     });
 </script>

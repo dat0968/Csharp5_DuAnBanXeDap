@@ -117,5 +117,26 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [HttpGet("GetShippingFee")]
+        public IActionResult? GetShippingFee(string pho, string quan, string phuong)
+        {
+            try
+            {
+                var getShippingfee = ShippingRepository.GetShippingFee(pho, quan, phuong);
+                return Ok(new
+                {
+                    Success = true,
+                    Data = getShippingfee,
+                    Message = "Truy xuất phí vận chuyển thành công"
+                });
+            }catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = $"Lỗi {ex.Message}"
+                });
+            }
+        }
     }
 }

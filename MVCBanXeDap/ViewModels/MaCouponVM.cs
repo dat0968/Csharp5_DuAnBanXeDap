@@ -9,5 +9,6 @@
         public bool TrangThai { get; set; } = true;
         public DateTime NgayTao { get; set; }
         public decimal? MinimumOrderAmount { get; set; }
+        public bool DaSuDung = false;
     }
 }

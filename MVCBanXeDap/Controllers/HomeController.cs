@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using MVCBanXeDap.Models;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
@@ -31,7 +32,7 @@ namespace MVCBanXeDap.Controllers
                     var minPrice = Convert.ToDecimal(item.Chitietsanphams.Min(x => x.DonGia));  
                     var maxPrice = Convert.ToDecimal(item.Chitietsanphams.Max(x => x.DonGia));
 
-                    // C?p nh?t MinPrice v� MaxPrice
+                    // C?p nh?t MinPrice và MaxPrice
                     item.MinPrice = minPrice;
                     item.MaxPrice = maxPrice;
                     list.Add(item);
@@ -50,13 +51,37 @@ namespace MVCBanXeDap.Controllers
                 string data = await response.Content.ReadAsStringAsync();
                 ProductVM = JsonConvert.DeserializeObject<ProductVM>(data);
             };
+            string ten = ProductVM.DanhMuc;
+            var relatedProducts = await _client.GetAsync(_client.BaseAddress + $"Home/GetSanPhamLienQuan/{ten}");
+            List<ProductVM> relatedProductsList = new List<ProductVM>();
+
+            if (relatedProducts.IsSuccessStatusCode)
+            {
+                string relatedData = await relatedProducts.Content.ReadAsStringAsync();
+                relatedProductsList = JsonConvert.DeserializeObject<List<ProductVM>>(relatedData);
+                foreach (var item in relatedProductsList)
+                {
+                    if (item.Chitietsanphams != null && item.Chitietsanphams.Any())
+                    {
+                        var minPrice = Convert.ToDecimal(item.Chitietsanphams.Min(x => x.DonGia));
+                        var maxPrice = Convert.ToDecimal(item.Chitietsanphams.Max(x => x.DonGia));
+
+                        // Cập nhật MinPrice và MaxPrice cho sản phẩm liên quan
+                        item.MinPrice = minPrice;
+                        item.MaxPrice = maxPrice;
+                    }
+                }
+            }
+
+            // Truyền dữ liệu sản phẩm liên quan vào ViewBag hoặc View
+            ViewBag.RelatedProducts = relatedProductsList;
             return View(ProductVM);
         }
         [HttpGet]
-        public async Task<IActionResult> Product()
+        public async Task<IActionResult> Product(int? maThuongHieu, string? timKiem, int? maDanhMuc, string? sapXep, int page = 1)
         {
             var ListProducts = new List<ProductVM>();
-            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Home/GetAllProduct");
+            HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + $"Products/GetAllProduct?keywords={timKiem}&MaDanhMuc={maDanhMuc}&MaThuongHieu={maThuongHieu}&sort={sapXep}&page={page}").Result;
             if (response.IsSuccessStatusCode)
             {
                 string data = response.Content.ReadAsStringAsync().Result;
@@ -73,6 +98,27 @@ namespace MVCBanXeDap.Controllers
                 ViewBag.TotalPages = ConvertResponseProduct["totalPages"].Value<int>();
                 ViewBag.Page = ConvertResponseProduct["page"].Value<int>();
             };
+            
+            ViewBag.MaThuongHieu = maThuongHieu;
+            ViewBag.TimKiem = timKiem;
+            ViewBag.MaDanhMuc = maDanhMuc;
+            ViewBag.SapXep = sapXep;
+            var ListCategory = new List<DanhmucVM>();
+            HttpResponseMessage responseCategory = _client.GetAsync(_client.BaseAddress + "Categories/GetAllCategory").Result;
+            if (responseCategory.IsSuccessStatusCode)
+            {
+                string data = responseCategory.Content.ReadAsStringAsync().Result;
+                ListCategory = JsonConvert.DeserializeObject<List<DanhmucVM>>(data);
+                ViewBag.Category = ListCategory;
+            }
+            var ListBrand = new List<BrandVM>();
+            HttpResponseMessage responseBrand = _client.GetAsync(_client.BaseAddress + "Brands/GetAllBrand").Result;
+            if (responseBrand.IsSuccessStatusCode)
+            {
+                string data = responseBrand.Content.ReadAsStringAsync().Result;
+                ListBrand = JsonConvert.DeserializeObject<List<BrandVM>>(data);
+                ViewBag.Brand = ListBrand;
+            }
             return View(ListProducts);
         }
     }

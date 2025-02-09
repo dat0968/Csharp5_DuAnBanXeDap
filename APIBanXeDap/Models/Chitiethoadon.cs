@@ -12,6 +12,8 @@ public partial class Chitiethoadon
     public int MaMau { get; set; }
 
     public int MaKichThuoc { get; set; }
+    public float GiamGiaMaCoupon { get; set; } = 0;
+    public float PhiVanChuyen { get; set; } = 0;
 
     public int SoLuong { get; set; }
 

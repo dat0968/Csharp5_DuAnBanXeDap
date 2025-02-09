@@ -367,6 +367,8 @@ public partial class Csharp5Context : DbContext
             MinimumOrderAmount = 600000
         }
     );
+
+
         OnModelCreatingPartial(modelBuilder);
     }
 

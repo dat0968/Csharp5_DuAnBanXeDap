@@ -15,6 +15,8 @@
         public int MaKichThuoc { get; set; }
 
         public string TenKichThuoc { get; set; } = null!;
+        public float GiamGiaMaCoupon { get; set; } = 0;
+        public float PhiVanChuyen { get; set; } = 0;
 
         public int SoLuong { get; set; }
 

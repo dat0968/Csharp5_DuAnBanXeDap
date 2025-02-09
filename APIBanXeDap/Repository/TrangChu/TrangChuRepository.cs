@@ -137,9 +137,38 @@ namespace APIBanXeDap.Repository.TrangChu
             return list;
         }
 
-        //public List<Sanpham> GetSanphams()
-        //{
-        //    return db.Sanphams.ToList();
-        //}
+        public List<ProductVM> GetSanphamLienQuan(string tenDM)
+        {
+            var Product = db.Sanphams.AsNoTracking()
+                 .Include(sp => sp.Chitietsanphams)
+                     .ThenInclude(ct => ct.MaMauNavigation)
+                 .Include(sp => sp.Chitietsanphams)
+                     .ThenInclude(ct => ct.MaKichThuocNavigation)
+                 .Include(sp => sp.MaThuongHieuNavigation)
+                 .Include(sp => sp.MaNhaCcNavigation)
+                 .Include(sp => sp.MaDanhMucNavigation)
+                 .Take(4)
+                 .Where(sp => sp.MaDanhMucNavigation.TenDanhMuc == tenDM).ToList();
+            var productVMList = Product.Select(sp => new ProductVM
+            {
+                MaSP = sp.MaSp,
+                TenSp = sp.TenSp,
+                ThuongHieu = sp.MaThuongHieuNavigation.TenThuongHieu,
+                Hinh = sp.Hinh,
+                MoTa = sp.MoTa,
+                NgaySanXuat = sp.NgaySanXuat,
+                NhaCungCap = sp.MaNhaCcNavigation.TenNhaCc,
+                DanhMuc = sp.MaDanhMucNavigation.TenDanhMuc,
+                Chitietsanphams = sp.Chitietsanphams.Select(ct => new DetailsProductVM
+                {
+                    TenMau = ct.MaMauNavigation.TenMau,
+                    TenKichThuoc = ct.MaKichThuocNavigation.TenKichThuoc,
+                    SoLuongTon = ct.SoLuongTon,
+                    DonGia = ct.DonGia,
+                }).ToList(),
+            }).ToList();
+
+            return productVMList;
+        }    
     }
 }

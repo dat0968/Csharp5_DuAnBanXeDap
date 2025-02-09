@@ -1,5 +1,6 @@
 ﻿using APIBanXeDap.Repository.MaCoupon;
 using APIBanXeDap.ViewModels;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,32 +17,56 @@ namespace APIBanXeDap.Controllers
             this.MaCouponRepository = MaCouponRepository;
         }
         [HttpGet("GetAllCouponCode")]
-        public IActionResult GetAll(string? keywords, bool? status, string? sort, int page = 1)
+        public IActionResult GetAll(string? keywords, bool? status, string? sort, int page)
         {
-            page = page < 1 ? 1 : page;
-            int pagesize = 5;
-            try
+            if(page >= 1)
             {
-                var listCounponCode = MaCouponRepository.GetAll(keywords, status, sort);
-                var pagedCouponCode = listCounponCode.Skip((page - 1) * pagesize).Take(pagesize);
-                var totalItems = listCounponCode.Count();
-                var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
-                return Ok(new
+                int pagesize = 5;
+                try
                 {
-                    Success = true,
-                    Data = pagedCouponCode,
-                    TotalItems = totalItems,
-                    TotalPages = totalPages,
-                    Page = page,
-                });
-            }catch (Exception ex)
+                    var listCounponCode = MaCouponRepository.GetAll(keywords, status, sort);
+                    var pagedCouponCode = listCounponCode.Skip((page - 1) * pagesize).Take(pagesize);
+                    var totalItems = listCounponCode.Count();
+                    var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
+                    return Ok(new
+                    {
+                        Success = true,
+                        Data = pagedCouponCode,
+                        TotalItems = totalItems,
+                        TotalPages = totalPages,
+                        Page = page,
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = $"Error {ex.Message}"
+                    });
+                }
+            }
+            else
             {
-                return Ok(new
+                try
                 {
-                    Success = false,
-                    Message = $"Error {ex.Message}"
-                });
-            }          
+                    var listCounponCode = MaCouponRepository.GetAll(keywords, status, sort);
+                    return Ok(new
+                    {
+                        Success = true,
+                        Data = listCounponCode,
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = $"Error {ex.Message}"
+                    });
+                }
+            }
+                      
         }
         [HttpPost("Create")]
         public IActionResult Create(MaCouponVM model)

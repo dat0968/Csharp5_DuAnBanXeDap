@@ -22,6 +22,56 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <style>
+
+/* Styling for the coupon section */
+
+        .cart__discount {
+            margin-bottom: 20px;
+        }
+
+        .cart__discount h6 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .cart__discount div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #CouponCode {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+            #CouponCode:focus {
+                border-color: black;
+            }
+
+        #ButtonCouponCode {
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+            #ButtonCouponCode:hover {
+                background-color: #555;
+            }
+
+    </style>
 </head>
 
 <body>
@@ -120,19 +170,38 @@
                             </div>                         
                         </div>
                         <div class="col-lg-4 col-md-6">
+                            <div class="cart__discount">
+                                <h6>Áp dụng mã coupon</h6>
+                                <div>
+                                    <input id="CouponCode" readonly type="text" placeholder="Mã coupon">
+                                    <button id="ButtonCouponCode"  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Lấy mã coupon</button>
+                                </div>
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="couponModalLabel">Danh sách mã Coupon</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                             <div class="checkout__order">
                                 <h4 class="order__title">ĐƠN HÀNG CỦA BẠN</h4>
                                 <div class="checkout__order__products">SẢN PHẨM <span>TỔNG</span></div>
                                 <ul class="checkout__total__products">
                                     <li>SỐ THỨ TỰ. TÊN SẢN PHẨM 1 <span>300 VNĐ</span></li>
-                                   
+
                                 </ul>
                                 <ul class="checkout__total__all">
                                     <li>THÀNH TIỀN <span>750.99 VNĐ</span></li>
                                     <li>TỔNG TIỀN <span>$750.99 VNĐ</span></li>
                                 </ul>
-                               
-                              
+
+
                                 <div class="checkout__input__checkbox">
                                     <label for="payment">
                                         VNPAY
