@@ -1,0 +1,185 @@
+﻿@model List<MVCBanXeDap.ViewModels.CompareProductVM>
+@{
+    bool isValueContain = Model != null && Model.Any(m => m?.MaSp != null);
+}
+
+<!-- Nút Toggle -->
+<button id="toggleQuickCompare" class="btn btn-primary position-fixed bottom-3 start-50 translate-middle-x shadow-lg px-3 py-2 rounded-pill"
+        style="z-index: 1100; display: @(isValueContain ? "none" : "block");">
+    🔍 So sánh
+</button>
+
+<!-- Thanh so sánh nhanh -->
+<div class="fixed-bottom bg-white shadow-lg p-3 rounded-top"
+     style="width: 50%; left: 25%; z-index: 1000; display: @(isValueContain ? "block" : "none");"
+     id="quickCompareSection"
+     data-has-products="@isValueContain">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="text-center fs-5 flex-grow-1">So sánh sản phẩm</h5>
+            <button id="closeQuickCompare" class="btn btn-outline-danger btn-sm rounded-circle">✖</button>
+        </div>
+
+        <!-- Developer Button -->
+        <!--
+        <div class="input-group mb-3">
+            <input type="number" id="productIdInput" class="form-control" placeholder="Nhập ID sản phẩm" />
+            <button id="addProductButton" class="btn btn-success">Thêm</button>
+        </div>
+        -->
+
+        <div class="d-flex justify-content-between align-items-center gap-2">
+            @for (int i = 0; i < 3; i++)
+            {
+                var isProductAvailable = Model != null && Model.Count() > i && Model[i] != null;
+                <div class="card border-@((isProductAvailable) ? "primary" : "secondary") shadow-sm flex-fill text-center overflow-auto"
+                     style="min-width: 30%; max-width: 32%; height: 150px;">
+                    @if (isProductAvailable)
+                    {
+                        var product = Model[i];
+                        <div class="d-flex flex-column align-items-center justify-content-between h-100 p-2">
+                            <img src="/hinh/sanpham/@product.Hinh" class="rounded" alt="@product.TenSp"
+                                 style="height: 50px; object-fit: cover;" />
+                            <h6 class="text-truncate fs-6 m-1 w-100">@product.TenSp</h6>
+                            <div class="d-flex justify-content-center gap-1">
+                                <a href="@Url.Action("Details", "Home", new { id = product.MaSp })" class="btn btn-primary btn-sm">Chi tiết</a>
+                                <button class="btn btn-danger btn-sm" onclick="removeProductFromCompare(@product.MaSp)">Xóa</button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center justify-content-center h-100 text-muted fs-6">
+                            Chưa có sản phẩm
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="d-flex justify-content-center mt-3">
+            <a asp-controller="CompareProducts" asp-action="Index" class="btn btn-info px-4">So sánh</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 8px;
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+    .fixed-bottom {
+        transition: all 0.3s ease-in-out;
+    }
+
+    #toggleQuickCompare {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1100;
+        font-weight: bold;
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+
+        #toggleQuickCompare.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        #toggleQuickCompare:hover {
+            opacity: 0.8;
+        }
+</style>
+
+<script>
+    async function addProductToCompare(productId) {
+        if (!productId) {
+            toastr.error("Vui lòng nhập ID sản phẩm!");
+            return;
+        }
+
+        try {
+            let response = await fetch(`@Url.Action("AddProductToCompare", "CompareProducts")?id=${productId}`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!response.ok) throw new Error("Có lỗi xảy ra khi thêm sản phẩm.");
+            let result = await response.json();
+
+            if (result.success) {
+                toastr.success(result.message);
+                loadQuickCompare();
+            } else {
+                toastr.info(result.message);
+            }
+        } catch (error) {
+            toastr.error("Đã xảy ra lỗi: " + error.message);
+        }
+    }
+    async function removeProductFromCompare(productId) {
+        try {
+            let response = await fetch(`@Url.Action("RemoveProductFromCompare", "CompareProducts")?id=${productId}`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!response.ok) throw new Error("Có lỗi xảy ra khi xóa sản phẩm.");
+            let result = await response.json();
+
+            if (result.success) {
+                toastr.success(result.message);
+                loadQuickCompare();
+            } else {
+                toastr.info(result.message);
+            }
+        } catch (error) {
+            toastr.error("Đã xảy ra lỗi: " + error.message);
+        }
+    }
+
+    $(document).ready(function () {
+        const quickCompareSection = $("#quickCompareSection");
+        const toggleQuickCompareBtn = $("#toggleQuickCompare");
+        const closeQuickCompareBtn = $("#closeQuickCompare");
+
+        function updateVisibility() {
+            const isVisible = localStorage.getItem("compareVisible") === "True";
+            quickCompareSection.toggle(isVisible);
+            if (isVisible) {
+                toggleQuickCompareBtn.css("display", "none");  // Ẩn phần tử
+            } else {
+                toggleQuickCompareBtn.css("display", "block"); // Hiện phần tử
+            }
+        }
+
+        function toggleQuickCompareSection() {
+            const isCurrentlyVisible = quickCompareSection.is(":visible");
+            quickCompareSection.toggle(!isCurrentlyVisible);
+            if (!isCurrentlyVisible) {
+                toggleQuickCompareBtn.css("display", "none");  // Ẩn phần tử
+            } else {
+                toggleQuickCompareBtn.css("display", "block"); // Hiện phần tử
+            }
+            localStorage.setItem("compareVisible", isCurrentlyVisible ? "False" : "True");
+        }
+
+        // Developer function to button
+        // $("#addProductButton").on("click", function () {
+        //     const productId = $("#productIdInput").val();
+        //     addProductToCompare(productId);
+        // });
+
+        closeQuickCompareBtn.on("click", toggleQuickCompareSection);
+        toggleQuickCompareBtn.on("click", toggleQuickCompareSection);
+    });
+
+
+</script>

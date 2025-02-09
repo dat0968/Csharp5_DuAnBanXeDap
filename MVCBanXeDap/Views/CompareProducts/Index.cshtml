@@ -1,0 +1,203 @@
+﻿@model List<MVCBanXeDap.ViewModels.CompareProductVM>
+
+@{
+    ViewData["Title"] = "So sánh sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section CSSs {
+    <style>
+        .card {
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            padding: 10px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .card-body p {
+            margin-bottom: 5px;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .btn-group {
+            flex-wrap: wrap;
+        }
+    </style>
+}
+<div class="shadow-sm">
+    <div class="text-center mb-4">
+        <h2 class="text-dark fw-bolder">So sánh sản phẩm</h2>
+    </div>
+
+    @if (Model == null || !Model.Any(m => m != null))
+    {
+        <div class="alert alert-info text-dark text-center">
+            <h5>Hiện tại không có sản phẩm nào để so sánh.</h5>
+            <a href="/" class="btn btn-dark mt-3">Quay về trang chủ</a>
+        </div>
+    }
+    else if (Model.Count == 1)
+    {
+        <div class="alert alert-warning text-dark text-center">
+            <h5>Bạn cần chọn thêm ít nhất 1 sản phẩm để so sánh.</h5>
+            <a href="/" class="btn btn-dark mt-3">Quay về trang chủ</a>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            @foreach (var product in Model)
+            {
+                if (product == null) continue;
+
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-light">
+                        <a href="@Url.Action("Details", "Home", new { id = product.MaSp })">
+                            <img src="/hinh/sanpham/@product.Hinh" alt="@product.TenSp" class="card-img-top product-img">
+                        </a>
+                        <div class="card-body">
+                            <a href="@Url.Action("Details", "Home", new { id = product.MaSp })" class="text-decoration-none text-dark">
+                                <h5 class="card-title text-center">@product.TenSp</h5>
+                                <h6 class="card-subtitle text-muted text-center">@product.TenThuongHieu</h6>
+                            </a>
+                            <p><strong>Mô tả:</strong> @product.MoTa</p>
+                            <p><strong>Ngày sản xuất:</strong> @product.NgaySanXuat.ToString("dd/MM/yyyy")</p>
+                            <p><strong>Nhà cung cấp:</strong> @product.TenNhaCc</p>
+                            <p><strong>Danh mục:</strong> @product.TenDanhMuc</p>
+                            <hr class="bg-dark" />
+
+                            <!-- Kích cỡ -->
+                            <div class="mb-2">
+                                <strong>Kích cỡ:</strong>
+                                <div class="btn-group" role="group">
+                                    @foreach (var size in product.Chitietsanphams.Select(c => new { c.MaKichThuoc, c.TenKichThuoc }).Distinct())
+                                    {
+                                        <button type="button" class="btn btn-outline-dark btn-size"
+                                                data-masp="@product.MaSp" data-size="@size.MaKichThuoc">
+                                            @size.TenKichThuoc
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Màu sắc -->
+                            <div class="mb-2">
+                                <strong>Màu sắc:</strong>
+                                <div class="btn-group" role="group">
+                                    @foreach (var color in product.Chitietsanphams.Select(c => new { c.MaMau, c.TenMau }).Distinct())
+                                    {
+                                        <button type="button" class="btn btn-outline-dark btn-color"
+                                                data-masp="@product.MaSp" data-color="@color.MaMau">
+                                            @color.TenMau
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+
+                            <hr class="" />
+
+                            <!-- Kết quả so sánh -->
+                            <div class="product-details" id="product-details-@product.MaSp">
+                                <p><strong>Số lượng tồn:</strong> <span class="so-luong">-</span></p>
+                                <p><strong>Giá:</strong> <span class="gia">-</span> VND</p>
+                            </div>
+
+                            <!-- Dữ liệu JSON ẩn -->
+                            <script type="application/json" id="data-@product.MaSp">
+                                @Html.Raw(Json.Serialize(product.Chitietsanphams))
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".btn-size").forEach(button => {
+                button.addEventListener("click", function () {
+                    let productId = this.getAttribute("data-masp");
+                    let selectedSize = parseInt(this.getAttribute("data-size"));
+
+                    // Đánh dấu nút kích cỡ được chọn
+                    document.querySelectorAll(`.btn-size[data-masp="${productId}"]`).forEach(btn => btn.classList.remove("active"));
+                    this.classList.add("active");
+
+                    // Lấy dữ liệu sản phẩm từ JSON
+                    let productData = JSON.parse(document.getElementById(`data-${productId}`).textContent);
+
+                    // Lọc danh sách màu sắc có sẵn cho kích thước đã chọn
+                    let availableColors = productData
+                        .filter(p => p.maKichThuoc === selectedSize)
+                        .map(p => p.maMau);
+
+                    // Kiểm tra xem danh sách có màu nào không
+                    console.log("Available colors:", availableColors);
+
+                    // Hiển thị màu phù hợp, ẩn màu không có
+                    document.querySelectorAll(`.btn-color[data-masp="${productId}"]`).forEach(btn => {
+                        let colorValue = parseInt(btn.getAttribute("data-color"));
+                        if (availableColors.includes(colorValue)) {
+                            btn.style.display = "inline-block";
+                        } else {
+                            btn.style.display = "none";
+                        }
+                    });
+
+                    // Reset chọn màu khi thay đổi kích thước
+                    document.querySelectorAll(`.btn-color[data-masp="${productId}"]`).forEach(btn => btn.classList.remove("active"));
+
+                    updateProductDetails(productId);
+                });
+            });
+
+            document.querySelectorAll(".btn-color").forEach(button => {
+                button.addEventListener("click", function () {
+                    let productId = this.getAttribute("data-masp");
+                    let selectedColor = parseInt(this.getAttribute("data-color"));
+
+                    // Đánh dấu nút màu được chọn
+                    document.querySelectorAll(`.btn-color[data-masp="${productId}"]`).forEach(btn => btn.classList.remove("active"));
+                    this.classList.add("active");
+
+                    updateProductDetails(productId);
+                });
+            });
+
+            function updateProductDetails(productId) {
+                let selectedSizeBtn = document.querySelector(`.btn-size[data-masp="${productId}"].active`);
+                let selectedColorBtn = document.querySelector(`.btn-color[data-masp="${productId}"].active`);
+
+                if (!selectedSizeBtn || !selectedColorBtn) return;
+
+                let selectedSize = parseInt(selectedSizeBtn.getAttribute("data-size"));
+                let selectedColor = parseInt(selectedColorBtn.getAttribute("data-color"));
+
+                let productData = JSON.parse(document.getElementById(`data-${productId}`).textContent);
+                let matchedProduct = productData.find(p => p.maKichThuoc === selectedSize && p.maMau === selectedColor);
+
+                if (matchedProduct) {
+                    document.querySelector(`#product-details-${productId} .so-luong`).textContent = matchedProduct.soLuongTon;
+                    document.querySelector(`#product-details-${productId} .gia`).textContent = matchedProduct.donGia.toLocaleString();
+                }
+            }
+        });
+    </script>
+}

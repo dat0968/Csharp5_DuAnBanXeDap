@@ -11,7 +11,7 @@ namespace APIBanXeDap.Repository.SanPham
         public ProductEM CreateProduct(ProductEM product);
         public void UpdateProduct(ProductEM product);
         public void DeleteProduct(int id);
-
+        Task<CompareProductVM> GetCompareProductVmByIdAsync(int id);
 
     }
 }

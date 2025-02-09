@@ -171,5 +171,51 @@ namespace APIBanXeDap.Repository.SanPham
             }
         }
 
+        public async Task<CompareProductVM> GetCompareProductVmByIdAsync(int id)
+        {
+            var product = await db.Sanphams.AsNoTracking()
+                .Include(sp => sp.Chitietsanphams)
+                    .ThenInclude(ct => ct.MaMauNavigation)
+                .Include(sp => sp.Chitietsanphams)
+                    .ThenInclude(ct => ct.MaKichThuocNavigation)
+                .Include(sp => sp.MaThuongHieuNavigation)
+                .Include(sp => sp.MaNhaCcNavigation)
+                .Include(sp => sp.MaDanhMucNavigation)
+                .FirstOrDefaultAsync(sp => sp.MaSp == id);
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            CompareProductVM compareProduct = new CompareProductVM()
+            {
+                MaSp = product.MaSp,
+                TenSp = product.TenSp,
+                MaThuongHieu = product.MaThuongHieu,
+                TenThuongHieu = product.MaThuongHieuNavigation.TenThuongHieu,
+                Hinh = product.Hinh,
+                MoTa = product.MoTa,
+                NgaySanXuat = product.NgaySanXuat,
+                MaNhaCc = product.MaNhaCc,
+                TenNhaCc = product.MaNhaCcNavigation.TenNhaCc,
+                DiaChi = product.MaNhaCcNavigation.DiaChi,
+                Email = product.MaNhaCcNavigation.Email,
+                Sdt = product.MaNhaCcNavigation.Sdt,
+                MaDanhMuc = product.MaDanhMuc,
+                TenDanhMuc = product.MaDanhMucNavigation.TenDanhMuc,
+                IsDelete = product.IsDelete,
+                Chitietsanphams = product.Chitietsanphams.Select(ct => new DetailsProductVM
+                {
+                    MaKichThuoc = ct.MaKichThuoc,
+                    MaMau = ct.MaMau,
+                    TenMau = ct.MaMauNavigation.TenMau,
+                    TenKichThuoc = ct.MaKichThuocNavigation.TenKichThuoc,
+                    SoLuongTon = ct.SoLuongTon,
+                    DonGia = ct.DonGia,
+                }).ToList()
+            };
+            return compareProduct;
+        }
     }
 }

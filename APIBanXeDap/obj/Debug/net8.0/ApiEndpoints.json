@@ -451,6 +451,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "APIBanXeDap.Controllers.CompareProductsController",
+    "Method": "AddProductToCopare",
+    "RelativePath": "api/CompareProducts/AddProductToCopare/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIBanXeDap.Controllers.DashboardController",
     "Method": "GetAllOrderData",
     "RelativePath": "api/Dashboard/GetAllOrderData",
@@ -1800,6 +1816,90 @@
         "Name": "page",
         "Type": "System.Int32",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.WishlistController",
+    "Method": "ChangeListStatusWishlist",
+    "RelativePath": "api/Wishlist/ChangeListStatusWishlist/{idUser}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProducts",
+        "Type": "System.Int32[]",
+        "IsRequired": true
+      },
+      {
+        "Name": "idUser",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.WishlistController",
+    "Method": "ChangeStatusWishlist",
+    "RelativePath": "api/Wishlist/ChangeStatusWishlist/{idProduct}\u0026{idUser}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProduct",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idUser",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.WishlistController",
+    "Method": "IsManyInWishlist",
+    "RelativePath": "api/Wishlist/IsManyInWishlist/{idUser}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProducts",
+        "Type": "System.Int32[]",
+        "IsRequired": true
+      },
+      {
+        "Name": "idUser",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.WishlistController",
+    "Method": "IsOneInWishlist",
+    "RelativePath": "api/Wishlist/IsOneInWishlist/{idProduct}\u0026{idUser}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProduct",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idUser",
+        "Type": "System.Int32",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
