@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Danh Sách Yêu Thích";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section CSSs {
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+
+    <style>
+        /* //Căn chỉnh giao diện thành phần của Datatable */
+        div.dt-info {
+            margin-top: 0.5em;
+            text-align: center;
+        }
+
+        div.dt-search {
+            margin-top: 0.5em;
+            float: left;
+        }
+
+        div.dt-length {
+            margin-top: 0.5em;
+            float: right;
+        }
+
+        div.dt-paging {
+            clear: both;
+            text-align: left;
+            margin-top: 0.5em;
+        }
+    </style>
+}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light p-3 rounded">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Danh Sách Yêu Thích</li>
+    </ol>
+</nav>
+
+<!-- Bảng danh sách wishlist -->
+<div class="table-responsive">
+    <table id="wishlist-datatable" class="display table table-striped table-hover">
+    </table>
+</div>
+
+
+@section Scripts {
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            loadWishlistDatatable();
+        });
+        function loadWishlistDatatable() {
+            $('#wishlist-datatable').DataTable({
+                ajax: {
+                    url: '/Wishlist/GetWishlistData', // API lấy dữ liệu từ Session
+                    dataSrc: ''
+                },
+                columns: [
+                    {
+                        title: 'Mã',
+                        data: 'maYeuThich',
+                        width: '8%',
+                        className: 'text-center align-middle'
+                    },
+                    {
+                        title: 'Thông Tin Đối Tượng',
+                        data: null,
+                        width: '50%',
+                        className: 'text-left align-middle',
+                        render: function (data) {
+                            if (data.doiTuongYeuThich === "SanPham") {
+                                return `
+                                    <a href="/Home/Details/${data.maYeuThich}" class="d-flex align-items-center">
+                                        <img src="${data.hinh}" alt="Hình sản phẩm" class="img-thumbnail me-2" width="150">
+                                        <div>
+                                            <span class="fw-bold text-truncate d-inline-block" style="max-width: 200px;" title="${data.tenSp}">
+                                                ${data.tenSp}
+                                            </span><br>
+                                            <small class="text-muted">${data.danhMuc} | ${data.thuongHieu}</small><br>
+                                            <span class="text-success font-weight-bold">Khoảng giá: ${data.khoangGia}</span>
+                                        </div>
+                                    </a>`;
+                            } else {
+                                return `
+                                    <div>
+                                        <strong>Bình luận:</strong> <span class="text-muted">${data.noiDungBinhLuan}</span><br>
+                                        <small class="text-muted">${data.nguoiBinhLuan ?? "N/A"} | ${data.ngayBinhLuan}</small><br>
+                                        <a href="/Home/Details/${data.maYeuThich}" class="btn btn-link p-0">Xem bình luận</a>
+                                    </div>`;
+                            }
+                        }
+                    },
+                    {
+                        title: 'Thao tác',
+                        data: 'maYeuThich',
+                        width: '10%',
+                        className: 'text-center align-middle',
+                        render: function (data, type, row) {
+                            return `
+                                <button class="btn btn-danger btn-sm" onclick="removeFromWishlist(${data}, '${row.doiTuongYeuThich}')">
+                                    🗑️ Xóa
+                                </button>
+                            `;
+                        }
+                    }
+                ],
+                "language": {
+                    "sSearch": "Tìm kiếm:",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "paginate": {
+                        "first": "<<",
+                        "last": ">>",
+                        "next": ">",
+                        "previous": "<"
+                    },
+                    "zeroRecords": `<div style="text-align: center;">Không tìm thấy kết quả nào.</div>`,
+                    "infoEmpty": "Không có mục nào để hiển thị",
+                    "infoFiltered": "(lọc từ _MAX_ mục)"
+                },
+                "dom": '<"top"f>rt<"bottom"lp><"clear">'
+            });
+        }
+
+        // Xóa khỏi Wishlist
+        function removeFromWishlist(idProduct, typeObject) {
+            $.ajax({
+                url: '/Wishlist/ChangeWishlist',
+                type: 'POST',
+                data: { idProduct: idProduct, typeObject: typeObject},
+                success: function (response) {
+                    if (response.success) {
+                        $('#wishlist-datatable').DataTable().ajax.reload();
+                        toastr.success(response.message);
+                    }
+                },
+                error: (xhr) => {
+                    toastr.info("Thông báo", "Lỗi xử lí hành động, vui lòng liên hệ nhà phát triển để được hỗ trợ.");
+                    console.log(xhr);
+                }
+            });
+        }
+
+    </script>
+}
