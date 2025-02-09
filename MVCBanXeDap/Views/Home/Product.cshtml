@@ -14,8 +14,26 @@
         min-width: 200px; /* Đảm bảo kích thước tối thiểu */
     }
 
-    .nav {
-        overflow: visible !important; /* Đảm bảo không bị cắt */
+    /* Đảm bảo khoảng cách đồng đều giữa các phần tử */
+    nav .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px; /* Khoảng cách giữa các dòng */
+    }
+
+    /* Căn chỉnh label và select */
+    nav .form-label {
+        width: 100px; /* Đảm bảo label có cùng kích thước */
+        font-weight: bold;
+        text-align: right; /* Canh phải cho đồng bộ */
+        margin-right: 10px;
+    }
+
+    nav .form-select {
+        flex: 1; /* Để dropdown tự chiếm không gian còn lại */
+        height: 40px; /* Chiều cao đồng nhất */
+        max-width: 300px; /* Giới hạn chiều rộng tối đa */
+        border-radius: 5px; /* Bo góc mềm mại */
     }
     .product__item__pic {
         position: relative;
@@ -60,81 +78,85 @@
 </style>
 <nav class="p-3 bg-light">
     <form method="get" action="/Home/Product" id="filterForm">
-        <ul class="nav nav-pills mb-3 d-flex justify-content-between align-items-center flex-wrap gap-3" id="pills-tab" role="tablist">
-            <!-- Tìm kiếm -->
-            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
-                <label for="timKiem" class="form-label me-2">Tìm kiếm:</label>
-                <input type="text" id="timKiem" name="timKiem" class="form-control" value="@ViewBag.TimKiem" placeholder="Nhập tên sản phẩm" />
-            </li>
-
-            <!-- Danh mục -->
-            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
-                <label for="maDanhMuc" class="form-label me-2">Danh mục:</label>
-                <div class="dropdown-container">
-                <select id="maDanhMuc" name="maDanhMuc" class="w-100">
-                    <option value="">Tất cả</option>
-                    @foreach (var category in ViewBag.Category as List<DanhmucVM>)
-                    {
-                        if (category.MaDanhMuc == ViewBag.MaDanhMuc)
-                        {
-                            <option selected value="@category.MaDanhMuc">@category.TenDanhMuc</option>
-                        }
-                        else
-                        {
-                            <option value="@category.MaDanhMuc">@category.TenDanhMuc</option>
-                        }
-                    }
-                </select>
+        <div class="row">
+            <!-- Thanh tìm kiếm -->
+            <div class="col-12 mb-3">
+                <div class="d-flex align-items-center">
+                    <label for="timKiem" class="form-label me-2">Tìm kiếm:</label>
+                    <input type="text" id="timKiem" name="timKiem" class="form-control flex-grow-1" 
+                           value="@ViewBag.TimKiem" placeholder="Nhập tên sản phẩm" />
+                    <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-check-lg"></i></button>
                 </div>
-            </li>
+            </div>
 
-            <!-- Thương hiệu -->
-            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
-                <label for="maThuongHieu" class="form-label me-2">Thương hiệu:</label>
-                <div class="dropdown-container">
-                <select id="maThuongHieu" name="maThuongHieu" class="w-100" >
-                    <option value="">Tất cả</option>
-                    @foreach (var brand in ViewBag.Brand as List<BrandVM>)
-                    {
-                        @if (brand.MaThuongHieu == ViewBag.MaThuongHieu)
-                        {
-                            <option selected value="@brand.MaThuongHieu">@brand.TenThuongHieu</option>
-                        }
-                        else
-                        {
-                            <option value="@brand.MaThuongHieu">@brand.TenThuongHieu</option>
-                        }
-                    }
-                </select>
+            <!-- Bộ lọc -->
+            <div class="col-12 col-md-3 ms-auto">
+                <div class="d-flex flex-column gap-3">
+                    <!-- Danh mục -->
+                    <div class="form-group">
+                        <label for="maDanhMuc" class="form-label">Danh mục:</label>
+                        <select id="maDanhMuc" name="maDanhMuc" class="">
+                            <option value="">Tất cả</option>
+                            @foreach (var category in ViewBag.Category as List<DanhmucVM>)
+                            {
+                                if (category.MaDanhMuc == ViewBag.MaDanhMuc)
+                                {
+                                    <option selected value="@category.MaDanhMuc">@category.TenDanhMuc</option>
+                                }
+                                else
+                                {
+                                    <option value="@category.MaDanhMuc">@category.TenDanhMuc</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Thương hiệu -->
+                    <div class="form-group">
+                        <label for="maThuongHieu" class="form-label">Thương hiệu:</label>
+                        <select id="maThuongHieu" name="maThuongHieu" class="">
+                            <option value="">Tất cả</option>
+                            @foreach (var brand in ViewBag.Brand as List<BrandVM>)
+                            {
+                                @if (brand.MaThuongHieu == ViewBag.MaThuongHieu)
+                                {
+                                    <option selected value="@brand.MaThuongHieu">
+                                        @brand.TenThuongHieu
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@brand.MaThuongHieu">
+                                        @brand.TenThuongHieu
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Sắp xếp -->
+                    <div class="form-group">
+                        
+                        <label for="sapXep" class="form-label">Sắp xếp:</label>
+                        <select id="sapXep" name="sapXep" class="">
+                            @if (ViewBag.SapXep == "asc")
+                            {
+                                <option selected value="asc">Giá tăng dần</option>
+                                <option value="desc">Giá giảm dần</option>
+                            }
+                            else
+                            {
+                                <option value="asc">Giá tăng dần</option>
+                                <option selected value="desc">Giá giảm dần</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-            </li>
-
-            <!-- Sắp xếp -->
-            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
-                <label for="sapXep" class="form-label me-2">Sắp xếp:</label>
-                <div class="dropdown-container">
-                <select id="sapXep" name="sapXep" class="w-100">
-                    @if (ViewBag.SapXep == "asc")
-                    {
-                        <option selected value="asc">Giá tăng dần</option>
-                        <option value="desc">Giá giảm dần</option>
-                    }
-                    else
-                    {
-                        <option value="asc">Giá tăng dần</option>
-                        <option selected value="desc">Giá giảm dần</option>
-                    }
-                </select>
-                </div>
-            </li>
-
-            <!-- Nút Tìm kiếm -->
-            <li class="nav-item form-group d-flex align-items-center flex-grow-1" role="presentation">
-                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-check-lg"></i></button>
-            </li>
-        </ul>
+            </div>
+        </div>
     </form>
 </nav>
+
 
 <div class="container py-5">
     
@@ -156,7 +178,7 @@
                     </div>
                     <div class="product__item__text">
                         <h6>@product.TenSp</h6>
-                        <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
+                        
 
                         <h6 style="color:red;">@product.MinPrice VNĐ - @product.MaxPrice VNĐ</h6>
                     </div>
@@ -165,15 +187,36 @@
         }
     </div>
 </div>
-<!-- Phân trang -->
-<nav>
-    <ul class="pagination">
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <!-- Nút Previous -->
+        <li class="page-item @(ViewBag.Page <= 1 ? "disabled" : "")">
+            <a class="page-link"
+               href="@Url.Action("Product", new { keywords = ViewBag.Keywords, MaDanhMuc = ViewBag.MaDanhMuc, page = (int)ViewBag.Page - 1 })"
+               aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <!-- Các trang -->
         @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
         {
             <li class="page-item @(ViewBag.Page == i ? "active" : "")">
-                <a class="page-link" data-page="@i" href="@Url.Action("Product", new { keywords = ViewBag.Keywords, MaDanhMuc = ViewBag.MaDanhMuc, page = i })">@i</a>
+                <a class="page-link"
+                   href="@Url.Action("Product", new { keywords = ViewBag.Keywords, MaDanhMuc = ViewBag.MaDanhMuc, page = i })">
+                    @i
+                </a>
             </li>
         }
+
+        <!-- Nút Next -->
+        <li class="page-item @(ViewBag.Page >= (int)ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link"
+               href="@Url.Action("Product", new { keywords = ViewBag.Keywords, MaDanhMuc = ViewBag.MaDanhMuc, page = (int)ViewBag.Page + 1 })"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
     </ul>
 </nav>
 

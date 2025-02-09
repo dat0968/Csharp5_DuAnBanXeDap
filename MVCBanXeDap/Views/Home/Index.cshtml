@@ -53,7 +53,7 @@
                             <p style="color: black">
                                 Chất lượng vượt trội, thiết kế tinh tế và phù hợp cho mọi nhu cầu. Khám phá các mẫu xe đạp với công nghệ mới nhất, mang đến sự thoải mái và hiệu suất tối ưu.
                             </p>
-                            <a href="#" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
+                            <a asp-action="Product" asp-controller="Home" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
                             @* <div class="hero__social"> *@
                             @*     <a href="#"><i class="fa fa-facebook"></i></a> *@
                             @*     <a href="#"><i class="fa fa-twitter"></i></a> *@
@@ -75,7 +75,7 @@
                             <p style="color: black">
                                 Những chiếc xe đạp tuyệt vời với thiết kế hiện đại và chất liệu cao cấp, phù hợp với tất cả mọi người, mang đến trải nghiệm tuyệt vời mỗi khi di chuyển.
                             </p>
-                            <a href="#" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
+                            <a asp-action="Product" asp-controller="Home" class="primary-btn">Mua ngay <span class="arrow_right"></span></a>
                             @* <div class="hero__social"> *@
                             @*     <a href="#"><i class="fa fa-facebook"></i></a> *@
                             @*     <a href="#"><i class="fa fa-twitter"></i></a> *@
@@ -108,7 +108,7 @@
                     </div>
                     <div class="product__item__text">
                         <h6>@product.TenSp</h6>
-                        <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
+                        
 
 
                         <h6 style="color: red;">@product.MinPrice VNĐ - @product.MaxPrice VNĐ</h6>
