@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVCBanXeDap.ViewModels;
 using MVCBanXeDap.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -49,14 +50,14 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var brand = new BrandVM();
+            var BrandVM = new BrandVM();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Brands/GettBrandById/{id}");
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
-                brand = JsonConvert.DeserializeObject<BrandVM>(data);
+                BrandVM = JsonConvert.DeserializeObject<BrandVM>(data);
             };
-            return PartialView("_BrandDetails", brand);
+            return PartialView("_BrandDetails", BrandVM);
         }
         [HttpPost]
         public async Task<IActionResult> CreateBrand(BrandVM newBrand)

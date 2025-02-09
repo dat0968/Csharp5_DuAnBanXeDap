@@ -34,9 +34,9 @@
                 </div>
                 <div class="col-md-3">
                     <select id="SortByPrice" class="form-select">
-                        <option selected="@(string.IsNullOrEmpty(ViewBag.Sort))">Sắp xếp</option>
-                        <option value="@(ViewBag.Sort == "asc" ? "selected" : "")">Tên: A-Z</option>
-                        <option value="@(ViewBag.Sort == "desc" ? "selected" : "")">Tên: Z-A</option>
+                        <option value="" selected>Sắp xếp</option>
+                        <option value="asc">Tên: A-Z</option>
+                        <option value="desc">Tên: Z-A</option>
                     </select>
                 </div>
             </div>
@@ -67,6 +67,7 @@
                                         <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@brand.MaThuongHieu">
                                             <i class="fas fa-eye"></i> Chi tiết
                                         </button>
+                                        <partial name="_BrandDetails" model="@brand"></partial>
                                         <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@brand.MaThuongHieu-edit">
                                             <i class="fas fa-edit"></i> Sửa
                                         </button>
@@ -99,35 +100,56 @@
 
 <!-- Modal Thêm sản phẩm -->
 <partial name="_BrandCreate"></partial>
-
 <script>
     const keywords = document.getElementById("keywords");
+    const SortByPrice = document.getElementById("SortByPrice");
+
+    // Hàm gọi API để lấy danh sách thương hiệu
     function GenerateTableBrand() {
-        fetch(`https://localhost:7137/api/Brands/GetAllBrand?keywords=${keywords.value}&sort=""&page=1`)
+        const sortValue = SortByPrice.value || "";
+        fetch(`https://localhost:7137/api/Brands/GetAllBrand?keywords=${keywords.value}&sort=${sortValue}&page=1`)
             .then(response => response.json())
             .then(data => {
-                const tbody = document.querySelector("#basic-datatables");
+                const tbody = document.querySelector("#basic-datatables tbody");
                 tbody.innerHTML = "";
+
                 if (data && data.data) {
                     data.data.forEach(brand => {
                         const row = `
-                                <tr>
-                                    <td>${brand.tenThuongHieu}</td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-info btn-sm">
-                                                <i class="fas fa-eye"></i> Chi tiết
-                                            </button>
-                                            <button type="button" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i> Sửa
-                                            </button>
-                                            <button type="button" class="btn btn-danger btn-sm">
+                            <tr>
+                                <td>${brand.tenThuongHieu}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <!-- Nút Chi tiết -->
+                                        <button data-brand='${JSON.stringify(brand)}' 
+                                            onclick="generateDetailsModal(this)" 
+                                            type="button" 
+                                            class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i> Chi tiết
+                                        </button>
+
+                                        <!-- Nút Sửa -->
+                                        <button data-brand='${JSON.stringify(brand)}' 
+                                            onclick="generateEditModal(this)" 
+                                            type="button" 
+                                            class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </button>
+
+                                        <!-- Nút Xóa -->
+                                        <form 
+                                            method="post" 
+                                            action="/brand/Deletebrand/${brand.maThuongHieu}" 
+                                            style="display: inline" 
+                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa thương hiệu này không?')">
+                                            <button type="submit" class="btn btn-danger btn-sm">
                                                 <i class="fas fa-trash"></i> Xóa
                                             </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            `;
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
                         tbody.innerHTML += row;
                     });
                 }
@@ -136,7 +158,78 @@
                 console.error("Lỗi khi tải dữ liệu:", error);
             });
     }
-    keywords.addEventListener("input", function () {
-        GenerateTableBrand()
+
+    // Hàm hiển thị modal chỉnh sửa thương hiệu
+    function generateEditModal(element) {
+        const brandData = element.getAttribute('data-brand');
+        const brand = JSON.parse(brandData);
+        const maThuongHieu = brand.maThuongHieu;
+
+        $.ajax({
+            url: 'https://localhost:7137/api/Brands/GetPartialViewEdit', // URL API để lấy giao diện chỉnh sửa
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ maThuongHieu: maThuongHieu }),
+            success: function(data) {
+                console.log(data);
+                $('#EditModal').html(data);
+
+                // Khởi tạo lại modal sau khi thêm vào DOM
+                const modalElement = document.querySelector(`#modal-${maThuongHieu}-edit`);
+                if (modalElement) {
+                    const modalInstance = new bootstrap.Modal(modalElement);
+                    modalInstance.show();
+
+                    // Xử lý nút đóng modal
+                    document.getElementById("closeModal").addEventListener("click", function () {
+                        modalElement.remove();
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Lỗi khi lấy giao diện chỉnh sửa:", error);
+                console.error("Chi tiết lỗi:", xhr.responseText);
+            }
+        });
+    }
+
+    // Hàm hiển thị modal chi tiết thương hiệu
+    function generateDetailsModal(element) {
+        const brandData = element.getAttribute('data-brand');
+        const brand = JSON.parse(brandData);
+        const maThuongHieu = brand.maThuongHieu;
+
+        $.ajax({
+            url: 'https://localhost:7137/api/Brands/GetBrandDetails', // URL API để lấy chi tiết thương hiệu
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ maThuongHieu: maThuongHieu }),
+            success: function(data) {
+                console.log(data);
+                $('#EditModal').html(data);
+
+                // Khởi tạo lại modal sau khi thêm vào DOM
+                const modalElement = document.querySelector(`#modal-${maThuongHieu}`);
+                if (modalElement) {
+                    const modalInstance = new bootstrap.Modal(modalElement);
+                    modalInstance.show();
+
+                    // Xử lý nút đóng modal
+                    document.getElementById("closeModal").addEventListener("click", function () {
+                        modalElement.remove();
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Lỗi khi lấy chi tiết thương hiệu:", error);
+                console.error("Chi tiết lỗi:", xhr.responseText);
+            }
+        });
+    }
+    SortByPrice.addEventListener("change", function() {
+        GenerateTableBrand();
     });
+    keywords.oninput = function() {
+        GenerateTableBrand();
+    };
 </script>

@@ -14,13 +14,32 @@ namespace APIBanXeDap.Repository.NhaCungCap
         }
         public List<Nhacungcap> GetAllSupplier(string? keywords, string? sort)
         {
-            var listSupplier = db.Nhacungcaps.AsNoTracking().Where(ncc => ncc.IsDelete == false).AsQueryable();
-            if(!string.IsNullOrEmpty(keywords) )
+            var list = db.Nhacungcaps.AsNoTracking().Where(ncc => ncc.IsDelete == false).AsQueryable();
+
+            // Tìm kiếm theo từ khóa
+            if (!string.IsNullOrEmpty(keywords))
             {
-                listSupplier = listSupplier.Where(n => n.MaNhaCc.ToString().Contains(keywords) || n.TenNhaCc.Contains(keywords));
+                list = list.Where(n => n.MaNhaCc.ToString().Contains(keywords) || n.TenNhaCc.Contains(keywords));
             }
-            var list = listSupplier.ToList();
-            return list;
+
+            // Sắp xếp theo yêu cầu
+            switch (sort)
+            {
+                case "asc":
+                    // Sắp xếp theo tên nhà cung cấp từ A-Z
+                    list = list.OrderBy(n => n.TenNhaCc);
+                    break;
+                case "desc":
+                    // Sắp xếp theo tên nhà cung cấp từ Z-A
+                    list = list.OrderByDescending(n => n.TenNhaCc);
+                    break;
+                default:
+                    // Sắp xếp mặc định (có thể thay đổi theo nhu cầu)
+                    list = list.OrderByDescending(n => n.TenNhaCc);
+                    break;
+            }
+
+            return list.ToList();
         }
         public SupplierEM CreateSupplier(SupplierEM supplier)
         {
