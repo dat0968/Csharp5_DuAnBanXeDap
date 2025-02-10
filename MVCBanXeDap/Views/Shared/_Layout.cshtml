@@ -363,12 +363,9 @@
                     // Đảm bảo phần tử tồn tại trước khi thay đổi
                     if (quickCompareSection.length === 0 || toggleQuickCompareBtn.length === 0) return;
 
-                    const hasProducts = quickCompareSection.data("has-products") === "True";
-                    
-                    // console.log(hasProducts);
-                    // console.log(quickCompareSection.data("has-products"));
+                    const isVisible = localStorage.getItem("compareVisible") === "True";
 
-                    if (hasProducts) {
+                    if (isVisible) {
                         quickCompareSection.show();
                         toggleQuickCompareBtn.hide();
                         localStorage.setItem("compareVisible", "True");
