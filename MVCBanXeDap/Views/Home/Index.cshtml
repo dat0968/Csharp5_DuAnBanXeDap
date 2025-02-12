@@ -65,12 +65,20 @@
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="product__item">
                     <div class="product__item__pic set-bg">
-                        <img src="/Hinh/SanPham/@product.Hinh" alt="@product.TenSp" style="border-radius: 10px"/>
+                        <img src="/Hinh/SanPham/@product.Hinh" alt="@product.TenSp" style="border-radius: 10px" />
                         <div class="hover-overlay">
-                            <a href="@Url.Action("Details", "Home", new { id = product.MaSP })" class="btn btn-danger btn-sm">
-                                Xem chi tiết
-                            </a>
+                            <div>
+                                <a href="@Url.Action("Details", "Home", new { id = product.MaSP })" class="btn btn-danger btn-sm">
+                                    Xem chi tiết
+                                </a>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-danger btn-sm rounded-circle shadow-sm" onclick="changeWishlistStatus(@product.MaSP, 'SanPham')" title="Yêu thích">
+                                    ❤️
+                                </button>
+                            </div>
                         </div>
+
                     </div>
                     <div class="product__item__text">
                         <h6>@product.TenSp</h6>

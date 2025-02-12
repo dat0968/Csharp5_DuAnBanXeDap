@@ -18,6 +18,11 @@
                 <button class="btn btn-dark rounded mb-3" onclick="addProductToCompare(@Model.MaSP)">
                     <i class="fas fa-exchange-alt"></i> So sánh
                 </button>
+                <br />
+                <button class="btn btn-outline-danger rounded-circle mb-3 shadow-sm" onclick="changeWishlistStatus(@Model.MaSP, 'SanPham')" title="Yêu thích">
+                    ❤️
+                </button>
+
                 <p class="text-muted mb-1"><strong>Thương hiệu:</strong> @Model.ThuongHieu</p>
                 <p class="text-muted mb-1"><strong>Danh mục:</strong> @Model.DanhMuc</p>
                 <p class="text-muted mb-1"><strong>Khoảng giá:</strong> <span class="text-success">@Model.KhoangGia</span></p>

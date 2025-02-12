@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using APIBanXeDap.Repository.YeuThich;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIBanXeDap.Controllers
@@ -7,29 +7,56 @@ namespace APIBanXeDap.Controllers
     [ApiController]
     public class WishlistController : ControllerBase
     {
-        public WishlistController()
-        {
+        private readonly IYeuThichRepository _yeuThichRepo;
 
+        public WishlistController(IYeuThichRepository yeuThichRepo)
+        {
+            _yeuThichRepo = yeuThichRepo;
         }
+
         [HttpPut("{idProduct}&{idUser}")]
-        public IActionResult ChangeStatusWishlist(int idProduct, int idUser)
+        public async Task<IActionResult> ChangeStatusWishlist(int idProduct, int idUser)
         {
-            return Ok();
+            var result = await _yeuThichRepo.ChangeWishlist(idProduct, "SanPham", idUser); // type Binhluan still not support
+            return result;
         }
+
         [HttpPut("{idUser}")]
-        public IActionResult ChangeListStatusWishlist([FromBody] int[]idProducts, int idUser)
+        public async Task<IActionResult> ChangeListStatusWishlist([FromBody] int[] idProducts, int idUser)
         {
+            foreach (var idProduct in idProducts)
+            {
+                await _yeuThichRepo.ChangeWishlist(idProduct, "SanPham", idUser); // type Binhluan still not support
+            }
             return Ok();
         }
+
         [HttpGet("{idProduct}&{idUser}")]
-        public IActionResult IsOneInWishlist(int idProduct, int idUser)
+        public async Task<IActionResult> IsOneInWishlist(int idProduct, int idUser)
         {
-            return Ok(new Random().NextDouble() > 0.5); //Type: bool
+            var exists = await _yeuThichRepo.IsOneInWishlist(idProduct, idUser);
+            return Ok(exists);
         }
+
         [HttpGet("{idUser}")]
-        public IActionResult IsManyInWishlist([FromBody] int[]idProducts, int idUser)
+        public async Task<IActionResult> IsManyInWishlist([FromBody] int[] idProducts, int idUser)
         {
-            return Ok(Enumerable.Range(0, 10).Select(x => new Random().NextDouble() > 0.5).ToArray()); //Type: bool[]
+            var results = await _yeuThichRepo.IsManyInWishlist(idProducts, idUser);
+            return Ok(results);
+        }
+
+        [HttpGet("{idUser}")]
+        public async Task<IActionResult> GetAllWishlistItems(int idUser)
+        {
+            var result = await _yeuThichRepo.GetAllYeuThichVMAsync(x => x.MaNguoiDung == idUser, includeProperties: "Sanpham");
+            return Ok(result);
+        }
+
+        [HttpGet("{idProduct}&{idUser}")]
+        public async Task<IActionResult> GetWishlistItem(int idProduct, int idUser)
+        {
+            var result = await _yeuThichRepo.GetAsync(x => x.MaDoiTuong == idProduct && x.MaNguoiDung == idUser, includeProperties: "Sanpham");
+            return Ok(result);
         }
     }
 }

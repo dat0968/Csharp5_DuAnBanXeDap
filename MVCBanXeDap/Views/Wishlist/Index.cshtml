@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
 
     <style>
-        /* //Căn chỉnh giao diện thành phần của Datatable */
+        /* Căn chỉnh giao diện thành phần của Datatable */
         div.dt-info {
             margin-top: 0.5em;
             text-align: center;
@@ -51,16 +51,17 @@
         $(document).ready(function () {
             loadWishlistDatatable();
         });
+
         function loadWishlistDatatable() {
             $('#wishlist-datatable').DataTable({
                 ajax: {
-                    url: '/Wishlist/GetWishlistData', // API lấy dữ liệu từ Session
+                    url: '/Wishlist/GetWishlistData', // API lấy dữ liệu wishlist từ server
                     dataSrc: ''
                 },
                 columns: [
                     {
                         title: 'Mã',
-                        data: 'maYeuThich',
+                        data: 'ma',
                         width: '8%',
                         className: 'text-center align-middle'
                     },
@@ -72,7 +73,7 @@
                         render: function (data) {
                             if (data.doiTuongYeuThich === "SanPham") {
                                 return `
-                                    <a href="/Home/Details/${data.maYeuThich}" class="d-flex align-items-center">
+                                    <a href="/Home/Details/${data.ma}" class="d-flex align-items-center">
                                         <img src="${data.hinh}" alt="Hình sản phẩm" class="img-thumbnail me-2" width="150">
                                         <div>
                                             <span class="fw-bold text-truncate d-inline-block" style="max-width: 200px;" title="${data.tenSp}">
@@ -87,14 +88,14 @@
                                     <div>
                                         <strong>Bình luận:</strong> <span class="text-muted">${data.noiDungBinhLuan}</span><br>
                                         <small class="text-muted">${data.nguoiBinhLuan ?? "N/A"} | ${data.ngayBinhLuan}</small><br>
-                                        <a href="/Home/Details/${data.maYeuThich}" class="btn btn-link p-0">Xem bình luận</a>
+                                        <a href="/Home/Details/${data.ma}" class="btn btn-link p-0">Xem bình luận</a>
                                     </div>`;
                             }
                         }
                     },
                     {
                         title: 'Thao tác',
-                        data: 'maYeuThich',
+                        data: 'ma',
                         width: '10%',
                         className: 'text-center align-middle',
                         render: function (data, type, row) {
@@ -106,21 +107,21 @@
                         }
                     }
                 ],
-                "language": {
-                    "sSearch": "Tìm kiếm:",
-                    "lengthMenu": "Hiển thị _MENU_ mục",
-                    "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
-                    "paginate": {
-                        "first": "<<",
-                        "last": ">>",
-                        "next": ">",
-                        "previous": "<"
+                language: {
+                    sSearch: "Tìm kiếm:",
+                    lengthMenu: "Hiển thị _MENU_ mục",
+                    info: "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    paginate: {
+                        first: "<<",
+                        last: ">>",
+                        next: ">",
+                        previous: "<"
                     },
-                    "zeroRecords": `<div style="text-align: center;">Không tìm thấy kết quả nào.</div>`,
-                    "infoEmpty": "Không có mục nào để hiển thị",
-                    "infoFiltered": "(lọc từ _MAX_ mục)"
+                    zeroRecords: `<div style="text-align: center;">Không tìm thấy kết quả nào.</div>`,
+                    infoEmpty: "Không có mục nào để hiển thị",
+                    infoFiltered: "(lọc từ _MAX_ mục)"
                 },
-                "dom": '<"top"f>rt<"bottom"lp><"clear">'
+                dom: '<"top"f>rt<"bottom"lp><"clear">'
             });
         }
 
@@ -129,11 +130,18 @@
             $.ajax({
                 url: '/Wishlist/ChangeWishlist',
                 type: 'POST',
-                data: { idProduct: idProduct, typeObject: typeObject},
+                data: { idProduct: idProduct, typeObject: typeObject },
                 success: function (response) {
                     if (response.success) {
                         $('#wishlist-datatable').DataTable().ajax.reload();
                         toastr.success(response.message);
+                    } else if (response.isLoginAgain) {
+                        toastr.warning(response.message);
+                        setTimeout(() => {
+                            window.location.href = "/Account/Login";
+                        }, 2000);
+                    } else {
+                        toastr.error(response.message);
                     }
                 },
                 error: (xhr) => {

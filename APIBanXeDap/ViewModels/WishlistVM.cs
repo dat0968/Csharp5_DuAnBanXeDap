@@ -1,8 +1,9 @@
-﻿namespace MVCBanXeDap.ViewModels
+﻿namespace APIBanXeDap.ViewModels
 {
     public class WishlistVM
     {
         public int Ma { get; set; }
+        public int MaDoiTuong { get; set; }
         public int MaNguoiDung { get; set; }
         public string DoiTuongYeuThich { get; set; } = "SanPham"; // SanPham / BinhLuan
         public string? NoiDungBinhLuan { get; set; }

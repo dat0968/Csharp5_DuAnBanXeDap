@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MVCBanXeDap.Helper;
 using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -12,12 +13,15 @@ namespace MVCBanXeDap.Controllers
 {
     public class WishlistController : Controller
     {
-        private readonly Uri baseAddress = new Uri("https://localhost:7137/api/");
+        Uri baseAddress = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
+        private readonly IjwtToken jwtToken;
 
-        public WishlistController()
+        public WishlistController(IjwtToken jwtToken)
         {
-            _client = new HttpClient { BaseAddress = baseAddress };
+            _client = new HttpClient();
+            _client.BaseAddress = baseAddress;
+            this.jwtToken = jwtToken;
         }
 
         public IActionResult Index()
@@ -27,99 +31,100 @@ namespace MVCBanXeDap.Controllers
 
         public async Task<IActionResult> ChangeWishlist(int idProduct, string typeObject)
         {
-            int idUser = 100; //Note: Demo
-            var wishlistVMs = TakeWishlistFromSession();
-            var wishlistOne = wishlistVMs?.FirstOrDefault(x => x.MaYeuThich == idProduct && x.DoiTuongYeuThich == typeObject && x.MaNguoiDung == idUser);
-
-            if (wishlistOne == null) // Nếu sản phẩm chưa có trong danh sách yêu thích
+            int? idUser = await GetUserIdAsync();
+            if (idUser == null)
             {
-                wishlistVMs.Add(new WishlistVM
-                {
-                    MaYeuThich = idProduct,
-                    MaNguoiDung = idUser
-                });
-
-                SetWishlistFromSession(wishlistVMs);
-
-                return Json(new
-                {
-                    success = true,
-                    message = "Sản phẩm đã được thêm vào danh sách yêu thích. (Developer)"
-                });
+                return Json(new { success = false, message = "Bạn cần đăng nhập để thay đổi danh sách yêu thích.", isLoginAgain = true });
             }
 
-            wishlistVMs.Remove(wishlistOne);
-            SetWishlistFromSession(wishlistVMs);
-
-            return Json(new
+            var response = await _client.PutAsJsonAsync(_client.BaseAddress + $"Wishlist/ChangeStatusWishlist/{idProduct}&{idUser}", new { });
+            if (response.IsSuccessStatusCode)
             {
-                success = true,
-                message = "Đã xóa sản phẩm khỏi danh sách yêu thích."
-            });
-        }
-
-        public IActionResult IsOneInWishlist(int idProduct)
-        {
-            int idUser = 100; //Note: Demo
-            var wishlistVMs = TakeWishlistFromSession();
-            var exists = wishlistVMs?.Any(x => x.MaYeuThich == idProduct && x.MaNguoiDung == idUser) ?? false;
-            return Json(new { data = exists });
-        }
-
-        public IActionResult IsManyInWishlist(int[] idProducts)
-        {
-            int idUser = 100; //Note: Demo
-            var wishlistVMs = TakeWishlistFromSession();
-            var results = wishlistVMs?.Select(x => idProducts.Contains(x.MaYeuThich) && x.MaNguoiDung == idUser).ToArray();
-            return Json(new { data = results});
-        }
-
-        private List<WishlistVM> TakeWishlistFromSession()
-        {
-            var wishlistVMs = HttpContext.Session.Get<List<WishlistVM>>("demoWishlist") ?? new List<WishlistVM>();
-
-            if (wishlistVMs.Count == 0)
-            {
-                SeedWishlist(wishlistVMs);
+                var result = await response.Content.ReadFromJsonAsync<object>();
+                return Json(result);
             }
 
-            return wishlistVMs;
+            return Json(new { success = false, message = "Có lỗi xảy ra." });
         }
 
-        private void SeedWishlist(List<WishlistVM> wishlistVMs) //Tạo danh sách yêu thích ngẫu nhiên
+        public async Task<IActionResult> IsOneInWishlist(int idProduct)
         {
-            Random rd = new Random();
-            for (int i = 0; i < 20; i++)
+            int? idUser = await GetUserIdAsync();
+            if (idUser == null)
             {
-                bool isComment = rd.NextDouble() > 0.5;
-                wishlistVMs.Add(new WishlistVM
-                {
-                    MaYeuThich = 100 + i,
-                    MaNguoiDung = 100,
-                    DoiTuongYeuThich = (isComment ? "BinhLuan" : "SanPham"),
-                    DanhMuc = "Danh Mục Ngẫu Nhiên",
-                    Hinh = "https://picsum.photos/100/150",
-                    NoiDungBinhLuan = (isComment ? $"Bình luận ngẫu nhiên tạo {i}" : ""),
-                    NgayBinhLuan = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-rd.Next(1, 10))),
-                    KhoangGia = "123.123.000 đ - 999.000.000 đ",
-                    TenSp = $"Sản Phẩm Ngẫu Nhiên {i}",
-                    ThuongHieu = "Ngẫu Nhiên",
-                    NhaCungCap = "Công ty Ngẫu Nhiên",
-                    SoLuong = new Random().Next(5, 10)
-                });
+                return Json(new { data = false });
             }
-            SetWishlistFromSession(wishlistVMs);
+
+            var response = await _client.GetAsync(_client.BaseAddress + $"Wishlist/IsOneInWishlist/{idProduct}&{idUser}");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<object>();
+                return Json(result);
+            }
+
+            return Json(new { success = false, message = "Có lỗi xảy ra." });
         }
 
-        private void SetWishlistFromSession(List<WishlistVM> wishlistVMs) //Set dữ liệu vào Session
+        public async Task<IActionResult> IsManyInWishlist(int[] idProducts)
         {
-            HttpContext.Session.Set("demoWishlist", wishlistVMs);
+            int? idUser = await GetUserIdAsync();
+            if (idUser == null)
+            {
+                return Json(new { data = Enumerable.Repeat(false, idProducts.Length).ToArray() });
+            }
+
+            var response = await _client.PostAsJsonAsync(_client.BaseAddress + $"Wishlist/IsManyInWishlist/{idUser}", idProducts);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<object>();
+                return Json(result);
+            }
+
+            return Json(new { success = false, message = "Có lỗi xảy ra." });
         }
 
-        public IActionResult GetWishlistData()
+        public async Task<IActionResult> GetWishlistData()
         {
-            var wishlistVMs = TakeWishlistFromSession();
-            return Json(wishlistVMs);
+            int? idUser = await GetUserIdAsync();
+            if (idUser == null)
+            {
+                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
+            }
+
+            var response = await _client.GetAsync(_client.BaseAddress + $"Wishlist/GetAllWishlistItems/{idUser}");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<IEnumerable<WishlistVM>>();
+                return Json(result);
+            }
+
+            return Json(new { success = false, message = "Có lỗi xảy ra." });
         }
+
+        #region //NonAction
+        [NonAction]
+        private async Task<int?> GetUserIdAsync()
+        {
+            var accessToken = HttpContext.Session.GetString("AccessToken");
+            var refreshToken = HttpContext.Session.GetString("RefreshToken");
+
+            if (accessToken == null || refreshToken == null)
+            {
+                return null;
+            }
+
+            var validateAccessToken = await jwtToken.ValidateAccessToken(accessToken, refreshToken);
+            if (validateAccessToken == null)
+            {
+                return null;
+            }
+            else
+            {
+                HttpContext.Session.SetString("AccessToken", validateAccessToken);
+            }
+
+            return Int32.Parse(jwtToken.GetUserIdFromToken(validateAccessToken));
+        }
+        #endregion
     }
 }

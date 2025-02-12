@@ -32,4 +32,5 @@ public partial class Sanpham
     public virtual Nhacungcap MaNhaCcNavigation { get; set; } = null!;
 
     public virtual Thuonghieu MaThuongHieuNavigation { get; set; } = null!;
+    public virtual ICollection<Yeuthich> YeuThichs { get; set; } = new List<Yeuthich>();
 }
