@@ -135,7 +135,7 @@
 </head>
 <body>
     <div class="main">
-        <form asp-action="LoginStaff" class="form" id="form-1">
+        <form asp-action="Login_Staff" class="form" id="form-1">
             <h3 class="heading">ĐĂNG NHẬP</h3>
             <p class="desc">Chào mừng đến với URANISHOP ❤️</p>
             <div asp-validation-summary="ModelOnly" style="color:red"></div>
@@ -152,7 +152,7 @@
                 <span asp-validation-for="MatKhau" style="color:red" class="form-message"></span>
             </div>          
             <div style="text-align: center; color: blue" class="text-center mt-3">
-                <a asp-action="ForgotPasswordStaff" asp-controller="Accounts">Quên mật khẩu?</a>
+                <a asp-action="ForgotPassword_Staff" asp-controller="Accounts">Quên mật khẩu?</a>
             </div>           
             <button type="submit" class="form-submit">Đăng nhập</button>
             <div style="text-align: center; color: blue" class="text-center mt-3">

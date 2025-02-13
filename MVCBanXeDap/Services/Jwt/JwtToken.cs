@@ -64,12 +64,10 @@ namespace MVCBanXeDap.Services.Jwt
                 var jwtToken = handler.ReadJwtToken(accessToken);
                 var claims = jwtToken.Claims;
 
-                //Console.WriteLine(String.Join(", ", claims.Select(cl => cl.Type + ": " + cl.Value))); //Note
 
-                // Giả sử idStaff được lưu trong Claim có tên "id"
-                var idClaim = claims.FirstOrDefault(c => c.Type == "sub"); // Thế quái nào mà id người dùng đăng nhập lại lưu dạng sub vậy (￣┰￣*)?
+                var id = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub); 
 
-                return idClaim?.Value; // Trả về idStaff hoặc null
+                return id?.Value; // Trả về idStaff hoặc null
             }
             return null;
         }

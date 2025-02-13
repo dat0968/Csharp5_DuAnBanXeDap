@@ -27,6 +27,27 @@
         color: #e3342f !important; 
     }
 
+    .checkout__input textarea {
+        width: 100%; /* Đảm bảo chiều rộng bằng input */
+        height: 100px; /* Điều chỉnh chiều cao theo ý muốn */
+        padding: 10px; /* Tăng padding để nội dung dễ đọc hơn */
+        border: 1px solid #ccc; /* Viền giống với input */
+        border-radius: 5px; /* Bo góc giống input */
+        font-size: 16px;
+        resize: none; /* Ngăn người dùng kéo thay đổi kích thước */
+    }
+
+    .error-message {
+        color: red;
+        font-size: 14px;
+        display: none; /* Ẩn mặc định */
+        margin-top: 5px;
+    }
+
+    .css_select:invalid, input:invalid {
+        border: 1px solid red; /* Viền đỏ khi nhập sai */
+    }
+
 </style>
 <style type="text/css">
     .css_select {
@@ -38,6 +59,7 @@
         border-radius: 0
     }
 </style>
+
 <!-- Checkout Section Begin -->
 <!-- Page Preloder -->
 <div id="preloder">
@@ -46,7 +68,7 @@
 <section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
-            <form action="#">
+            <form asp-controller="Cart" asp-action="Checkout">
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
                         <h6 class="checkout__title">THÔNG TIN NGƯỜI NHẬN</h6>
@@ -54,30 +76,42 @@
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>HỌ VÀ TÊN<span>*</span></p>
-                                    <input type="text">
+                                    <span class="error-message" id="fullname-error"></span>
+                                    <input value="@ViewBag.FullName" name="fullname" id="fullname" type="text">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>SỐ ĐIỆN THOẠI<span>*</span></p>
-                                    <input type="text">
+                                    <span class="error-message" id="phonenumber-error"></span>
+                                    <input value="@ViewBag.PhoneNumber" name="sdt" id="phonenumber" type="text">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>ĐỊA CHỈ<span>*</span></p>
+                                    <span class="error-message" id="tinh-error"></span>
                                     <select class="css_select" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
                                         <option value="0">Tỉnh Thành</option>
                                     </select>
+                                    <span class="error-message" id="quan-error"></span>
                                     <select class="css_select" id="quan" name="quan" title="Chọn Quận Huyện">
                                         <option value="0">Quận Huyện</option>
                                     </select>
+                                    <span class="error-message" id="phuong-error"></span>
                                     <select class="css_select" id="phuong" name="phuong" title="Chọn Phường Xã">
                                         <option value="0">Phường Xã</option>
                                     </select>
-                                    <input type="text" placeholder="Nhập địa chỉ cụ thể" >
+                                    <span class="error-message" id="address-error"></span>
+                                    <input name="diachicuthe" id="address" type="text" placeholder="Nhập địa chỉ cụ thể">
                                 </div>
-                            </div>  
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>MÔ TẢ</p>
+                                    <textarea name="mota"></textarea>
+                                </div>
+                            </div>
                         </div>
                         @* <div class="checkout__input">
                             <p>ĐỊA CHỈ NHẬN HÀNG<span>*</span></p>
@@ -141,15 +175,15 @@
                                 <label class="form-check-label" for="VNPAY">VNPAY</label>
                             </div>
                             <div class="form-check mb-4">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="COD" value="COD">
+                                <input checked class="form-check-input" type="radio" name="paymentMethod" id="COD" value="COD">
                                 <label class="form-check-label" for="COD">COD</label>
                             </div>
 
                             <!-- Nút đặt hàng -->
-                            <button type="button"
+                            <button type="submit"
                                     class="btn btn-dark w-100"
                             @(Model.ListCartItem.Count() == 0 || !Model.ListCartItem.Any() ? "disabled" : "")
-                                    onclick="window.location.href='/Cart/Checkout'">
+                                    >
                                 ĐẶT HÀNG
                             </button>
                         </div>
@@ -378,6 +412,82 @@
             phivanchuyen.textContent = "Chưa cập nhật";
             tongtien.textContent = "";
             tongtien.textContent = "Chưa cập nhật";
+        }
+        
+    });
+    //Xử lí thanh toán
+    document.querySelector("form").addEventListener("submit", function(event) {
+        var isValid = true; // Biến kiểm tra form hợp lệ
+
+        var tinh = document.getElementById("tinh");
+        var quan = document.getElementById("quan");
+        var phuong = document.getElementById("phuong");
+        var address = document.getElementById("address")
+        var fullname = document.getElementById("fullname")
+        var phonenumber = document.getElementById("phonenumber");
+
+        var tinhError = document.getElementById("tinh-error");
+        var quanError = document.getElementById("quan-error");
+        var phuongError = document.getElementById("phuong-error");
+        var addressError = document.getElementById("address-error");
+        var fullnameError = document.getElementById("fullname-error");
+        var phonenumberError = document.getElementById("phonenumber-error");
+
+        // Xóa thông báo lỗi trước đó
+        tinhError.style.display = "none";
+        quanError.style.display = "none";
+        phuongError.style.display = "none";
+        addressError.style.display = "none";
+        fullnameError.style.display = "none";
+        phonenumberError.style.display = "none";
+        
+
+        tinh.style.border = "";
+        quan.style.border = "";
+        phuong.style.border = "";
+        address.style.border = "";
+        fullname.style.border = "";
+        phonenumber.style.border = "";
+        // Kiểm tra từng trường
+        if (fullname.value.trim() === "") {
+            fullnameError.innerText = "Vui lòng điền họ tên đầy đủ";
+            fullnameError.style.display = "block";
+            fullname.style.border = "1px solid red";
+            isValid = false;
+        }
+        if (phonenumber.value.trim() === "") {
+            phonenumberError.innerText = "Vui lòng điền số điện thoại";
+            phonenumberError.style.display = "block";
+            phonenumber.style.border = "1px solid red";
+            isValid = false;
+        }
+        if (tinh.value === "0") {
+            tinhError.innerText = "Vui lòng chọn tỉnh/thành";
+            tinhError.style.display = "block";
+            tinh.style.border = "1px solid red";
+            isValid = false;
+        }
+        if (quan.value === "0") {
+            quanError.innerText = "Vui lòng chọn quận/huyện";
+            quanError.style.display = "block";
+            quan.style.border = "1px solid red";
+            isValid = false;
+        }
+        if (phuong.value === "0") {
+            phuongError.innerText = "Vui lòng chọn phường/xã";
+            phuongError.style.display = "block";
+            phuong.style.border = "1px solid red";
+            isValid = false;
+        }
+        if (address.value.trim() === "") {
+            addressError.innerText = "Vui lòng nhập địa chỉ cụ thể";
+            addressError.style.display = "block";
+            address.style.border = "1px solid red";
+            isValid = false;
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Ngăn form submit nếu có lỗi
         }
     });
 </script>

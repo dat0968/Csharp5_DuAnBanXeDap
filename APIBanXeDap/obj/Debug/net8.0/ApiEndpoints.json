@@ -365,7 +365,7 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.CheckoutsController",
-    "Method": "SaveInfoOrder",
+    "Method": "CheckoutOrders",
     "RelativePath": "api/Checkouts",
     "HttpMethod": "POST",
     "IsController": true,
@@ -378,26 +378,6 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "APIBanXeDap.Controllers.CheckoutsController",
-    "Method": "Callback",
-    "RelativePath": "api/Checkouts/Callback",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.CheckoutsController",
@@ -429,16 +409,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "APIBanXeDap.Controllers.CheckoutsController",
-    "Method": "IpnAction",
-    "RelativePath": "api/Checkouts/IpnAction",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.ColorsController",
@@ -969,6 +939,22 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
+    "Method": "Cancel",
+    "RelativePath": "api/MaCoupons/Cancel",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
     "Method": "Create",
     "RelativePath": "api/MaCoupons/Create",
     "HttpMethod": "POST",
@@ -979,22 +965,6 @@
         "Name": "model",
         "Type": "APIBanXeDap.ViewModels.MaCouponVM",
         "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
-    "Method": "Delete",
-    "RelativePath": "api/MaCoupons/Delete",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -1014,7 +984,7 @@
       },
       {
         "Name": "status",
-        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -1025,6 +995,22 @@
       {
         "Name": "page",
         "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
+    "Method": "RevokeCouponCode",
+    "RelativePath": "api/MaCoupons/RevokeCouponCode",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
@@ -1877,6 +1863,38 @@
         "Name": "page",
         "Type": "System.Int32",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.TestCheckoutController",
+    "Method": "CreateOder",
+    "RelativePath": "api/TestCheckout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "APIBanXeDap.ViewModels.HoadonVM",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.TestCheckoutController",
+    "Method": "CreateDetailOder",
+    "RelativePath": "api/TestCheckout/CreateDetailOder",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "System.Collections.Generic.List\u00601[[APIBanXeDap.ViewModels.ChiTietHoaDonVM, APIBanXeDap, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

@@ -66,16 +66,16 @@
                             @if (Context.Session.GetString("RefreshToken") == null)
                             {
                                 <div class="header__top__links">
-                                    <a asp-action="Register" asp-controller="Accounts">ĐĂNG KÝ</a>
+                                    <a asp-action="RegisterAccounts" asp-controller="Accounts">ĐĂNG KÝ</a>
                                     @* <a href="#">FAQs</a> *@
                                 </div>
                                 <div class="header__top__hover">
                                     <span>ĐĂNG NHẬP <i class="arrow_carrot-down"></i></span>
                                     <ul style="text-align: left" >
-                                        <a asp-controller="Accounts" asp-action="LoginCustomer" >
+                                        <a asp-controller="Accounts" asp-action="Login_Customer">
                                             <li>KHÁCH HÀNG</li>
                                         </a>
-                                        <a asp-controller="Accounts" asp-action="LoginStaff" >
+                                        <a asp-controller="Accounts" asp-action="Login_Staff">
                                             <li>NHÂN VIÊN</li>
                                         </a>                                       
                                     </ul>
@@ -87,7 +87,7 @@
                                     <span>TÀI KHOẢN CỦA TÔI<i class="arrow_carrot-down"></i></span>
                                     <ul>
                                         <li>OPTIONS1</li>
-                                        <a asp-controller="Accounts" asp-action="Logout">
+                                        <a asp-controller="Accounts" asp-action="LogoutAccount">
                                             <li>ĐĂNG XUẤT</li>
                                         </a>
                                     </ul>
@@ -319,7 +319,77 @@
             </div>
         </div>
     </footer>
+    <!-- code chatbot-->
+    <div style="position: fixed; bottom: 20px; right: 20px; width: 700px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end;">
+        <div id="tawk-bubble-container"
+             role="button"
+             tabindex="0"
+             class="tawk-bubble-container d-flex align-items-center justify-content-center"
+             onclick="toggleChatBox()"
+             style="cursor: pointer; margin-bottom: 10px;">
+            <div class="tawk-icon-right">
+                <i role="button"
+                   tabindex="0"
+                   data-text="Đóng"
+                   aria-label="Đóng"
+                   class="tawk-icon tawk-icon-close tawk-icon-small"></i>
+                <img src="~/img/pngtree-smart-chatbot-cartoon-clipart-png-image_6620453-removebg-preview.png"
+                     alt="Thu hút chú ý đến tính năng trò chuyện"
+                     class="img-fluid rounded-circle"
+                     style="max-width: 75px; height: 75px; cursor: pointer">
+            </div>
+        </div>
+        <div id="chat-box" class="chat-box" style="display: none; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); width: 700px">
+            <div class="chat-header" style="padding: 10px; background-color: #007bff; color: white; font-weight: bold; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                Hộp Thoại Hỗ Trợ
+            </div>
+            <div class="chat-body" id="chat-body" style="padding: 10px; max-height: 300px; overflow-y: auto; width: 700px">
+                <div class="chat-message user-message" style="display: none;">
+                    Chào bạn! Tôi muốn biết thêm về sản phẩm.
+                </div>
+                <div class="chat-message typing-indicator" id="typing-indicator" style="display: none; text-align: left;">
+                    <span>...</span>
+                </div>
+            </div>
+            <div class="chat-input-container" style="display: flex; padding: 10px; width: 700px">
+                <input type="text" id="user-input" placeholder="Nhập câu hỏi..." class="chat-input" style="flex: 1; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+                <button onclick="sendMessage()" class="chat-send-button" style="margin-left: 5px; padding: 8px 12px; border-radius: 5px; background-color: #007bff; color: white; border: none;">Gửi</button>
+            </div>
+        </div>
+    </div>
+    <style>
+        .chat-message {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 10px;
+            max-width: 80%;
+        }
 
+        .user-message {
+            background-color: cornflowerblue;
+            color: white;
+            text-align: left;
+            align-self: flex-start;
+        }
+
+        .system-message {
+            background-color: lightgray;
+            color: black;
+            text-align: left;
+            align-self: flex-end;
+        }
+
+        .typing-indicator {
+            color: #666;
+            font-style: italic;
+            text-align: left;
+        }
+
+        .chat-body {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
     <!-- Thanh xem sản phẩm so sánh nhanh -->
     <div id="coverQuickBarComparetion"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -342,14 +412,16 @@
     <script>
         $(document).ready(function() {
 
-            var successMessage = '@TempData["SuccessMessage"]';
-            if (successMessage) {
-                toastr.success(successMessage);
-            }
+            if (performance.navigation.type !== 2) { // 2 là khi Back hoặc Forward
+                var successMessage = '@TempData["SuccessMessage"]';
+                if (successMessage && successMessage !== "") {
+                    toastr.success(successMessage);
+                }
 
-            var errorMessage = '@TempData["ErrorMessage"]';
-            if (errorMessage) {
-                toastr.error(errorMessage);
+                var errorMessage = '@TempData["ErrorMessage"]';
+                if (errorMessage && errorMessage !== "") {
+                    toastr.error(errorMessage);
+                }
             }
         });     
         
@@ -407,7 +479,54 @@
             loadQuickCompare();
         })
     </script>
+    <script>
+        function toggleChatBox() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
+        }
 
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const chatBody = document.getElementById('chat-body');
+            const typingIndicator = document.getElementById('typing-indicator');
+
+            if (userInput.value.trim() === '') return;
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user-message';
+            userMessage.textContent = userInput.value;
+            chatBody.appendChild(userMessage);
+            userInput.value = '';
+            typingIndicator.style.display = 'block';
+            try {
+                const response = await fetch('https://localhost:7137/api/Gemini', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userMessage.textContent),
+                });
+
+
+                const data = await response.json();
+                typingIndicator.style.display = 'none';
+
+                // Thêm phản hồi từ hệ thống
+                const systemMessage = document.createElement('div');
+                systemMessage.className = 'chat-message system-message';
+                systemMessage.innerHTML = data.message;
+                chatBody.appendChild(systemMessage);
+            } catch (error) {
+                typingIndicator.style.display = 'none';
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'chat-message system-message';
+                errorMessage.textContent = 'Xin lỗi, đã xảy ra lỗi trong quá trình xử lý.'
+                console.error('Error:', error);
+                chatBody.appendChild(errorMessage);
+            }
+
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

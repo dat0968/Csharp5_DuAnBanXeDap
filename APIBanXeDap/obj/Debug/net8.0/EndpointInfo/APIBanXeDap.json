@@ -619,47 +619,6 @@
         }
       }
     },
-    "/api/Checkouts/IpnAction": {
-      "get": {
-        "tags": [
-          "Checkouts"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Checkouts/Callback": {
-      "get": {
-        "tags": [
-          "Checkouts"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/Colors/GetAllColor": {
       "get": {
         "tags": [
@@ -1473,7 +1432,7 @@
             "name": "status",
             "in": "query",
             "schema": {
-              "type": "boolean"
+              "type": "string"
             }
           },
           {
@@ -1561,8 +1520,29 @@
         }
       }
     },
-    "/api/MaCoupons/Delete": {
-      "delete": {
+    "/api/MaCoupons/Cancel": {
+      "put": {
+        "tags": [
+          "MaCoupons"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MaCoupons/RevokeCouponCode": {
+      "put": {
         "tags": [
           "MaCoupons"
         ],
@@ -2848,6 +2828,77 @@
         }
       }
     },
+    "/api/TestCheckout": {
+      "post": {
+        "tags": [
+          "TestCheckout"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HoadonVM"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HoadonVM"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HoadonVM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TestCheckout/CreateDetailOder": {
+      "post": {
+        "tags": [
+          "TestCheckout"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ChiTietHoaDonVM"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ChiTietHoaDonVM"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ChiTietHoaDonVM"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
@@ -3111,14 +3162,6 @@
             "type": "string",
             "nullable": true
           },
-          "giamGiaMaCoupon": {
-            "type": "number",
-            "format": "float"
-          },
-          "phiVanChuyen": {
-            "type": "number",
-            "format": "float"
-          },
           "soLuong": {
             "type": "integer",
             "format": "int32"
@@ -3215,6 +3258,22 @@
           "thoiGianGiao": {
             "type": "string",
             "format": "date"
+          },
+          "giamGiaMaCoupon": {
+            "type": "number",
+            "format": "float"
+          },
+          "phiVanChuyen": {
+            "type": "number",
+            "format": "float"
+          },
+          "tienGoc": {
+            "type": "number",
+            "format": "float"
+          },
+          "tongTien": {
+            "type": "number",
+            "format": "float"
           }
         },
         "additionalProperties": false
@@ -3417,6 +3476,10 @@
             "items": {
               "$ref": "#/components/schemas/ChiTietHoaDonVM"
             },
+            "nullable": true
+          },
+          "maCoupon": {
+            "type": "string",
             "nullable": true
           }
         },

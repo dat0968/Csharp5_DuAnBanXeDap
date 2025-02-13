@@ -26,6 +26,10 @@ public partial class Hoadon
     public string? Sdt { get; set; }
 
     public DateOnly ThoiGianGiao { get; set; }
+    public float GiamGiaMaCoupon { get; set; } = 0;
+    public float PhiVanChuyen { get; set; } = 0;
+    public float TienGoc { get; set; }
+    public float TongTien { get; set; }
 
     public virtual Khachhang MaKhNavigation { get; set; } = null!;
 

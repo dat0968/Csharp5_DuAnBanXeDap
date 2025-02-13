@@ -24,15 +24,13 @@ namespace APIBanXeDap.Repository.ThanhToan
                     SoLuong = chitiethoadon.SoLuong,
                     Gia = chitiethoadon.Gia,
                     ThanhTien = chitiethoadon.ThanhTien,
-                    GiamGiaMaCoupon = chitiethoadon.GiamGiaMaCoupon,
-                    PhiVanChuyen = chitiethoadon.PhiVanChuyen
                 };
                 db.Chitiethoadons.Add(detailOrder);
                 db.SaveChanges();
             }            
         }
 
-        public void CreateOrder(HoadonVM model)
+        public Hoadon CreateOrder(HoadonVM model)
         {
             var Order = new Hoadon
             {
@@ -46,9 +44,14 @@ namespace APIBanXeDap.Repository.ThanhToan
                 Hoten = model.Hoten,
                 Sdt = model.Sdt,
                 ThoiGianGiao = model.ThoiGianGiao,
+                PhiVanChuyen = model.PhiVanChuyen,
+                GiamGiaMaCoupon = model.GiamGiaMaCoupon,
+                TienGoc = model.TienGoc,
+                TongTien = model.TongTien,
             };
             db.Hoadons.Add(Order);
             db.SaveChanges();
+            return Order;
         }
     }
 }

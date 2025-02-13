@@ -68,10 +68,10 @@
                                 <td>
                                     @coupon.NgayHetHan.ToString("dd-MM-yyyy")
                                 </td>
-                                <td class="@((coupon.TrangThai == true ? "text-success fw-bold" : "text-danger fw-bold"))">
-                                    @(coupon.TrangThai == true ? "Còn hiệu lực" : "Hết hiệu lực")
+                                <td class="@((coupon.TrangThai == true && coupon.DaSuDung == false && coupon.NgayHetHan > DateTime.Now ? "text-success fw-bold" : "text-danger fw-bold"))">
+                                    @(coupon.TrangThai == true && coupon.DaSuDung == false && coupon.NgayHetHan > DateTime.Now ? "Còn hiệu lực" : "Hết hiệu lực")
                                 </td>
-                                @if (coupon.TrangThai == true)
+                                @if (coupon.TrangThai == true && coupon.DaSuDung == false && coupon.NgayHetHan > DateTime.Now)
                                 {
                                     @if (coupon.MinimumOrderAmount > thanhtien)
                                     {

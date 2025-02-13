@@ -4049,8 +4049,8 @@
           "lib/net8.0/VNPAY.NET.dll": {}
         },
         "contentFiles": {
-          "contentFiles/any/any/_._": {
-            "buildAction": "None",
+          "contentFiles/any/net8.0/Icon.ico": {
+            "buildAction": "Content",
             "codeLanguage": "any",
             "copyToOutput": false
           }
@@ -12108,6 +12108,7 @@
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.12",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 8.0.7",
       "Newtonsoft.Json >= 13.0.3",
+      "VNPAY.NET >= 8.5.0",
       "X.PagedList.Mvc.Core >= 10.5.7",
       "itext7 >= 8.0.0",
       "itext7.bouncy-castle-adapter >= 8.0.0"
@@ -12187,6 +12188,10 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.3, )"
+          },
+          "VNPAY.NET": {
+            "target": "Package",
+            "version": "[8.5.0, )"
           },
           "X.PagedList.Mvc.Core": {
             "target": "Package",

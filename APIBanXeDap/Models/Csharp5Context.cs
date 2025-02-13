@@ -48,9 +48,8 @@ public partial class Csharp5Context : DbContext
 
         modelBuilder.Entity<Chitiethoadon>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("CHITIETHOADON");
+            entity.HasKey(e => new { e.MaHoaDon, e.MaSp, e.MaMau, e.MaKichThuoc});
+            entity.ToTable("CHITIETHOADON");
 
             entity.Property(e => e.Gia).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.MaSp).HasColumnName("MaSP");

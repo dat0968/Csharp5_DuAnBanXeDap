@@ -23,12 +23,12 @@ namespace MVCBanXeDap.Controllers
             _config = config;
         }
         [HttpGet]
-        public IActionResult LoginCustomer()
+        public IActionResult Login_Customer()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> LoginCustomer(Login model)
+        public async Task<IActionResult> Login_Customer(Login model)
         {
             try
             {
@@ -51,6 +51,10 @@ namespace MVCBanXeDap.Controllers
                             {
                                 HttpContext.Session.SetString("AccessToken", token["accessToken"]?.ToString());
                                 HttpContext.Session.SetString("RefreshToken", token["refreshToken"]?.ToString());
+                                var phoneNumber = responseData["phoneNumber"].ToString();
+                                var fullName = responseData["fullName"].ToString();
+                                HttpContext.Session.SetString("PhoneNumber", phoneNumber);
+                                HttpContext.Session.SetString("FullName", fullName);
                                 TempData["SuccessMessage"] = "Đăng nhập thành công";
                                 return RedirectToAction("Index", "Home");
                             }
@@ -77,12 +81,12 @@ namespace MVCBanXeDap.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult LoginStaff()
+        public IActionResult Login_Staff()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> LoginStaff(Login model)
+        public async Task<IActionResult> Login_Staff(Login model)
         {
             try
             {
@@ -131,12 +135,12 @@ namespace MVCBanXeDap.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult RegisterAccounts()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register(Register model)
+        public async Task<IActionResult> RegisterAccounts(Register model)
         {
             if (ModelState.IsValid)
             {
@@ -161,7 +165,7 @@ namespace MVCBanXeDap.Controllers
             }
             return View(model);
         }
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutAccount()
         {
             string refreshToken = HttpContext.Session.GetString("RefreshToken");
             HttpResponseMessage response = await _client.DeleteAsync(_client.BaseAddress + $"Accounts/Logout?RefreshToken={refreshToken}");
@@ -181,12 +185,12 @@ namespace MVCBanXeDap.Controllers
             return RedirectToAction("Index", "Home");
         }
         [HttpGet]
-        public async Task<IActionResult> ForgotPasswordCustomer()
+        public async Task<IActionResult> ForgotPassword_Customer()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> ForgotPasswordCustomer(string? YourEmail)
+        public async Task<IActionResult> ForgotPassword_Customer(string? YourEmail)
         {
             if (string.IsNullOrEmpty(YourEmail))
             {
@@ -218,12 +222,12 @@ namespace MVCBanXeDap.Controllers
             return BadRequest();
         }
         [HttpGet]
-        public async Task<IActionResult> ForgotPasswordStaff()
+        public async Task<IActionResult> ForgotPassword_Staff()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> ForgotPasswordStaff(string? YourEmail)
+        public async Task<IActionResult> ForgotPassword_Staff(string? YourEmail)
         {
             if (string.IsNullOrEmpty(YourEmail))
             {
@@ -256,7 +260,7 @@ namespace MVCBanXeDap.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GoogleLogin()
+        public async Task<IActionResult> Google_Login()
         {
             HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "Accounts/LoginGoogle").Result;
             if (response.IsSuccessStatusCode)

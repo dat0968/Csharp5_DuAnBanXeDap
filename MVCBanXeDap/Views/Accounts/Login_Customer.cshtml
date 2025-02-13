@@ -135,7 +135,7 @@
 </head>
 <body>
     <div class="main">
-        <form asp-action="LoginCustomer" class="form" id="form-1">
+        <form asp-action="Login_Customer" class="form" id="form-1">
             <h3 class="heading">ĐĂNG NHẬP</h3>
             <p class="desc">Chào mừng đến với URANISHOP ❤️</p>
             <div asp-validation-summary="ModelOnly" style="color:red"></div>
@@ -153,14 +153,14 @@
             </div>
             <div style="text-align: center; color: red" class="text-center mt-3">
                 <span>Bạn chưa có tài khoản?</span>
-                <a asp-action="Register" asp-controller="Accounts" style="color: rgb(85, 26, 139)">Đăng ký</a>
+                <a asp-action="RegisterAccounts" asp-controller="Accounts" style="color: rgb(85, 26, 139)">Đăng ký</a>
             </div>
             <div style="text-align: center; color: blue" class="text-center mt-3">
-                <a asp-action="ForgotPasswordCustomer" asp-controller="Accounts">Quên mật khẩu?</a>
+                <a asp-action="ForgotPassword_Customer" asp-controller="Accounts">Quên mật khẩu?</a>
             </div>
             <button type="submit" class="form-submit">Đăng nhập</button>
             <div style="text-align: center; margin-top: 16px;">
-                <a asp-action="GoogleLogin" asp-controller="Accounts" type="button" class="form-submit" style="background-color: #db4437; display: flex; align-items: center; justify-content: center; text-decoration: none">
+                <a asp-action="Google_Login" asp-controller="Accounts" type="button" class="form-submit" style="background-color: #db4437; display: flex; align-items: center; justify-content: center; text-decoration: none">
                     <img src="~/img/icon/idesign_logogg_1.jpg"
                          alt="Google Logo" style="width: 25px; height: 20px; margin-right: 8px;">
                     Đăng nhập với Google

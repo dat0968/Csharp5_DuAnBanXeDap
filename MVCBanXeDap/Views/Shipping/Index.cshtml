@@ -223,7 +223,7 @@
             for(let i = 1; i <= data.totalPages; i++){
                 const pageLink = `
                         <li class="page-item ${data.page === i ? "active" : ""}">
-                            <a class="page-link" data-page="${i}" href="/Shipping/Index?keywords=${keywords.value}&priceFilter=${priceFilter.value}&SortByPrice=${SortByPrice.value}&page=${i}"">${i}</a>
+                            <a class="page-link" data-page="${i}" href="/Shipping/Index?keywords=${keywords.value}&priceFilter=${priceFilter.value}&SortByPrice=${SortByPrice.value}&page=${i}">${i}</a>
                         </li>
                     `;
                     pagination.innerHTML += pageLink

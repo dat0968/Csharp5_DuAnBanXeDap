@@ -1,10 +1,11 @@
-﻿using APIBanXeDap.ViewModels;
+﻿using APIBanXeDap.Models;
+using APIBanXeDap.ViewModels;
 
 namespace APIBanXeDap.Repository.ThanhToan
 {
     public interface ICheckoutRepository
     {
-        public void CreateOrder(HoadonVM model);
+        public Hoadon CreateOrder(HoadonVM model);
         public void CreateDetailOrder(List<ChiTietHoaDonVM> model);
     }
 }

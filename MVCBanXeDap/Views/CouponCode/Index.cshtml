@@ -35,9 +35,11 @@
                 </div>
                 <div class="col-md-3">
                     <select id="statusFilter" class="form-select">
-                        <option selected="@(ViewBag.Status == null)" value="">Lọc theo trạng thái</option>
-                        <option selected="@(ViewBag.Status == 1)" value="true">Còn hiệu lực</option>
-                        <option selected="@(ViewBag.Status == 0)" value="false">Hết hiệu lực</option>
+                        <option selected="@(string.IsNullOrEmpty(ViewBag.Status))" value="">Lọc theo trạng thái</option>
+                        <option selected="@(ViewBag.Status == "Còn hiệu lực")" value="Còn hiệu lực">Còn hiệu lực</option>
+                        <option selected="@(ViewBag.Status == "Đã hủy")" value="Đã hủy">Đã hủy</option>
+                        <option selected="@(ViewBag.Status == "Đã hết hạn")" value="Đã hết hạn">Đã hết hạn</option>
+                        <option selected="@(ViewBag.Status == "Đã sử dụng")" value="Đã sử dụng">Đã sử dụng</option>
                     </select>
                 </div>               
                 <div class="col-md-3">
@@ -58,7 +60,7 @@
 
             <!-- Danh sách mã coupon -->
             <div class="table-responsive">
-                <table id="basic-datatables" class="display table table-striped table-hover">
+                <table class="display table table-striped table-hover">
                     <thead>
                         <tr>
                             <th>Mã</th>
@@ -92,22 +94,33 @@
                                 <td>
                                     @couponcode.NgayHetHan.ToString("dd-MM-yyyy")
                                 </td>
-                                <td class="@((couponcode.TrangThai == true ? "text-success fw-bold" : "text-danger fw-bold"))">
-                                    @(couponcode.TrangThai == true ? "Còn hiệu lực" : "Hết hiệu lực")
+                                <td class="@(
+                                    couponcode.TrangThai
+                                        ? (couponcode.DaSuDung ? "text-warning fw-bold" :
+                                            (couponcode.NgayHetHan > DateTime.Now ? "text-success fw-bold" : "text-danger fw-bold"))
+                                        : "text-danger fw-bold"
+                                    )">
+                                    @(
+                                        couponcode.TrangThai
+                                        ? (couponcode.DaSuDung ? "Đã sử dụng" :
+                                        (couponcode.NgayHetHan > DateTime.Now ? "Còn hiệu lực" : "Đã hết hạn"))
+                                        : "Đã hủy"
+                                        )
                                 </td>
+
                                 <td>@($"{couponcode.MinimumOrderAmount} VNĐ")</td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        @if (couponcode.TrangThai == true)
+                                        @if (couponcode.TrangThai == true && couponcode.DaSuDung == false && couponcode.NgayHetHan > DateTime.Now )
                                         {
                                             <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@couponcode.Code-edit">
                                                 <i class="fas fa-edit"></i> Sửa
                                             </button>
-                                            <partial name="_CouponCodeEdit" model="@couponcode"></partial>                                           
-                                        }
-                                        <form method="post" asp-action="DeleteCouponCode" asp-controller="CouponCode" asp-route-id="@couponcode.Code" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa mã coupon này không?')">
-                                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
-                                        </form>
+                                            <partial name="_CouponCodeEdit" model="@couponcode"></partial>
+                                            <form method="post" asp-action="CancelCouponCode" asp-controller="CouponCode" asp-route-id="@couponcode.Code" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn hủy mã coupon này không?')">
+                                                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Hủy</button>
+                                            </form>
+                                        }           
                                     </div>
                                 </td>
                             </tr>
@@ -159,39 +172,53 @@
                             ? `${couponcode.phanTramGiam} %`
                             : "Không có ưu đãi";
 
-                    const status = couponcode.trangThai
-                        ? `<span class="text-success fw-bold">Còn hiệu lực</span>`
-                        : `<span class="text-danger fw-bold">Hết hiệu lực</span>`;
+                    let statusClass = "text-danger fw-bold";
+                    let statusText = "Đã hết hạn";
+
+                    if (!couponcode.trangThai) {
+                        statusClass = "text-secondary fw-bold"; 
+                        statusText = "Đã hủy";
+                    } else {
+                        if (couponcode.daSuDung) {
+                            statusClass = "text-warning fw-bold"; 
+                            statusText = "Đã sử dụng";
+                        } else if (new Date(couponcode.ngayHetHan) > new Date()) {
+                            statusClass = "text-success fw-bold"; 
+                            statusText = "Còn hiệu lực";
+                        }
+                    }
 
                     const row = `
                         <tr>
-                            <td>${couponcode.code}</td>
-                            <td>${discount}</td>
-                            <td>${new Date(couponcode.ngayHetHan).toLocaleDateString("vi-VN")}</td>
-                            <td>${status}</td>
-                            <td>${couponcode.minimumOrderAmount} VNĐ</td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    ${couponcode.trangThai
-                                        ? `<button data-couponcode='${JSON.stringify(couponcode)}' onclick="loadPartialView(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${couponcode.code}-edit">
-                                                <i class="fas fa-edit"></i> Sửa
-                                            </button>`
-                                        : ""}
-                                    <form method="post" action="/CouponCode/DeleteCouponCode/${couponcode.code}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa mã coupon này không?')">
-                                        <button class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash"></i> Xóa
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
+                        <td>${couponcode.code}</td>
+                        <td>${discount}</td>
+                        <td>${new Date(couponcode.ngayHetHan).toLocaleDateString("vi-VN")}</td>
+                        <td><span class="${statusClass}">${statusText}</span></td>
+                        <td>${couponcode.minimumOrderAmount} VNĐ</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                ${(couponcode.trangThai && !couponcode.daSuDung)
+                                    ? `<button data-couponcode='${JSON.stringify(couponcode)}' onclick="loadPartialView(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${couponcode.code}-edit">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </button>`
+                                    : ""}
+                                ${(!couponcode.daSuDung && couponcode.trangThai)
+                                    ? `<form method="post" action="/CouponCode/CancelCouponCode/${couponcode.code}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn hủy mã coupon này không?')">
+                                            <button class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Hủy
+                                            </button>
+                                        </form>`
+                                    : ""}
+                            </div>
+                        </td>
+                    </tr>
                     `;
 
                     tableBody.innerHTML += row;
                 });
-
                 // Cập nhật phân trang
                 updatePagination(data);
+                
             })
             .catch(error => console.error("Error fetching data:", error));
     }
@@ -232,9 +259,10 @@
     function updatePagination(data) {
         const pagination = document.querySelector(".pagination");
         pagination.innerHTML = "";
+        console.log(data.page)
         for (let i = 1; i <= data.totalPages; i++) {
             const pageLink = `
-                <li class="page-item ${data.page === i ? "active" : ""}">
+                <li class="page-item ${ "1" == i ? "active" : ""}">
                     <a class="page-link" data-page="${i}" href="#">${i}</a>
                 </li>
             `;
@@ -242,13 +270,12 @@
         }
 
         const paginationLinks = document.querySelectorAll(".page-link");
-        paginationLinks.forEach(link => {
-            link.addEventListener("click", event => {
-                event.preventDefault();
+        if (keywords && paginationLinks) {
+            paginationLinks.forEach(link => {
                 const page = link.getAttribute("data-page");
-                GenerateTableCouponCode(page);
+                link.href = `/CouponCode/Index?keywords=${keywords.value}&status=${statusFilter.value}&sort=${sortByTime.value}&page=${page}`;
             });
-        });
+        }
     }
 
     // Gọi hàm GenerateTableCouponCode khi các input thay đổi

@@ -16,7 +16,7 @@ namespace MVCBanXeDap.Controllers
             this._client = new HttpClient();
             _client.BaseAddress = uri;
         }
-        public IActionResult Index(string? keywords, bool? status, string? sort ,int page = 1)
+        public IActionResult Index(string? keywords, string? status, string? sort ,int page = 1)
         {
             var listCouponCode = new List<MaCouponVM>();
             HttpResponseMessage responseGetAllResponse = _client.GetAsync(_client.BaseAddress + $"MaCoupons/GetAllCouponCode?keywords={keywords}&status={status}&page={page}").Result;
@@ -90,9 +90,9 @@ namespace MVCBanXeDap.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteCouponCode(string id)
+        public async Task<IActionResult> CancelCouponCode(string id)
         {
-            HttpResponseMessage response = await _client.DeleteAsync(_client.BaseAddress + $"MaCoupons/Delete?id={id}");
+            HttpResponseMessage response = await _client.PutAsync(_client.BaseAddress + $"MaCoupons/Cancel?id={id}", null);
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();

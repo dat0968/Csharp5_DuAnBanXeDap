@@ -16,6 +16,6 @@ namespace APIBanXeDap.Models
         [Required]
         public DateTime NgayTao { get; set; } = DateTime.Now;
         [Required]
-        public bool DaSuDung = false;
+        public bool DaSuDung { get; set; } = false;
     }
 }

@@ -2,6 +2,7 @@ using MVCBanXeDap.Services.Email;
 using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.Services;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using VNPAY.NET;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -19,6 +20,7 @@ builder.Services.AddHttpClient("ApiClient", client =>
     client.BaseAddress = new Uri("https://localhost:7137/api");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+builder.Services.AddScoped<IVnpay, Vnpay>();
 var app = builder.Build();
 
 

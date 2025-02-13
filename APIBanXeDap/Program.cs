@@ -108,12 +108,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("MyPolicy");
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseCors("MyPolicy");
 app.UseSession();
 app.UseAuthentication();
-app.UseAuthorization();
-app.UseStaticFiles();
+app.UseAuthorization();;
 app.MapControllers();
 
 SeedDb();

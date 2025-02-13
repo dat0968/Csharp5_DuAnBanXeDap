@@ -29,26 +29,19 @@ namespace APIBanXeDap.Repository.MaCoupon
             return maCoupon;
         }
 
-        public void Delete(string id)
+        public void Cancel(string id)
         {
             var FindMaCoupon = db.MaCoupons.FirstOrDefault(p => p.Code == id);
             if (FindMaCoupon != null)
             {
-                db.MaCoupons.Remove(FindMaCoupon);
+                FindMaCoupon.TrangThai = false;
                 db.SaveChanges();
             }
         }
 
-        public List<MaCouponVM> GetAll(string? keywords, bool? status, string? sort)
+        public List<MaCouponVM> GetAll(string? keywords, string? status, string? sort)
         {
-            var listCouponCode = db.MaCoupons.AsEnumerable();
-            var expiredCoupons = listCouponCode.Where(c => (c.NgayHetHan < DateTime.Now || c.DaSuDung == true )&& c.TrangThai == true).ToList();
-            foreach (var coupon in expiredCoupons)
-            {
-                coupon.TrangThai = false;
-            }
-            db.UpdateRange(expiredCoupons);
-            db.SaveChanges();
+            var listCouponCode = db.MaCoupons.AsQueryable();
             var CovertToListMaCouponVM = new List<MaCouponVM>();
             
             if (!string.IsNullOrEmpty(keywords))
@@ -57,12 +50,18 @@ namespace APIBanXeDap.Repository.MaCoupon
             }
             switch (status)
             {
-                case true:
-                    listCouponCode = listCouponCode.Where(p => p.TrangThai == true);
+                case "Còn hiệu lực":
+                    listCouponCode = listCouponCode.Where(p => p.TrangThai == true && p.DaSuDung == false && p.NgayHetHan > DateTime.Now);
                     break;
-                case false:
+                case "Đã hủy":
                     listCouponCode = listCouponCode.Where(p => p.TrangThai == false);
                     break;
+                case "Đã sử dụng":
+                    listCouponCode = listCouponCode.Where(p => p.DaSuDung == true);
+                    break;
+                case "Đã hết hạn":
+                    listCouponCode = listCouponCode.Where(p => p.NgayHetHan < DateTime.Now);
+                    break;   
                 default:
                     listCouponCode = listCouponCode.OrderByDescending(p => p.NgayTao);
                     break;
@@ -78,12 +77,6 @@ namespace APIBanXeDap.Repository.MaCoupon
             }
             foreach (var item in listCouponCode)
             {
-                //if (item.NgayHetHan < DateTime.Now)
-                //{
-                //    item.TrangThai = false;
-                //    db.MaCoupons.Update(item);
-                //    db.SaveChanges();
-                //}
                 CovertToListMaCouponVM.Add(new MaCouponVM
                 {
                     Code = item.Code,
@@ -92,8 +85,8 @@ namespace APIBanXeDap.Repository.MaCoupon
                     NgayHetHan = item.NgayHetHan,
                     TrangThai = item.TrangThai,
                     NgayTao = item.NgayTao,
+                    DaSuDung = false,
                     MinimumOrderAmount = item.MinimumOrderAmount,
-                    DaSuDung = item.DaSuDung,
                 });
             }
             return CovertToListMaCouponVM;
@@ -110,9 +103,20 @@ namespace APIBanXeDap.Repository.MaCoupon
                 TrangThai = maCoupon.TrangThai,
                 NgayTao = maCoupon.NgayTao,
                 MinimumOrderAmount = maCoupon.MinimumOrderAmount,
+                DaSuDung = maCoupon.DaSuDung,
             };
             db.MaCoupons.Update(editCouponCode);
             db.SaveChanges();
+        }
+        public void RevokeCouponCode(string id)
+        {
+            var findCouponCode = db.MaCoupons.FirstOrDefault(p => p.Code == id);
+            if(findCouponCode != null)
+            {
+                findCouponCode.DaSuDung = true;
+                db.MaCoupons.Update(findCouponCode);
+                db.SaveChanges();
+            }
         }
     }
 }

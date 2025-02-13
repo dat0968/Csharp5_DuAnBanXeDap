@@ -3,6 +3,7 @@ using APIBanXeDap.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
 
 namespace APIBanXeDap.Controllers
 {
@@ -17,17 +18,17 @@ namespace APIBanXeDap.Controllers
             this.MaCouponRepository = MaCouponRepository;
         }
         [HttpGet("GetAllCouponCode")]
-        public IActionResult GetAll(string? keywords, bool? status, string? sort, int page)
+        public IActionResult GetAll(string? keywords, string? status, string? sort, int page)
         {
-            if(page >= 1)
+            try
             {
                 int pagesize = 5;
-                try
+                var listCounponCode = MaCouponRepository.GetAll(keywords, status, sort);
+                var totalItems = listCounponCode.Count();
+                var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
+                if(page >= 1)
                 {
-                    var listCounponCode = MaCouponRepository.GetAll(keywords, status, sort);
                     var pagedCouponCode = listCounponCode.Skip((page - 1) * pagesize).Take(pagesize);
-                    var totalItems = listCounponCode.Count();
-                    var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
                     return Ok(new
                     {
                         Success = true,
@@ -37,36 +38,25 @@ namespace APIBanXeDap.Controllers
                         Page = page,
                     });
                 }
-                catch (Exception ex)
+                else
                 {
-                    return Ok(new
-                    {
-                        Success = false,
-                        Message = $"Error {ex.Message}"
-                    });
-                }
-            }
-            else
-            {
-                try
-                {
-                    var listCounponCode = MaCouponRepository.GetAll(keywords, status, sort);
                     return Ok(new
                     {
                         Success = true,
                         Data = listCounponCode,
-                    });
-                }
-                catch (Exception ex)
-                {
-                    return Ok(new
-                    {
-                        Success = false,
-                        Message = $"Error {ex.Message}"
+                        TotalItems = totalItems,
+                        TotalPages = totalPages,
                     });
                 }
             }
-                      
+            catch(Exception ex)
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = $"Error {ex.Message}"
+                });
+            }           
         }
         [HttpPost("Create")]
         public IActionResult Create(MaCouponVM model)
@@ -110,16 +100,16 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
-        [HttpDelete("Delete")]
-        public IActionResult Delete(string id)
+        [HttpPut("Cancel")]
+        public IActionResult Cancel(string id)
         {
             try
             {
-                MaCouponRepository.Delete(id);
+                MaCouponRepository.Cancel(id);
                 return Ok(new
                 {
                     Success = true,
-                    Message = "Xóa thông tin mã coupon thành công"
+                    Message = "Hủy thông tin mã coupon thành công"
                 });
             }
             catch (Exception ex)
@@ -130,6 +120,26 @@ namespace APIBanXeDap.Controllers
                     Message = $"error {ex.Message}"
                 });
             }
-        }       
+        }
+        [HttpPut("RevokeCouponCode")]
+        public IActionResult RevokeCouponCode(string id)
+        {
+            try
+            {
+                MaCouponRepository.RevokeCouponCode(id);
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Thu hồi mã coupon thành công"
+                });
+            }catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = $"Error {ex.Message}"
+                });
+            }
+        }
     }
 }

@@ -89,12 +89,14 @@ namespace APIBanXeDap.Controllers
             {
                 Success = true,
                 Message = "Login successfully",
-                IDCustomer = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sub),
+                //IDCustomer = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sub),
                 Data = new TokenResponse
                 {
                     AccessToken = AccessToken,
                     RefreshToken = RefreshToken,
                 },
+                PhoneNumber = findUser.Sdt != null ? findUser.Sdt : null,
+                FullName = findUser.HoTen
             });
         }
         [HttpPost("LoginStaff")]
