@@ -102,7 +102,7 @@
                                     )">
                                     @(
                                         couponcode.TrangThai
-                                        ? (couponcode.DaSuDung ? "Đã sử dụng" :
+                                        ? (couponcode.DaSuDung == true ? "Đã sử dụng" :
                                         (couponcode.NgayHetHan > DateTime.Now ? "Còn hiệu lực" : "Đã hết hạn"))
                                         : "Đã hủy"
                                         )

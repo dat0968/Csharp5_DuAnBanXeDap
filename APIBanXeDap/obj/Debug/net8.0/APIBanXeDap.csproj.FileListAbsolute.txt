@@ -100,7 +100,6 @@ F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\System.Runtime.Caching.dll
 F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
 F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\System.Security.Permissions.dll
 F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\System.Windows.Extensions.dll
-F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\VNPAY.NET.dll
 F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\af\Humanizer.resources.dll
 F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\ar\Humanizer.resources.dll
 F:\CSHARP_5\APIBanXeDap\APIBanXeDap\bin\Debug\net8.0\az\Humanizer.resources.dll

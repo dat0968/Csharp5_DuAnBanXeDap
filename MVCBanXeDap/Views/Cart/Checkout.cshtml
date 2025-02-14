@@ -488,6 +488,23 @@
 
         if (!isValid) {
             event.preventDefault(); // Ngăn form submit nếu có lỗi
+        }else{
+            var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')
+            if(paymentMethod.value == "COD"){
+                event.preventDefault();
+                Swal.fire({
+                    title: "Xác nhận thanh toán",
+                    text: "Bạn có muốn thanh toán COD cho giỏ hàng không?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Có",
+                    cancelButtonText: "Không"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        event.target.submit();
+                    }
+                });
+            }
         }
     });
 </script>

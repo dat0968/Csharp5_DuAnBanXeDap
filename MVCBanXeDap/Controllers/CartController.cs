@@ -10,8 +10,11 @@ using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Asn1;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
+using VNPAY.NET.Enums;
+using VNPAY.NET.Models;
 
 
 namespace MVCBanXeDap.Controllers
@@ -194,6 +197,11 @@ namespace MVCBanXeDap.Controllers
         public IActionResult Checkout()
         {
             var mycart = Cart;
+            if(mycart.ListCartItem.Count == 0)
+            {
+                TempData["ErrorMessage"] = "Giỏ hàng đang trống, vui lòng thêm sản phẩm vào giỏ trước khi thanh toán";
+                return RedirectToAction("Index", "Cart");
+            }
             ViewBag.PhoneNumber = HttpContext.Session.GetString("PhoneNumber")?.Trim('"');
             ViewBag.FullName = HttpContext.Session.GetString("FullName")?.Trim('"');
             return View(mycart);
@@ -254,25 +262,46 @@ namespace MVCBanXeDap.Controllers
 
                     if(paymentMethod == "VNPAY")
                     {
-                        return RedirectToAction("CreatePaymentUrl", new { mycart.TongTien, mota });
-                    }
-                    var model = JsonConvert.SerializeObject(thongtinhoadon);
-                    StringContent content = new StringContent(model, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = await _client.PostAsync(_client.BaseAddress + "Checkouts/CreatePaymentUrl", content);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var redirectUrl = response.Headers.Location?.ToString();
-                        if (!string.IsNullOrEmpty(redirectUrl))
+                        var model = JsonConvert.SerializeObject(thongtinhoadon);
+                        StringContent content = new StringContent(model, Encoding.UTF8, "application/json");
+                        var response = await _client.PostAsync("https://localhost:7029/api/VnpayPayment/CreatePaymentUrl", content);
+                        if (response.IsSuccessStatusCode)
                         {
-                            return Redirect(redirectUrl);
+                            var url = response.Headers.Location.ToString();
+                            return Redirect(url);
                         }
-                       // return RedirectToAction("Index");
                     }
+                    if(paymentMethod == "COD")
+                    {
+                        var model = JsonConvert.SerializeObject(thongtinhoadon);
+                        StringContent content = new StringContent(model, Encoding.UTF8, "application/json");
+                        HttpResponseMessage response = _client.PostAsync(_client.BaseAddress + "Checkouts/CheckoutOrders", content).Result;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string data = response.Content.ReadAsStringAsync().Result;
+                            var DeserializeObj = JsonConvert.DeserializeObject<JObject>(data);
+                            var isSuccess = DeserializeObj["success"].Value<bool>();
+                            var message = DeserializeObj["message"].ToString();
+                            if (isSuccess)
+                            {
+                                return RedirectToAction("SuccessCheckout", "Cart", new { IDorder = thongtinhoadon.HoaDon.MaHoaDon, AmoutTotal = thongtinhoadon.HoaDon.TongTien });
+                            }
+                            return NotFound($"Không tìm thấy thông tin thanh toán. Error {message}");
+                        }
+                    }
+                    
                     return NotFound();
                 }
             }
             return RedirectToAction("LogoutAccount", "Accounts");
         }
-       
+        [HttpGet]
+        public IActionResult SuccessCheckout(string IDorder, string AmoutTotal)
+        {
+            HttpContext.Session.Remove("MYCART");
+            ViewBag.IDorder = IDorder;
+            ViewBag.AmoutTotal = AmoutTotal;
+            return View();
+        }
     }
 }

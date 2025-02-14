@@ -542,7 +542,7 @@
         }
       }
     },
-    "/api/Checkouts": {
+    "/api/Checkouts/CheckoutOrders": {
       "post": {
         "tags": [
           "Checkouts"
@@ -569,52 +569,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Checkouts/CreatePaymentUrl": {
-      "get": {
-        "tags": [
-          "Checkouts"
-        ],
-        "parameters": [
-          {
-            "name": "moneyToPay",
-            "in": "query",
-            "schema": {
-              "type": "number",
-              "format": "double"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }

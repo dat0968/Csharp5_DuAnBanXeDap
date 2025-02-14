@@ -366,7 +366,7 @@
   {
     "ContainingType": "APIBanXeDap.Controllers.CheckoutsController",
     "Method": "CheckoutOrders",
-    "RelativePath": "api/Checkouts",
+    "RelativePath": "api/Checkouts/CheckoutOrders",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -378,37 +378,6 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "APIBanXeDap.Controllers.CheckoutsController",
-    "Method": "CreatePaymentUrl",
-    "RelativePath": "api/Checkouts/CreatePaymentUrl",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "moneyToPay",
-        "Type": "System.Double",
-        "IsRequired": false
-      },
-      {
-        "Name": "description",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.ColorsController",

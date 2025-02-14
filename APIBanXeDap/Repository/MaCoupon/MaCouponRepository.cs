@@ -85,7 +85,7 @@ namespace APIBanXeDap.Repository.MaCoupon
                     NgayHetHan = item.NgayHetHan,
                     TrangThai = item.TrangThai,
                     NgayTao = item.NgayTao,
-                    DaSuDung = false,
+                    DaSuDung = item.DaSuDung,
                     MinimumOrderAmount = item.MinimumOrderAmount,
                 });
             }
