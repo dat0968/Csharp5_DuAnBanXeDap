@@ -51,6 +51,12 @@ namespace APIBanXeDap.Controllers
             var result = await _yeuThichRepo.GetAllYeuThichVMAsync(x => x.MaNguoiDung == idUser, includeProperties: "Sanpham");
             return Ok(result);
         }
+        [HttpGet("{idUser}")]
+        public async Task<IActionResult> CountWishlistOfUser(int idUser)
+        {
+            var result = await _yeuThichRepo.GetAllYeuThichVMAsync(x => x.MaNguoiDung == idUser, includeProperties: "Sanpham");
+            return Ok(result.Count());
+        }
 
         [HttpGet("{idProduct}&{idUser}")]
         public async Task<IActionResult> GetWishlistItem(int idProduct, int idUser)

@@ -85,16 +85,12 @@ namespace APIBanXeDap.Repository.YeuThich
                 MaDoiTuong = entity.MaDoiTuong,
                 MaNguoiDung = entity.MaNguoiDung,
                 DoiTuongYeuThich = entity.DoiTuongYeuThich,
-                //NoiDungBinhLuan = entity.DoiTuongYeuThich == "BinhLuan" ? entity.NoiDungBinhLuan : null,
-                TenSp = entity.DoiTuongYeuThich == "SanPham" ? entity.Sanpham?.TenSp : null,
-                ThuongHieu = entity.DoiTuongYeuThich == "SanPham" ? entity.Sanpham?.MaThuongHieuNavigation.TenThuongHieu : null,
-                Hinh = entity.DoiTuongYeuThich == "SanPham" ? entity.Sanpham?.Hinh : null,
+                TenSp = entity.DoiTuongYeuThich == "SanPham" && entity.Sanpham != null ? entity.Sanpham.TenSp : null,
+                ThuongHieu = entity.DoiTuongYeuThich == "SanPham" && entity.Sanpham != null ? entity.Sanpham.MaThuongHieuNavigation?.TenThuongHieu : null,
+                Hinh = entity.DoiTuongYeuThich == "SanPham" && entity.Sanpham != null ? entity.Sanpham.Hinh : null,
                 MoTa = entity.Sanpham?.MoTa ?? null,
-                //NgayBinhLuan = entity.NgayBinhLuan,
-                NhaCungCap = entity.DoiTuongYeuThich == "SanPham" ? entity.Sanpham?.MaNhaCcNavigation.TenNhaCc : null,
-                DanhMuc = entity.DoiTuongYeuThich == "SanPham" ? entity.Sanpham?.MaDanhMucNavigation.TenDanhMuc : null,
-                //SoLuong = entity.DoiTuongYeuThich == "SanPham" ? entity.Sanpham?.SoLuong ?? 0 : 0,
-                //KhoangGia = entity.DoiTuongYeuThich == "SanPham" ? entity.Sanpham?.KhoangGia : null
+                NhaCungCap = entity.DoiTuongYeuThich == "SanPham" && entity.Sanpham != null ? entity.Sanpham.MaNhaCcNavigation?.TenNhaCc : null,
+                DanhMuc = entity.DoiTuongYeuThich == "SanPham" && entity.Sanpham != null ? entity.Sanpham.MaDanhMucNavigation?.TenDanhMuc : null,
             }).ToList();
         }
 

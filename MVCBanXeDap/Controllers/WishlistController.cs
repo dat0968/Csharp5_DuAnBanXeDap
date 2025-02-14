@@ -31,10 +31,21 @@ namespace MVCBanXeDap.Controllers
 
         public async Task<IActionResult> ChangeWishlist(int idProduct, string typeObject)
         {
+            string? roleUser = GetUserRole();
+
+            if (roleUser == null)
+            {
+                return Json(new { success = false, message = "Bạn cần đăng nhập để thay đổi yêu thích.", isLoginAgain = true });
+            }
+
+            if (roleUser == "Staff")
+            {
+                return Json(new { success = false, message = "Bạn không phải là khách hàng để yêu thích sản phẩm." });
+            }
             int? idUser = await GetUserIdAsync();
             if (idUser == null)
             {
-                return Json(new { success = false, message = "Bạn cần đăng nhập để thay đổi danh sách yêu thích.", isLoginAgain = true });
+                return Json(new { success = false, message = "Bạn cần đăng nhập để thay đổi yêu thích.", isLoginAgain = true });
             }
 
             var response = await _client.PutAsJsonAsync(_client.BaseAddress + $"Wishlist/ChangeStatusWishlist/{idProduct}&{idUser}", new { });
@@ -49,6 +60,18 @@ namespace MVCBanXeDap.Controllers
 
         public async Task<IActionResult> IsOneInWishlist(int idProduct)
         {
+            string? roleUser = GetUserRole();
+
+            if (roleUser == null)
+            {
+                return Json(new { data = false });
+            }
+
+            if (roleUser == "Staff")
+            {
+                return Json(new { data = false });
+            }
+
             int? idUser = await GetUserIdAsync();
             if (idUser == null)
             {
@@ -67,6 +90,18 @@ namespace MVCBanXeDap.Controllers
 
         public async Task<IActionResult> IsManyInWishlist(int[] idProducts)
         {
+            string? roleUser = GetUserRole();
+
+            if (roleUser == null)
+            {
+                return Json(new { data = Enumerable.Repeat(false, idProducts.Length).ToArray() });
+            }
+
+            if (roleUser == "Staff")
+            {
+                return Json(new { data = Enumerable.Repeat(false, idProducts.Length).ToArray() });
+            }
+
             int? idUser = await GetUserIdAsync();
             if (idUser == null)
             {
@@ -102,6 +137,18 @@ namespace MVCBanXeDap.Controllers
         }
 
         #region //NonAction
+        [NonAction]
+        private string? GetUserRole()
+        {
+            var role = HttpContext.Session.GetString("Role");
+
+            if (role == null)
+            {
+                return null;
+            }
+
+            return role;
+        }
         [NonAction]
         private async Task<int?> GetUserIdAsync()
         {

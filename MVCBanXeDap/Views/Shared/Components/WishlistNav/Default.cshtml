@@ -1,0 +1,15 @@
+﻿@using MVCBanXeDap.ViewModels
+@model WishlistNavVM
+
+<a href="/wishlist" class="btn position-relative" style="
+        outline: none;
+        box-shadow: none;">
+    <img src="img/icon/heart.png" alt="" class="heart-icon d-block mx-auto">
+    @if (Model.NumberOfWishlists.HasValue)
+    {
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            @Model.NumberOfWishlists.Value
+            <span class="visually-hidden">wishlist items</span>
+        </span>
+    }
+</a>
