@@ -2899,6 +2899,141 @@
         }
       }
     },
+    "/api/UpdateProfile/UpdateProfile/{id}": {
+      "put": {
+        "tags": [
+          "UpdateProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "Cccd",
+                  "Email",
+                  "HoTen",
+                  "MatKhau",
+                  "Sdt",
+                  "TenTaiKhoan"
+                ],
+                "type": "object",
+                "properties": {
+                  "MaKh": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "HoTen": {
+                    "type": "string"
+                  },
+                  "Cccd": {
+                    "pattern": "^0\\d{11}$",
+                    "type": "string"
+                  },
+                  "Sdt": {
+                    "pattern": "^0\\d{9}$",
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "TenTaiKhoan": {
+                    "pattern": "^[a-zA-Z0-9]*$",
+                    "type": "string"
+                  },
+                  "MatKhau": {
+                    "type": "string"
+                  },
+                  "GioiTinh": {
+                    "type": "string"
+                  },
+                  "NgaySinh": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "DiaChi": {
+                    "type": "string"
+                  },
+                  "TinhTrang": {
+                    "type": "string"
+                  },
+                  "Hinh": {
+                    "type": "string"
+                  },
+                  "Anh": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "IsDelete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "MaKh": {
+                  "style": "form"
+                },
+                "HoTen": {
+                  "style": "form"
+                },
+                "Cccd": {
+                  "style": "form"
+                },
+                "Sdt": {
+                  "style": "form"
+                },
+                "Email": {
+                  "style": "form"
+                },
+                "TenTaiKhoan": {
+                  "style": "form"
+                },
+                "MatKhau": {
+                  "style": "form"
+                },
+                "GioiTinh": {
+                  "style": "form"
+                },
+                "NgaySinh": {
+                  "style": "form"
+                },
+                "DiaChi": {
+                  "style": "form"
+                },
+                "TinhTrang": {
+                  "style": "form"
+                },
+                "Hinh": {
+                  "style": "form"
+                },
+                "Anh": {
+                  "style": "form"
+                },
+                "IsDelete": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [

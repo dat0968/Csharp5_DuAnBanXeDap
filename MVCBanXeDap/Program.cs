@@ -3,9 +3,12 @@ using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.Services;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using VNPAY.NET;
+using APIBanXeDap.Repository.HinhAnhSanPham;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(1);

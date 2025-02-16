@@ -1,0 +1,79 @@
+﻿@model MVCBanXeDap.ViewModels.KhachHangVM
+
+@{
+    ViewData["Title"] = "Cập Nhật Thông Tin Khách Hàng";
+}
+
+<h2 class="text-center">Cập Nhật Thông Tin</h2>
+
+<form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="MaKh" />
+
+    <div class="form-group">
+        <label>Họ và Tên</label>
+        <input asp-for="HoTen" class="form-control" />
+        <span asp-validation-for="HoTen" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Số CCCD</label>
+        <input asp-for="Cccd" class="form-control" />
+        <span asp-validation-for="Cccd" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Số Điện Thoại</label>
+        <input asp-for="Sdt" class="form-control" />
+        <span asp-validation-for="Sdt" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" type="email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Tên Tài Khoản</label>
+        <input asp-for="TenTaiKhoan" class="form-control" />
+        <span asp-validation-for="TenTaiKhoan" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Mật Khẩu</label>
+        <input asp-for="MatKhau" class="form-control" type="password" />
+        <span asp-validation-for="MatKhau" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Giới Tính</label>
+        <select asp-for="GioiTinh" class="form-control">
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+            <option value="Khác">Khác</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Ngày Sinh</label>
+        <input asp-for="NgaySinh" class="form-control" type="date" />
+    </div>
+
+    <div class="form-group">
+        <label>Địa Chỉ</label>
+        <input asp-for="DiaChi" class="form-control" />
+        <span asp-validation-for="DiaChi" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Ảnh Đại Diện</label><br />
+        @if (!string.IsNullOrEmpty(Model.Hinh))
+        {
+            <img src="~/Hinh/AnhKhachHang/@Model.Hinh" width="100" height="100" class="mb-2" />
+        }
+        <input asp-for="Anh" type="file" class="form-control-file" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Hủy</a>
+</form>
