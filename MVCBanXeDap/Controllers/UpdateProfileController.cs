@@ -67,7 +67,7 @@ namespace MVCBanXeDap.Controllers
                 fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(khachHang.Anh.ContentType);
                 formData.Add(fileContent, "Anh", khachHang.Anh.FileName);
             }
-            var json = JsonConvert.SerializeObject(khachHang);
+            var json = JsonConvert.SerializeObject(formData);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Gọi API cập nhật

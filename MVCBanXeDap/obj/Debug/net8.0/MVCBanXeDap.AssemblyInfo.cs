@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MVCBanXeDap")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6c2c34abcbac014206d8c077d113c51ef769864c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+46c7b2a5863b9bd18ecc5e0b00e1f10dbc5c31fe")]
 [assembly: System.Reflection.AssemblyProductAttribute("MVCBanXeDap")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MVCBanXeDap")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
