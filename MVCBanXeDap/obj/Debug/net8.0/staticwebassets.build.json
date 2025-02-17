@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8/eyPDkiE7FNEv3sJ0fS1RjTpaR2ag3cQlpowhNKaso=",
+  "Hash": "lGebU+J0SzjGtpyVWrDZhJN51BND1Pxd14++buzNLCE=",
   "Source": "MVCBanXeDap",
   "BasePath": "_content/MVCBanXeDap",
   "Mode": "Default",
@@ -36,6 +36,27 @@
   ],
   "Assets": [
     {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\15b5b786-8b00-4900-9f2d-991999762943_KBO09138 copy.jpg",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/15b5b786-8b00-4900-9f2d-991999762943_KBO09138 copy#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "uf4coyv75k",
+      "Integrity": "ejGFUovm+Dt1jhINm3L7TxKE84LEeTEPMz/OwymZVVo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\15b5b786-8b00-4900-9f2d-991999762943_KBO09138 copy.jpg"
+    },
+    {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4.png",
       "SourceId": "APIBanXeDap",
       "SourceType": "Project",
@@ -55,6 +76,48 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4.png"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.heic",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633#[.{fingerprint}]?.heic",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ekmm651kgs",
+      "Integrity": "viUbL5cpteJ9DhN7Cz8OqPNDkAjI3b/S0w5mT4RA87U=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.heic"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\a9993e96-d8e4-4c16-8754-e5939409b784_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/a9993e96-d8e4-4c16-8754-e5939409b784_z5445910105187_999b9327ce38f077a8f34a37b8345663#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7qkf363tvs",
+      "Integrity": "r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\a9993e96-d8e4-4c16-8754-e5939409b784_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg"
     },
     {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\download (1).jpg",
@@ -118,6 +181,48 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\download.jpg"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\e626df7c-8a70-4782-8a18-db3f9235dfc5_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/e626df7c-8a70-4782-8a18-db3f9235dfc5_z5445910105187_999b9327ce38f077a8f34a37b8345663#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7qkf363tvs",
+      "Integrity": "r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\e626df7c-8a70-4782-8a18-db3f9235dfc5_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\fa60fe2f-8fc8-4574-b404-58f45b5fc941_IMG_1053.jpg",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/fa60fe2f-8fc8-4574-b404-58f45b5fc941_IMG_1053#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "zybmpub30k",
+      "Integrity": "G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\fa60fe2f-8fc8-4574-b404-58f45b5fc941_IMG_1053.jpg"
     },
     {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (1).jpg",
@@ -14675,6 +14780,88 @@
   ],
   "Endpoints": [
     {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/15b5b786-8b00-4900-9f2d-991999762943_KBO09138 copy.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\15b5b786-8b00-4900-9f2d-991999762943_KBO09138 copy.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17467043"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ejGFUovm+Dt1jhINm3L7TxKE84LEeTEPMz/OwymZVVo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ejGFUovm+Dt1jhINm3L7TxKE84LEeTEPMz/OwymZVVo="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/15b5b786-8b00-4900-9f2d-991999762943_KBO09138 copy.uf4coyv75k.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\15b5b786-8b00-4900-9f2d-991999762943_KBO09138 copy.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17467043"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ejGFUovm+Dt1jhINm3L7TxKE84LEeTEPMz/OwymZVVo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "uf4coyv75k"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ejGFUovm+Dt1jhINm3L7TxKE84LEeTEPMz/OwymZVVo="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/15b5b786-8b00-4900-9f2d-991999762943_KBO09138 copy.jpg"
+        }
+      ]
+    },
+    {
       "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/4.6c2q89yecj.png",
       "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4.png",
       "Selectors": [],
@@ -14753,6 +14940,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-Vvpe/cQjYKpZLyde1An94VEY6QwFhNA5bhESBtrYbCM="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.ekmm651kgs.heic",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.heic",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1980618"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"viUbL5cpteJ9DhN7Cz8OqPNDkAjI3b/S0w5mT4RA87U=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ekmm651kgs"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-viUbL5cpteJ9DhN7Cz8OqPNDkAjI3b/S0w5mT4RA87U="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.heic"
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.heic",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.heic",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1980618"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"viUbL5cpteJ9DhN7Cz8OqPNDkAjI3b/S0w5mT4RA87U=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-viUbL5cpteJ9DhN7Cz8OqPNDkAjI3b/S0w5mT4RA87U="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/a9993e96-d8e4-4c16-8754-e5939409b784_z5445910105187_999b9327ce38f077a8f34a37b8345663.7qkf363tvs.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\a9993e96-d8e4-4c16-8754-e5939409b784_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "52713"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7qkf363tvs"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/a9993e96-d8e4-4c16-8754-e5939409b784_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg"
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/a9993e96-d8e4-4c16-8754-e5939409b784_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\a9993e96-d8e4-4c16-8754-e5939409b784_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "52713"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4="
         }
       ]
     },
@@ -14999,6 +15350,170 @@
         {
           "Name": "label",
           "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/download.jpg"
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/e626df7c-8a70-4782-8a18-db3f9235dfc5_z5445910105187_999b9327ce38f077a8f34a37b8345663.7qkf363tvs.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\e626df7c-8a70-4782-8a18-db3f9235dfc5_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "52713"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7qkf363tvs"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/e626df7c-8a70-4782-8a18-db3f9235dfc5_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg"
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/e626df7c-8a70-4782-8a18-db3f9235dfc5_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\e626df7c-8a70-4782-8a18-db3f9235dfc5_z5445910105187_999b9327ce38f077a8f34a37b8345663.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "52713"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-r0EhfgP06g9sk0lP1xdxl47yTN6v12ieghWgX4Z6pk4="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/fa60fe2f-8fc8-4574-b404-58f45b5fc941_IMG_1053.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\fa60fe2f-8fc8-4574-b404-58f45b5fc941_IMG_1053.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2835285"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/fa60fe2f-8fc8-4574-b404-58f45b5fc941_IMG_1053.zybmpub30k.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\fa60fe2f-8fc8-4574-b404-58f45b5fc941_IMG_1053.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2835285"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 17 Feb 2025 09:27:31 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zybmpub30k"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/fa60fe2f-8fc8-4574-b404-58f45b5fc941_IMG_1053.jpg"
         }
       ]
     },
@@ -69145,7 +69660,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 14 Feb 2025 10:17:42 GMT"
+          "Value": "Mon, 17 Feb 2025 09:35:28 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -69182,7 +69697,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 14 Feb 2025 10:17:42 GMT"
+          "Value": "Mon, 17 Feb 2025 09:35:28 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -69227,7 +69742,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 14 Feb 2025 10:17:42 GMT"
+          "Value": "Mon, 17 Feb 2025 09:35:28 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -69272,7 +69787,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 14 Feb 2025 10:17:42 GMT"
+          "Value": "Mon, 17 Feb 2025 09:35:28 GMT"
         },
         {
           "Name": "Cache-Control",

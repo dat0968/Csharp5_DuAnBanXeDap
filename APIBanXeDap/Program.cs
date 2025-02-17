@@ -25,6 +25,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using APIBanXeDap.Repository.ThanhToan;
+using APIBanXeDap.Repository.UpdateProfile;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -81,6 +82,7 @@ builder.Services.AddScoped<IKhachHangService, KhachHangService>();
 builder.Services.AddScoped<IKhachHangRepository, KhachHangRepository>();
 builder.Services.AddScoped<INhanVienService, NhanVienService>();
 builder.Services.AddScoped<INhanVienRepository, NhanVienRepository>();
+builder.Services.AddScoped<IUpdateProfileRepository, UpdateProfileRepository>();
 builder.Services.AddScoped<ICheckoutRepository, CheckoutRepository>();
 builder.Services.AddCors(options =>
 {
