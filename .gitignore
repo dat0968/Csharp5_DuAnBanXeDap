@@ -6,3 +6,4 @@ APIBanXeDap/obj/
 # Ignore bin and obj folders for MVCBanXeDap project
 MVCBanXeDap/bin/
 MVCBanXeDap/obj/
+/xUTPBanXeDap/obj
