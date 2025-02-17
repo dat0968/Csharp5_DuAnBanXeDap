@@ -1,6 +1,7 @@
 ﻿using APIBanXeDap.Models;
 using APIBanXeDap.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Security.AccessControl;
 
 namespace APIBanXeDap.DbInitializer
 {
@@ -28,8 +29,12 @@ namespace APIBanXeDap.DbInitializer
             {
                 CreateOrderForCharts();
             }
+            if (_db.YeuThichs.Count() == 0)
+            {
+                CreateWishlist();
+            }
         }
-        public void CreateTempStaff()
+        private void CreateTempStaff()
         {
             Nhanvien nhanvien = new Nhanvien
             {
@@ -52,7 +57,7 @@ namespace APIBanXeDap.DbInitializer
             _db.SaveChanges();
         }
 
-        public void CreateOrderForCharts()
+        private void CreateOrderForCharts()
         {
             try
             {
@@ -159,6 +164,35 @@ namespace APIBanXeDap.DbInitializer
             {
                 Console.WriteLine($"Đã xảy ra lỗi khi tạo hóa đơn: {ex.Message}");
             }
+        }
+        private void CreateWishlist()
+        {
+            int[] listProductIds = _db.Sanphams.Select(x => x.MaSp).ToArray();
+
+            //int[] listCommentIds = _db.Binhluans.Select(x => x.MaBl).ToArray(); Note: Table haven't been create in this momment
+
+            int[] listUserIds = _db.Khachhangs.Select(x => x.MaKh).ToArray();
+
+            List<Yeuthich> yeuThiches = new List<Yeuthich>();
+
+            Random rd = new Random();
+            foreach (int userId in listUserIds)
+            {
+                int[] randomWishlistForUser = Enumerable.Range(0, listProductIds.Length)
+                                                        .Select(_ => listProductIds[rd.Next(listProductIds.Length)]) // Sử dụng các ID sản phẩm hợp lệ
+                                                        .Distinct()
+                                                        .ToArray();
+
+                yeuThiches.AddRange(randomWishlistForUser.Select(productId => new Yeuthich
+                {
+                    MaDoiTuong = productId,
+                    MaNguoiDung = userId,
+                    DoiTuongYeuThich = "SanPham"
+                }));
+            }
+
+            _db.YeuThichs.AddRange(yeuThiches);
+            _db.SaveChanges();
         }
 
 

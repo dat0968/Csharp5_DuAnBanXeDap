@@ -55,6 +55,7 @@
         justify-content: center;
     }
 </style>
+
 <div class="container mt-4">
     <div class="row">
         <!-- Phần trái: Slide hình ảnh sản phẩm -->
@@ -72,6 +73,9 @@
                 <h2 class="text-danger">@Model.TenSp</h2>
                 <button class="btn btn-dark rounded mb-3" onclick="addProductToCompare(@Model.MaSP)">
                     <i class="fas fa-exchange-alt"></i> So sánh
+                </button>
+                <button class="btn btn-outline-danger btn-sm rounded-circle shadow" onclick="changeWishlistStatus(@Model.MaSP, 'SanPham')" title="Yêu thích">
+                    ❤️
                 </button>
                 <p class="text-muted mb-1"><strong>Thương hiệu:</strong> @Model.ThuongHieu</p>
                 <p class="text-muted mb-1"><strong>Danh mục:</strong> @Model.DanhMuc</p>
@@ -314,3 +318,4 @@
         });
     });
 </script>
+

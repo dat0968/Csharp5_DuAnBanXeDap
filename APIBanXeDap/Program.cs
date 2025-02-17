@@ -26,6 +26,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using APIBanXeDap.Repository.ThanhToan;
 using APIBanXeDap.Repository.UpdateProfile;
+using APIBanXeDap.Repository.YeuThich;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -84,6 +85,7 @@ builder.Services.AddScoped<INhanVienService, NhanVienService>();
 builder.Services.AddScoped<INhanVienRepository, NhanVienRepository>();
 builder.Services.AddScoped<IUpdateProfileRepository, UpdateProfileRepository>();
 builder.Services.AddScoped<ICheckoutRepository, CheckoutRepository>();
+builder.Services.AddScoped<IYeuThichRepository, YeuThichRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyPolicy", options =>

@@ -55,6 +55,7 @@ namespace MVCBanXeDap.Controllers
                                 var fullName = responseData["fullName"].ToString();
                                 HttpContext.Session.SetString("PhoneNumber", phoneNumber);
                                 HttpContext.Session.SetString("FullName", fullName);
+                                HttpContext.Session.SetString("Role", "Customer");
                                 TempData["SuccessMessage"] = "Đăng nhập thành công";
                                 return RedirectToAction("Index", "Home");
                             }
@@ -109,6 +110,7 @@ namespace MVCBanXeDap.Controllers
                             {
                                 HttpContext.Session.SetString("AccessToken", token["accessToken"]?.ToString());
                                 HttpContext.Session.SetString("RefreshToken", token["refreshToken"]?.ToString());
+                                HttpContext.Session.SetString("Role", "Staff");
                                 TempData["SuccessMessage"] = "Đăng nhập thành công";
                                 return RedirectToAction("Index", "Home");
                             }
@@ -178,6 +180,7 @@ namespace MVCBanXeDap.Controllers
                 {
                     HttpContext.Session.Remove("RefreshToken");
                     HttpContext.Session.Remove("AccessToken");
+                    HttpContext.Session.Remove("Role");
                     TempData["SuccessMessage"] = "Đăng xuất thành công";
                 }
             }

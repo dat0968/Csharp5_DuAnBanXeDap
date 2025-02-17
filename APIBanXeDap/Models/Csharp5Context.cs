@@ -42,6 +42,7 @@ public partial class Csharp5Context : DbContext
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     public virtual DbSet<MaCoupon> MaCoupons { get; set; }
     public virtual DbSet<Vanchuyen> Vanchuyens { get; set; }
+    public virtual DbSet<Yeuthich> YeuThichs { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
        
@@ -318,6 +319,29 @@ public partial class Csharp5Context : DbContext
             entity.Property(e => e.IsDelete).HasDefaultValue(false);
             entity.Property(e => e.TenThuongHieu).HasMaxLength(40);
         });
+
+        modelBuilder.Entity<Yeuthich>(entity =>
+        {
+            entity.HasKey(e => e.Ma);
+
+            entity.ToTable("YEUTHICH");
+
+            entity.Property(e => e.MaDoiTuong).IsRequired();
+            entity.Property(e => e.MaNguoiDung).IsRequired();
+            entity.Property(e => e.DoiTuongYeuThich).HasMaxLength(50);
+
+            entity.HasOne(d => d.Sanpham)
+                .WithMany(p => p.YeuThichs)
+                .HasForeignKey(d => d.MaDoiTuong)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.Khachhang)
+                .WithMany(p => p.YeuThichs)
+                .HasForeignKey(d => d.MaNguoiDung)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+
         //Thêm data cho bảng MaCoupon
         modelBuilder.Entity<MaCoupon>().HasData(
         new MaCoupon

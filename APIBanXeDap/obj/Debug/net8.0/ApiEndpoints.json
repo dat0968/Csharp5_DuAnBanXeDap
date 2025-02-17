@@ -1998,6 +1998,59 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.WishlistController",
+    "Method": "CountWishlistOfUser",
+    "RelativePath": "api/Wishlist/CountWishlistOfUser/{idUser}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idUser",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.WishlistController",
+    "Method": "GetAllWishlistItems",
+    "RelativePath": "api/Wishlist/GetAllWishlistItems/{idUser}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idUser",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.WishlistController",
+    "Method": "GetWishlistItem",
+    "RelativePath": "api/Wishlist/GetWishlistItem/{idProduct}\u0026{idUser}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProduct",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idUser",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.WishlistController",
     "Method": "IsManyInWishlist",
     "RelativePath": "api/Wishlist/IsManyInWishlist/{idUser}",
     "HttpMethod": "GET",

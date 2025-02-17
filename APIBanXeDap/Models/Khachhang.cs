@@ -34,4 +34,5 @@ public partial class Khachhang
     public IFormFile? Anh { get; set; }
 
     public virtual ICollection<Hoadon> Hoadons { get; set; } = new List<Hoadon>();
+    public virtual ICollection<Yeuthich> YeuThichs { get; set; } = new List<Yeuthich>();
 }

@@ -690,6 +690,34 @@ namespace APIBanXeDap.Migrations
                     b.ToTable("Vanchuyens");
                 });
 
+            modelBuilder.Entity("APIBanXeDap.Models.YeuThich", b =>
+                {
+                    b.Property<int>("Ma")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ma"));
+
+                    b.Property<string>("DoiTuongYeuThich")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("MaDoiTuong")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaNguoiDung")
+                        .HasColumnType("int");
+
+                    b.HasKey("Ma");
+
+                    b.HasIndex("MaDoiTuong");
+
+                    b.HasIndex("MaNguoiDung");
+
+                    b.ToTable("YEUTHICH", (string)null);
+                });
+
             modelBuilder.Entity("APIBanXeDap.Models.Chitiethoadon", b =>
                 {
                     b.HasOne("APIBanXeDap.Models.Hoadon", "MaHoaDonNavigation")
@@ -808,6 +836,23 @@ namespace APIBanXeDap.Migrations
                     b.Navigation("MaThuongHieuNavigation");
                 });
 
+            modelBuilder.Entity("APIBanXeDap.Models.YeuThich", b =>
+                {
+                    b.HasOne("APIBanXeDap.Models.Sanpham", "Sanpham")
+                        .WithMany("YeuThichs")
+                        .HasForeignKey("MaDoiTuong")
+                        .IsRequired();
+
+                    b.HasOne("APIBanXeDap.Models.Khachhang", "Khachhang")
+                        .WithMany("YeuThichs")
+                        .HasForeignKey("MaNguoiDung")
+                        .IsRequired();
+
+                    b.Navigation("Khachhang");
+
+                    b.Navigation("Sanpham");
+                });
+
             modelBuilder.Entity("APIBanXeDap.Models.Danhmuc", b =>
                 {
                     b.Navigation("Sanphams");
@@ -816,6 +861,8 @@ namespace APIBanXeDap.Migrations
             modelBuilder.Entity("APIBanXeDap.Models.Khachhang", b =>
                 {
                     b.Navigation("Hoadons");
+
+                    b.Navigation("YeuThichs");
                 });
 
             modelBuilder.Entity("APIBanXeDap.Models.Mausac", b =>
@@ -838,6 +885,8 @@ namespace APIBanXeDap.Migrations
                     b.Navigation("Chitietsanphams");
 
                     b.Navigation("Hinhanhs");
+
+                    b.Navigation("YeuThichs");
                 });
 
             modelBuilder.Entity("APIBanXeDap.Models.SizeVM", b =>
