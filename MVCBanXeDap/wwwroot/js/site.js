@@ -19,7 +19,7 @@ async function changeWishlistStatus(idProduct, typeObject) {
     } else if (result.isLoginAgain) {
         toastr.warning(result.message);
         setTimeout(() => {
-            window.location.href = "/Accounts/LoginCustomer";
+            window.location.href = "/Accounts/Login_Customer";
         }, 2000);
     } else {
         toastr.error(result.message);
