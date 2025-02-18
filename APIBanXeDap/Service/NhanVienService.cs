@@ -52,6 +52,7 @@ public class NhanVienService : INhanVienService
             Luong = nhanVienVM.Luong,
             TenTaiKhoan = nhanVienVM.TenTaiKhoan,
             MatKhau = nhanVienVM.MatKhau,
+            NgayVaoLam = nhanVienVM.NgayVaoLam,
             TinhTrang = "Đang hoạt động",
             IsDelete = false
         };

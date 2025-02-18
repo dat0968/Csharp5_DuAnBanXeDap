@@ -12,7 +12,7 @@ namespace APIBanXeDap.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize(Roles = "Admin, Nhân viên")]
+    [Authorize(Roles = "Admin, Nhân viên")]
     public class KhachHangController : ControllerBase
     {
         private readonly IKhachHangService _khachHangService;
@@ -76,7 +76,7 @@ namespace APIBanXeDap.Controllers
         }
 
 
-        [HttpPost("ToggleIsDelete/{id}")]
+        [HttpPut("ToggleIsDelete/{id}")]
         public IActionResult ToggleIsDelete(int id)
         {
             try

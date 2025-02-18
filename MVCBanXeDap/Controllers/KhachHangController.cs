@@ -47,8 +47,8 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
-                //SetAuthorizationHeader();
-                var response = await _client.GetAsync($"KhachHang/GetPaged?pageNumber={pageNumber}&pageSize={pageSize}&keyword={keyword}&sort={sort}&status={status}&gender={gender}");
+                SetAuthorizationHeader();
+                var response = await _client.GetAsync(_client.BaseAddress + $"KhachHang/GetPaged?pageNumber={pageNumber}&pageSize={pageSize}&keyword={keyword}&sort={sort}&status={status}&gender={gender}");
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await response.Content.ReadAsStringAsync();
@@ -104,6 +104,14 @@ namespace MVCBanXeDap.Controllers
                 formData.Add(new StringContent(model.Email ?? ""), "Email");
                 formData.Add(new StringContent(model.TenTaiKhoan ?? ""), "TenTaiKhoan");
                 formData.Add(new StringContent(model.MatKhau ?? ""), "MatKhau");
+                formData.Add(new StringContent(model.GioiTinh ?? ""), "GioiTinh");
+                if (model.NgaySinh != null)
+                {
+                    formData.Add(new StringContent(model.NgaySinh.Value.ToString("yyyy-MM-dd")), "NgaySinh");
+                }
+
+                formData.Add(new StringContent(model.DiaChi ?? ""), "DiaChi");
+                formData.Add(new StringContent(model.TinhTrang.ToString()), "TinhTrang");
 
                 // Xử lý file nếu có
                 if (Anh != null)
@@ -118,8 +126,8 @@ namespace MVCBanXeDap.Controllers
                 }
 
                 // Gửi yêu cầu POST với form-data
-                //SetAuthorizationHeader();
-                var response = await _client.PostAsync("KhachHang/Add", formData);
+                SetAuthorizationHeader();
+                var response = await _client.PostAsync(_client.BaseAddress + "KhachHang/Add", formData);
                 if (response.IsSuccessStatusCode)
                 {
                     return Json(new { success = true, message = "Thêm khách hàng thành công!" });
@@ -127,7 +135,9 @@ namespace MVCBanXeDap.Controllers
                 else
                 {
                     int status = (int)response.StatusCode;
-                    return Json(new { success = false, message = $"{status}" });
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(errorMessage);
+                    return Json(new { success = false, message = khachHang.Message, status = $"{status}" });
                 }
             }
             catch (Exception ex)
@@ -179,18 +189,21 @@ namespace MVCBanXeDap.Controllers
                     }
 
                     // Gửi yêu cầu PUT với form-data
-                    var response = await _client.PutAsync($"KhachHang/Update/{id}", formData);
+                    SetAuthorizationHeader();
+                    var response = await _client.PutAsync(_client.BaseAddress + $"KhachHang/Update/{id}", formData);
                     if (response.IsSuccessStatusCode)
                     {
                         return Json(new { success = true, message = "Cập nhật khách hàng thành công!" });
                     }
                     else
                     {
-
+                        int status = (int)response.StatusCode;
+                        //return Json(new { success = false, message = $"{status}" });
                         var errorMessage = await response.Content.ReadAsStringAsync();
                         var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(errorMessage);
-                        return Json(new { success = false, message = khachHang.Message });
+                        return Json(new { success = false, message = khachHang.Message, status = $"{status}" });
                     }
+
                 }
                 catch (Exception ex)
                 {
@@ -209,14 +222,21 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
-                var response = await _client.GetAsync($"KhachHang/GetKhachHangById/{id}");
+                SetAuthorizationHeader();
+                var response = await _client.GetAsync(_client.BaseAddress + $"KhachHang/GetKhachHangById/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await response.Content.ReadAsStringAsync();
                     var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(data);
                     return Json(new { success = true, data = khachHang.Data });
                 }
-                return Json(new { success = false, message = "Không tìm thấy khách hàng" });
+                else
+                {
+                    int status = (int)response.StatusCode;
+                    //return Json(new { success = false, message = $"{status}" });
+                    var errorMessage = await response.Content.ReadAsStringAsync();                   
+                    return Json(new { success = false, message = "Không tìm thấy khách hàng", status = $"{status}" });
+                }
             }
             catch (Exception ex)
             {
@@ -228,11 +248,12 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
+                SetAuthorizationHeader();
                 // Tạo nội dung JSON để gửi
                 var jsonContent = new StringContent(JsonConvert.SerializeObject(new { status = status }), Encoding.UTF8, "application/json");
 
                 // Gửi yêu cầu tới API backend
-                var response = await _client.PostAsync($"KhachHang/ToggleStatus/{id}", jsonContent);
+                var response = await _client.PostAsync(_client.BaseAddress + $"KhachHang/ToggleStatus/{id}", jsonContent);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -241,8 +262,9 @@ namespace MVCBanXeDap.Controllers
                 }
                 else
                 {
+                    int Status = (int)response.StatusCode;
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    return Json(new { success = false, message = "API Error: " + errorMessage });
+                    return Json(new { success = false, message = "API Error: " + errorMessage, status = $"{Status}" });
                 }
             }
             catch (Exception ex)
@@ -256,8 +278,9 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
+                SetAuthorizationHeader();
                 // Gửi yêu cầu POST tới API backend
-                var response = await _client.PostAsync($"KhachHang/ToggleIsDelete/{id}", null);
+                var response = await _client.PutAsync(_client.BaseAddress + $"KhachHang/ToggleIsDelete/{id}", null);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -265,8 +288,9 @@ namespace MVCBanXeDap.Controllers
                 }
                 else
                 {
+                    int Status = (int)response.StatusCode;
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    return Json(new { success = false, message = "API Error: " + errorMessage });
+                    return Json(new { success = false, message = "API Error: " + errorMessage, status = $"{Status}" });
                 }
             }
             catch (Exception ex)
@@ -281,10 +305,12 @@ namespace MVCBanXeDap.Controllers
             try
             {
                 // Lấy danh sách khách hàng từ API
-                var response = await _client.GetAsync("KhachHang/GetAll?isDelete=false"); // Chỉ lấy khách hàng IsDelete = false
+                SetAuthorizationHeader();
+                var response = await _client.GetAsync(_client.BaseAddress + "KhachHang/GetAll?isDelete=false"); // Chỉ lấy khách hàng IsDelete = false
                 if (!response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Index");
+                    int Status = (int)response.StatusCode;
+                    return RedirectToAction($"/Home/Error/{Status}");
                 }
 
                 var data = await response.Content.ReadAsStringAsync();
@@ -350,7 +376,7 @@ namespace MVCBanXeDap.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> ImportExcel(IFormFile file)
+        public async Task<IActionResult> Import_Excel(IFormFile file)
         {
             if (file == null || file.Length == 0)
             {
@@ -360,6 +386,7 @@ namespace MVCBanXeDap.Controllers
 
             try
             {
+                SetAuthorizationHeader();
                 using (var content = new MultipartFormDataContent())
                 {
                     var fileStreamContent = new StreamContent(file.OpenReadStream());
@@ -367,7 +394,7 @@ namespace MVCBanXeDap.Controllers
                     content.Add(fileStreamContent, "file", file.FileName);
 
                     // Call API to process the file
-                    var response = await _client.PostAsync("KhachHang/ImportExcel", content);
+                    var response = await _client.PostAsync(_client.BaseAddress + "KhachHang/ImportExcel", content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -378,9 +405,8 @@ namespace MVCBanXeDap.Controllers
                     else
                     {
 
-                        var errorMessage = await response.Content.ReadAsStringAsync();
-                        var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(errorMessage);
-                        TempData["ErrorMessage"] = khachHang.Message;
+                        int Status = (int)response.StatusCode;
+                        return RedirectToAction($"/Home/Error/{Status}");
                     }
                 }
             }

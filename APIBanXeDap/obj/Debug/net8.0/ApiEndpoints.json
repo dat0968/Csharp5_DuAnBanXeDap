@@ -787,7 +787,7 @@
     "ContainingType": "APIBanXeDap.Controllers.KhachHangController",
     "Method": "ToggleIsDelete",
     "RelativePath": "api/KhachHang/ToggleIsDelete/{id}",
-    "HttpMethod": "POST",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -1271,7 +1271,7 @@
     "ContainingType": "APIBanXeDap.Controllers.NhanVienController",
     "Method": "ToggleIsDelete",
     "RelativePath": "api/NhanVien/ToggleIsDelete/{id}",
-    "HttpMethod": "POST",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [

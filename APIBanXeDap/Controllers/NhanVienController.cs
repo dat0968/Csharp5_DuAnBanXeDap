@@ -2,12 +2,14 @@
 using APIBanXeDap.Models.ViewModels;
 using APIBanXeDap.ViewModels;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIBanXeDap.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin, Nhân viên")]
     public class NhanVienController : ControllerBase
     {
         private readonly INhanVienService _nhanVienService;
@@ -70,7 +72,7 @@ namespace APIBanXeDap.Controllers
             }
         }
 
-        [HttpPost("ToggleIsDelete/{id}")]
+        [HttpPut("ToggleIsDelete/{id}")]
         public IActionResult ToggleIsDelete(int id)
         {
             try

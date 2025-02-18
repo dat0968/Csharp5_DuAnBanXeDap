@@ -17,12 +17,6 @@ builder.Services.AddSession(options =>
 });
 builder.Services.AddSingleton<EmailService>();
 builder.Services.AddScoped<IjwtToken, JwtToken>();
-// Đăng ký HttpClient
-builder.Services.AddHttpClient("ApiClient", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7137/api");
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-});
 builder.Services.AddScoped<IVnpay, Vnpay>();
 var app = builder.Build();
 

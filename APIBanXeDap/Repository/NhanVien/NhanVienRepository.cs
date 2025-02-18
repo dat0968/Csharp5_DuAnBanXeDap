@@ -111,10 +111,8 @@ namespace APIBanXeDap.Repository
             }
 
             nhanVien.IsDelete = true;
-            nhanVien.Email = null;
+            nhanVien.Email = "";
             nhanVien.TenTaiKhoan = null;
-            nhanVien.MatKhau = null;
-
             _context.SaveChanges();
         }
 

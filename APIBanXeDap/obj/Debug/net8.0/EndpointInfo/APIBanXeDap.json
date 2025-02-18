@@ -1206,7 +1206,7 @@
       }
     },
     "/api/KhachHang/ToggleIsDelete/{id}": {
-      "post": {
+      "put": {
         "tags": [
           "KhachHang"
         ],
@@ -1896,7 +1896,7 @@
       }
     },
     "/api/NhanVien/ToggleIsDelete/{id}": {
-      "post": {
+      "put": {
         "tags": [
           "NhanVien"
         ],

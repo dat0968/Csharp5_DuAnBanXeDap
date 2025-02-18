@@ -180,7 +180,7 @@
 
         <!-- Import Excel -->
         <div class="col-md-4">
-            <form asp-action="ImportExcel" method="post" enctype="multipart/form-data" class="d-inline">
+            <form asp-action="Import_Excel" method="post" enctype="multipart/form-data" class="d-inline">
                 <div class="input-group">
                     <input type="file" id="importFile" name="file" class="form-control form-control-sm">
                     <div class="input-group-append">
@@ -578,10 +578,7 @@
             text: message,
             confirmButtonColor: '#dc3545'
         });
-        console.log(message)
-        setTimeout(function(){
-            window.location.href = `/Home/Error/${parseInt(message, 10)}`
-        }, 2000)
+        
     }
 
     // Hàm xử lý phản hồi từ server
@@ -600,6 +597,12 @@
                     $(`[name="${fieldName}"]`).siblings('.text-danger').text(errorMessages.join(', '));
                 }
             } else {
+                if(response.status != null ){ 
+                     setTimeout(function(){ 
+                         window.location.href = `/Home/Error/${parseInt(message, 10)}` 
+                     }, 2000) 
+                 }  
+
                 showErrorAlert(response.message);
             }
         }

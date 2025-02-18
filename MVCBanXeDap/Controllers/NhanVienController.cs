@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Text;
 using MVCBanXeDap.ViewModels;
 using ClosedXML.Excel;
+using MVCBanXeDap.Services.Jwt;
+using System.Net.Http.Headers;
 
 namespace MVCBanXeDap.Controllers
 {
@@ -12,16 +14,31 @@ namespace MVCBanXeDap.Controllers
     {
         private readonly HttpClient _client;
         private readonly Uri _baseAddress;
-
-        public NhanVienController()
+        private readonly IjwtToken jwtToken;
+        public NhanVienController(IjwtToken jwtToken)
         {
             _baseAddress = new Uri("https://localhost:7137/api/");
             _client = new HttpClient
             {
                 BaseAddress = _baseAddress
             };
+            this.jwtToken = jwtToken;
         }
-
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+            else
+            {
+                HttpContext.Response.Redirect("/Accounts/LogoutAccount");
+            }
+        }
         public async Task<IActionResult> Index(
            int pageNumber = 1,
            int pageSize = 10,
@@ -32,7 +49,8 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
-                var response = await _client.GetAsync($"NhanVien/GetPaged?pageNumber={pageNumber}&pageSize={pageSize}&keyword={keyword}&sort={sort}&status={status}&gender={gender}");
+                SetAuthorizationHeader();
+                var response = await _client.GetAsync(_client.BaseAddress + $"NhanVien/GetPaged?pageNumber={pageNumber}&pageSize={pageSize}&keyword={keyword}&sort={sort}&status={status}&gender={gender}");
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await response.Content.ReadAsStringAsync();
@@ -48,9 +66,10 @@ namespace MVCBanXeDap.Controllers
 
                     return View(pagedResult);
                 }
-
-                TempData["ErrorMessage"] = "Không thể tải dữ liệu nhân viên!";
-                return View(new PagedResult<NhanVienVM>());
+                else
+                {
+                    return StatusCode((int)response.StatusCode);
+                }
             }
             catch (Exception ex)
             {
@@ -84,7 +103,10 @@ namespace MVCBanXeDap.Controllers
                 formData.Add(new StringContent(model.MatKhau ?? ""), "MatKhau");
                 formData.Add(new StringContent(model.VaiTro ?? ""), "VaiTro");
                 formData.Add(new StringContent(model.GioiTinh ?? ""), "GioiTinh");
-
+                formData.Add(new StringContent(model.TinhTrang.ToString()), "TinhTrang");
+                formData.Add(new StringContent(model.DiaChi ?? ""), "DiaChi");
+                formData.Add(new StringContent(model.NgaySinh.HasValue ? model.NgaySinh.Value.ToString("yyyy-MM-dd") : ""), "NgaySinh");
+                formData.Add(new StringContent(model.NgayVaoLam.HasValue ? model.NgayVaoLam.Value.ToString("yyyy-MM-dd") : ""), "NgayVaoLam");
                 if (Anh != null)
                 {
                     var memoryStream = new MemoryStream();
@@ -95,17 +117,18 @@ namespace MVCBanXeDap.Controllers
                     fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(Anh.ContentType);
                     formData.Add(fileContent, "Anh", Anh.FileName);
                 }
-
-                var response = await _client.PostAsync("NhanVien/Add", formData);
+                SetAuthorizationHeader();
+                var response = await _client.PostAsync(_client.BaseAddress + "NhanVien/Add", formData);
                 if (response.IsSuccessStatusCode)
                 {
                     return Json(new { success = true, message = "Thêm nhân viên thành công!" });
                 }
                 else
                 {
+                    int status = (int)response.StatusCode;
                     var errorMessage = await response.Content.ReadAsStringAsync();
                     var nhanVien = JsonConvert.DeserializeObject<ApiReponse<NhanVienVM>>(errorMessage);
-                    return Json(new { success = false, message = nhanVien.Message });
+                    return Json(new { success = false, message = nhanVien.Message, status = $"{status}" });
                 }
             }
             catch (Exception ex)
@@ -149,17 +172,18 @@ namespace MVCBanXeDap.Controllers
                         fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(Anh.ContentType);
                         formData.Add(fileContent, "Anh", Anh.FileName);
                     }
-
-                    var response = await _client.PutAsync($"NhanVien/Update/{id}", formData);
+                    SetAuthorizationHeader();
+                    var response = await _client.PutAsync(_client.BaseAddress + $"NhanVien/Update/{id}", formData);
                     if (response.IsSuccessStatusCode)
                     {
                         return Json(new { success = true, message = "Cập nhật nhân viên thành công!" });
                     }
                     else
                     {
+                        int status = (int)response.StatusCode;
                         var errorMessage = await response.Content.ReadAsStringAsync();
                         var nhanVien = JsonConvert.DeserializeObject<ApiReponse<NhanVienVM>>(errorMessage);
-                        return Json(new { success = false, message = nhanVien.Message });
+                        return Json(new { success = false, message = nhanVien.Message, status = $"{status}" });
                     }
                 }
                 catch (Exception ex)
@@ -176,14 +200,21 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
-                var response = await _client.GetAsync($"NhanVien/GetNhanVienById/{id}");
+                SetAuthorizationHeader();
+                var response = await _client.GetAsync(_client.BaseAddress + $"NhanVien/GetNhanVienById/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await response.Content.ReadAsStringAsync();
                     var nhanVien = JsonConvert.DeserializeObject<ApiReponse<NhanVienVM>>(data);
                     return Json(new { success = true, data = nhanVien.Data });
                 }
-                return Json(new { success = false, message = "Không tìm thấy nhân viên" });
+                else
+                {
+                    int status = (int)response.StatusCode;
+                    //return Json(new { success = false, message = $"{status}" });
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    return Json(new { success = false, message = "Không tìm thấy khách hàng", status = $"{status}" });
+                }
             }
             catch (Exception ex)
             {
@@ -196,8 +227,9 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
+                SetAuthorizationHeader();
                 var jsonContent = new StringContent(JsonConvert.SerializeObject(new { status = status }), Encoding.UTF8, "application/json");
-                var response = await _client.PostAsync($"NhanVien/ToggleStatus/{id}", jsonContent);
+                var response = await _client.PostAsync(_client.BaseAddress + $"NhanVien/ToggleStatus/{id}", jsonContent);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -205,8 +237,9 @@ namespace MVCBanXeDap.Controllers
                 }
                 else
                 {
+                    int Status = (int)response.StatusCode;
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    return Json(new { success = false, message = errorMessage });
+                    return Json(new { success = false, message = "API Error: " + errorMessage, status = $"{Status}" });
                 }
             }
             catch (Exception ex)
@@ -220,15 +253,17 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
-                var response = await _client.PostAsync($"NhanVien/ToggleIsDelete/{id}", null);
+                SetAuthorizationHeader();
+                var response = await _client.PutAsync(_client.BaseAddress + $"NhanVien/ToggleIsDelete/{id}", null);
                 if (response.IsSuccessStatusCode)
                 {
                     return Json(new { success = true, message = "Nhân viên đã được ẩn khỏi danh sách." });
                 }
                 else
                 {
+                    int Status = (int)response.StatusCode;
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    return Json(new { success = false, message = errorMessage });
+                    return Json(new { success = false, message = "API Error: " + errorMessage, status = $"{Status}" });
                 }
             }
             catch (Exception ex)
@@ -241,11 +276,12 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
-                var response = await _client.GetAsync($"NhanVien/GetAll?keyword={keyword}&sort={sort}&status={status}&gender={gender}");
+                SetAuthorizationHeader();
+                var response = await _client.GetAsync(_client.BaseAddress + $"NhanVien/GetAll?keyword={keyword}&sort={sort}&status={status}&gender={gender}");
                 if (!response.IsSuccessStatusCode)
                 {
-                    TempData["ErrorMessage"] = "Không thể xuất dữ liệu!";
-                    return RedirectToAction("Index");
+                    int Status = (int)response.StatusCode;
+                    return RedirectToAction($"/Home/Error/{Status}");
                 }
 
                 var data = await response.Content.ReadAsStringAsync();
@@ -293,7 +329,7 @@ namespace MVCBanXeDap.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ImportExcel(IFormFile file)
+        public async Task<IActionResult> Import_Excel(IFormFile file)
         {
             if (file == null || file.Length == 0)
             {
@@ -303,6 +339,7 @@ namespace MVCBanXeDap.Controllers
 
             try
             {
+                SetAuthorizationHeader();
                 using (var content = new MultipartFormDataContent())
                 {
                     var fileStreamContent = new StreamContent(file.OpenReadStream());
@@ -310,7 +347,7 @@ namespace MVCBanXeDap.Controllers
                     content.Add(fileStreamContent, "file", file.FileName);
 
                     // Call API to process the file
-                    var response = await _client.PostAsync("NhanVien/ImportExcel", content);
+                    var response = await _client.PostAsync(_client.BaseAddress + "NhanVien/ImportExcel", content);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -320,9 +357,8 @@ namespace MVCBanXeDap.Controllers
                     }
                     else
                     {
-                        var errorMessage = await response.Content.ReadAsStringAsync();
-                        var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(errorMessage);
-                        TempData["ErrorMessage"] = khachHang.Message;
+                        int Status = (int)response.StatusCode;
+                        return RedirectToAction($"/Home/Error/{Status}");
                     }
                 }
             }

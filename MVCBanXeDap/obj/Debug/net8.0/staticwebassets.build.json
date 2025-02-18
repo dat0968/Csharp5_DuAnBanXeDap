@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "zT4HUowFYCHAbCdGrs05PQ5gPDBaw2pblLQxRIJMRps=",
+  "Hash": "GiQDsgE8YVs13bCmluNePZN/h1RAGmArBle5QWIxYRo=",
   "Source": "MVCBanXeDap",
   "BasePath": "_content/MVCBanXeDap",
   "Mode": "Default",
@@ -76,6 +76,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4.png"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4-VANG.png",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/4-VANG#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "gyek4vj1kh",
+      "Integrity": "SKc8GiFwI5nvCHfMzQPcF8w32dpiSyQ704XGxN/yYiE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4-VANG.png"
     },
     {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.heic",
@@ -349,6 +370,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-01-15 063250.png"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Xe-dap-dia-hinh-mtb-Trinx-X1-One-2021-den-lam.jpg",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/Xe-dap-dia-hinh-mtb-Trinx-X1-One-2021-den-lam#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "xoffm8i0hj",
+      "Integrity": "MROAvl/Gp00NY+DKbP//lL+Yjd+BA9f1pKALDI1uWNk=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Xe-dap-dia-hinh-mtb-Trinx-X1-One-2021-den-lam.jpg"
     },
     {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhNhanVien\\Screenshot 2024-12-31 141623.png",
@@ -14965,6 +15007,88 @@
       ]
     },
     {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/4-VANG.gyek4vj1kh.png",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4-VANG.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "549869"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"SKc8GiFwI5nvCHfMzQPcF8w32dpiSyQ704XGxN/yYiE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 18 Feb 2025 10:43:36 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "gyek4vj1kh"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-SKc8GiFwI5nvCHfMzQPcF8w32dpiSyQ704XGxN/yYiE="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/4-VANG.png"
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/4-VANG.png",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4-VANG.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "549869"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"SKc8GiFwI5nvCHfMzQPcF8w32dpiSyQ704XGxN/yYiE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 18 Feb 2025 10:43:36 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-SKc8GiFwI5nvCHfMzQPcF8w32dpiSyQ704XGxN/yYiE="
+        }
+      ]
+    },
+    {
       "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.ekmm651kgs.heic",
       "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.heic",
       "Selectors": [],
@@ -16027,6 +16151,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-SAFhJMM6B2c/WOXLVU++Ig/ZBAqj3GKfb2tBttDhlws="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/Xe-dap-dia-hinh-mtb-Trinx-X1-One-2021-den-lam.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Xe-dap-dia-hinh-mtb-Trinx-X1-One-2021-den-lam.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "77214"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MROAvl/Gp00NY+DKbP//lL+Yjd+BA9f1pKALDI1uWNk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 18 Feb 2025 11:10:30 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-MROAvl/Gp00NY+DKbP//lL+Yjd+BA9f1pKALDI1uWNk="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/Xe-dap-dia-hinh-mtb-Trinx-X1-One-2021-den-lam.xoffm8i0hj.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Xe-dap-dia-hinh-mtb-Trinx-X1-One-2021-den-lam.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "77214"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MROAvl/Gp00NY+DKbP//lL+Yjd+BA9f1pKALDI1uWNk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 18 Feb 2025 11:10:30 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "xoffm8i0hj"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-MROAvl/Gp00NY+DKbP//lL+Yjd+BA9f1pKALDI1uWNk="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/Xe-dap-dia-hinh-mtb-Trinx-X1-One-2021-den-lam.jpg"
         }
       ]
     },

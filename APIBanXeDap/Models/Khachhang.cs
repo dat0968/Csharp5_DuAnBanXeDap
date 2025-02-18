@@ -20,7 +20,7 @@ public partial class Khachhang
 
     public string? Sdt { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
 
     public string? TenTaiKhoan { get; set; }
 

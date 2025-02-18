@@ -58,7 +58,7 @@
 
         <!-- Import Excel -->
         <div class="col-md-4">
-            <form asp-action="ImportExcel" method="post" enctype="multipart/form-data" class="d-inline">
+            <form asp-action="Import_Excel" method="post" enctype="multipart/form-data" class="d-inline">
                 <div class="input-group">
                     <input type="file" id="importFile" name="file" class="form-control form-control-sm">
                     <div class="input-group-append">
@@ -372,6 +372,11 @@
                                 $(`[name="${fieldName}"]`).siblings('.text-danger').text(errorMessages.join(', '));
                             }
                         } else {
+                            if(response.status != null ){
+                                 setTimeout(function(){
+                                     window.location.href = `/Home/Error/${parseInt(message, 10)}`
+                                 }, 2000)
+                            }
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Thất bại!',
@@ -536,7 +541,7 @@
                     $('#MatKhau').val(data.data.matKhau ? data.data.matKhau.trim() : '').parent().hide();
                     $('#Role').val(data.data.vaiTro ? data.data.vaiTro.trim() : '');
                     $('#Luong').val(data.data.luong ? data.data.luong: 0);
-                    $('#NgayVaoLam').val(data.data.ngayBatDau ? data.data.ngayBatDau.trim() : '').parent().hide();
+                    $('#NgayVaoLam').val(data.data.NgayVaoLam ? data.data.NgayVaoLam.trim() : '').parent().hide();
 
 
 

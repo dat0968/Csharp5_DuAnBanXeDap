@@ -213,6 +213,7 @@ namespace APIBanXeDap.Repository
 
             // Đổi trạng thái IsDelete
             khachHang.IsDelete = !khachHang.IsDelete;
+            _context.Khachhangs.Update(khachHang);
             _context.SaveChanges();
         }
         public Khachhang GetKhachHangById(int id)
