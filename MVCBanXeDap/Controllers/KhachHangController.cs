@@ -7,6 +7,9 @@ using MVCBanXeDap.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Drawing;
 using ClosedXML.Excel;
+using MVCBanXeDap.Services.Jwt;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 namespace MVCBanXeDap.Controllers
 {
     public class KhachHangController : Controller
@@ -14,9 +17,10 @@ namespace MVCBanXeDap.Controllers
         private readonly HttpClient _client;
         private readonly Uri _baseAddress;
         private readonly IKhachHangService _khachHangService;
-
-        public KhachHangController()
+        private readonly IjwtToken jwtToken;
+        public KhachHangController(IjwtToken jwtToken)
         {
+            this.jwtToken = jwtToken;
             _baseAddress = new Uri("https://localhost:7137/api/");
             _client = new HttpClient
             {
@@ -24,11 +28,26 @@ namespace MVCBanXeDap.Controllers
             };
 
         }
-
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+            else
+            {
+                HttpContext.Response.Redirect("/Accounts/LogoutAccount");
+            }
+        }
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 5, string? keyword = null, string? sort = "asc", string? status = null, string? gender = null)
         {
             try
             {
+                //SetAuthorizationHeader();
                 var response = await _client.GetAsync($"KhachHang/GetPaged?pageNumber={pageNumber}&pageSize={pageSize}&keyword={keyword}&sort={sort}&status={status}&gender={gender}");
                 if (response.IsSuccessStatusCode)
                 {
@@ -46,9 +65,10 @@ namespace MVCBanXeDap.Controllers
 
                     return View(pagedResult);
                 }
-
-                TempData["ErrorMessage"] = "Không thể tải dữ liệu khách hàng!";
-                return View(new PagedResult<KhachHangVM>());
+                else
+                {
+                    return StatusCode((int)response.StatusCode);
+                }
             }
             catch (Exception ex)
             {
@@ -98,6 +118,7 @@ namespace MVCBanXeDap.Controllers
                 }
 
                 // Gửi yêu cầu POST với form-data
+                //SetAuthorizationHeader();
                 var response = await _client.PostAsync("KhachHang/Add", formData);
                 if (response.IsSuccessStatusCode)
                 {
@@ -105,9 +126,8 @@ namespace MVCBanXeDap.Controllers
                 }
                 else
                 {
-                    var errorMessage = await response.Content.ReadAsStringAsync();
-                    var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(errorMessage);
-                    return Json(new { success = false, message = khachHang.Message });
+                    int status = (int)response.StatusCode;
+                    return Json(new { success = false, message = $"{status}" });
                 }
             }
             catch (Exception ex)

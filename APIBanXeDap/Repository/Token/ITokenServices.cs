@@ -5,7 +5,7 @@ namespace APIBanXeDap.Repository.Token
 {
     public interface ITokenServices
     {
-        public string GenerateAccessToken(string Id);
+        public string GenerateAccessToken(PersonalInformation model);
         public string GenerateRefreshToken();
 
     }

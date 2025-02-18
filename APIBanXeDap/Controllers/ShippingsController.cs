@@ -1,5 +1,6 @@
 ﻿using APIBanXeDap.Repository.VanChuyen;
 using APIBanXeDap.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace APIBanXeDap.Controllers
         {
             this.ShippingRepository = ShippingRepository;
         }
+        [Authorize(Roles = "Admin, Nhân viên")]
         [HttpGet("GetAll")]
         public IActionResult Get(string? keywords, string? priceFilter, string? SortByPrice, int page = 1)
         {
@@ -46,6 +48,7 @@ namespace APIBanXeDap.Controllers
                 });
             }          
         }
+        [Authorize(Roles = "Admin, Nhân viên")]
         [HttpPost("CreateShipping")]
         public IActionResult Create(ShippingVM model)
         {
@@ -75,6 +78,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin, Nhân viên")]
         [HttpPut("EditShipping")]
         public IActionResult Edit([FromBody] ShippingVM model)
         {
@@ -96,6 +100,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin, Nhân viên")]
         [HttpDelete("DeleteShipping/{id}")]
         public IActionResult Delete(int id)
         {

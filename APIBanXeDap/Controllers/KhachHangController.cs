@@ -2,6 +2,8 @@
 using APIBanXeDap.Repository;
 using APIBanXeDap.ViewModels;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
+
 
 //using APIBanXeDap.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +12,7 @@ namespace APIBanXeDap.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    //[Authorize(Roles = "Admin, Nhân viên")]
     public class KhachHangController : ControllerBase
     {
         private readonly IKhachHangService _khachHangService;

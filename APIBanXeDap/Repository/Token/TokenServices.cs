@@ -1,4 +1,5 @@
-﻿using APIBanXeDap.ViewModels;
+﻿using APIBanXeDap.Models;
+using APIBanXeDap.ViewModels;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,7 +15,7 @@ namespace APIBanXeDap.Repository.Token
         {
             this.configuration = configuration;
         }
-        public string GenerateAccessToken(string Id)
+        public string GenerateAccessToken(PersonalInformation model)
         {
             var JwtTokenHandler = new JwtSecurityTokenHandler();
             var radomIDToken = Guid.NewGuid();
@@ -23,8 +24,11 @@ namespace APIBanXeDap.Repository.Token
             {
                 Subject = new ClaimsIdentity(new List<Claim>
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, Id),
+                    new Claim(JwtRegisteredClaimNames.Sub, model.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, radomIDToken.ToString()),
+                    new Claim("PhoneNumber", model.SDT ?? ""),
+                    new Claim("FullName", model.HoTen),
+                    new Claim(ClaimTypes.Role, model.VaiTro)
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKetByte), SecurityAlgorithms.HmacSha256Signature),

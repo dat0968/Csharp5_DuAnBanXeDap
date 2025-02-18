@@ -1,5 +1,6 @@
 ﻿using APIBanXeDap.Models;
 using APIBanXeDap.ViewModels;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace APIBanXeDap.Repository.ThanhToan
 {
@@ -13,21 +14,42 @@ namespace APIBanXeDap.Repository.ThanhToan
         }
         public void CreateDetailOrder(List<ChiTietHoaDonVM> model)
         {
-            foreach(var chitiethoadon in model)
+            db.Database.BeginTransaction();
+            try
             {
-                var detailOrder = new Chitiethoadon
+                foreach (var chitiethoadon in model)
                 {
-                    MaHoaDon = chitiethoadon.MaHoaDon,
-                    MaSp = chitiethoadon.MaSp,
-                    MaMau = chitiethoadon.MaMau,
-                    MaKichThuoc = chitiethoadon.MaKichThuoc,
-                    SoLuong = chitiethoadon.SoLuong,
-                    Gia = chitiethoadon.Gia,
-                    ThanhTien = chitiethoadon.ThanhTien,
-                };
-                db.Chitiethoadons.Add(detailOrder);
-                db.SaveChanges();
-            }            
+                    var detailOrder = new Chitiethoadon
+                    {
+                        MaHoaDon = chitiethoadon.MaHoaDon,
+                        MaSp = chitiethoadon.MaSp,
+                        MaMau = chitiethoadon.MaMau,
+                        MaKichThuoc = chitiethoadon.MaKichThuoc,
+                        SoLuong = chitiethoadon.SoLuong,
+                        Gia = chitiethoadon.Gia,
+                        ThanhTien = chitiethoadon.ThanhTien,
+                    };
+                    db.Chitiethoadons.Add(detailOrder);
+                    db.SaveChanges();
+
+                    var Chitietsanpham = db.Chitietsanphams.FirstOrDefault(p => p.MaSp == detailOrder.MaSp && p.MaMau == detailOrder.MaMau && p.MaKichThuoc == detailOrder.MaKichThuoc);
+                    if(Chitietsanpham != null)
+                    {
+                        Chitietsanpham.SoLuongTon = Chitietsanpham.SoLuongTon - 1;
+                        db.Database.CommitTransaction();
+                    }
+                    else
+                    {
+                        throw new Exception($"Không tìm thấy sản phẩm với MaSp: {detailOrder.MaSp}, MaMau: {detailOrder.MaMau}, MaKichThuoc: {detailOrder.MaKichThuoc}");
+                    }
+                }
+
+                
+            }catch (Exception ex)
+            {
+                db.Database.RollbackTransaction();
+            }
+                   
         }
 
         public Hoadon CreateOrder(HoadonVM model)

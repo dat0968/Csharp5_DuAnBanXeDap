@@ -72,7 +72,14 @@ namespace APIBanXeDap.Controllers
                     Message = "Login failed"
                 });
             }
-            var AccessToken = TokenServices.GenerateAccessToken(findUser.MaKh.ToString());
+            var Khachhang = new PersonalInformation
+            {
+                Id = findUser.MaKh,
+                HoTen = findUser.HoTen,
+                SDT = findUser.Sdt,
+                VaiTro = "Customer",
+            };
+            var AccessToken = TokenServices.GenerateAccessToken(Khachhang);
             var RefreshToken = TokenServices.GenerateRefreshToken();
             var AddRefreshTokenDb = new RefreshToken
             {
@@ -84,7 +91,7 @@ namespace APIBanXeDap.Controllers
             };
             db.RefreshTokens.Add(AddRefreshTokenDb);
             await db.SaveChangesAsync();
-
+            Khachhang.RefreshToken = RefreshToken;
             return Ok(new
             {
                 Success = true,
@@ -95,8 +102,6 @@ namespace APIBanXeDap.Controllers
                     AccessToken = AccessToken,
                     RefreshToken = RefreshToken,
                 },
-                PhoneNumber = findUser.Sdt != null ? findUser.Sdt : null,
-                FullName = findUser.HoTen
             });
         }
         [HttpPost("LoginStaff")]
@@ -113,7 +118,14 @@ namespace APIBanXeDap.Controllers
                     Message = "Login failed"
                 });
             }
-            var AccessToken = TokenServices.GenerateAccessToken(findUser.MaNv.ToString());
+            var nhanvien = new PersonalInformation
+            {
+                Id = findUser.MaNv,
+                HoTen = findUser.HoTen,
+                SDT = findUser.Sdt,
+                VaiTro = findUser.VaiTro,
+            };
+            var AccessToken = TokenServices.GenerateAccessToken(nhanvien);
             var RefreshToken = TokenServices.GenerateRefreshToken();
             var AddRefreshTokenDb = new RefreshToken
             {
@@ -125,7 +137,7 @@ namespace APIBanXeDap.Controllers
             };
             db.RefreshTokens.Add(AddRefreshTokenDb);
             await db.SaveChangesAsync();
-
+            nhanvien.RefreshToken = RefreshToken;
             return Ok(new
             {
                 Success = true,
@@ -214,9 +226,9 @@ namespace APIBanXeDap.Controllers
             });
         }
         [HttpPost("RenewAccessToken")]
-        public async Task<IActionResult> RenewToken([FromBody] string RefreshToken)
+        public async Task<IActionResult> RenewToken([FromBody]PersonalInformation model)
         {
-            var checkRefreshToken = await db.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(p => p.Token == RefreshToken);
+            var checkRefreshToken = await db.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(p => p.Token == model.RefreshToken);
             var JwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             if ((checkRefreshToken == null) || (checkRefreshToken != null && checkRefreshToken.ExpiredAt < DateTime.UtcNow))
             {
@@ -226,7 +238,13 @@ namespace APIBanXeDap.Controllers
                     Message = "RefreshToken has expired. Login again",
                 });
             }
-            var GenerateAccessToken = TokenServices.GenerateAccessToken(checkRefreshToken.UserId);
+            var information = new PersonalInformation
+            {
+                Id = model.Id,
+                HoTen = model.HoTen,
+                SDT = model.SDT,
+            };
+            var GenerateAccessToken = TokenServices.GenerateAccessToken(information);
             return Ok(new
             {
                 Success = true,
@@ -234,7 +252,7 @@ namespace APIBanXeDap.Controllers
                 Data = new TokenResponse
                 {
                     AccessToken = GenerateAccessToken,
-                    RefreshToken = RefreshToken,
+                    RefreshToken = model.RefreshToken,
                 }
             });
         }
@@ -328,8 +346,14 @@ namespace APIBanXeDap.Controllers
                 db.Khachhangs.Add(existingUser);
                 db.SaveChanges();
             }
-
-            var AccessToken = TokenServices.GenerateAccessToken(existingUser.MaKh.ToString());
+            var model = new PersonalInformation
+            {
+                Id = existingUser.MaKh,
+                HoTen = existingUser.HoTen ?? "",
+                SDT = existingUser.Sdt ?? "",
+                VaiTro = "Customer"
+            };
+            var AccessToken = TokenServices.GenerateAccessToken(model);
             var RefreshToken = TokenServices.GenerateRefreshToken();
             var AddRefreshTokenDb = new RefreshToken
             {

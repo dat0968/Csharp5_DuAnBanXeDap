@@ -178,8 +178,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "RefreshToken",
-        "Type": "System.String",
+        "Name": "model",
+        "Type": "APIBanXeDap.ViewModels.PersonalInformation",
         "IsRequired": true
       }
     ],
@@ -941,7 +941,17 @@
   {
     "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
     "Method": "GetAll",
-    "RelativePath": "api/MaCoupons/GetAllCouponCode",
+    "RelativePath": "api/MaCoupons/GetAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
+    "Method": "GetAllByPage",
+    "RelativePath": "api/MaCoupons/GetAllCouponCodeByPage",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -964,22 +974,6 @@
       {
         "Name": "page",
         "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "APIBanXeDap.Controllers.MaCouponsController",
-    "Method": "RevokeCouponCode",
-    "RelativePath": "api/MaCoupons/RevokeCouponCode",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
         "IsRequired": false
       }
     ],
@@ -1533,22 +1527,6 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.ProductsController",
-    "Method": "DeleteProduct",
-    "RelativePath": "api/Products/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "APIBanXeDap.Controllers.ProductsController",
     "Method": "CreateProduct",
     "RelativePath": "api/Products/CreateProduct",
     "HttpMethod": "POST",
@@ -1558,6 +1536,22 @@
       {
         "Name": "product",
         "Type": "APIBanXeDap.EditModels.ProductEM",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ProductsController",
+    "Method": "DeleteProduct",
+    "RelativePath": "api/Products/DeleteProduct/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

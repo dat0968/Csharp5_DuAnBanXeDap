@@ -1,8 +1,10 @@
-﻿namespace MVCBanXeDap.Services.Jwt
+﻿using MVCBanXeDap.ViewModels;
+
+namespace MVCBanXeDap.Services.Jwt
 {
     public interface IjwtToken
     {
-        Task<string?> ValidateAccessToken(string accessToken, string refreshToken); 
-        string GetUserIdFromToken(string accessToken);
+        Task<string> ValidateAccessToken();
+        PersonalInformation GetInformationUserFromToken(string accessToken);
     }
 }

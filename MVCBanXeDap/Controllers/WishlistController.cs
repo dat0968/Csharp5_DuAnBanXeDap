@@ -160,7 +160,7 @@ namespace MVCBanXeDap.Controllers
                 return null;
             }
 
-            var validateAccessToken = await jwtToken.ValidateAccessToken(accessToken, refreshToken);
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
             if (validateAccessToken == null)
             {
                 return null;
@@ -169,8 +169,9 @@ namespace MVCBanXeDap.Controllers
             {
                 HttpContext.Session.SetString("AccessToken", validateAccessToken);
             }
-
-            return Int32.Parse(jwtToken.GetUserIdFromToken(validateAccessToken));
+            var information = jwtToken.GetInformationUserFromToken(validateAccessToken);
+            var id = information.Id;
+            return id;
         }
         #endregion
     }

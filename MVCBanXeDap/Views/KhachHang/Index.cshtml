@@ -1,8 +1,125 @@
-﻿    @model MVCBanXeDap.ViewModels.PagedResult<MVCBanXeDap.ViewModels.KhachHangVM>
+﻿@model MVCBanXeDap.ViewModels.PagedResult<MVCBanXeDap.ViewModels.KhachHangVM>
 @{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Khách Hàng";
 }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+<style>
+    .custom-modal-width {
+        max-width: 80%; /* Hoặc chỉnh sửa giá trị theo nhu cầu */
+    }
+
+    .modal-dialog {
+        max-width: 80%; /* Hoặc điều chỉnh theo tỷ lệ hoặc đơn vị khác */
+        margin: 30px auto; /* Tùy chỉnh để căn chỉnh modal ở giữa */
+    }
+
+    .table {
+        font-size: 14px;
+    }
+
+    .draggable-row {
+        cursor: move;
+    }
+
+    .dropzone {
+        border: 2px dashed #007bff;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        transition: background-color 0.3s;
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .dropzone.dragover {
+            background-color: #e7f1ff;
+        }
+
+        .dropzone h5 {
+            margin: 0;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .dropzone i {
+            font-size: 48px;
+            color: #007bff;
+        }
+
+
+
+    .dropzone {
+        border: 2px dashed #007bff;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        transition: background-color 0.3s;
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .dropzone.dragover {
+            background-color: #e7f1ff;
+        }
+
+        .dropzone h5 {
+            margin: 0;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .dropzone i {
+            font-size: 48px;
+            color: #007bff;
+        }
+    /* Container */
+    .container {
+        padding: 20px;
+    }
+
+    /* Tiêu đề */
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Bộ lọc (3 phần trên) */
+    .row.mt-3.mb-3 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .row.mt-3.mb-3 .col-md-3,
+        .row.mt-3.mb-3 .col-md-2 {
+            display: flex;
+            align-items: center;
+        }
+
+            .row.mt-3.mb-3 .col-md-3 input,
+            .row.mt-3.mb-3 .col-md-2 select {
+                width: 100%;
+            }
+
+            .row.mt-3.mb-3 .col-md-2 button {
+                width: 100%;
+            }
+
+            .row.mt-3.mb-3 .col-md-3.text-right button {
+                margin-left: 10px;
+            }
+</style>
+
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -315,7 +432,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
 
 <script>
     $(document).ready(function () {
@@ -454,13 +571,17 @@
     }
 
     // Hàm hiển thị alert lỗi
-    function showErrorAlert(message) {
+    function showErrorAlert(message) {       
         Swal.fire({
             icon: 'error',
             title: 'Lỗi!',
             text: message,
             confirmButtonColor: '#dc3545'
         });
+        console.log(message)
+        setTimeout(function(){
+            window.location.href = `/Home/Error/${parseInt(message, 10)}`
+        }, 2000)
     }
 
     // Hàm xử lý phản hồi từ server
@@ -607,117 +728,3 @@
     });
 
 </script>
-<style>
-    .custom-modal-width {
-        max-width: 80%; /* Hoặc chỉnh sửa giá trị theo nhu cầu */
-    }
-
-    .modal-dialog {
-        max-width: 80%; /* Hoặc điều chỉnh theo tỷ lệ hoặc đơn vị khác */
-        margin: 30px auto; /* Tùy chỉnh để căn chỉnh modal ở giữa */
-    }
-    .table {
-        font-size: 14px;
-    }
-
-    .draggable-row {
-        cursor: move;
-    }
-
-    .dropzone {
-        border: 2px dashed #007bff;
-        border-radius: 10px;
-        padding: 20px;
-        text-align: center;
-        transition: background-color 0.3s;
-        height: 120px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-        .dropzone.dragover {
-            background-color: #e7f1ff;
-        }
-
-        .dropzone h5 {
-            margin: 0;
-            font-size: 18px;
-            margin-top: 10px;
-        }
-
-        .dropzone i {
-            font-size: 48px;
-            color: #007bff;
-        }
-
-
-
-    .dropzone {
-        border: 2px dashed #007bff;
-        border-radius: 10px;
-        padding: 20px;
-        text-align: center;
-        transition: background-color 0.3s;
-        height: 120px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-        .dropzone.dragover {
-            background-color: #e7f1ff;
-        }
-
-        .dropzone h5 {
-            margin: 0;
-            font-size: 18px;
-            margin-top: 10px;
-        }
-
-        .dropzone i {
-            font-size: 48px;
-            color: #007bff;
-        }
-    /* Container */
-    .container {
-        padding: 20px;
-    }
-
-    /* Tiêu đề */
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    /* Bộ lọc (3 phần trên) */
-    .row.mt-3.mb-3 {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-        .row.mt-3.mb-3 .col-md-3,
-        .row.mt-3.mb-3 .col-md-2 {
-            display: flex;
-            align-items: center;
-        }
-
-            .row.mt-3.mb-3 .col-md-3 input,
-            .row.mt-3.mb-3 .col-md-2 select {
-                width: 100%;
-            }
-
-            .row.mt-3.mb-3 .col-md-2 button {
-                width: 100%;
-            }
-
-            .row.mt-3.mb-3 .col-md-3.text-right button {
-                margin-left: 10px;
-            }
-</style>

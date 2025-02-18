@@ -26,7 +26,8 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> UpdateProfile()
         {
             string token = HttpContext.Session.GetString("AccessToken");
-            int id = int.Parse(ijwtToken.GetUserIdFromToken(token));
+            var information = ijwtToken.GetInformationUserFromToken(token);
+            var id = information.Id;
             // Lấy thông tin khách hàng từ API
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"KhachHang/GetKhachHangById/{id}");
             if (response.IsSuccessStatusCode)
@@ -45,8 +46,8 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> UpdateProfile( KhachHangVM khachHang)
         {
             string token = HttpContext.Session.GetString("AccessToken");
-            int id = int.Parse(ijwtToken.GetUserIdFromToken(token));
-
+            var information = ijwtToken.GetInformationUserFromToken(token);
+            var id = information.Id;
             var formData = new MultipartFormDataContent();
 
             // Thêm các trường dữ liệu vào FormData

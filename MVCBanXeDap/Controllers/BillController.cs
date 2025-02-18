@@ -8,6 +8,7 @@ using iText.Layout.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.IdentityModel.Tokens;
 using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
@@ -45,7 +46,7 @@ namespace MVCBanXeDap.Controllers
                 return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
             }
 
-            var ValidateAccessToken = await jwtToken.ValidateAccessToken(accessToken, refreshToken);
+            var ValidateAccessToken = await jwtToken.ValidateAccessToken();
             if (ValidateAccessToken == null)
             {
                 return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
@@ -55,9 +56,9 @@ namespace MVCBanXeDap.Controllers
                 HttpContext.Session.SetString("AccessToken", ValidateAccessToken);
             }
 
-            var idStaff = jwtToken.GetUserIdFromToken(ValidateAccessToken); // Lấy idStaff từ token
-
-            if (string.IsNullOrEmpty(idStaff))
+            var information = jwtToken.GetInformationUserFromToken(ValidateAccessToken); // Lấy idStaff từ token
+            var id = information.Id.ToString();
+            if (string.IsNullOrEmpty(id))
             {
                 return Json(new { success = false, message = "Không tìm thấy mã người dùng đăng nhập, vui lòng liên hệ nhà phát triển để được hỗ trợ." });
             }
@@ -65,7 +66,7 @@ namespace MVCBanXeDap.Controllers
             var paramsChange = new Dictionary<string, string>
             {
                 { "idOrder", idOrder },
-                { "idStaff", idStaff },
+                { "idStaff", id },
                 { "statusOrder", status }
             };
 
@@ -337,6 +338,10 @@ namespace MVCBanXeDap.Controllers
                     if (!string.IsNullOrEmpty(tinhTrang))
                         hoadonVMs = hoadonVMs.Where(hd => hd.TinhTrang.Contains(tinhTrang)).ToList();
                 }
+            }
+            else
+            {
+                return Unauthorized();
             }
 
             return Json(new { data = hoadonVMs });

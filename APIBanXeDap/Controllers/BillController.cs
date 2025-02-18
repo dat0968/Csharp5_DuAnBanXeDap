@@ -1,6 +1,7 @@
 ﻿using APIBanXeDap.Models;
 using APIBanXeDap.Repository.HoaDon;
 using APIBanXeDap.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace APIBanXeDap.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(Roles = "Admin, Nhân viên")]
     public class BillController : ControllerBase
     {
         private readonly IHoaDonRepository hoaDonRepository;

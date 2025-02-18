@@ -2,6 +2,7 @@
 using APIBanXeDap.Models;
 using APIBanXeDap.Repository.SanPham;
 using APIBanXeDap.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Razor;
@@ -11,6 +12,7 @@ namespace APIBanXeDap.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin, Nhân viên")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository ProductRepository;
@@ -89,7 +91,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
-        [HttpPut("{id}")]
+        [HttpPut("DeleteProduct/{id}")]
         public IActionResult DeleteProduct([FromRoute] int id)
         {
             try

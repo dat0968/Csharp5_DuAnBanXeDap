@@ -20,7 +20,7 @@ namespace MVCBanXeDap.ViewComponents
         public IViewComponentResult Invoke()
         {
             var listCouponCode = new List<MaCouponVM>();
-            HttpResponseMessage responseGetAllResponse = _client.GetAsync(_client.BaseAddress + $"MaCoupons/GetAllCouponCode").Result;
+            HttpResponseMessage responseGetAllResponse = _client.GetAsync(_client.BaseAddress + $"MaCoupons/GetAll").Result;
             if (responseGetAllResponse.IsSuccessStatusCode)
             {
                 string data = responseGetAllResponse.Content.ReadAsStringAsync().Result;

@@ -35017,6 +35017,88 @@
       ]
     },
     {
+      "Route": "Hinh/SanPham/123.cqw9e47v85.jpg",
+      "AssetFile": "Hinh/SanPham/123.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "223138"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Jt3+wBqks901Mcv5KS+7O5zdMfu84UViwaT5urBkAQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 18 Feb 2025 02:57:47 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "cqw9e47v85"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Jt3+wBqks901Mcv5KS+7O5zdMfu84UViwaT5urBkAQ="
+        },
+        {
+          "Name": "label",
+          "Value": "Hinh/SanPham/123.jpg"
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/SanPham/123.jpg",
+      "AssetFile": "Hinh/SanPham/123.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "223138"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Jt3+wBqks901Mcv5KS+7O5zdMfu84UViwaT5urBkAQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 18 Feb 2025 02:57:47 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Jt3+wBqks901Mcv5KS+7O5zdMfu84UViwaT5urBkAQ="
+        }
+      ]
+    },
+    {
       "Route": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.4y2gn89k0t.jpg",
       "AssetFile": "Hinh/SanPham/366760000_968465774368418_3331979115163731096_n.jpg",
       "Selectors": [],
@@ -35043,7 +35125,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 21 Jan 2025 05:54:02 GMT"
+          "Value": "Tue, 18 Feb 2025 02:57:18 GMT"
         }
       ],
       "EndpointProperties": [
@@ -35088,7 +35170,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 21 Jan 2025 05:54:02 GMT"
+          "Value": "Tue, 18 Feb 2025 02:57:18 GMT"
         }
       ],
       "EndpointProperties": [
@@ -36765,7 +36847,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 04 Jan 2025 15:08:29 GMT"
+          "Value": "Tue, 18 Feb 2025 02:58:18 GMT"
         }
       ],
       "EndpointProperties": [
@@ -36802,7 +36884,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 04 Jan 2025 15:08:29 GMT"
+          "Value": "Tue, 18 Feb 2025 02:58:18 GMT"
         }
       ],
       "EndpointProperties": [
@@ -36847,7 +36929,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 07 Jan 2025 06:22:17 GMT"
+          "Value": "Tue, 18 Feb 2025 02:54:31 GMT"
         }
       ],
       "EndpointProperties": [
@@ -36884,7 +36966,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 07 Jan 2025 06:22:17 GMT"
+          "Value": "Tue, 18 Feb 2025 02:54:31 GMT"
         }
       ],
       "EndpointProperties": [
@@ -37011,7 +37093,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 04 Jan 2025 15:08:30 GMT"
+          "Value": "Tue, 18 Feb 2025 02:58:18 GMT"
         }
       ],
       "EndpointProperties": [
@@ -37048,7 +37130,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 04 Jan 2025 15:08:30 GMT"
+          "Value": "Tue, 18 Feb 2025 02:58:18 GMT"
         }
       ],
       "EndpointProperties": [
@@ -37257,7 +37339,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 24 Dec 2024 12:14:09 GMT"
+          "Value": "Tue, 18 Feb 2025 07:22:01 GMT"
         }
       ],
       "EndpointProperties": [
@@ -37302,7 +37384,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 24 Dec 2024 12:14:09 GMT"
+          "Value": "Tue, 18 Feb 2025 07:22:01 GMT"
         }
       ],
       "EndpointProperties": [

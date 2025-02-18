@@ -154,7 +154,7 @@
 
     function GenerateTableCouponCode() {
         // Fetch API lấy dữ liệu từ server
-        fetch(`https://localhost:7137/api/MaCoupons/GetAllCouponCode?keywords=${keywords.value}&status=${statusFilter.value}&sort=${sortByTime.value}`)
+        fetch(`https://localhost:7137/api/MaCoupons/GetAllCouponCodeByPage?keywords=${keywords.value}&status=${statusFilter.value}&sort=${sortByTime.value}`)
             .then(response => {
                 if (!response.ok) throw new Error("Failed to fetch data");
                 return response.json();

@@ -121,7 +121,27 @@ namespace MVCBanXeDap.Controllers
             }
             return View(ListProducts);
         }
-        
+        [Route("Home/Error/{statusCode}")]
+        public IActionResult Error(int statusCode)
+        {
+            ViewBag.StatusCode = statusCode;
+            switch (statusCode)
+            {
+                case 404:
+                    ViewBag.ErrorMessage = "Oops! Liên kết này không tồn tại.";
+                    break;
+                case 401:
+                    ViewBag.ErrorMessage = "Không thể truy cập vào đường dẫn này hoặc do phiên của bạn đã hết. Vui lòng thử đăng nhập lại.";
+                    break;
+                case 500:
+                    ViewBag.ErrorMessage = "Lỗi máy chủ nội bộ! Vui lòng thử lại sau.";
+                    break;
+                default:
+                    ViewBag.ErrorMessage = "Đã xảy ra lỗi!";
+                    break;
+            }
+            return View();
+        }
 
     }
 }

@@ -194,7 +194,7 @@ namespace MVCBanXeDap.Controllers
             }
         }
         [HttpGet]
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
             var mycart = Cart;
             if(mycart.ListCartItem.Count == 0)
@@ -202,8 +202,18 @@ namespace MVCBanXeDap.Controllers
                 TempData["ErrorMessage"] = "Giỏ hàng đang trống, vui lòng thêm sản phẩm vào giỏ trước khi thanh toán";
                 return RedirectToAction("Index", "Cart");
             }
-            ViewBag.PhoneNumber = HttpContext.Session.GetString("PhoneNumber")?.Trim('"');
-            ViewBag.FullName = HttpContext.Session.GetString("FullName")?.Trim('"');
+            var accesstoken = HttpContext.Session.GetString("AccessToken")?.Trim('"');
+            var refreshtoken = HttpContext.Session.GetString("RefreshToken")?.Trim('"');
+            if (accesstoken != null && refreshtoken != null)
+            {
+                var validateAccessToken = await jwtToken.ValidateAccessToken();
+                if (!string.IsNullOrEmpty(validateAccessToken))
+                {
+                    var information = jwtToken.GetInformationUserFromToken(validateAccessToken);
+                    ViewBag.PhoneNumber = information.SDT;
+                    ViewBag.FullName = information.HoTen;
+                }
+            }
             return View(mycart);
         }
         [HttpPost]
@@ -214,10 +224,10 @@ namespace MVCBanXeDap.Controllers
             var refreshtoken = HttpContext.Session.GetString("RefreshToken")?.Trim('"');
             if (accesstoken != null && refreshtoken != null)
             {
-                var validateAccessToken = await jwtToken.ValidateAccessToken(accesstoken, refreshtoken);
+                var validateAccessToken = await jwtToken.ValidateAccessToken();
                 if (!string.IsNullOrEmpty(validateAccessToken))
                 {
-                    var idUser = jwtToken.GetUserIdFromToken(validateAccessToken);
+                    var information = jwtToken.GetInformationUserFromToken(validateAccessToken);
                     var CouponCode = mycart.MaCoupon != null ? mycart.MaCoupon : null;
                     var thongtinhoadon = new ThongTinHoaDonVM();
                     thongtinhoadon.ChiTietHoaDons = new List<ChiTietHoaDonVM>();
@@ -232,7 +242,7 @@ namespace MVCBanXeDap.Controllers
                         Httt = paymentMethod,
                         TinhTrang = "Chờ xác nhận",
                         MaNv = null,
-                        MaKh = int.Parse(idUser),
+                        MaKh = information.Id,
                         MoTa = mota,
                         Hoten = fullname,
                         Sdt = sdt,

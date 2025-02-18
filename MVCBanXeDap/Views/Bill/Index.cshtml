@@ -145,6 +145,11 @@
                         d.httt = $('#httt').val();
                         d.tinhTrang = $('#tinhTrang').val();
                     },
+                    error: function(xhr, status, error) {
+                        console.log("Status Code:", xhr.status);
+                        console.log("Error:", error);
+                        window.location.href = `/Home/Error/${xhr.status}`
+                    },
                     dataSrc: 'data'
                 },
                 columns: [
@@ -204,7 +209,8 @@
                     "infoEmpty": "Không có mục nào để hiển thị",
                     "infoFiltered": "(lọc từ _MAX_ mục)"
                 },
-                "dom": '<"top"pf<"clear">rt<"clear"> <"bottom"p<"clear">>' // Thêm thanh phân trang cả trên và dưới
+                "dom": '<"top"pf<"clear">rt<"clear"> <"bottom"p<"clear">>' // Thêm thanh phân trang cả trên và dưới,
+
             });
         }
 

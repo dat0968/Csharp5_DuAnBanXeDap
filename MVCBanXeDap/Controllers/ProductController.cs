@@ -1,15 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using APIBanXeDap.Models;
+using Azure;
+using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MVCBanXeDap.EditModels;
 using MVCBanXeDap.Models;
+using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Asn1.Cms;
 using System.Drawing;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using X.PagedList.Extensions;
+using SizeVM = MVCBanXeDap.ViewModels.SizeVM;
 
 namespace MVCBanXeDap.Controllers
 {
@@ -17,14 +24,32 @@ namespace MVCBanXeDap.Controllers
     {
         Uri baseAddress = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
-        public ProductController()
+        private readonly IjwtToken jwtToken;
+        public ProductController(IjwtToken jwtToken)
         {
+            this.jwtToken = jwtToken;
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
+        }
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+            else
+            {
+                HttpContext.Response.Redirect("/Accounts/LogoutAccount");
+            }
         }
         [HttpGet]
         public async Task<IActionResult> Index(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, int page = 1)
         {
+            SetAuthorizationHeader();
             var ListProducts = new List<ProductVM>();
             HttpResponseMessage responseProduct = _client.GetAsync(_client.BaseAddress + $"Products/GetAllProduct?keywords={keywords}&MaDanhMuc={MaDanhMuc}&MaThuongHieu={MaThuongHieu}&sort={sort}&page={page}").Result;
             if (responseProduct.IsSuccessStatusCode)
@@ -38,8 +63,11 @@ namespace MVCBanXeDap.Controllers
                 ViewBag.MaDanhMuc = MaDanhMuc;
                 ViewBag.MaThuongHieu = MaThuongHieu;
                 ViewBag.Sort = sort;
+            }
+            else
+            {
+                return StatusCode((int)responseProduct.StatusCode);
             };
-            
             var ListBrand = new List<BrandVM>();
             HttpResponseMessage responseBrand = await _client.GetAsync(_client.BaseAddress + "Brands/GetAllBrand");
             if (responseBrand.IsSuccessStatusCode)
@@ -48,6 +76,10 @@ namespace MVCBanXeDap.Controllers
                 ListBrand = JsonConvert.DeserializeObject<List<BrandVM>>(data);
                 ViewBag.Brand = ListBrand;
             }
+            else
+            {
+                return StatusCode((int)responseProduct.StatusCode);
+            };
 
             var ListSupplier = new List<SupplierVM>();
             HttpResponseMessage responseSupplier = _client.GetAsync(_client.BaseAddress + "Suppliers/GetAllSupplier").Result;
@@ -57,6 +89,10 @@ namespace MVCBanXeDap.Controllers
                 ListSupplier = JsonConvert.DeserializeObject<List<SupplierVM>>(data);
                 ViewBag.Supplier = ListSupplier;
             }
+            else
+            {
+                return StatusCode((int)responseProduct.StatusCode);
+            };
 
             var ListColor = new List<ColorVM>();
             HttpResponseMessage responseColor = _client.GetAsync(_client.BaseAddress + "Colors/GetAllColor").Result;
@@ -66,6 +102,10 @@ namespace MVCBanXeDap.Controllers
                 ListColor = JsonConvert.DeserializeObject<List<ColorVM>>(data);
                 ViewBag.Color = ListColor;
             }
+            else
+            {
+                return StatusCode((int)responseProduct.StatusCode);
+            };
             var ListSize = new List<SizeVM>();
             HttpResponseMessage responseSize = _client.GetAsync(_client.BaseAddress + "Sizes/GetAllSize").Result;
             if (responseSize.IsSuccessStatusCode)
@@ -74,6 +114,10 @@ namespace MVCBanXeDap.Controllers
                 ListSize = JsonConvert.DeserializeObject<List<SizeVM>>(data);
                 ViewBag.Size = ListSize;
             }
+            else
+            {
+                return StatusCode((int)responseProduct.StatusCode);
+            };
             var ListCategory = new List<DanhmucVM>();
             HttpResponseMessage responseCategory = _client.GetAsync(_client.BaseAddress + "Categories/GetAllCategory").Result;
             if (responseCategory.IsSuccessStatusCode)
@@ -82,17 +126,26 @@ namespace MVCBanXeDap.Controllers
                 ListCategory = JsonConvert.DeserializeObject<List<DanhmucVM>>(data);
                 ViewBag.Category = ListCategory;
             }
+            else
+            {
+                return StatusCode((int)responseProduct.StatusCode);
+            };
             return View(ListProducts);
         }
         [HttpGet("id")]
         public async Task<IActionResult> Details(int id)
         {
+            SetAuthorizationHeader();
             var ProductVM = new ProductVM();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Products/GetProductById/{id}");
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
                 ProductVM = JsonConvert.DeserializeObject<ProductVM>(data);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
             };
             return PartialView("_ProductDetails", ProductVM);
         }
@@ -100,6 +153,7 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> CreateProduct(string TenSp, int ThuongHieu, int DanhMuc, int NhaCC, string MoTa,
         DateOnly NgaySanXuat, IFormFile? file, List<IFormFile>? files, List<DetailsProductEM> Attributes)
         {
+            SetAuthorizationHeader();
             if (!string.IsNullOrEmpty(TenSp) && NhaCC > 0 && ThuongHieu > 0 && DanhMuc > 0 &&
                (file != null && file.Length > 0) && (files != null && files.Count > 0) && Attributes.Count > 0)
             {
@@ -139,6 +193,10 @@ namespace MVCBanXeDap.Controllers
                         return RedirectToAction("Index", "Product");
                     }
                 }
+                else
+                {
+                    return StatusCode((int)responseProduct.StatusCode);
+                };
 
                 //Xử lí thêm hình ảnh phụ
                 foreach (var hinhanh in files)
@@ -168,6 +226,10 @@ namespace MVCBanXeDap.Controllers
                                 return RedirectToAction("Index", "Product");
                             }
                         }
+                        else
+                        {
+                            return StatusCode((int)responseImg.StatusCode);
+                        };
                     }
                 }
 
@@ -194,6 +256,10 @@ namespace MVCBanXeDap.Controllers
                             TempData["ErrorMessage"] = "Có lỗi xảy ra";
                             return RedirectToAction("Index", "Product");
                         }
+                    }
+                    else
+                    {
+                        return StatusCode((int)responseDetailsProduct.StatusCode);
                     };
                 }
 
@@ -208,7 +274,7 @@ namespace MVCBanXeDap.Controllers
         List<IFormFile>? files, string MoTa, DateOnly NgaySanXuat, List<DetailsProductEM> Attributes, List<string> DeleteImages, 
         List<DetailsProductEM> Chitietsanphams)
         {
-
+            SetAuthorizationHeader();
             if (!string.IsNullOrEmpty(TenSp) && NhaCC > 0 && ThuongHieu > 0 && DanhMuc > 0)
             {
                 //Xử lí ảnh chính
@@ -280,6 +346,10 @@ namespace MVCBanXeDap.Controllers
                                         return RedirectToAction("Index", "Product");
                                     }
                                 }
+                                else
+                                {
+                                    return StatusCode((int)responseImg.StatusCode);
+                                };
                             }
                         }
                     }
@@ -300,6 +370,10 @@ namespace MVCBanXeDap.Controllers
                                     return RedirectToAction("Index", "Product");
                                 }
                             }
+                            else
+                            {
+                                return StatusCode((int)responseImg.StatusCode);
+                            };
                         }
                     }
                     //Xử lí thêm thuộc tích sản phẩm
@@ -326,6 +400,10 @@ namespace MVCBanXeDap.Controllers
                                 TempData["ErrorMessage"] = "Có lỗi xảy ra";
                                 return RedirectToAction("Index", "Product");
                             }
+                        }
+                        else
+                        {
+                            return StatusCode((int)responseDetailsProduct.StatusCode);
                         };
                     }
                     //Xử lí sửa thông tin thuộc tích sản phẩm
@@ -353,11 +431,19 @@ namespace MVCBanXeDap.Controllers
                                 return RedirectToAction("Index", "Product");
                             }
                         }
+                        else
+                        {
+                            return StatusCode((int)responseDetailsProduct.StatusCode);
+                        };
                     }
                     TempData["SuccessMessage"] = "Thay đổi thông tin sản phẩm thành công";
                     return RedirectToAction("Index", "Product");
 
                 }
+                else
+                {
+                    return StatusCode((int)response.StatusCode);
+                };
             }
             TempData["ErrorMessage"] = "Có lỗi xảy ra";
             return RedirectToAction("Index", "Product");
@@ -366,9 +452,8 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> DeleteProduct(int id )
         {
             //Ẩn sản phẩm isDelete = true
-
-            StringContent content = new StringContent($"{{\"id\": {id}}}", Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PutAsync(_client.BaseAddress + $"Products/DeleteProduct/{id}", content);
+            SetAuthorizationHeader();
+            HttpResponseMessage response = await _client.PutAsync(_client.BaseAddress + $"Products/DeleteProduct/{id}", null);
             if (response.IsSuccessStatusCode)
             {
                 var dataResponse = await response.Content.ReadAsStringAsync();
@@ -383,6 +468,10 @@ namespace MVCBanXeDap.Controllers
                     TempData["ErrorMessage"] = "Có lỗi xảy ra khi thực hiện thao tác";
                 }               
             }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
+            };
             return RedirectToAction("index", "Product");
         }
         [HttpPost]
@@ -396,7 +485,10 @@ namespace MVCBanXeDap.Controllers
                 ListBrand = JsonConvert.DeserializeObject<List<BrandVM>>(data);
                 ViewBag.Brand = ListBrand;
             }
-
+            else
+            {
+                return StatusCode((int)responseBrand.StatusCode);
+            };
             var ListSupplier = new List<SupplierVM>();
             HttpResponseMessage responseSupplier = _client.GetAsync(_client.BaseAddress + "Suppliers/GetAllSupplier").Result;
             if (responseSupplier.IsSuccessStatusCode)
@@ -405,7 +497,10 @@ namespace MVCBanXeDap.Controllers
                 ListSupplier = JsonConvert.DeserializeObject<List<SupplierVM>>(data);
                 ViewBag.Supplier = ListSupplier;
             }
-
+            else
+            {
+                return StatusCode((int)responseSupplier.StatusCode);
+            };
             var ListColor = new List<ColorVM>();
             HttpResponseMessage responseColor = _client.GetAsync(_client.BaseAddress + "Colors/GetAllColor").Result;
             if (responseColor.IsSuccessStatusCode)
@@ -414,6 +509,10 @@ namespace MVCBanXeDap.Controllers
                 ListColor = JsonConvert.DeserializeObject<List<ColorVM>>(data);
                 ViewBag.Color = ListColor;
             }
+            else
+            {
+                return StatusCode((int)responseColor.StatusCode);
+            };
             var ListSize = new List<SizeVM>();
             HttpResponseMessage responseSize = _client.GetAsync(_client.BaseAddress + "Sizes/GetAllSize").Result;
             if (responseSize.IsSuccessStatusCode)
@@ -422,6 +521,10 @@ namespace MVCBanXeDap.Controllers
                 ListSize = JsonConvert.DeserializeObject<List<SizeVM>>(data);
                 ViewBag.Size = ListSize;
             }
+            else
+            {
+                return StatusCode((int)responseSize.StatusCode);
+            };
             var ListCategory = new List<DanhmucVM>();
             HttpResponseMessage responseCategory = _client.GetAsync(_client.BaseAddress + "Categories/GetAllCategory").Result;
             if (responseCategory.IsSuccessStatusCode)
@@ -430,6 +533,10 @@ namespace MVCBanXeDap.Controllers
                 ListCategory = JsonConvert.DeserializeObject<List<DanhmucVM>>(data);
                 ViewBag.Category = ListCategory;
             }
+            else
+            {
+                return StatusCode((int)responseCategory.StatusCode);
+            };
             return PartialView("~/Views/Shared/_ProductEdit.cshtml", model);
         }
         [HttpPost]

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
+using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace MVCBanXeDap.Controllers
@@ -11,13 +13,31 @@ namespace MVCBanXeDap.Controllers
     {
         Uri uri = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
-        public ShippingController()
+        private readonly IjwtToken jwtToken;
+        public ShippingController(IjwtToken jwtToken)
         {
+            this.jwtToken = jwtToken;
             _client = new HttpClient();
             _client.BaseAddress = uri;
         }
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+            else
+            {
+                HttpContext.Response.Redirect("/Accounts/LogoutAccount");
+            }
+        }
         public async Task<IActionResult> Index(string? keywords, string? priceFilter, string? SortByPrice, int page = 1)
         {
+            SetAuthorizationHeader();
             var list = new List<ShippingVM>();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Shippings/GetAll?page={page}");
             if (response.IsSuccessStatusCode)
@@ -35,11 +55,16 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.SortByPrice = SortByPrice;
                 }
             }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
+            }
             return View(list);
         }
         [HttpPost]
         public async Task<IActionResult> Create(string tinh, string quan, string phuong, float gia)
         {
+            SetAuthorizationHeader();
             var model = new ShippingVM
             {
                 ThanhPho = tinh,
@@ -63,12 +88,17 @@ namespace MVCBanXeDap.Controllers
                 {
                     TempData["ErrorMessage"] = ConvertResponse["message"].Value<string>();
                 }
-;            }
+;           }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
+            }
             return RedirectToAction("index");
         }
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
+            SetAuthorizationHeader();
             HttpResponseMessage response = await _client.DeleteAsync(_client.BaseAddress + $"Shippings/DeleteShipping/{id}");
             if (response.IsSuccessStatusCode)
             {
@@ -83,6 +113,10 @@ namespace MVCBanXeDap.Controllers
                 {
                     TempData["ErrorMessage"] = ConvertResponse["message"].Value<string>();
                 }
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
             }
             return RedirectToAction("index");
         }

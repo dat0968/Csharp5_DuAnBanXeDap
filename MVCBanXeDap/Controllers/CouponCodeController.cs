@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace MVCBanXeDap.Controllers
@@ -11,15 +13,33 @@ namespace MVCBanXeDap.Controllers
     {
         Uri uri = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
-        public CouponCodeController()
+        private readonly IjwtToken jwtToken;
+        public CouponCodeController(IjwtToken jwtToken)
         {
+            this.jwtToken = jwtToken;
             this._client = new HttpClient();
             _client.BaseAddress = uri;
         }
-        public IActionResult Index(string? keywords, string? status, string? sort ,int page = 1)
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
         {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+            else
+            {
+                HttpContext.Response.Redirect("/Accounts/LogoutAccount");
+            }
+        }
+        public async Task<IActionResult> Index(string? keywords, string? status, string? sort ,int page = 1)
+        {
+            SetAuthorizationHeader();
             var listCouponCode = new List<MaCouponVM>();
-            HttpResponseMessage responseGetAllResponse = _client.GetAsync(_client.BaseAddress + $"MaCoupons/GetAllCouponCode?keywords={keywords}&status={status}&page={page}").Result;
+            HttpResponseMessage responseGetAllResponse = _client.GetAsync(_client.BaseAddress + $"MaCoupons/GetAllCouponCodeByPage?keywords={keywords}&status={status}&page={page}").Result;
             if(responseGetAllResponse.IsSuccessStatusCode)
             {
                 string data = responseGetAllResponse.Content.ReadAsStringAsync().Result;
@@ -35,12 +55,17 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.Status = status;
                     ViewBag.Sort = sort;
                 }
+            }
+            else
+            {
+                return StatusCode((int)responseGetAllResponse.StatusCode);
             };
             return View(listCouponCode);
         }
         [HttpPost]
         public async Task<IActionResult> CreateCouponCode(float SoPhanTramGiam, decimal SoTienGiam, DateTime NgayHetHan, decimal GiaToiThieu)
         {
+            SetAuthorizationHeader();
             var model = new MaCouponVM
             {
                 SoTienGiam = SoTienGiam,
@@ -65,11 +90,16 @@ namespace MVCBanXeDap.Controllers
                     TempData["ErrorMessage"] = convertDataresponse["message"].Value<string>();
                 }
             }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
+            };
             return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> EditCouponCode(MaCouponVM model)
         {
+            SetAuthorizationHeader();
             var ConvertModel = JsonConvert.SerializeObject(model);
             StringContent content = new StringContent(ConvertModel, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PutAsync(_client.BaseAddress + "MaCoupons/Update", content);
@@ -87,11 +117,16 @@ namespace MVCBanXeDap.Controllers
                     TempData["ErrorMessage"] = ConvertResponse["message"].Value<string>();
                 }
             }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
+            };
             return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> CancelCouponCode(string id)
         {
+            SetAuthorizationHeader();
             HttpResponseMessage response = await _client.PutAsync(_client.BaseAddress + $"MaCoupons/Cancel?id={id}", null);
             if (response.IsSuccessStatusCode)
             {
@@ -103,6 +138,10 @@ namespace MVCBanXeDap.Controllers
                     TempData["SuccessMessage"] = ConvertResponse["message"].Value<string>();
                 }
             }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
+            };
             return RedirectToAction("Index");
         }
         [HttpPost]

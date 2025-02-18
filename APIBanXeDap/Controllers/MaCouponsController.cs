@@ -1,6 +1,7 @@
 ﻿using APIBanXeDap.Repository.MaCoupon;
 using APIBanXeDap.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
@@ -17,8 +18,9 @@ namespace APIBanXeDap.Controllers
         {
             this.MaCouponRepository = MaCouponRepository;
         }
-        [HttpGet("GetAllCouponCode")]
-        public IActionResult GetAll(string? keywords, string? status, string? sort, int page)
+        [Authorize(Roles = "Admin, Nhân viên")]
+        [HttpGet("GetAllCouponCodeByPage")]
+        public IActionResult GetAllByPage(string? keywords, string? status, string? sort, int page = 1)
         {
             try
             {
@@ -26,28 +28,15 @@ namespace APIBanXeDap.Controllers
                 var listCounponCode = MaCouponRepository.GetAll(keywords, status, sort);
                 var totalItems = listCounponCode.Count();
                 var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
-                if(page >= 1)
+                var pagedCouponCode = listCounponCode.Skip((page - 1) * pagesize).Take(pagesize);
+                return Ok(new
                 {
-                    var pagedCouponCode = listCounponCode.Skip((page - 1) * pagesize).Take(pagesize);
-                    return Ok(new
-                    {
-                        Success = true,
-                        Data = pagedCouponCode,
-                        TotalItems = totalItems,
-                        TotalPages = totalPages,
-                        Page = page,
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        Success = true,
-                        Data = listCounponCode,
-                        TotalItems = totalItems,
-                        TotalPages = totalPages,
-                    });
-                }
+                    Success = true,
+                    Data = pagedCouponCode,
+                    TotalItems = totalItems,
+                    TotalPages = totalPages,
+                    Page = page,
+                });
             }
             catch(Exception ex)
             {
@@ -58,6 +47,28 @@ namespace APIBanXeDap.Controllers
                 });
             }           
         }
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                var listCounponCode = MaCouponRepository.GetAll(null, null, null);
+                return Ok(new
+                {
+                    Success = true,
+                    Data = listCounponCode,
+                });
+            }
+            catch(Exception ex)
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = $"Error {ex.Message}"
+                });
+            }
+        }
+        [Authorize(Roles = "Admin, Nhân viên")]
         [HttpPost("Create")]
         public IActionResult Create(MaCouponVM model)
         {
@@ -79,6 +90,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin, Nhân viên")]
         [HttpPut("Update")]
         public IActionResult Update(MaCouponVM model)
         {
@@ -100,6 +112,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin, Nhân viên")]
         [HttpPut("Cancel")]
         public IActionResult Cancel(string id)
         {
@@ -121,25 +134,6 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
-        [HttpPut("RevokeCouponCode")]
-        public IActionResult RevokeCouponCode(string id)
-        {
-            try
-            {
-                MaCouponRepository.RevokeCouponCode(id);
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Thu hồi mã coupon thành công"
-                });
-            }catch (Exception ex)
-            {
-                return Ok(new
-                {
-                    Success = false,
-                    Message = $"Error {ex.Message}"
-                });
-            }
-        }
+        
     }
 }
