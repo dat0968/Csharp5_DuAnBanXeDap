@@ -51,7 +51,8 @@ namespace MVCBanXeDap.Services.Jwt
                                 {
                                     var TokenResponse = convertResponse["data"];
                                     var NewAccessToken = TokenResponse["accessToken"]?.ToString();
-                                    return NewAccessToken;
+                                    _httpContextAccessor.HttpContext.Session.SetString("AccessToken", NewAccessToken);
+;                                    return NewAccessToken;
                                 }
                                 else
                                 {

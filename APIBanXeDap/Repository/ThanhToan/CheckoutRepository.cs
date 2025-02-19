@@ -14,44 +14,35 @@ namespace APIBanXeDap.Repository.ThanhToan
         }
         public void CreateDetailOrder(List<ChiTietHoaDonVM> model)
         {
-            db.Database.BeginTransaction();
-            try
+            foreach (var chitiethoadon in model)
             {
-                foreach (var chitiethoadon in model)
+                var detailOrder = new Chitiethoadon
                 {
-                    var detailOrder = new Chitiethoadon
-                    {
-                        MaHoaDon = chitiethoadon.MaHoaDon,
-                        MaSp = chitiethoadon.MaSp,
-                        MaMau = chitiethoadon.MaMau,
-                        MaKichThuoc = chitiethoadon.MaKichThuoc,
-                        SoLuong = chitiethoadon.SoLuong,
-                        Gia = chitiethoadon.Gia,
-                        ThanhTien = chitiethoadon.ThanhTien,
-                    };
-                    db.Chitiethoadons.Add(detailOrder);
-                    db.SaveChanges();
-
-                    var Chitietsanpham = db.Chitietsanphams.FirstOrDefault(p => p.MaSp == detailOrder.MaSp && p.MaMau == detailOrder.MaMau && p.MaKichThuoc == detailOrder.MaKichThuoc);
-                    if(Chitietsanpham != null)
-                    {
-                        Chitietsanpham.SoLuongTon = Chitietsanpham.SoLuongTon - 1;
-                        db.Database.CommitTransaction();
-                    }
-                    else
-                    {
-                        throw new Exception($"Không tìm thấy sản phẩm với MaSp: {detailOrder.MaSp}, MaMau: {detailOrder.MaMau}, MaKichThuoc: {detailOrder.MaKichThuoc}");
-                    }
-                }
-
-                
-            }catch (Exception ex)
-            {
-                db.Database.RollbackTransaction();
+                    MaHoaDon = chitiethoadon.MaHoaDon,
+                    MaSp = chitiethoadon.MaSp,
+                    MaMau = chitiethoadon.MaMau,
+                    MaKichThuoc = chitiethoadon.MaKichThuoc,
+                    SoLuong = chitiethoadon.SoLuong,
+                    Gia = chitiethoadon.Gia,
+                    ThanhTien = chitiethoadon.ThanhTien,
+                };
+                db.Chitiethoadons.Add(detailOrder);
+                db.SaveChanges();               
             }
-                   
         }
-
+        public void UpdateQuantityProduct(List<ChiTietHoaDonVM> model)
+        {
+            foreach(var chitiet in model)
+            {
+                var Chitietsanpham = db.Chitietsanphams.FirstOrDefault(p => p.MaSp == chitiet.MaSp && p.MaMau == chitiet.MaMau && p.MaKichThuoc == chitiet.MaKichThuoc);
+                if (Chitietsanpham != null)
+                {
+                    Chitietsanpham.SoLuongTon = Chitietsanpham.SoLuongTon - 1;
+                    db.Chitietsanphams.Update(Chitietsanpham);
+                    db.SaveChanges();
+                }
+            }            
+        }
         public Hoadon CreateOrder(HoadonVM model)
         {
             var Order = new Hoadon

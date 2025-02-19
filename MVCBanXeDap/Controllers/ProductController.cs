@@ -41,10 +41,6 @@ namespace MVCBanXeDap.Controllers
                 var accesstoken = validateAccessToken;
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
             }
-            else
-            {
-                HttpContext.Response.Redirect("/Accounts/LogoutAccount");
-            }
         }
         [HttpGet]
         public async Task<IActionResult> Index(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, int page = 1)

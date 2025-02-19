@@ -236,7 +236,7 @@
                         toastr.info(result.message ?? "Lỗi không xác định.", 'Lỗi');
                         if (result.isLoginAgain) {
                             setTimeout(function(){
-                                window.location.href = '/Accounts/LoginStaff'
+                                window.location.href = '/Accounts/Login_Staff'
                             }, 2000)
                         }
                     }
@@ -244,7 +244,13 @@
                     return { success: true, message: result.message };
                 },
                 error: function(xhr, status, error) {
-                    const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Đã xảy ra lỗi khi thay đổi tình trạng đơn hàng.';
+                    //window.location.href = `/Home/Error/${xhr.status}`
+                    let errorMessage = "";
+                    if(xhr.status == 409){
+                        errorMessage = "Đơn hàng đã được quản lý bởi nhân viên khác. Đơn hàng chỉ có thể thay đổi bởi người xác nhận đơn hàng"
+                    }else{
+                        errorMessage = xhr.responseJSON ? xhr.responseJSON.message : `Đã xảy ra lỗi khi thay đổi tình trạng đơn hàng ${xhr.status}.`;
+                    }                    
                     datatable.ajax.reload();
                     toastr.error(errorMessage, 'Thất bại');
                     return { success: false, message: errorMessage };
@@ -264,14 +270,15 @@
                     },
                 error: (xhr) => {
                     // Tạo một phần tử mới và căn giữa với biểu tượng tải
-                    const errorHtml = `
-                        <div class="text-center">
-                            <i class="fas fa-spinner fa-spin fa-3x"></i><br />
-                            <p>Hiện không thể hiển thị thông tin đơn hàng mang mã ${idOrder}!</p>
-                        </div>
-                    `;
-                    $('#coverContentDetailOrder .modal-body').html(errorHtml);
-                    $('#coverContentDetailOrder').modal('show');
+                    window.location.href = `/Home/Error/${xhr.status}`;
+                    // const errorHtml = `
+                    //     <div class="text-center">
+                    //         <i class="fas fa-spinner fa-spin fa-3x"></i><br />
+                    //         <p>Hiện không thể hiển thị thông tin đơn hàng mang mã ${idOrder}!</p>
+                    //     </div>
+                    // `;
+                    // $('#coverContentDetailOrder .modal-body').html(errorHtml);
+                    // $('#coverContentDetailOrder').modal('show');
                 }
             });
         }

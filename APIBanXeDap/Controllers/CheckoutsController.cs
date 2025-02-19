@@ -47,6 +47,7 @@ namespace APIBanXeDap.Controllers
                     MaCouponRepository.RevokeCouponCode(model.MaCoupon);
                 }
                 CheckoutRepository.CreateDetailOrder(model.ChiTietHoaDons);
+                CheckoutRepository.UpdateQuantityProduct(model.ChiTietHoaDons);
                 db.Database.CommitTransaction();
                 return Ok(new
                 {

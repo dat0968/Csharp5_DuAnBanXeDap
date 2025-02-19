@@ -6,6 +6,7 @@ using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,7 @@ using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using System.IO.Compression;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 
@@ -29,6 +31,17 @@ namespace MVCBanXeDap.Controllers
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
             this.jwtToken = jwtToken;
+        }
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
         }
         public IActionResult Index()
         {
@@ -75,9 +88,9 @@ namespace MVCBanXeDap.Controllers
                             .Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
 
             Console.WriteLine(queryString);
-
-            var content = new StringContent("", Encoding.UTF8, "application/x-www-form-urlencoded");
-            HttpResponseMessage httpResponse = await _client.PutAsync(_client.BaseAddress + "bill/ChangeStatusOrder?" + queryString, content);
+            SetAuthorizationHeader();
+            //var content = new StringContent("", Encoding.UTF8, "application/x-www-form-urlencoded");
+            HttpResponseMessage httpResponse = await _client.PutAsync(_client.BaseAddress + "bill/ChangeStatusOrder?" + queryString, null);
 
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -86,8 +99,9 @@ namespace MVCBanXeDap.Controllers
             }
             else
             {
-                string jsonError = await httpResponse.Content.ReadAsStringAsync();
-                return Json(jsonError);
+                //string jsonError = await httpResponse.Content.ReadAsStringAsync();
+                //return Json(jsonError);
+                return StatusCode((int)httpResponse.StatusCode);
             }
         }
 
@@ -95,13 +109,17 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> Detail(string idOrder)
         {
             InvoiceVM invoice = null;
-
+            SetAuthorizationHeader();
             // Gọi API để lấy thông tin hóa đơn
             HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + $"Bill/GetInvoiceData/{idOrder}");
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 string data = await httpResponseMessage.Content.ReadAsStringAsync();
                 invoice = JsonConvert.DeserializeObject<InvoiceVM>(data);
+            }
+            else
+            {
+                return StatusCode((int)httpResponseMessage.StatusCode);
             }
 
             if (invoice == null)
@@ -323,6 +341,7 @@ namespace MVCBanXeDap.Controllers
                 [FromQuery] string? tinhTrang)
         {
             List<HoadonVM> hoadonVMs = new List<HoadonVM>();
+            SetAuthorizationHeader();
             HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + "bill/get");
             if (httpResponseMessage.IsSuccessStatusCode)
             {
@@ -341,7 +360,7 @@ namespace MVCBanXeDap.Controllers
             }
             else
             {
-                return Unauthorized();
+                return StatusCode((int)httpResponseMessage.StatusCode);
             }
 
             return Json(new { data = hoadonVMs });

@@ -294,7 +294,7 @@ namespace MVCBanXeDap.Controllers
                             var message = DeserializeObj["message"].ToString();
                             if (isSuccess)
                             {
-                                return RedirectToAction("SuccessCheckout", "Cart", new { IDorder = thongtinhoadon.HoaDon.MaHoaDon, AmoutTotal = thongtinhoadon.HoaDon.TongTien });
+                                return RedirectToAction("SuccessCheckout", "Cart", new { IDorder = DeserializeObj["iDorder"].ToString(), AmoutTotal = thongtinhoadon.HoaDon.TongTien });
                             }
                             return NotFound($"Không tìm thấy thông tin thanh toán. Error {message}");
                         }
