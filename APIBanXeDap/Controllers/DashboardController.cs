@@ -4,6 +4,7 @@ using APIBanXeDap.Repository.ChiTietHoaDon;
 using APIBanXeDap.Repository.HoaDon;
 using APIBanXeDap.Repository.ThongKe;
 using APIBanXeDap.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
