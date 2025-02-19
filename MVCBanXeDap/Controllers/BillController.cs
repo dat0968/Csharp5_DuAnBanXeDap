@@ -131,7 +131,7 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> TakeInvoice(string maHoaDon)
         {
             InvoiceVM invoice = null;
-
+            SetAuthorizationHeader();
             // Gọi API để lấy thông tin hóa đơn
             HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + $"Bill/GetInvoiceData/{maHoaDon}");
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -139,7 +139,10 @@ namespace MVCBanXeDap.Controllers
                 string data = await httpResponseMessage.Content.ReadAsStringAsync();
                 invoice = JsonConvert.DeserializeObject<InvoiceVM>(data);
             }
-
+            else
+            {
+                return StatusCode((int)httpResponseMessage.StatusCode);
+            }
             if (invoice == null)
             {
                 return NotFound("Hóa đơn không tồn tại.");
@@ -236,14 +239,17 @@ namespace MVCBanXeDap.Controllers
         {
             // Lấy danh sách hóa đơn từ API
             List<InvoiceVM> invoices = new List<InvoiceVM>();
-
+            SetAuthorizationHeader();
             HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + $"Bill/GetAllInvoiceData/");
             if (httpResponseMessage.IsSuccessStatusCode)
             {
                 string data = await httpResponseMessage.Content.ReadAsStringAsync();
                 invoices = JsonConvert.DeserializeObject<List<InvoiceVM>>(data);
             }
-
+            else
+            {
+                return StatusCode((int)httpResponseMessage.StatusCode);
+            }
             // Kiểm tra nếu không có hóa đơn
             if (invoices == null || !invoices.Any())
             {

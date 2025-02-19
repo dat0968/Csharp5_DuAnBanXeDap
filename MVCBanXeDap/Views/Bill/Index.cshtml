@@ -291,7 +291,7 @@
                     toastr.success(`Bạn đã xuất hóa đơn đơn hàng mang mã ${maHoaDon}!`, "Xuất hóa đơn");
                 },
                 error: (xhr, status, error) => {
-                    console.error("Error occurred:", xhr, status, error); // Log lỗi ra console
+                    window.location.href = `/Home/Error/${xhr.status}`;
                 }
             });
         }
@@ -309,7 +309,7 @@
                     console.log(response); // Ghi log ra console để xem dữ liệu
                 },
                 error: (xhr, status, error) => {
-                    console.error("Error occurred:", xhr, status, error); // Log lỗi ra console
+                    window.location.href = `/Home/Error/${xhr.status}`;
                 }
             });
         }

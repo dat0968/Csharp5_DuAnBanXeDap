@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MVCBanXeDap.Models;
+using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 
 namespace MVCBanXeDap.Controllers
 {
@@ -12,15 +14,29 @@ namespace MVCBanXeDap.Controllers
     {
         private readonly HttpClient _client;
         private readonly Uri _apiUri = new Uri("https://localhost:7137/api/");
+        private readonly IjwtToken jwtToken;
 
-        public HomeController()
+        public HomeController(IjwtToken jwtToken)
         {
             _client = new HttpClient();
             _client.BaseAddress = _apiUri;
+            this.jwtToken = jwtToken;
+        }
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            SetAuthorizationHeader();
             var list = new List<ProductVM>();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + "Home/SanPhamBanChay");
             if (response.IsSuccessStatusCode)
@@ -37,7 +53,11 @@ namespace MVCBanXeDap.Controllers
                     item.MaxPrice = maxPrice;
                     list.Add(item);
                 }
-                
+
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
             }
             return View(list);
         }
@@ -45,12 +65,17 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var ProductVM = new ProductVM();
+            SetAuthorizationHeader();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Home/GetProductById/{id}");
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
                 ProductVM = JsonConvert.DeserializeObject<ProductVM>(data);
-            };
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
+            }
             string ten = ProductVM.DanhMuc;
             var relatedProducts = await _client.GetAsync(_client.BaseAddress + $"Home/GetSanPhamLienQuan/{ten}");
             List<ProductVM> relatedProductsList = new List<ProductVM>();
@@ -72,7 +97,10 @@ namespace MVCBanXeDap.Controllers
                     }
                 }
             }
-
+            else
+            {
+                return StatusCode((int)relatedProducts.StatusCode);
+            }
             // Truyền dữ liệu sản phẩm liên quan vào ViewBag hoặc View
             ViewBag.RelatedProducts = relatedProductsList;
             return View(ProductVM);

@@ -38,10 +38,6 @@ namespace MVCBanXeDap.Controllers
                 var accesstoken = validateAccessToken;
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
             }
-            else
-            {
-                HttpContext.Response.Redirect("/Accounts/LogoutAccount");
-            }
         }
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 5, string? keyword = null, string? sort = "asc", string? status = null, string? gender = null)
         {
@@ -137,7 +133,7 @@ namespace MVCBanXeDap.Controllers
                     int status = (int)response.StatusCode;
                     var errorMessage = await response.Content.ReadAsStringAsync();
                     var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(errorMessage);
-                    return Json(new { success = false, message = khachHang.Message, status = $"{status}" });
+                    return Json(new { success = false, message = khachHang?.Message ?? "Lỗi không xác định", status = $"{status}" });
                 }
             }
             catch (Exception ex)
@@ -201,7 +197,7 @@ namespace MVCBanXeDap.Controllers
                         //return Json(new { success = false, message = $"{status}" });
                         var errorMessage = await response.Content.ReadAsStringAsync();
                         var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(errorMessage);
-                        return Json(new { success = false, message = khachHang.Message, status = $"{status}" });
+                        return Json(new { success = false, message = khachHang?.Message ?? "Lỗi không xác định", status = $"{status}" });
                     }
 
                 }
