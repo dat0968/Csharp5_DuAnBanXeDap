@@ -6,6 +6,9 @@ using Newtonsoft.Json.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
+using MVCBanXeDap.Services.Jwt;
+using System.Net.Http.Headers;
+using Azure;
 
 namespace MVCBanXeDap.Controllers
 {
@@ -13,10 +16,23 @@ namespace MVCBanXeDap.Controllers
     {
         Uri baseAddress = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
-        public BrandController()
+        private readonly IjwtToken jwtToken;
+        public BrandController(IjwtToken jwtToken)
         {
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
+            this.jwtToken = jwtToken;
+        }
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
         }
         [HttpGet]
         public async Task<IActionResult> Index(string? keywords, string? sort, int page = 1)
@@ -24,6 +40,7 @@ namespace MVCBanXeDap.Controllers
             var ListBrand = new List<BrandVM>();
             try
             {
+                SetAuthorizationHeader();
                 HttpResponseMessage responseBrand = await _client.GetAsync(_client.BaseAddress + $"Brands/GetAllBrand?keywords={keywords}&sort={sort}&page={page}");
                 if (responseBrand.IsSuccessStatusCode)
                 {
@@ -37,7 +54,7 @@ namespace MVCBanXeDap.Controllers
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Không thể tải danh sách thương hiệu.";
+                    return StatusCode((int)responseBrand.StatusCode);
                 }
             }
             catch (Exception ex)
@@ -50,13 +67,18 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
+            SetAuthorizationHeader();
             var BrandVM = new BrandVM();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Brands/GettBrandById/{id}");
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
                 BrandVM = JsonConvert.DeserializeObject<BrandVM>(data);
-            };
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
+            }
             return PartialView("_BrandDetails", BrandVM);
         }
         [HttpPost]
@@ -64,17 +86,17 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
+                SetAuthorizationHeader();
                 var jsonContent = JsonConvert.SerializeObject(newBrand);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                 var response = await _client.PostAsync(_client.BaseAddress + "Brands/CreateBrand", content);
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["SuccessMessage"] = "Thêm thương hiệu thành công!";
-                    return RedirectToAction("Index");
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Không thể thêm thương hiệu mới.";
+                    return StatusCode((int)response.StatusCode);
                 }
 
                 return RedirectToAction("index");
@@ -96,29 +118,31 @@ namespace MVCBanXeDap.Controllers
 
             try
             {
+                SetAuthorizationHeader();
                 var jsonContent = JsonConvert.SerializeObject(updatedBrand);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                 var response = await _client.PutAsync(_client.BaseAddress + "Brands/EditBrand", content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessMessage"] = "Cập nhật thương hiệu thành công!";
-                    return RedirectToAction("Index");
+                    TempData["SuccessMessage"] = "Cập nhật thương hiệu thành công!";;
                 }
-
-                TempData["ErrorMessage"] = "Không thể cập nhật thương hiệu.";
-                return View();
+                else
+                {
+                    return StatusCode((int)response.StatusCode);
+                }
             }
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = $"Đã xảy ra lỗi: {ex.Message}";
-                return View();
             }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteBrand(int id)
         {
+            SetAuthorizationHeader(); 
             StringContent content = new StringContent($"{{\"id\": {id}}}", Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PutAsync(_client.BaseAddress + $"Brands/DeleteBrand/{id}", content);
             if (response.IsSuccessStatusCode)
@@ -134,6 +158,10 @@ namespace MVCBanXeDap.Controllers
                 {
                     TempData["ErrorMessage"] = "Có lỗi xảy ra khi thực hiện thao tác";
                 }
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
             }
             return RedirectToAction("index", "Brand");
         }

@@ -3,12 +3,14 @@ using APIBanXeDap.Repository.NhaCungCap;
 using APIBanXeDap.Repository.SanPham;
 using APIBanXeDap.Repository.ThuongHieu;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIBanXeDap.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin, Nhân viên")]
     public class SuppliersController : ControllerBase
     {
         private readonly ISupplierRepository SupplierRepository;

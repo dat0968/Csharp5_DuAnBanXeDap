@@ -30,10 +30,6 @@ namespace MVCBanXeDap.Controllers
                 var accesstoken = validateAccessToken;
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
             }
-            else
-            {
-                HttpContext.Response.Redirect("/Accounts/LogoutAccount");
-            }
         }
         public async Task<IActionResult> Index(string? keywords, string? priceFilter, string? SortByPrice, int page = 1)
         {

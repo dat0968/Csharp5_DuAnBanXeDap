@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MVCBanXeDap.Models;
+using MVCBanXeDap.Services.Jwt;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
@@ -12,15 +14,28 @@ namespace MVCBanXeDap.Controllers
     {
         Uri baseAddress = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
-        public SupplierController()
+        private readonly IjwtToken jwtToken;
+        public SupplierController(IjwtToken jwtToken)
         {
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
+            this.jwtToken = jwtToken;
         }
-
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> Index(string? keywords, string? sort, int page = 1)
         {
+            SetAuthorizationHeader();
             var ListSupplier = new List<SupplierVM>();
             HttpResponseMessage responseSupplier = await _client.GetAsync(_client.BaseAddress + $"Suppliers/GetAllSupplier?keywords={keywords}&sort={sort}&page={page}");
             if (responseSupplier.IsSuccessStatusCode)
@@ -35,7 +50,7 @@ namespace MVCBanXeDap.Controllers
             }
             else
             {
-                TempData["ErrorMessage"] = "Không thể tải danh sách thương hiệu.";
+                return StatusCode((int)responseSupplier.StatusCode);
             }
             return View(ListSupplier);
         }
@@ -46,6 +61,7 @@ namespace MVCBanXeDap.Controllers
            
             try
             {
+                SetAuthorizationHeader();
                 var jsonContent = JsonConvert.SerializeObject(newSupplier);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                 var response = await _client.PostAsync(_client.BaseAddress + "Suppliers/CreateSupplier", content);
@@ -53,11 +69,10 @@ namespace MVCBanXeDap.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["SuccessMessage"] = "Thêm nhà cung cấp thành công!";
-                    return RedirectToAction("Index");
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Không thể thêm nhà cung cấp mới.";
+                    return StatusCode((int)response.StatusCode);
                 }
                 
                 return RedirectToAction("index");
@@ -80,18 +95,20 @@ namespace MVCBanXeDap.Controllers
 
             try
             {
+                SetAuthorizationHeader();
                 var jsonContent = JsonConvert.SerializeObject(updatedSupplier);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                 var response = await _client.PutAsync(_client.BaseAddress + "Suppliers/EditSupplier", content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessMessage"] = "Cập nhật nhà cung cấp thành công!";
-                    return RedirectToAction("Index");
+                    TempData["SuccessMessage"] = "Cập nhật nhà cung cấp thành công!";                    
                 }
-
-                TempData["ErrorMessage"] = "Không thể cập nhật nhà cung cấp.";
-                return View();
+                else
+                {
+                    return StatusCode((int)response.StatusCode);
+                }
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -103,6 +120,7 @@ namespace MVCBanXeDap.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteSupplier(int id)
         {
+            SetAuthorizationHeader();
             StringContent content = new StringContent($"{{\"id\": {id}}}", Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PutAsync(_client.BaseAddress + $"Suppliers/DeleteSupplier/{id}", content);
             if (response.IsSuccessStatusCode)
@@ -118,6 +136,10 @@ namespace MVCBanXeDap.Controllers
                 {
                     TempData["ErrorMessage"] = "Có lỗi xảy ra khi thực hiện thao tác";
                 }
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode);
             }
             return RedirectToAction("index", "Supplier");
         }

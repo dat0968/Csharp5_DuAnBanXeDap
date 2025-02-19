@@ -6,11 +6,13 @@ using APIBanXeDap.Models;
 using APIBanXeDap.ViewModels;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Razor;
 using System.Drawing.Printing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APIBanXeDap.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin, Nhân viên")]
     public class BrandsController : ControllerBase
     {
         private readonly IBrandRepository BrandRepository;
