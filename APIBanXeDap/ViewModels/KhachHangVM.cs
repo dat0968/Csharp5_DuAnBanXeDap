@@ -10,11 +10,9 @@ namespace APIBanXeDap.ViewModels
         public string HoTen { get; set; }
 
         [Required(ErrorMessage = "CCCD không được để trống")]
-        [RegularExpression(@"^0\d{11}$", ErrorMessage = "CCCD phải bắt đầu từ 0 và có đúng 12 số")]
         public string Cccd { get; set; }
 
         [Required(ErrorMessage = "Số điện thoại không được để trống")]
-        [RegularExpression(@"^0\d{9}$", ErrorMessage = "Số điện thoại phải bắt đầu từ 0 và có đúng 10 số")]
         public string Sdt { get; set; }
 
         [Required(ErrorMessage = "Email không được để trống")]
@@ -22,7 +20,6 @@ namespace APIBanXeDap.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Tên tài khoản không được để trống")]
-        [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "Tên tài khoản không được chứa ký tự đặc biệt")]
         public string TenTaiKhoan { get; set; }
 
         [Required(ErrorMessage = "Mật khẩu không được để trống")]

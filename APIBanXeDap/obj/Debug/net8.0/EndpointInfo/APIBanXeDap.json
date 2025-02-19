@@ -918,7 +918,6 @@
             "in": "query",
             "required": true,
             "schema": {
-              "pattern": "^0\\d{11}$",
               "type": "string"
             }
           },
@@ -927,7 +926,6 @@
             "in": "query",
             "required": true,
             "schema": {
-              "pattern": "^0\\d{9}$",
               "type": "string"
             }
           },
@@ -945,7 +943,6 @@
             "in": "query",
             "required": true,
             "schema": {
-              "pattern": "^[a-zA-Z0-9]*$",
               "type": "string"
             }
           },
@@ -1066,11 +1063,9 @@
                     "type": "string"
                   },
                   "Cccd": {
-                    "pattern": "^0\\d{11}$",
                     "type": "string"
                   },
                   "Sdt": {
-                    "pattern": "^0\\d{9}$",
                     "type": "string"
                   },
                   "Email": {
@@ -1078,7 +1073,6 @@
                     "format": "email"
                   },
                   "TenTaiKhoan": {
-                    "pattern": "^[a-zA-Z0-9]*$",
                     "type": "string"
                   },
                   "MatKhau": {
@@ -2883,11 +2877,9 @@
                     "type": "string"
                   },
                   "Cccd": {
-                    "pattern": "^0\\d{11}$",
                     "type": "string"
                   },
                   "Sdt": {
-                    "pattern": "^0\\d{9}$",
                     "type": "string"
                   },
                   "Email": {
@@ -2895,7 +2887,6 @@
                     "format": "email"
                   },
                   "TenTaiKhoan": {
-                    "pattern": "^[a-zA-Z0-9]*$",
                     "type": "string"
                   },
                   "MatKhau": {

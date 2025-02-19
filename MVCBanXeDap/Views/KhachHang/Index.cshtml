@@ -597,13 +597,14 @@
                     $(`[name="${fieldName}"]`).siblings('.text-danger').text(errorMessages.join(', '));
                 }
             } else {
+                showErrorAlert(response.message);
                 if(response.status != null ){ 
                     setTimeout(function(){
                         window.location.href = `/Home/Error/${parseInt(response.status, 10)}`
                     }, 2000) 
                  }  
 
-                showErrorAlert(response.message);
+                
             }
         }
     }

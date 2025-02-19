@@ -372,17 +372,18 @@
                                 $(`[name="${fieldName}"]`).siblings('.text-danger').text(errorMessages.join(', '));
                             }
                         } else {
-                            if(response.status != null ){
-                                 setTimeout(function(){
-                                     window.location.href = `/Home/Error/${parseInt(message, 10)}`
-                                 }, 2000)
-                            }
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Thất bại!',
                                 text: response.message,
                                 confirmButtonColor: '#dc3545'
                             });
+                            if(response.status != null ){
+                                 setTimeout(function(){
+                                     window.location.href = `/Home/Error/${parseInt(response.status, 10)}`
+                                 }, 2000)
+                            }
+                            
                         }
                     }
                 },
