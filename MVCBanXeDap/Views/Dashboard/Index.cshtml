@@ -250,6 +250,8 @@
     <script>
         const defaultRange = 'day';
         const defaultAPI = "https://localhost:7137/api";
+        const valueAuth = `Bearer @Html.Raw(ViewBag.ValueAuth)`;
+
         const chartConfigs = {
             orderChart: {
                 url: defaultAPI + '/Dashboard/GetAllOrderData', // Sửa đổi API cho orderChart
@@ -312,13 +314,20 @@
         });
 
         async function fetchJson(url) {
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': valueAuth,
+                    'Content-Type': 'application/json'
+                }
+            });
             if (!response.ok) {
                 throw new Error(`Failed to fetch data from ${url}: ${response.statusText}`);
             }
             const rawData = await response.json();
             return typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
         }
+
 
         function renderOrderChart(data, chartName, chartInstance) {
             const ctx = document.getElementById(chartName).getContext('2d');
@@ -604,6 +613,7 @@
             $.ajax({
                 url: '/dashboard/GetTopSellingProducts',
                 method: 'GET',
+                headers: {'Authorization': valueAuth},
                 success: function (response) {
                     if (response.success) {
                         renderTopProductsTable(response.data.topProducts);
@@ -623,6 +633,7 @@
             $.ajax({
                 url: 'https://localhost:7137/api/Dashboard/GetEmployeeOrderStats',
                 method: 'GET',
+                headers: {'Authorization': valueAuth},
                 success: function (response) {
                     renderTopEmployeesTable(response);
                 },

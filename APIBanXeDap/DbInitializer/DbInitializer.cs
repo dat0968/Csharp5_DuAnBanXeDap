@@ -21,7 +21,7 @@ namespace APIBanXeDap.DbInitializer
             //    _db.Database.Migrate();
             //}
 
-            if (!_db.Nhanviens.Any(x => x.Email == "email@gmail.com"))
+            if (!_db.Nhanviens.Any(x => x.Email == "admin@gmail.com"))
             {
                 CreateTempStaff();
             }
@@ -44,10 +44,10 @@ namespace APIBanXeDap.DbInitializer
                 DiaChi = "123 Duong ABC, Phuong XYZ, Thanh pho HCM",
                 Cccd = "123456789012",
                 Sdt = "0901234567",
-                Email = "email@gmail.com",
+                Email = "admin@gmail.com",
                 NgayVaoLam = new DateOnly(2021, 1, 1),
                 Luong = 10000000,
-                VaiTro = "Nhan vien ban hang",
+                VaiTro = "Admin",
                 TenTaiKhoan = "nguyenvana",
                 MatKhau = "password123",
                 TinhTrang = "Đang hoạt động",
