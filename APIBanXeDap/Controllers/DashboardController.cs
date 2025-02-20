@@ -4,6 +4,7 @@ using APIBanXeDap.Repository.ChiTietHoaDon;
 using APIBanXeDap.Repository.HoaDon;
 using APIBanXeDap.Repository.ThongKe;
 using APIBanXeDap.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace APIBanXeDap.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class DashboardController : ControllerBase
     {
         private readonly IHoaDonRepository _hd;
@@ -25,6 +27,11 @@ namespace APIBanXeDap.Controllers
             _hd = hd;
             _cthd = cthd;
             _tk = tk;
+        }
+        [HttpGet]
+        public IActionResult IsAuth()
+        {
+            return Ok();
         }
 
         /// <summary>
