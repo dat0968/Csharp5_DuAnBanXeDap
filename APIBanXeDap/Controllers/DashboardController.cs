@@ -2,6 +2,7 @@
 using APIBanXeDap.Models.ViewModels;
 using APIBanXeDap.Repository.ChiTietHoaDon;
 using APIBanXeDap.Repository.HoaDon;
+using APIBanXeDap.Repository.SanPham;
 using APIBanXeDap.Repository.ThongKe;
 using APIBanXeDap.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -22,11 +23,13 @@ namespace APIBanXeDap.Controllers
         private readonly IHoaDonRepository _hd;
         private readonly IChiTietHoaDonRepository _cthd;
         private readonly IThongKeRepository _tk;
-        public DashboardController(IHoaDonRepository hd, IChiTietHoaDonRepository cthd, IThongKeRepository tk)
+        private readonly IProductRepository _product;
+        public DashboardController(IHoaDonRepository hd, IChiTietHoaDonRepository cthd, IThongKeRepository tk, IProductRepository product)
         {
             _hd = hd;
             _cthd = cthd;
             _tk = tk;
+            _product = product;
         }
         [HttpGet]
         public IActionResult IsAuth()
@@ -303,6 +306,49 @@ namespace APIBanXeDap.Controllers
             });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> JustGetOneListSellingProducts()
+        {
+            try
+            {
+                // Sử dụng repository để lấy danh sách chi tiết hóa đơn
+                List<ChiTietHoaDonVM> detailInvoices = (await _cthd.GetAllDetailInvoiceAsync()).ToList();
+
+                // Tính sản phẩm bán chạy nhất
+                var topSellingProducts = detailInvoices
+                    .GroupBy(g => new { g.MaHoaDon, g.MaSp, g.TenSp, g.MaMau, g.TenMau, g.MaKichThuoc, g.TenKichThuoc, g.Hinh })
+                    .Select(g => new ChiTietHoaDonVM
+                    {
+                        MaHoaDon = g.Key.MaHoaDon,
+                        MaSp = g.Key.MaSp,
+                        TenSp = g.Key.TenSp,
+                        MaMau = g.Key.MaMau,
+                        TenMau = g.Key.TenMau,
+                        MaKichThuoc = g.Key.MaKichThuoc,
+                        TenKichThuoc = g.Key.TenKichThuoc,
+                        SoLuong = g.Sum(x => x.SoLuong), // Tổng số lượng
+                        ThanhTien = g.Sum(x => x.ThanhTien),  // Tổng tiền
+                        Hinh = g.Key.Hinh
+                    })
+                    .OrderByDescending(x => x.SoLuong)
+                    .Take(10) // Lấy 5 sản phẩm bán chạy nhất
+                    .ToList();
+
+                // Tạo kết quả trả về
+                var result = new
+                {
+                    TopProducts = topSellingProducts
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi: " + ex.Message);
+                var result = new { success = false, message = ex.Message };
+                return BadRequest(result);
+            }
+        }
         /// <summary>
         /// Dữ liệu thống kê sản phẩm theo được chọn nhiều nhất,...
         /// </summary>
@@ -331,7 +377,7 @@ namespace APIBanXeDap.Controllers
                         ThanhTien = g.Sum(x => x.ThanhTien),  // Tổng tiền
                         Hinh = g.Key.Hinh
                     })
-                    .OrderByDescending(x => x.SoLuong)
+                    .OrderByDescending(x => x.ThanhTien)
                     .Take(5) // Lấy 5 sản phẩm bán chạy nhất
                     .ToList();
 
@@ -390,6 +436,17 @@ namespace APIBanXeDap.Controllers
             }
         }
 
+        /// <summary>
+        /// Lấy thông tin chi tiết cho sản phẩm trong Datatable
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDetailProduct(int id)
+        {
+            var detailProduct = await _product.GetCompareProductVmByIdAsync(id);
+            return Ok(detailProduct);
+        }
 
         /// <summary>
         /// Dữ liệu thống kê danh sách nhân viên mang lại doanh thu nhiều nhất trong day/week/month/year

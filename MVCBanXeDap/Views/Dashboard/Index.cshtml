@@ -216,8 +216,8 @@
                             <label for="tableSelect" class="form-label">Chọn bảng:</label>
                             <select id="tableSelect" class="form-select" onchange="showTableFromDropdown()">
                                 <option value="coverTopProducts">Sản phẩm bán chạy</option>
-                                <option value="coverTopColors">Thống kê theo màu sắc</option>
-                                <option value="coverTopSizes">Thống kê theo kích cỡ</option>
+                                @* <option value="coverTopColors">Thống kê theo màu sắc</option>
+                                <option value="coverTopSizes">Thống kê theo kích cỡ</option> *@
                                 <option value="coverTopEmployees">Thống kê nhân viên</option>
                             </select>
                         </div>
@@ -248,9 +248,11 @@
     <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 
     <script>
-        const defaultRange = 'day';
         const defaultAPI = "https://localhost:7137/api";
         const valueAuth = `Bearer @Html.Raw(ViewBag.ValueAuth)`;
+    </script>
+    <script>
+        const defaultRange = 'day';
 
         const chartConfigs = {
             orderChart: {
@@ -332,7 +334,7 @@
         function renderOrderChart(data, chartName, chartInstance) {
             const ctx = document.getElementById(chartName).getContext('2d');
             if (chartInstance) chartInstance.destroy();
-            console.log(data);
+            // console.log(data);
             return new Chart(ctx, {
                 type: 'pie',
                 data: {
@@ -351,7 +353,7 @@
                         tooltip: {
                             callbacks: {
                                 label: function (tooltipItem) {
-                                    console.log(tooltipItem);
+                                    // console.log(tooltipItem);
                                     const total = data.approved + data.pending + data.inAllProgress;
                                     const value = tooltipItem.parsed;
                                     const percentage = ((value / total) * 100).toFixed(2);
@@ -497,7 +499,7 @@
                                 display: false
                             },
                             ticks: {
-                                color: '#000',
+                                color: '#fff',
                                 font: {
                                     size: 12
                                 }
@@ -508,7 +510,7 @@
                                 display: false
                             },
                             ticks: {
-                                color: '#000',
+                                color: '#fff',
                                 font: {
                                     size: 12
                                 }
@@ -607,18 +609,190 @@
         $(document).ready(function () {
             loadTopSellingProductsData();
             loadTopEmployeesData();
+
         });
+
+
+        function attachDetailsControl(tableSelector) {
+            $(tableSelector + ' tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var tdi = tr.find("i.fa");
+                var row = $(tableSelector).DataTable().row(tr);
+
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                    tdi.first().removeClass('fa-minus-square');
+                    tdi.first().addClass('fa-plus-square');
+                } else {
+                    row.child(formatDetailProduct(row.data())).show();
+                    tr.addClass('shown');
+                    tdi.first().removeClass('fa-plus-square');
+                    tdi.first().addClass('fa-minus-square');
+                }
+            });
+        }
+
+        //#region [Format Detail Product]
+            function formatDetailProduct(rowData) {
+        // Create a loading div
+        var div = $('<div/>').addClass('loading').text('Loading...');
+
+        // AJAX request to fetch product details
+        $.ajax({
+            url: defaultAPI + `/dashboard/GetDetailProduct/${rowData.maSp}`,
+            method: 'GET',
+            headers: { 'Authorization': valueAuth },
+            success: function (json) {
+                div.removeClass('loading'); // Remove loading indication
+
+                if (json && json.chitietsanphams && json.chitietsanphams.length > 0) {
+                let product = json;
+                let detailsHtml = `
+                    <div class="container border rounded-3 p-3">
+                        <div class="row">
+                            <!-- Cột 1: Thông tin chi tiết sản phẩm -->
+                            <div class="col-md-6">
+                                <strong>Thông tin sản phẩm:</strong>
+                                <table class="table table-bordered table-sm mt-2">
+                                    <tr><td><strong>Trọng lượng:</strong></td><td>${product.trongLuong || 'N/A'} kg</td></tr>
+                                    <tr><td><strong>Chất liệu:</strong></td><td>${product.chatLieu || 'N/A'}</td></tr>
+                                    <tr><td><strong>Bảo hành:</strong></td><td>${product.baoHanh || 'Không bảo hành'}</td></tr>
+                                    <tr><td><strong>Nhà cung cấp:</strong></td><td>${product.tenNhaCc || 'Không rõ'}</td></tr>
+                                </table>
+                            </div>
+
+                            <!-- Cột 2: Kích cỡ, Màu sắc, Giá, Số lượng tồn -->
+                                    <div class="col-md-6 d-flex justify-content-between flex-column">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div><strong>Kích cỡ:</strong></div>
+                                        <div class="btn-group mb-3" role="group">`;
+
+                // Xử lý danh sách kích cỡ
+                if (product.chitietsanphams && product.chitietsanphams.length) {
+                    let sizes = [...new Set(product.chitietsanphams.map(item => item.maKichThuoc))];
+                    sizes.forEach(size => {
+                        detailsHtml += `<button type="button" class="btn btn-outline-dark btn-size"
+                                            data-masp="${product.maSp}" data-size="${size}">
+                                            ${product.chitietsanphams.find(x => x.maKichThuoc === size).tenKichThuoc}
+                                        </button>`;
+                    });
+                } else {
+                    detailsHtml += `<p>Không có kích cỡ.</p>`;
+                }
+
+                detailsHtml += `</div>
+                                    </div>
+                                        <div class="col-md-6">
+                                            <div><strong>Màu sắc:</strong></div>
+                                <div class="btn-group mb-3" role="group">`;
+
+                // Xử lý danh sách màu sắc
+                if (product.chitietsanphams && product.chitietsanphams.length) {
+                    let colors = [...new Set(product.chitietsanphams.map(item => item.maMau))];
+                    colors.forEach(color => {
+                        detailsHtml += `<button type="button" class="btn btn-outline-dark btn-color"
+                                            data-masp="${product.maSp}" data-color="${color}">
+                                            ${product.chitietsanphams.find(x => x.maMau === color).tenMau}
+                                        </button>`;
+                    });
+                } else {
+                    detailsHtml += `<p>Không có màu sắc.</p>`;
+                }
+
+                detailsHtml += `</div>
+                                </div>
+                                </div>
+                                <hr>
+                                <div id="product-details-${product.maSp}" class="product-details text-center">
+                                    <p><strong>Số lượng tồn:</strong> <span class="so-luong">-</span></p>
+                                    <p><strong>Giá:</strong> <span class="gia">-</span> VND</p>
+                                </div>
+                            </div>
+                        </div> <!-- End row -->
+
+                        <script type="application/json" id="data-${product.maSp}">
+                            ${JSON.stringify(product.chitietsanphams)}`;
+                    const endScript = "</"+"script"+"></div>";
+                    detailsHtml += endScript;
+                    // Update DIV with the constructed HTML
+                    div.html(detailsHtml);
+            } else {
+                div.html('<p>Không có thông tin chi tiết để hiển thị.</p>');
+            }
+        },
+        error: function (xhr) {
+            div.html('<p>Không thể lấy thông tin chi tiết.</p>');
+            console.error('Lỗi khi lấy thông tin sản phẩm:', xhr);
+        }
+    });
+
+    return div; // Return the loading div initially or updated with details afterwards.
+}
+
+        // Thêm event handler cho nút chọn kích cỡ & màu sắc
+        $(document).on("click", ".btn-size", function () {
+            let productId = $(this).data("masp");
+            let selectedSize = $(this).data("size");
+
+            $(`.btn-size[data-masp="${productId}"]`).removeClass("active");
+            $(this).addClass("active");
+
+            let productData = JSON.parse($(`#data-${productId}`).text());
+            let availableColors = productData.filter(p => p.maKichThuoc === selectedSize).map(p => p.maMau);
+
+            $(`.btn-color[data-masp="${productId}"]`).each(function () {
+                let colorValue = $(this).data("color");
+                if (availableColors.includes(colorValue)) {
+                    $(this).show();
+                } else {
+                    $(this).hide().removeClass("active");
+                }
+            });
+
+            updateProductDetails(productId);
+        });
+
+        $(document).on("click", ".btn-color", function () {
+            let productId = $(this).data("masp");
+            let selectedColor = $(this).data("color");
+
+            $(`.btn-color[data-masp="${productId}"]`).removeClass("active");
+            $(this).addClass("active");
+
+            updateProductDetails(productId);
+        });
+
+        function updateProductDetails(productId) {
+            let selectedSize = $(`.btn-size[data-masp="${productId}"].active`).data("size");
+            let selectedColor = $(`.btn-color[data-masp="${productId}"].active`).data("color");
+
+            if (!selectedSize || !selectedColor) return;
+
+            let productData = JSON.parse($(`#data-${productId}`).text());
+            let matchedProduct = productData.find(p => p.maKichThuoc === selectedSize && p.maMau === selectedColor);
+
+            if (matchedProduct) {
+                $(`#product-details-${productId} .so-luong`).text(matchedProduct.soLuongTon);
+                $(`#product-details-${productId} .gia`).text(matchedProduct.donGia.toLocaleString());
+            }
+        }
+
+        //#endregion
+
 
         function loadTopSellingProductsData() {
             $.ajax({
                 url: '/dashboard/GetTopSellingProducts',
-                method: 'GET',
+                method: 'GET',  
                 headers: {'Authorization': valueAuth},
                 success: function (response) {
                     if (response.success) {
                         renderTopProductsTable(response.data.topProducts);
-                        renderTopColorsTable(response.data.topColors);
-                        renderTopSizesTable(response.data.topSizes);
+                        attachDetailsControl("#topProducts");
+                        // renderTopColorsTable(response.data.topColors);
+                        // renderTopSizesTable(response.data.topSizes);
                     } else {
                         displayError(response.message);
                     }
@@ -649,6 +823,7 @@
                 destroy: true,
                 columns: columns,
                 language: getDatatableLanguageSettings(),
+                order: [[1, 'asc']],
                 "dom": '<"top"pf<"clear">rt<"clear"> <"bottom"p<"clear">>' // Thêm thanh phân trang cả trên và dưới
             });
         }
@@ -656,6 +831,16 @@
         // Khởi tạo bảng Top Products
         function renderTopProductsTable(data) {
             const columns = [
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": '',
+                    "render": function () {
+                        return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+                    },
+                    "width": "15px"
+                },
                 { title: 'ID', data: 'maSp' },
                 {
                     title: 'Sản Phẩm',
@@ -665,8 +850,6 @@
                                     <img src="/hinh/sanpham/${row.hinh}" alt="Hình sản phẩm" style="width: 50px; height: auto; margin-right: 10px;">
                                     <div>
                                         <span>${row.tenSp}</span><br>
-                                        <span>Màu: ${row.tenMau}</span><br>
-                                        <span>Kích thước: ${row.tenKichThuoc}</span><br>
                                         <span>Giá: ${$.fn.dataTable.render.number(',', '.', 0, '₫').display(row.thanhTien)}</span>
                                     </div>
                                 </div>`;
@@ -676,13 +859,15 @@
                 {
                     title: 'Thành Tiền',
                     data: 'thanhTien',
-                    render: $.fn.dataTable.render.number(',', '.', 0, '₫')
+                    render: function(data, type, row) {
+                        return `${$.fn.dataTable.render.number(',', '.', 0, '₫').display(row.thanhTien * row.soLuong)}`;
+                    }
                 }
             ];
             renderTable(data, columns, '#topProducts');
         }
 
-        // Khởi tạo bảng Top Colors
+        // Khởi tạo bảng Top Colors : NO
         function renderTopColorsTable(data) {
             const columns = [
                 { title: 'ID', data: 'maSp' },
@@ -711,7 +896,7 @@
             renderTable(data, columns, '#topColors');
         }
 
-        // Khởi tạo bảng Top Sizes
+        // Khởi tạo bảng Top Sizes : NO
         function renderTopSizesTable(data) {
             const columns = [
                 { title: 'ID', data: 'maSp' },
@@ -740,7 +925,7 @@
             renderTable(data, columns, '#topSizes');
         }
 
-        // Khởi tạo bảng Top Employees
+        // Khởi tạo bảng Top Employees : OK
         function renderTopEmployeesTable(data) {
             const columns = [
                 { title: 'Mã NV', data: 'maNv' },
@@ -754,7 +939,7 @@
             ];
             renderTable(data, columns, '#topEmployees');
         }
-
+        //Format language
         function getDatatableLanguageSettings() {
             return {
                 sSearch: "Tìm kiếm:",
@@ -771,7 +956,7 @@
                 infoFiltered: "(lọc từ _MAX_ mục)"
             };
         }
-
+        //Ẩn/Hiện Datatable
         function showTableFromDropdown() {
             const selectedTableId = document.getElementById('tableSelect').value;
             const tables = ['coverTopProducts', 'coverTopColors', 'coverTopSizes', 'coverTopEmployees'];
