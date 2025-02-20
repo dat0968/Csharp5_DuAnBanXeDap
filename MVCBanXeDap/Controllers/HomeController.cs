@@ -81,7 +81,7 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> Product(int? maThuongHieu, string? timKiem, int? maDanhMuc, string? sapXep, int page = 1)
         {
             var ListProducts = new List<ProductVM>();
-            HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + $"Products/GetAllProduct?keywords={timKiem}&MaDanhMuc={maDanhMuc}&MaThuongHieu={maThuongHieu}&sort={sapXep}&page={page}").Result;
+            HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + $"Home/GetAllProduct?keywords={timKiem}&MaDanhMuc={maDanhMuc}&MaThuongHieu={maThuongHieu}&sort={sapXep}&page={page}").Result;
             if (response.IsSuccessStatusCode)
             {
                 string data = response.Content.ReadAsStringAsync().Result;
@@ -104,7 +104,7 @@ namespace MVCBanXeDap.Controllers
             ViewBag.MaDanhMuc = maDanhMuc;
             ViewBag.SapXep = sapXep;
             var ListCategory = new List<DanhmucVM>();
-            HttpResponseMessage responseCategory = _client.GetAsync(_client.BaseAddress + "Categories/GetAllCategory").Result;
+            HttpResponseMessage responseCategory = _client.GetAsync(_client.BaseAddress + "Home/GetAllCategory").Result;
             if (responseCategory.IsSuccessStatusCode)
             {
                 string data = responseCategory.Content.ReadAsStringAsync().Result;
@@ -112,7 +112,7 @@ namespace MVCBanXeDap.Controllers
                 ViewBag.Category = ListCategory;
             }
             var ListBrand = new List<BrandVM>();
-            HttpResponseMessage responseBrand = _client.GetAsync(_client.BaseAddress + "Brands/GetAllBrand").Result;
+            HttpResponseMessage responseBrand = _client.GetAsync(_client.BaseAddress + "Home/GetAllBrand").Result;
             if (responseBrand.IsSuccessStatusCode)
             {
                 string data = responseBrand.Content.ReadAsStringAsync().Result;
