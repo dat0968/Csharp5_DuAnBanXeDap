@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace MVCBanXeDap.Controllers
 {
@@ -8,15 +10,25 @@ namespace MVCBanXeDap.Controllers
     {
         Uri baseAddress = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
-        public DashboardController()
+        private readonly IjwtToken _jwt;
+        public DashboardController(IjwtToken jwt)
         {
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
+            _jwt = jwt;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            SetAuthorizationHeader();
+            var response = await _client.GetAsync(_client.BaseAddress + "dashboard/IsAuth"); // Chỉ lấy khách hàng IsDelete = false
+            if (!response.IsSuccessStatusCode)
+            {
+                int Status = (int)response.StatusCode;
+                return RedirectToAction($"/Home/Error/{Status}");
+            }
             return View();
         }
+        #region [GET APIS]
         public async Task<IActionResult> GetAllOrderData()
         {
             // Gọi API để lấy thông tin hóa đơn
@@ -116,5 +128,20 @@ namespace MVCBanXeDap.Controllers
             }
             return Json(new { success = false });
         }
+        #endregion
+        #region [NON ACTION]
+
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await _jwt.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+        }
+        #endregion
     }
 }
