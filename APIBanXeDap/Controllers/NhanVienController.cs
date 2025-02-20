@@ -9,7 +9,7 @@ namespace APIBanXeDap.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin, Nhân viên")]
+    [Authorize(Roles = "Admin")]
     public class NhanVienController : ControllerBase
     {
         private readonly INhanVienService _nhanVienService;

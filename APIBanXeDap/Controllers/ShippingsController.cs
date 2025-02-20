@@ -48,7 +48,7 @@ namespace APIBanXeDap.Controllers
                 });
             }          
         }
-        [Authorize(Roles = "Admin, Nhân viên")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("CreateShipping")]
         public IActionResult Create(ShippingVM model)
         {
@@ -78,7 +78,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
-        [Authorize(Roles = "Admin, Nhân viên")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("EditShipping")]
         public IActionResult Edit([FromBody] ShippingVM model)
         {
@@ -100,7 +100,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
-        [Authorize(Roles = "Admin, Nhân viên")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteShipping/{id}")]
         public IActionResult Delete(int id)
         {

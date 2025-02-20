@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
 
 namespace MVCBanXeDap.Services.Jwt
@@ -81,11 +82,13 @@ namespace MVCBanXeDap.Services.Jwt
                 var id = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub); 
                 var hoten = claims.FirstOrDefault(c => c.Type == "FullName");
                 var sdt = claims.FirstOrDefault(c => c.Type == "PhoneNumber");
+                var role = claims.FirstOrDefault(c => c.Type == "role");
                 var data = new PersonalInformation
                 {
                     Id = int.Parse(id.Value),
                     HoTen = hoten.Value,
                     SDT = sdt.Value,
+                    VaiTro = role.Value,
                 };
                 return data;
             }

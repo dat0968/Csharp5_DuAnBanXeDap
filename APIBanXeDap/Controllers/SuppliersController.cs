@@ -10,7 +10,7 @@ namespace APIBanXeDap.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin, Nhân viên")]
+    [Authorize(Roles = "Admin")]
     public class SuppliersController : ControllerBase
     {
         private readonly ISupplierRepository SupplierRepository;

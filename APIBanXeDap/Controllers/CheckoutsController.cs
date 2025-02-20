@@ -3,6 +3,7 @@ using APIBanXeDap.Repository.MaCoupon;
 using APIBanXeDap.Repository.ThanhToan;
 using APIBanXeDap.ViewModels;
 using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ namespace APIBanXeDap.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Customer")]
     public class CheckoutsController : ControllerBase
     {
 

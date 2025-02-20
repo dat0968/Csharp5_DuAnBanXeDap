@@ -1,4 +1,6 @@
 ﻿using APIBanXeDap.Repository.Token;
+using Azure.Core;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Asn1;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using VNPAY.NET.Enums;
@@ -33,16 +36,43 @@ namespace MVCBanXeDap.Controllers
             _client.BaseAddress = baseAddress;
         }
         public DetailsCart Cart => HttpContext.Session.Get<DetailsCart>("MYCART") ?? new DetailsCart();
+        [NonAction]
         [HttpGet]
-        public IActionResult Index()
+        public async Task<bool> CheckRole()
         {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var AccessToken = validateAccessToken;
+                var information = jwtToken.GetInformationUserFromToken(AccessToken);
+                if(information.VaiTro == "Admin" || information.VaiTro == "Nhân viên")
+                {
+                    return false;
+                };
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+            }
+            return true;
+        }
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var result = await CheckRole();
+            if (result == false)
+            {
+                return StatusCode(401);
+            }
             var mycart = Cart;
             var ListItemCart = mycart.ListCartItem;
             return View(mycart);
         }
         [HttpPost]
-        public IActionResult AddToCart( [FromBody] CartItem item)
+        public async Task<IActionResult> AddToCart( [FromBody] CartItem item)
         {
+            var result = await CheckRole();
+            if (result == false)
+            {
+                return StatusCode(401);
+            }
             var mycart = Cart;
             var ListItemCart = mycart.ListCartItem;
             try
@@ -196,6 +226,11 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
+            var result = await CheckRole();
+            if (result == false)
+            {
+                return StatusCode(401);
+            }
             var mycart = Cart;
             if(mycart.ListCartItem.Count == 0)
             {
@@ -219,6 +254,11 @@ namespace MVCBanXeDap.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(string fullname, string sdt, string? mota, string diachicuthe, string paymentMethod)
         {
+            var result = await CheckRole();
+            if (result == false)
+            {
+                return StatusCode(401);
+            }
             var mycart = Cart;
             var accesstoken = HttpContext.Session.GetString("AccessToken")?.Trim('"');
             var refreshtoken = HttpContext.Session.GetString("RefreshToken")?.Trim('"');
@@ -243,7 +283,7 @@ namespace MVCBanXeDap.Controllers
                         TinhTrang = "Chờ xác nhận",
                         MaNv = null,
                         MaKh = information.Id,
-                        MoTa = mota,
+                        MoTa = !string.IsNullOrEmpty(mota) ? mota : null,
                         Hoten = fullname,
                         Sdt = sdt,
                         ThoiGianGiao = DateOnly.MinValue,
