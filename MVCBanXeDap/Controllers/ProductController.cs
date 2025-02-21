@@ -33,19 +33,21 @@ namespace MVCBanXeDap.Controllers
         }
         [NonAction]
         [HttpGet]
-        public async void SetAuthorizationHeader()
+        public async Task<string?> SetAuthorizationHeader()
         {
             var validateAccessToken = await jwtToken.ValidateAccessToken();
             if (!string.IsNullOrEmpty(validateAccessToken))
             {
                 var accesstoken = validateAccessToken;
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+                return accesstoken;
             }
+            return null;
         }
         [HttpGet]
         public async Task<IActionResult> Index(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, int page = 1)
         {
-            SetAuthorizationHeader();
+            var accesstoken = await SetAuthorizationHeader();
             var ListProducts = new List<ProductVM>();
             HttpResponseMessage responseProduct = _client.GetAsync(_client.BaseAddress + $"Products/GetAllProduct?keywords={keywords}&MaDanhMuc={MaDanhMuc}&MaThuongHieu={MaThuongHieu}&sort={sort}&page={page}").Result;
             if (responseProduct.IsSuccessStatusCode)
@@ -59,6 +61,7 @@ namespace MVCBanXeDap.Controllers
                 ViewBag.MaDanhMuc = MaDanhMuc;
                 ViewBag.MaThuongHieu = MaThuongHieu;
                 ViewBag.Sort = sort;
+                ViewBag.Token = accesstoken;
             }
             else
             {

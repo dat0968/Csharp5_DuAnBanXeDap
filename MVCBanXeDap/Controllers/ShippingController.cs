@@ -22,18 +22,20 @@ namespace MVCBanXeDap.Controllers
         }
         [NonAction]
         [HttpGet]
-        public async void SetAuthorizationHeader()
+        public async Task<string?> SetAuthorizationHeader()
         {
             var validateAccessToken = await jwtToken.ValidateAccessToken();
             if (!string.IsNullOrEmpty(validateAccessToken))
             {
                 var accesstoken = validateAccessToken;
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+                return accesstoken;
             }
+            return null;
         }
         public async Task<IActionResult> Index(string? keywords, string? priceFilter, string? SortByPrice, int page = 1)
         {
-            SetAuthorizationHeader();
+            var accesstoken = await SetAuthorizationHeader();
             var list = new List<ShippingVM>();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Shippings/GetAll?page={page}");
             if (response.IsSuccessStatusCode)
@@ -49,6 +51,7 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.Keywords = keywords;
                     ViewBag.PriceFilter = priceFilter;
                     ViewBag.SortByPrice = SortByPrice;
+                    ViewBag.Token = accesstoken;
                 }
             }
             else

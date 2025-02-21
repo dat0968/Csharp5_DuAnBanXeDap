@@ -111,11 +111,17 @@
 
     // Hàm gọi API với tham số sắp xếp và tìm kiếm
     function GenerateTableSupplier() {
+        var token = @Html.Raw(Json.Serialize(ViewBag.Token));
         const sortValue = SortByPrice.value || "";
-        fetch(`https://localhost:7137/api/Suppliers/GetAllSupplier?keywords=${keywords.value}&sort=${sortValue}&page=1`)
+        fetch(`https://localhost:7137/api/Suppliers/GetAllSupplier?keywords=${keywords.value}&sort=${sortValue}&page=1`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => response.json())
             .then(data => {
-                const tbody = document.querySelector("#basic-datatables tbody");
+                const tbody = document.querySelector("#basic-datatables");
                 tbody.innerHTML = ""; // Xóa nội dung cũ
                 if (data && data.data) {
                     data.data.forEach(supplier => {

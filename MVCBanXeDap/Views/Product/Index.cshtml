@@ -224,6 +224,7 @@
     }
     //Hàm hiển thị và reload table sản phẩm
     function GenerateTableProduct(){
+        var token = @Html.Raw(Json.Serialize(ViewBag.Token))
         function updatePagination(currentPage, totalPages) {
             paginationContainer.innerHTML = "";
             for (let i = 1; i <= totalPages; i++) {
@@ -236,7 +237,12 @@
             }
         }
         
-        fetch(`https://localhost:7137/api/Products/GetAllProduct?keywords=${keywords.value}&MaDanhMuc=${categoryFilter.value}&MaThuongHieu=${brandFilter.value}&sort=${SortByPrice.value}`)
+        fetch(`https://localhost:7137/api/Products/GetAllProduct?keywords=${keywords.value}&MaDanhMuc=${categoryFilter.value}&MaThuongHieu=${brandFilter.value}&sort=${SortByPrice.value}`,{
+            method: 'GET',
+            headers:{
+                "Authorization": `Bearer ${token}`
+            }
+        })
         .then(response => response.json())
         .then(data => {
             const tbody = document.querySelector("#basic-datatables tbody");
