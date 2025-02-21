@@ -15,6 +15,7 @@
         public string DiaChiKhachHang { get; set; } // Địa chỉ khách hàng
         public List<ChiTietHoaDonViewModel> Items { get; set; } = new List<ChiTietHoaDonViewModel>();
         public decimal TongTien { get; set; }
+        public string? LyDoHuy { get; set; }
 
         public class ChiTietHoaDonViewModel
         {

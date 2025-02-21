@@ -52,7 +52,8 @@ namespace APIBanXeDap.Repository.HoaDon
                 MoTa = hoadon.MoTa,
                 Hoten = hoadon.Hoten,
                 Sdt = hoadon.Sdt,
-                ThoiGianGiao = hoadon.ThoiGianGiao
+                ThoiGianGiao = hoadon.ThoiGianGiao,
+                LyDoHuy = hoadon.LyDoHuy
             }).ToList();
         }
 
@@ -90,11 +91,12 @@ namespace APIBanXeDap.Repository.HoaDon
                 MoTa = hoadon.MoTa,
                 Hoten = hoadon.Hoten,
                 Sdt = hoadon.Sdt,
-                ThoiGianGiao = hoadon.ThoiGianGiao
+                ThoiGianGiao = hoadon.ThoiGianGiao,
+                LyDoHuy = hoadon.LyDoHuy
             };
             return hoadonVM;
         }
-        public async Task<string?> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder)
+        public async Task<string?> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder, string? reason)
         {
             var originHoadon = await _db.Hoadons.FirstOrDefaultAsync(x => x.MaHoaDon == idOrder);
             if (originHoadon == null)
@@ -111,7 +113,18 @@ namespace APIBanXeDap.Repository.HoaDon
 
             originHoadon.TinhTrang = statusOrder;
             originHoadon.MaNv = idStaff;
-
+            if (new string[] {
+                    "Hoàn trả/Hoàn tiền",
+                    "Đã hủy"}.Contains(statusOrder))
+            {
+                if (reason is not null)
+                {
+                    originHoadon.LyDoHuy = reason;
+                } else
+                {
+                    originHoadon.LyDoHuy = $"Đơn hàng đã bị đổi thành tình trạng [{statusOrder}] bởi nhân viên [Mã nhân viên: {idStaff}].";
+                }
+            }
             // Cập nhật thời gian giao hàng nếu cần
             if (statusOrder == "Đã xác nhận")
             {
@@ -157,6 +170,7 @@ namespace APIBanXeDap.Repository.HoaDon
                 TenNhanVien = staffForce?.HoTen ?? "Đơn hàng chưa có nhân viên phụ trách",
                 SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
                 DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
+                LyDoHuy = invoiceData.LyDoHuy,
                 Items = invoiceItems.Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
                 {
                     TenSanPham = ct.MaSpNavigation.TenSp,
@@ -226,5 +240,18 @@ namespace APIBanXeDap.Repository.HoaDon
             if (hoadon == null) return null;
             return hoadon.TinhTrang;
         }
+/*
+        public async Task<bool> SetReasonCancel(int maHoaDon, string reason)
+        {
+            Hoadon? hoadon = await _db.Hoadons.FirstOrDefaultAsync(x => x.MaHoaDon == maHoaDon);
+            if (hoadon is null) return false;
+            hoadon.LyDoHuy = reason;
+
+            _db.Update(hoadon);
+
+            await _db.SaveChangesAsync();
+
+            return true;
+        }*/
     }
 }

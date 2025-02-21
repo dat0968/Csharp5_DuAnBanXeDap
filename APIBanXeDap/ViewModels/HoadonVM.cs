@@ -27,5 +27,7 @@
         public float PhiVanChuyen { get; set; } = 0;
         public float TienGoc { get; set; }
         public float TongTien { get; set; }
+
+        public string? LyDoHuy { get; set; }
     }
 }

@@ -25,6 +25,8 @@ public partial class Hoadon
 
     public string? Sdt { get; set; }
 
+    public string? LyDoHuy { get; set; }
+
     public DateOnly ThoiGianGiao { get; set; }
     public float GiamGiaMaCoupon { get; set; } = 0;
     public float PhiVanChuyen { get; set; } = 0;

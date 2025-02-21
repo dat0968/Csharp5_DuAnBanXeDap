@@ -17,7 +17,11 @@
 }
 
 @section CSSs {
+    <!-- Datatable CSS-->
     <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css">
 
     <style>
         /* //Căn chỉnh giao diện thành phần của Datatable */
@@ -116,12 +120,15 @@
         </div>
     </div>
 </div>
-@section Scripts {
-    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js" asp-append-version="true"></script>
-    <script>
-        // API mặc định truy vấn
-        const defaultAPI = "https://localhost:7137/api";
 
+@section Scripts {
+    <!-- Datatable JS -->
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js" asp-append-version="true"></script>
+    
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
+
+    <script>
         // Dictionary dữ liệu tình trạng hóa đơn được chấp nhập
         const validNextStatesMap = {
             "Chờ xác nhận": ["Chờ xác nhận", "Đã xác nhận", "Đã hủy"],
@@ -214,49 +221,89 @@
             });
         }
 
-        //Hàm thay đổi trạng thái đơn hàng
+        // Hàm thay đổi trạng thái đơn hàng
         function changeOrderStatus(idOrder, status) {
+            let reason = '';
+
+            // Kiểm tra nếu trạng thái là "Hoàn trả/Hoàn tiền" hoặc "Đã hủy"
+            if (["Hoàn trả/Hoàn tiền", "Đã hủy"].includes(status)) {
+                Swal.fire({
+                    title: "Xác nhận thay đổi trạng thái",
+                    html: '<textarea id="contentReason" class="form-control" rows="3" placeholder="Vui lòng nhập lý do (tối thiểu 10 ký tự)"></textarea>',
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Hủy bỏ"
+                }).then((result) => {
+                    if (result.value) {
+                        reason = $('#contentReason').val(); // Lấy giá trị từ textarea
+                        if (!reason || reason.trim().length < 10) {
+                            Swal.fire({
+                                title: "Thông báo",
+                                text: "Bạn cần nhập thông tin lý do dài hơn 10 ký tự.",
+                                icon: "info",
+                                confirmButtonText: "Xác nhận"
+                            });
+                            return;
+                        }
+                        // Tiếp tục gọi hàm xử lý ajax khi lý do hợp lệ
+                        callChangeOrderStatus(idOrder, status, reason);
+                    }
+                });
+            } else {
+                // Nếu trạng thái không cần lý do, gọi trực tiếp
+                callChangeOrderStatus(idOrder, status, '');
+            }
+        }
+
+        // Hàm xử lý gọi request AJAX
+        function callChangeOrderStatus(idOrder, status, reason) {
             const paramsChange = {
                 idOrder: idOrder,
-                status: status
+                status: status,
+                reason: reason // Đưa lý do vào params (có thể là chuỗi rỗng nếu lý do không cần)
             };
 
-            const queryString = $.param(paramsChange);
-            const url = `bill/ChangeStatusOrder?${queryString}`;
+            const queryString = $.param(paramsChange); // Chuyển params thành query string
+            const url = `/bill/ChangeStatusOrder?${queryString}`;
 
             $.ajax({
                 url: url,
                 type: 'GET',
-                success: function(response) {
+                success: function (response) {
                     const result = convertJsonData(response);
-                    console.log(result); //Note
+                    console.log(result); // Lưu lại log nếu cần
                     if (result.success) {
                         toastr.success(result.message, 'Thành công');
                     } else {
                         toastr.info(result.message ?? "Lỗi không xác định.", 'Lỗi');
                         if (result.isLoginAgain) {
-                            setTimeout(function(){
-                                window.location.href = '/Accounts/Login_Staff'
-                            }, 2000)
+                            setTimeout(function () {
+                                window.location.href = '/Accounts/Login_Staff';
+                            }, 2000);
                         }
                     }
+                    // Reload lại bảng dữ liệu
                     datatable.ajax.reload();
                     return { success: true, message: result.message };
                 },
-                error: function(xhr, status, error) {
-                    //window.location.href = `/Home/Error/${xhr.status}`
+                error: function (xhr, status, error) {
                     let errorMessage = "";
-                    if(xhr.status == 409){
-                        errorMessage = "Đơn hàng đã được quản lý bởi nhân viên khác. Đơn hàng chỉ có thể thay đổi bởi người xác nhận đơn hàng"
-                    }else{
-                        errorMessage = xhr.responseJSON ? xhr.responseJSON.message : `Đã xảy ra lỗi khi thay đổi tình trạng đơn hàng ${xhr.status}.`;
-                    }                    
+                    if (xhr.status == 409) {
+                        errorMessage = "Đơn hàng đã được quản lý bởi nhân viên khác. Đơn hàng chỉ có thể thay đổi bởi người xác nhận đơn hàng.";
+                    } else {
+                        errorMessage = xhr.responseJSON ? xhr.responseJSON.message : `Đã xảy ra lỗi khi thay đổi tình trạng đơn hàng (${xhr.status}).`;
+                    }
+                    // Reload lại bảng dữ liệu
                     datatable.ajax.reload();
                     toastr.error(errorMessage, 'Thất bại');
                     return { success: false, message: errorMessage };
                 }
             });
         }
+
 
         //Hàm hiển thị chi tiết thông tin đơn hàng
         function loadDetailOrderToModal(idOrder) {

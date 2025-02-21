@@ -28,7 +28,7 @@ namespace APIBanXeDap.Controllers
             return Ok(await hoaDonRepository.GetAsync(x => x.MaHoaDon == maHoadon));
         }
         [HttpPut]
-        public async Task<IActionResult> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder)
+        public async Task<IActionResult> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder, string? reason)
         {
             var currentOrderStatus = await hoaDonRepository.GetOrderStatusById(idOrder);
 
@@ -45,7 +45,7 @@ namespace APIBanXeDap.Controllers
             }
 
             // Thực hiện thay đổi trạng thái đơn hàng
-            var result = await hoaDonRepository.ChangeStatusOrder(idOrder, idStaff, statusOrder);
+            var result = await hoaDonRepository.ChangeStatusOrder(idOrder, idStaff, statusOrder, reason);
 
             if (result == null)
             {
@@ -66,6 +66,27 @@ namespace APIBanXeDap.Controllers
         {
             return Ok(await hoaDonRepository.GetAllInvoiceDataAsync());
         }
+        /*
+        [HttpPatch]
+        public async Task<IActionResult> SetReasonCancel(int maHoaDon, string reason)
+        {
+            bool isSetSuccess = await hoaDonRepository.SetReasonCancel(maHoaDon, reason);
+
+            if (isSetSuccess)
+            {
+                return Ok(new
+                {
+                    success = isSetSuccess,
+                    message = "Đổi tình trạng thành công."
+                });
+            }
+
+            return BadRequest(new
+            {
+                success = isSetSuccess,
+                message = "Đổi tình trạng thất bại."
+            });
+        }*/
 
         #region//NonAction
 

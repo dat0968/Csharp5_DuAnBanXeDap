@@ -22,22 +22,20 @@ namespace MVCBanXeDap.Controllers
         }
         [NonAction]
         [HttpGet]
-        public async void SetAuthorizationHeader()
+        public async Task<string?> SetAuthorizationHeader()
         {
             var validateAccessToken = await jwtToken.ValidateAccessToken();
             if (!string.IsNullOrEmpty(validateAccessToken))
             {
                 var accesstoken = validateAccessToken;
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+                return accesstoken;
             }
-            else
-            {
-                HttpContext.Response.Redirect("/Accounts/LogoutAccount");
-            }
+            return null;
         }
         public async Task<IActionResult> Index(string? keywords, string? status, string? sort ,int page = 1)
         {
-            SetAuthorizationHeader();
+            var accesstoken = await SetAuthorizationHeader();
             var listCouponCode = new List<MaCouponVM>();
             HttpResponseMessage responseGetAllResponse = _client.GetAsync(_client.BaseAddress + $"MaCoupons/GetAllCouponCodeByPage?keywords={keywords}&status={status}&page={page}").Result;
             if(responseGetAllResponse.IsSuccessStatusCode)
@@ -54,6 +52,7 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.Keywords = keywords;
                     ViewBag.Status = status;
                     ViewBag.Sort = sort;
+                    ViewBag.Token = accesstoken;
                 }
             }
             else

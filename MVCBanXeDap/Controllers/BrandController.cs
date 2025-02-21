@@ -25,14 +25,16 @@ namespace MVCBanXeDap.Controllers
         }
         [NonAction]
         [HttpGet]
-        public async void SetAuthorizationHeader()
+        public async Task<string?> SetAuthorizationHeader()
         {
             var validateAccessToken = await jwtToken.ValidateAccessToken();
             if (!string.IsNullOrEmpty(validateAccessToken))
             {
                 var accesstoken = validateAccessToken;
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+                return accesstoken;
             }
+            return null;
         }
         [HttpGet]
         public async Task<IActionResult> Index(string? keywords, string? sort, int page = 1)
@@ -40,7 +42,7 @@ namespace MVCBanXeDap.Controllers
             var ListBrand = new List<BrandVM>();
             try
             {
-                SetAuthorizationHeader();
+                var accesstoken = await SetAuthorizationHeader();
                 HttpResponseMessage responseBrand = await _client.GetAsync(_client.BaseAddress + $"Brands/GetAllBrand?keywords={keywords}&sort={sort}&page={page}");
                 if (responseBrand.IsSuccessStatusCode)
                 {
@@ -51,6 +53,7 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.Page = ConvertResponseSupplier["page"].Value<int>();
                     ViewBag.Keywords = keywords;
                     ViewBag.Sort = sort;
+                    ViewBag.Token = accesstoken;
                 }
                 else
                 {

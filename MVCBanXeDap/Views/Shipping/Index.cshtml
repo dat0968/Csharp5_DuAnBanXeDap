@@ -184,10 +184,16 @@
 
 
     function GenerateShipping(){
+        var token = @Html.Raw(Json.Serialize(ViewBag.Token));
         const keywords = document.getElementById("keywords");
         const priceFilter = document.getElementById("priceFilter");
         const SortByPrice = document.getElementById("SortByPrice");
-        fetch(`https://localhost:7137/api/Shippings/GetAll?keywords=${keywords.value}&priceFilter=${priceFilter.value}&SortByPrice=${SortByPrice.value}`)
+        fetch(`https://localhost:7137/api/Shippings/GetAll?keywords=${keywords.value}&priceFilter=${priceFilter.value}&SortByPrice=${SortByPrice.value}`,{
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById("basic-datatables");

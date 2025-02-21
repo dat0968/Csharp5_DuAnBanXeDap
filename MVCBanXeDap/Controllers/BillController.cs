@@ -32,24 +32,13 @@ namespace MVCBanXeDap.Controllers
             _client.BaseAddress = baseAddress;
             this.jwtToken = jwtToken;
         }
-        [NonAction]
-        [HttpGet]
-        public async void SetAuthorizationHeader()
-        {
-            var validateAccessToken = await jwtToken.ValidateAccessToken();
-            if (!string.IsNullOrEmpty(validateAccessToken))
-            {
-                var accesstoken = validateAccessToken;
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
-            }
-        }
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status)
+        public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status, string? reason)
         {
             var accessToken = HttpContext.Session.GetString("AccessToken");
             var refreshToken = HttpContext.Session.GetString("RefreshToken");
@@ -76,16 +65,24 @@ namespace MVCBanXeDap.Controllers
                 return Json(new { success = false, message = "Không tìm thấy mã người dùng đăng nhập, vui lòng liên hệ nhà phát triển để được hỗ trợ." });
             }
 
-            var paramsChange = new Dictionary<string, string>
+            var paramsChange = new Dictionary<string, string?>
             {
                 { "idOrder", idOrder },
                 { "idStaff", id },
-                { "statusOrder", status }
+                { "statusOrder", status },
+                { "reason", reason }
             };
 
+            // Kiểm tra, cập nhật và đảm bảo "reason" không bị null
+            paramsChange["reason"] = paramsChange["reason"] != null
+                ? "Đơn hàng bị hủy bởi nhân viên với lý do:\n" + paramsChange["reason"]
+                : null;
+
+            // Tạo queryString và xử lý lọc null hoặc chuỗi rỗng đảm bảo an toàn
             string queryString = string.Join("&",
-                paramsChange.Where(x => !string.IsNullOrEmpty(x.Value))
-                            .Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
+                paramsChange
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Value)) // Lọc bỏ giá trị null hoặc chuỗi rỗng
+                    .Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value!)}")); // Mã hóa giá trị để gửi trong URL
 
             Console.WriteLine(queryString);
             SetAuthorizationHeader();
@@ -221,6 +218,20 @@ namespace MVCBanXeDap.Controllers
                     .SetFontSize(12)
                     .SetMarginBottom(20));
 
+                // Thêm lý do hủy nếu có
+                if (!string.IsNullOrEmpty(invoice.LyDoHuy))
+                {
+                    document.Add(new Paragraph($"Lý Do Hủy Đơn Hàng:")
+                        .SetFontSize(12)
+                        .SetBold()
+                        .SetMarginBottom(5));
+
+                    document.Add(new Paragraph(invoice.LyDoHuy)
+                        .SetFontSize(12)
+                        .SetItalic()
+                        .SetMarginBottom(20));
+                }
+
                 // Cảm ơn khách hàng
                 document.Add(new Paragraph("Cảm ơn quý khách đã mua hàng!")
                     .SetTextAlignment(TextAlignment.CENTER)
@@ -317,6 +328,24 @@ namespace MVCBanXeDap.Controllers
 
                 document.Add(table.SetMarginBottom(20));
 
+                document.Add(new Paragraph($"Trạng Thái Thanh Toán: {invoice.TinhTrang}")
+                    .SetFontSize(12)
+                    .SetMarginBottom(20));
+
+                // Thêm lý do hủy nếu có
+                if (!string.IsNullOrEmpty(invoice.LyDoHuy))
+                {
+                    document.Add(new Paragraph($"Lý Do Hủy Đơn Hàng:")
+                        .SetFontSize(12)
+                        .SetBold()
+                        .SetMarginBottom(5));
+
+                    document.Add(new Paragraph(invoice.LyDoHuy)
+                        .SetFontSize(12)
+                        .SetItalic()
+                        .SetMarginBottom(20));
+                }
+
                 // Tổng tiền
                 document.Add(new Paragraph($"Tổng tiền: {totalAmount:n0} đ")
                     .SetBold()
@@ -372,6 +401,20 @@ namespace MVCBanXeDap.Controllers
             return Json(new { data = hoadonVMs });
         }
 
+        #endregion
+
+        #region [NON ACTION]
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+        }
         #endregion
     }
 }

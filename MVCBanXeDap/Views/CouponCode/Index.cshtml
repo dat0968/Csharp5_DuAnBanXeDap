@@ -154,73 +154,79 @@
 
     function GenerateTableCouponCode() {
         // Fetch API lấy dữ liệu từ server
-        fetch(`https://localhost:7137/api/MaCoupons/GetAllCouponCodeByPage?keywords=${keywords.value}&status=${statusFilter.value}&sort=${sortByTime.value}`)
-            .then(response => {
-                if (!response.ok) throw new Error("Failed to fetch data");
-                return response.json();
-            })
-            .then(data => {
-                // Lấy table body và reset nội dung cũ
-                const tableBody = document.getElementById("basic-datatables");
-                tableBody.innerHTML = "";
+        var token = @Html.Raw(Json.Serialize(ViewBag.Token))
+        fetch(`https://localhost:7137/api/MaCoupons/GetAllCouponCodeByPage?keywords=${keywords.value}&status=${statusFilter.value}&sort=${sortByTime.value}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to fetch data");
+            return response.json();
+        })
+        .then(data => {
+            // Lấy table body và reset nội dung cũ
+            const tableBody = document.getElementById("basic-datatables");
+            tableBody.innerHTML = "";
 
-                // Duyệt qua danh sách coupon codes
-                data.data.forEach(couponcode => {
-                    const discount = couponcode.soTienGiam
-                        ? `${couponcode.soTienGiam} VNĐ`
-                        : couponcode.phanTramGiam
-                            ? `${couponcode.phanTramGiam} %`
-                            : "Không có ưu đãi";
+            // Duyệt qua danh sách coupon codes
+            data.data.forEach(couponcode => {
+                const discount = couponcode.soTienGiam
+                    ? `${couponcode.soTienGiam} VNĐ`
+                    : couponcode.phanTramGiam
+                        ? `${couponcode.phanTramGiam} %`
+                        : "Không có ưu đãi";
 
-                    let statusClass = "text-danger fw-bold";
-                    let statusText = "Đã hết hạn";
+                let statusClass = "text-danger fw-bold";
+                let statusText = "Đã hết hạn";
 
-                    if (!couponcode.trangThai) {
-                        statusClass = "text-secondary fw-bold"; 
-                        statusText = "Đã hủy";
-                    } else {
-                        if (couponcode.daSuDung) {
-                            statusClass = "text-warning fw-bold"; 
-                            statusText = "Đã sử dụng";
-                        } else if (new Date(couponcode.ngayHetHan) > new Date()) {
-                            statusClass = "text-success fw-bold"; 
-                            statusText = "Còn hiệu lực";
-                        }
+                if (!couponcode.trangThai) {
+                    statusClass = "text-secondary fw-bold"; 
+                    statusText = "Đã hủy";
+                } else {
+                    if (couponcode.daSuDung) {
+                        statusClass = "text-warning fw-bold"; 
+                        statusText = "Đã sử dụng";
+                    } else if (new Date(couponcode.ngayHetHan) > new Date()) {
+                        statusClass = "text-success fw-bold"; 
+                        statusText = "Còn hiệu lực";
                     }
+                }
 
-                    const row = `
-                        <tr>
-                        <td>${couponcode.code}</td>
-                        <td>${discount}</td>
-                        <td>${new Date(couponcode.ngayHetHan).toLocaleDateString("vi-VN")}</td>
-                        <td><span class="${statusClass}">${statusText}</span></td>
-                        <td>${couponcode.minimumOrderAmount} VNĐ</td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                ${(couponcode.trangThai && !couponcode.daSuDung)
-                                    ? `<button data-couponcode='${JSON.stringify(couponcode)}' onclick="loadPartialView(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${couponcode.code}-edit">
-                                            <i class="fas fa-edit"></i> Sửa
-                                        </button>`
-                                    : ""}
-                                ${(!couponcode.daSuDung && couponcode.trangThai)
-                                    ? `<form method="post" action="/CouponCode/CancelCouponCode/${couponcode.code}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn hủy mã coupon này không?')">
-                                            <button class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> Hủy
-                                            </button>
-                                        </form>`
-                                    : ""}
-                            </div>
-                        </td>
-                    </tr>
-                    `;
+                const row = `
+                    <tr>
+                    <td>${couponcode.code}</td>
+                    <td>${discount}</td>
+                    <td>${new Date(couponcode.ngayHetHan).toLocaleDateString("vi-VN")}</td>
+                    <td><span class="${statusClass}">${statusText}</span></td>
+                    <td>${couponcode.minimumOrderAmount} VNĐ</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            ${(couponcode.trangThai && !couponcode.daSuDung)
+                                ? `<button data-couponcode='${JSON.stringify(couponcode)}' onclick="loadPartialView(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${couponcode.code}-edit">
+                                        <i class="fas fa-edit"></i> Sửa
+                                    </button>`
+                                : ""}
+                            ${(!couponcode.daSuDung && couponcode.trangThai)
+                                ? `<form method="post" action="/CouponCode/CancelCouponCode/${couponcode.code}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn hủy mã coupon này không?')">
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> Hủy
+                                        </button>
+                                    </form>`
+                                : ""}
+                        </div>
+                    </td>
+                </tr>
+                `;
 
-                    tableBody.innerHTML += row;
-                });
-                // Cập nhật phân trang
-                updatePagination(data);
+                tableBody.innerHTML += row;
+            });
+            // Cập nhật phân trang
+            updatePagination(data);
                 
-            })
-            .catch(error => console.error("Error fetching data:", error));
+        })
+        .catch(error => console.error("Error fetching data:", error));
     }
 
     function loadPartialView(element) {

@@ -107,7 +107,13 @@
     // Hàm gọi API để lấy danh sách thương hiệu
     function GenerateTableBrand() {
         const sortValue = SortByPrice.value || "";
-        fetch(`https://localhost:7137/api/Brands/GetAllBrand?keywords=${keywords.value}&sort=${sortValue}&page=1`)
+        var token = @Html.Raw(Json.Serialize(ViewBag.Token))
+        fetch(`https://localhost:7137/api/Brands/GetAllBrand?keywords=${keywords.value}&sort=${sortValue}&page=1`, {
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 const tbody = document.querySelector("#basic-datatables tbody");
