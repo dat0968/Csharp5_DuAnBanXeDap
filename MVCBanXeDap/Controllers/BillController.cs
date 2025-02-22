@@ -2,21 +2,13 @@ using iText.IO.Font;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
-using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.IdentityModel.Tokens;
 using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
-using System.IO.Compression;
 using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
 
 namespace MVCBanXeDap.Controllers
 {
@@ -415,6 +407,32 @@ namespace MVCBanXeDap.Controllers
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
             }
         }
+        //[NonAction]
+        //private string GetUserId()
+        //{
+        //    var accessToken = HttpContext.Session.GetString("AccessToken");
+        //    var refreshToken = HttpContext.Session.GetString("RefreshToken");
+
+        //    if (accessToken == null || refreshToken == null)
+        //    {
+        //        return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
+        //    }
+
+        //    var ValidateAccessToken = await jwtToken.ValidateAccessToken();
+        //    if (ValidateAccessToken == null)
+        //    {
+        //        return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
+        //    }
+        //    else
+        //    {
+        //        HttpContext.Session.SetString("AccessToken", ValidateAccessToken);
+        //    }
+
+        //    var information = jwtToken.GetInformationUserFromToken(ValidateAccessToken); // Lấy idStaff từ token
+        //    var id = information.Id.ToString();
+
+        //    return id;
+        //}
         #endregion
     }
 }

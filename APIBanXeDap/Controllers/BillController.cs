@@ -59,34 +59,13 @@ namespace APIBanXeDap.Controllers
         [HttpGet("{maHoaDon}")]
         public async Task<IActionResult> GetInvoiceData(int maHoaDon) // Lấy 1 thông tin hóa đơn cùng sản phẩm cho xuất hóa đơn
         {
-            return Ok(await hoaDonRepository.GetInvoiceDataAsync(maHoaDon));
+            return Ok(await hoaDonRepository.GetInvoiceDataAsync(null, maHoaDon:maHoaDon));
         }
         [HttpGet]
         public async Task<IActionResult> GetAllInvoiceData() // Lấy nhiều thông tin hóa đơn cùng sản phẩm cho xuất hóa đơn
         {
-            return Ok(await hoaDonRepository.GetAllInvoiceDataAsync());
+            return Ok(await hoaDonRepository.GetAllInvoiceDataAsync(null));
         }
-        /*
-        [HttpPatch]
-        public async Task<IActionResult> SetReasonCancel(int maHoaDon, string reason)
-        {
-            bool isSetSuccess = await hoaDonRepository.SetReasonCancel(maHoaDon, reason);
-
-            if (isSetSuccess)
-            {
-                return Ok(new
-                {
-                    success = isSetSuccess,
-                    message = "Đổi tình trạng thành công."
-                });
-            }
-
-            return BadRequest(new
-            {
-                success = isSetSuccess,
-                message = "Đổi tình trạng thất bại."
-            });
-        }*/
 
         #region//NonAction
 

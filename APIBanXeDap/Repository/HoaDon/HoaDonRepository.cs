@@ -19,7 +19,7 @@ namespace APIBanXeDap.Repository.HoaDon
         }
 
         // Phương thức để lấy tất cả hóa đơn dưới dạng HoadonVM
-        public async Task<IEnumerable<HoadonVM>> GetAllHoadonVMAsync(Expression<Func<Hoadon, bool>>? filter = null, string? includeProperties = null)
+        public async Task<IEnumerable<HoadonVM>?> GetAllHoadonVMAsync(Expression<Func<Hoadon, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<Hoadon> query = dbSet;
 
@@ -57,7 +57,7 @@ namespace APIBanXeDap.Repository.HoaDon
             }).ToList();
         }
 
-        public async Task<HoadonVM> GetAsync(Expression<Func<Hoadon, bool>> filter, string? includeProperties = null, bool tracked = false)
+        public async Task<HoadonVM?> GetAsync(Expression<Func<Hoadon, bool>>? filter, string? includeProperties = null, bool tracked = false)
         {
             IQueryable<Hoadon> query;
             if (tracked)
@@ -79,7 +79,7 @@ namespace APIBanXeDap.Repository.HoaDon
                 }
             }
             var hoadon = await query.FirstOrDefaultAsync();
-            HoadonVM hoadonVM = new HoadonVM
+            HoadonVM? hoadonVM = new HoadonVM
             {
                 MaHoaDon = hoadon.MaHoaDon,
                 DiaChiNhanHang = hoadon.DiaChiNhanHang,
@@ -117,6 +117,7 @@ namespace APIBanXeDap.Repository.HoaDon
                     "Hoàn trả/Hoàn tiền",
                     "Đã hủy"}.Contains(statusOrder))
             {
+                //originHoadon.ThoiGianGiao = null;
                 if (reason is not null)
                 {
                     originHoadon.LyDoHuy = reason;
@@ -136,13 +137,13 @@ namespace APIBanXeDap.Repository.HoaDon
 
             return originHoadon.TinhTrang; // Trả về tình trạng mới của hóa đơn
         }
-        public async Task<InvoiceVM> GetInvoiceDataAsync(int maHoaDon)
+        public async Task<InvoiceVM?> GetInvoiceDataAsync(int? maKhachHang, int maHoaDon)
         {
             // Truy vấn hóa đơn chính
             var invoiceData = await _db.Hoadons
                 .Include(i => i.MaKhNavigation)
                 .Include(i => i.MaNvNavigation)
-                .FirstOrDefaultAsync(i => i.MaHoaDon == maHoaDon);
+                .FirstOrDefaultAsync(i => (maKhachHang.HasValue ? i.MaKh == maKhachHang.Value! : true) && i.MaHoaDon == maHoaDon);
 
             if (invoiceData == null)
             {
@@ -183,7 +184,7 @@ namespace APIBanXeDap.Repository.HoaDon
 
             return invoiceViewModel;
         }
-        public async Task<IEnumerable<InvoiceVM>> GetAllInvoiceDataAsync()
+        public async Task<IEnumerable<InvoiceVM>?> GetAllInvoiceDataAsync(int? maKhachHang)
         {
             // Truy vấn hóa đơn chính
             var invoicesData = await _db.Hoadons
@@ -204,7 +205,7 @@ namespace APIBanXeDap.Repository.HoaDon
                 .Include(ct => ct.MaSpNavigation) // Bao gồm thông tin sản phẩm
                 .ToListAsync();
 
-            var invoicesViewModel = invoicesData.Select(invoiceData => new InvoiceVM
+            var invoicesViewModel = invoicesData.Where(i => (maKhachHang.HasValue ? i.MaKh == maKhachHang.Value! : true)).Select(invoiceData => new InvoiceVM
             {
                 MaHoaDon = invoiceData.MaHoaDon,
                 DiaChiNhanHang = invoiceData.DiaChiNhanHang,
@@ -232,26 +233,20 @@ namespace APIBanXeDap.Repository.HoaDon
             return invoicesViewModel;
         }
 
-
-
         public async Task<string?> GetOrderStatusById(int maHoaDon)
         {
             Hoadon? hoadon = await _db.Hoadons.FirstOrDefaultAsync(x => x.MaHoaDon == maHoaDon);
             if (hoadon == null) return null;
             return hoadon.TinhTrang;
         }
-/*
-        public async Task<bool> SetReasonCancel(int maHoaDon, string reason)
+
+        public async Task<int?> CountOrder(int? maKhachHang = 0)
         {
-            Hoadon? hoadon = await _db.Hoadons.FirstOrDefaultAsync(x => x.MaHoaDon == maHoaDon);
-            if (hoadon is null) return false;
-            hoadon.LyDoHuy = reason;
-
-            _db.Update(hoadon);
-
-            await _db.SaveChangesAsync();
-
-            return true;
-        }*/
+            if (maKhachHang == 0 || maKhachHang == null)
+            {
+                return await _db.Hoadons.CountAsync();
+            }
+            return await _db.Hoadons.CountAsync(x => x.MaKh == maKhachHang);
+        }
     }
 }
