@@ -169,6 +169,142 @@ namespace APIBanXeDap.Repository.TrangChu
             }).ToList();
 
             return productVMList;
-        }    
+        }
+        public List<ProductVM> GetAllProduct(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort)
+        {
+            var list = db.Sanphams.AsNoTracking().Where(p => p.IsDelete == false)
+                .Include(sp => sp.MaThuongHieuNavigation)
+                .Include(sp => sp.MaNhaCcNavigation)
+                .Include(sp => sp.MaDanhMucNavigation)
+                .Include(sp => sp.Chitietsanphams)
+                .ThenInclude(ct => ct.MaMauNavigation)
+                .Include(sp => sp.Chitietsanphams)
+                .ThenInclude(ct => ct.MaKichThuocNavigation)
+                .Include(sp => sp.Hinhanhs)
+                .AsQueryable();
+            if (!string.IsNullOrEmpty(keywords))
+            {
+                list = list.Where(p => p.MaSp.ToString().Contains(keywords) || p.TenSp.Contains(keywords));
+            }
+            if (MaDanhMuc.HasValue)
+            {
+                list = list.Where(p => p.MaDanhMuc == MaDanhMuc);
+            }
+            if (MaThuongHieu.HasValue)
+            {
+                list = list.Where(p => p.MaThuongHieu == MaThuongHieu);
+            }
+            switch (sort)
+            {
+                case "asc":
+                    list = list.OrderBy(p => p.Chitietsanphams.Min(p => p.DonGia));
+                    break;
+                case "desc":
+                    list = list.OrderByDescending(p => p.Chitietsanphams.Min(p => p.DonGia));
+                    break;
+                default:
+                    list = list.OrderByDescending(p => p.TenSp);
+                    break;
+            }
+            var ConvertToProductVM = new List<ProductVM>();
+            foreach (var item in list)
+            {
+                ConvertToProductVM.Add(new ProductVM
+                {
+                    MaSP = item.MaSp,
+                    TenSp = item.TenSp,
+                    ThuongHieu = item.MaThuongHieuNavigation.TenThuongHieu,
+                    Hinh = item.Hinh,
+                    MoTa = item.MoTa,
+                    NgaySanXuat = item.NgaySanXuat,
+                    NhaCungCap = item.MaNhaCcNavigation.TenNhaCc,
+                    DanhMuc = item.MaDanhMucNavigation.TenDanhMuc,
+                    SoLuong = item.Chitietsanphams?.Sum(p => p?.SoLuongTon ?? 0) ?? 0,
+                    KhoangGia = item.Chitietsanphams != null && item.Chitietsanphams.Any()
+                    ? $"Từ {item.Chitietsanphams.Where(p => p?.DonGia != null).Min(p => p.DonGia)} VNĐ đến {item.Chitietsanphams.Where(p => p?.DonGia != null).Max(p => p.DonGia)} VNĐ"
+                    : "Không có thông tin giá",
+                    Chitietsanphams = item.Chitietsanphams != null
+                    ? item.Chitietsanphams.Select(ct => new DetailsProductVM
+                    {
+                        MaSP = ct.MaSp,
+                        MaMau = ct.MaMau,
+                        TenSP = ct.MaSpNavigation.TenSp,
+                        TenMau = ct.MaMauNavigation?.TenMau,
+                        MaKichThuoc = ct.MaKichThuoc,
+                        TenKichThuoc = ct.MaKichThuocNavigation?.TenKichThuoc,
+                        SoLuongTon = ct.SoLuongTon,
+                        DonGia = ct.DonGia,
+                    }).ToList()
+                    : new List<DetailsProductVM>(),
+                    Hinhanhs = item.Hinhanhs?.Select(img => new Hinhanh
+                    {
+                        MaHinhAnh = img.MaHinhAnh,
+                        HinhAnh1 = img.HinhAnh1,
+                    }).ToList() ?? new List<Hinhanh>()
+                });
+            }
+            return ConvertToProductVM;
+        }
+        public ProductVM GetProductById(int id)
+        {
+            var Product = db.Sanphams.AsNoTracking()
+                .Include(sp => sp.Chitietsanphams)
+                    .ThenInclude(ct => ct.MaMauNavigation)
+                .Include(sp => sp.Chitietsanphams)
+                    .ThenInclude(ct => ct.MaKichThuocNavigation)
+                .Include(sp => sp.MaThuongHieuNavigation)
+                .Include(sp => sp.MaNhaCcNavigation)
+                .Include(sp => sp.MaDanhMucNavigation)
+                .FirstOrDefault(sp => sp.MaSp == id);
+            var ProductVM = new ProductVM
+            {
+                MaSP = Product.MaSp,
+                TenSp = Product.TenSp,
+                ThuongHieu = Product.MaThuongHieuNavigation.TenThuongHieu,
+                Hinh = Product.Hinh,
+                MoTa = Product.MoTa,
+                NgaySanXuat = Product.NgaySanXuat,
+                NhaCungCap = Product.MaNhaCcNavigation.TenNhaCc,
+                DanhMuc = Product.MaDanhMucNavigation.TenDanhMuc,
+                Chitietsanphams = Product.Chitietsanphams.Select(ct => new DetailsProductVM
+                {
+                    MaMau = ct.MaMau,
+                    TenMau = ct.MaMauNavigation.TenMau,
+                    MaKichThuoc = ct.MaKichThuoc,
+                    TenKichThuoc = ct.MaKichThuocNavigation.TenKichThuoc,
+                    SoLuongTon = ct.SoLuongTon,
+                    DonGia = ct.DonGia,
+                }).ToList(),
+            };
+            return ProductVM;
+        }
+        public List<Thuonghieu> GetAllBrand(string? keywords, string? sort)
+        {
+            var list = db.Thuonghieus.AsNoTracking().Where(p => p.IsDelete == false).AsQueryable();
+            if (!string.IsNullOrEmpty(keywords))
+            {
+                list = list.Where(p => p.MaThuongHieu.ToString().Contains(keywords) || p.TenThuongHieu.Contains(keywords));
+            }
+            switch (sort)
+            {
+                case "asc":
+                    // Sắp xếp theo giá tên thương hiệu A-Z
+                    list = list.OrderBy(p => p.TenThuongHieu);
+                    break;
+                case "desc":
+                    // Sắp xếp theo giá tên thương hiệu Z-A
+                    list = list.OrderByDescending(p => p.TenThuongHieu);
+                    break;
+                default:
+                    list = list.OrderByDescending(p => p.TenThuongHieu);
+                    break;
+            }
+            var lists = list.ToList();
+            return lists;
+        }
+        public List<Danhmuc> GetAllCategory()
+        {
+            return db.Danhmucs.ToList();
+        }
     }
 }

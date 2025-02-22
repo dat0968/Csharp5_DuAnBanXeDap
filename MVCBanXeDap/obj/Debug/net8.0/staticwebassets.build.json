@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "+cqtVsU2AkNqwsW0WkwqOhwM008VKlJo9RF+WrPqRGQ=",
+  "Hash": "ait00hNyNUgVAporjJnqaUX8wXR8RzVlipsjXJuUD+E=",
   "Source": "MVCBanXeDap",
   "BasePath": "_content/MVCBanXeDap",
   "Mode": "Default",
@@ -97,6 +97,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\4-VANG.png"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\63e8e4f0-64d4-46c6-9e7d-885b3c321e7c_IMG_1053.jpg",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/63e8e4f0-64d4-46c6-9e7d-885b3c321e7c_IMG_1053#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "zybmpub30k",
+      "Integrity": "G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\63e8e4f0-64d4-46c6-9e7d-885b3c321e7c_IMG_1053.jpg"
     },
     {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\739b7c0a-4173-4446-a26d-dc0194918f47_IMG_0633.heic",
@@ -15085,6 +15106,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-SKc8GiFwI5nvCHfMzQPcF8w32dpiSyQ704XGxN/yYiE="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/63e8e4f0-64d4-46c6-9e7d-885b3c321e7c_IMG_1053.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\63e8e4f0-64d4-46c6-9e7d-885b3c321e7c_IMG_1053.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2835285"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 22 Feb 2025 01:34:12 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/63e8e4f0-64d4-46c6-9e7d-885b3c321e7c_IMG_1053.zybmpub30k.jpg",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\63e8e4f0-64d4-46c6-9e7d-885b3c321e7c_IMG_1053.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2835285"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 22 Feb 2025 01:34:12 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zybmpub30k"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-G0dgdxUGTK1Vp20A3e3ySBFBiKGcNufFmMKz15gKgfQ="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/63e8e4f0-64d4-46c6-9e7d-885b3c321e7c_IMG_1053.jpg"
         }
       ]
     },
@@ -69969,7 +70072,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 20 Feb 2025 13:20:17 GMT"
+          "Value": "Sat, 22 Feb 2025 01:54:16 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -70006,7 +70109,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 20 Feb 2025 13:20:17 GMT"
+          "Value": "Sat, 22 Feb 2025 01:54:16 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -70051,7 +70154,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 20 Feb 2025 13:20:17 GMT"
+          "Value": "Sat, 22 Feb 2025 01:54:16 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -70096,7 +70199,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 20 Feb 2025 13:20:17 GMT"
+          "Value": "Sat, 22 Feb 2025 01:54:16 GMT"
         },
         {
           "Name": "Cache-Control",

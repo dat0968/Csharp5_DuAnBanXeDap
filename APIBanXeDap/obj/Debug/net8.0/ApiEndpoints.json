@@ -511,6 +511,42 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.HomeController",
+    "Method": "GetAllBrand",
+    "RelativePath": "api/Home/GetAllBrand",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keywords",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sort",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.HomeController",
+    "Method": "GetAllCategory",
+    "RelativePath": "api/Home/GetAllCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.HomeController",
     "Method": "GetAllProduct",
     "RelativePath": "api/Home/GetAllProduct",
     "HttpMethod": "GET",
