@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace MVCBanXeDap.Controllers
 {
@@ -8,17 +10,33 @@ namespace MVCBanXeDap.Controllers
     {
         Uri baseAddress = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
-        public DashboardController()
+        private readonly IjwtToken _jwt;
+        public DashboardController(IjwtToken jwt)
         {
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
+            _jwt = jwt;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var validateAccessToken = await _jwt.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                ViewBag.ValueAuth = validateAccessToken;
+            }
+            SetAuthorizationHeader();
+            var response = await _client.GetAsync(_client.BaseAddress + "dashboard/IsAuth");
+            if (!response.IsSuccessStatusCode)
+            {
+                int Status = (int)response.StatusCode;
+                return RedirectToAction("Error","Home",Status);
+            }
             return View();
         }
+        #region [GET APIS]
         public async Task<IActionResult> GetAllOrderData()
         {
+            SetAuthorizationHeader();
             // Gọi API để lấy thông tin hóa đơn
             HttpResponseMessage httpResponseMessage = await _client.GetAsync(_client.BaseAddress + $"dashboard/GetAllOrderData");
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -31,6 +49,7 @@ namespace MVCBanXeDap.Controllers
         //Lấy số liệu doanh thu đơn hàng theo thời gian
         public async Task<IActionResult> GetEarningData(string timeRange = "day")
         {
+            SetAuthorizationHeader();
             // Gọi API để lấy dữ liệu doanh thu
             HttpResponseMessage httpResponseMessage = await _client.GetAsync($"dashboard/GetEarningData/{timeRange}");
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -43,6 +62,7 @@ namespace MVCBanXeDap.Controllers
         //Lấy số liệu đơn hàng theo tình trạng
         public async Task<IActionResult> GetOrderStatusData(string timeRange = "day")
         {
+            SetAuthorizationHeader();
             // Gọi API để lấy dữ liệu theo trạng thái đơn hàng
             HttpResponseMessage httpResponseMessage = await _client.GetAsync($"dashboard/GetOrderStatusData/{timeRange}");
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -55,6 +75,7 @@ namespace MVCBanXeDap.Controllers
         //Lấy danh sách top 5 sản phẩm được mua nhiều nhất
         public async Task<IActionResult> GetTopSellingProducts()
         {
+            SetAuthorizationHeader();
             try
             {
                 // Gọi API để lấy sản phẩm bán chạy nhất
@@ -95,6 +116,7 @@ namespace MVCBanXeDap.Controllers
         //Lấy dữ liệu thống kê thông kê đơn hàng theo nhân viên
         public async Task<IActionResult> GetEmployeeOrderStats()
         {
+            SetAuthorizationHeader();
             // Gọi API để lấy dữ liệu thống kê đơn hàng theo nhân viên
             HttpResponseMessage httpResponseMessage = await _client.GetAsync($"dashboard/GetEmployeeOrderStats");
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -107,6 +129,7 @@ namespace MVCBanXeDap.Controllers
 
         public async Task<IActionResult> GetStatUserAsync()
         {
+            SetAuthorizationHeader();
             // Gọi API để lấy dữ liệu thống kê trạng thái người dùng
             HttpResponseMessage httpResponseMessage = await _client.GetAsync($"dashboard/GetStatUserAsync");
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -116,5 +139,20 @@ namespace MVCBanXeDap.Controllers
             }
             return Json(new { success = false });
         }
+        #endregion
+
+        #region [NON ACTION]
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await _jwt.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+        }
+        #endregion
     }
 }

@@ -417,6 +417,22 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "GetDetailProduct",
+    "RelativePath": "api/Dashboard/GetDetailProduct/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
     "Method": "GetEarningData",
     "RelativePath": "api/Dashboard/GetEarningData/{timeRange}",
     "HttpMethod": "GET",
@@ -487,6 +503,26 @@
     "ContainingType": "APIBanXeDap.Controllers.DashboardController",
     "Method": "GetTopSellingProducts",
     "RelativePath": "api/Dashboard/GetTopSellingProducts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "IsAuth",
+    "RelativePath": "api/Dashboard/IsAuth",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.DashboardController",
+    "Method": "JustGetOneListSellingProducts",
+    "RelativePath": "api/Dashboard/JustGetOneListSellingProducts",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
