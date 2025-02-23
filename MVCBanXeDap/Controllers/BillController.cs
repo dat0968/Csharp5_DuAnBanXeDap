@@ -202,10 +202,27 @@ namespace MVCBanXeDap.Controllers
 
                 document.Add(table.SetMarginBottom(20));
 
-                // Tổng tiền và trạng thái thanh toán
-                document.Add(new Paragraph($"Tổng Tiền: {String.Format("{0:n0}", totalAmount)} đ")
+                // Thêm thông tin Tiền Gốc
+                document.Add(new Paragraph($"Tiền Gốc: {String.Format("{0:n0}", invoice.TienGoc)} đ")
+                    .SetFontSize(12)
+                    .SetMarginBottom(20));
+
+                // Thêm thông tin Phí Vận Chuyển
+                document.Add(new Paragraph($"Phí Vận Chuyển: {String.Format("{0:n0}", invoice.PhiVanChuyen)} đ")
+                    .SetFontSize(12)
+                    .SetMarginBottom(10));
+
+                // Thêm thông tin Giảm Giá Mã Coupon
+                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {String.Format("{0}%", invoice.GiamGiaMaCoupon)}")
+                    .SetFontSize(12)
+                    .SetMarginBottom(10));
+
+                // Thêm thông tin Tổng Tiền
+                document.Add(new Paragraph($"Tổng Tiền: {String.Format("{0:n0}", invoice.TongTien)} đ")
                     .SetBold()
                     .SetFontSize(14));
+
+                // Thêm thông tin Trạng Thái Thanh Toán
                 document.Add(new Paragraph($"Trạng Thái Thanh Toán: {invoice.TinhTrang}")
                     .SetFontSize(12)
                     .SetMarginBottom(20));
@@ -272,15 +289,11 @@ namespace MVCBanXeDap.Controllers
 
             foreach (var invoice in invoices)
             {
-                // Tiêu đề hóa đơn
-                //document.Add(new Paragraph("****************************************")
-                //    .SetTextAlignment(TextAlignment.CENTER)
-                //    .SetFontSize(12)
-                //    .SetBold());
                 document.Add(new Paragraph("HÓA ĐƠN BÁN HÀNG")
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetFontSize(20)
                     .SetBold());
+
                 document.Add(new Paragraph($"Mã hóa đơn: {invoice.MaHoaDon}")
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetFontSize(14)
@@ -320,6 +333,7 @@ namespace MVCBanXeDap.Controllers
 
                 document.Add(table.SetMarginBottom(20));
 
+                // Trạng Thái Thanh Toán
                 document.Add(new Paragraph($"Trạng Thái Thanh Toán: {invoice.TinhTrang}")
                     .SetFontSize(12)
                     .SetMarginBottom(20));
@@ -338,21 +352,21 @@ namespace MVCBanXeDap.Controllers
                         .SetMarginBottom(20));
                 }
 
-                // Tổng tiền
-                document.Add(new Paragraph($"Tổng tiền: {totalAmount:n0} đ")
+                // Tổng tiền, hiển thị các thông tin đã xử lý sẵn
+                document.Add(new Paragraph($"Tiền Gốc: {invoice.TienGoc:n0} đ")
+                    .SetFontSize(12));
+                document.Add(new Paragraph($"Phí Vận Chuyển: {invoice.PhiVanChuyen:n0} đ")
+                    .SetFontSize(12));
+                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {invoice.GiamGiaMaCoupon}%")
+                    .SetFontSize(12));
+                document.Add(new Paragraph($"Tổng tiền: {invoice.TongTien:n0} đ")
                     .SetBold()
                     .SetFontSize(14)
                     .SetMarginBottom(20));
 
-                // Khoảng cách giữa các hóa đơn (dòng phân cách)
-                //document.Add(new Paragraph("****************************************")
-                //    .SetTextAlignment(TextAlignment.CENTER)
-                //    .SetFontSize(12)
-                //    .SetBold()
-                //    .SetMarginBottom(20));
-                // Ngắt trang để ghi hóa đơn tiếp theo
                 document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             }
+
 
             // Tải xuống file PDF tại đây
             document.Close();

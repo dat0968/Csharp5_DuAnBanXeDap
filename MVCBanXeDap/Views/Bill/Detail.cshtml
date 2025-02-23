@@ -72,7 +72,6 @@
             </a>
         </div>
 
-
         <div class="mb-3" style="max-height: 300px; overflow-y: auto;">
             <table class="table table-striped">
                 <thead>
@@ -105,7 +104,9 @@
         </div>
         <div class="mt-3 d-flex flex-column align-items-end">
             <strong class="h3">Tổng tiền đơn hàng:</strong>
-            <p class="h5 text-primary">@Model.TongTien.ToString("N0") VNĐ</p>
+            <p class="h5 text-primary">@((Model.TongTien != 0) ? Model.TongTien.ToString("N0") : (Model.TienGoc = Model.TongTien).ToString("N0")) VNĐ</p>
+            <p class="h5 text-secondary">Phí vận chuyển: @(Model?.PhiVanChuyen != 0 ? Model?.PhiVanChuyen.ToString("N0") + " VNĐ" : "Phí vận chuyển (miễn phí)")</p>
+            <p class="h5 text-secondary">Giảm giá mã coupon: @(Model?.GiamGiaMaCoupon != 0 ? Model?.GiamGiaMaCoupon.ToString("N0") + " %" : "Giảm giá mã coupon (không được áp dụng)")</p>
         </div>
     </div>
 </div>

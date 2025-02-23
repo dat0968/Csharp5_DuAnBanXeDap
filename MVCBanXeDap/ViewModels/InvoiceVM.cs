@@ -15,6 +15,9 @@
         public string DiaChiKhachHang { get; set; } // Địa chỉ khách hàng
         public List<ChiTietHoaDonViewModel> Items { get; set; } = new List<ChiTietHoaDonViewModel>();
         public decimal TongTien { get; set; }
+        public decimal GiamGiaMaCoupon { get; set; } // Giảm giá mã coupon
+        public decimal PhiVanChuyen { get; set; } // Phí vận chuyển
+        public decimal TienGoc { get; set; } // Tiền gốc
         public string? LyDoHuy { get; set; }
 
         public class ChiTietHoaDonViewModel

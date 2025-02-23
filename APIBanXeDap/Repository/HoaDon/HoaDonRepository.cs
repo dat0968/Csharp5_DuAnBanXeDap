@@ -53,8 +53,13 @@ namespace APIBanXeDap.Repository.HoaDon
                 Hoten = hoadon.Hoten,
                 Sdt = hoadon.Sdt,
                 ThoiGianGiao = hoadon.ThoiGianGiao,
-                LyDoHuy = hoadon.LyDoHuy
+                LyDoHuy = hoadon.LyDoHuy,
+                GiamGiaMaCoupon = hoadon.GiamGiaMaCoupon,
+                PhiVanChuyen = hoadon.PhiVanChuyen,
+                TienGoc = hoadon.TienGoc,
+                TongTien = hoadon.TongTien * (1 - (hoadon?.GiamGiaMaCoupon ?? (float)100) / 100) + (hoadon?.PhiVanChuyen ?? 0)
             }).ToList();
+
         }
 
         public async Task<HoadonVM?> GetAsync(Expression<Func<Hoadon, bool>>? filter, string? includeProperties = null, bool tracked = false)
@@ -92,7 +97,11 @@ namespace APIBanXeDap.Repository.HoaDon
                 Hoten = hoadon.Hoten,
                 Sdt = hoadon.Sdt,
                 ThoiGianGiao = hoadon.ThoiGianGiao,
-                LyDoHuy = hoadon.LyDoHuy
+                LyDoHuy = hoadon.LyDoHuy,
+                GiamGiaMaCoupon = hoadon.GiamGiaMaCoupon,
+                PhiVanChuyen = hoadon.PhiVanChuyen,
+                TienGoc = hoadon.TienGoc,
+                TongTien = hoadon.TongTien * (1 - (hoadon?.GiamGiaMaCoupon ?? (float)100) / 100) + (hoadon?.PhiVanChuyen ?? 0)
             };
             return hoadonVM;
         }
@@ -156,8 +165,8 @@ namespace APIBanXeDap.Repository.HoaDon
             var invoiceItems = await _db.Chitiethoadons
                 .Where(ct => ct.MaHoaDon == maHoaDon)
                 .Include(ct => ct.MaSpNavigation) // Include sản phẩm
-                .ToListAsync();
-
+                .ToListAsync(); 
+            
             var invoiceViewModel = new InvoiceVM
             {
                 MaHoaDon = invoiceData.MaHoaDon,
@@ -171,7 +180,7 @@ namespace APIBanXeDap.Repository.HoaDon
                 TenNhanVien = staffForce?.HoTen ?? "Đơn hàng chưa có nhân viên phụ trách",
                 SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
                 DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
-                LyDoHuy = invoiceData.LyDoHuy,
+                LyDoHuy = invoiceData?.LyDoHuy,
                 Items = invoiceItems.Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
                 {
                     TenSanPham = ct.MaSpNavigation.TenSp,
@@ -179,7 +188,10 @@ namespace APIBanXeDap.Repository.HoaDon
                     DonGia = ct.Gia,
                     Tong = ct.ThanhTien
                 }).ToList(),
-                TongTien = invoiceItems.Sum(ct => ct.ThanhTien)
+                TongTien = invoiceItems.Sum(ct => ct.ThanhTien) * (decimal)(1 - (invoiceData?.GiamGiaMaCoupon ?? 0) / 100) + (decimal)(invoiceData?.PhiVanChuyen ?? 0),
+                GiamGiaMaCoupon = (invoiceData?.GiamGiaMaCoupon ?? 0),
+                PhiVanChuyen = (invoiceData?.PhiVanChuyen ?? 0),
+                TienGoc = (invoiceData?.TienGoc ?? 0)
             };
 
             return invoiceViewModel;
@@ -218,16 +230,18 @@ namespace APIBanXeDap.Repository.HoaDon
                 TenNhanVien = staffsForce.FirstOrDefault(sf => sf.MaNv == invoiceData.MaNv)?.TenTaiKhoan ?? "Đơn hàng chưa có nhân viên phụ trách",
                 SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
                 DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
-                Items = invoiceItems.Where(ct => ct.MaHoaDon == invoiceData.MaHoaDon).Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
+                LyDoHuy = invoiceData?.LyDoHuy,
+                Items = invoiceItems.Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
                 {
                     TenSanPham = ct.MaSpNavigation.TenSp,
                     SoLuong = ct.SoLuong,
                     DonGia = ct.Gia,
                     Tong = ct.ThanhTien
                 }).ToList(),
-                TongTien = invoiceItems
-                    .Where(ct => ct.MaHoaDon == invoiceData.MaHoaDon) // Tính tổng tiền cho hóa đơn hiện tại
-                    .Sum(ct => ct.ThanhTien)
+                TongTien = invoiceItems.Sum(ct => ct.ThanhTien) * (decimal)(1 - (invoiceData?.GiamGiaMaCoupon ?? 0) / 100) + (decimal)(invoiceData?.PhiVanChuyen ?? 0),
+                GiamGiaMaCoupon = (invoiceData?.GiamGiaMaCoupon ?? 0),
+                PhiVanChuyen = (invoiceData?.PhiVanChuyen ?? 0),
+                TienGoc = (invoiceData?.TienGoc ?? 0)
             });
 
             return invoicesViewModel;
