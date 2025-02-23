@@ -43,7 +43,7 @@ namespace MVCBanXeDap.Controllers
             try
             {
                 var accesstoken = await SetAuthorizationHeader();
-                HttpResponseMessage responseBrand = await _client.GetAsync(_client.BaseAddress + $"Brands/GetAllBrand?keywords={keywords}&sort={sort}&page={page}");
+                HttpResponseMessage responseBrand = await _client.GetAsync(_client.BaseAddress + $"Brands/GetAllBrandByPage?keywords={keywords}&sort={sort}&page={page}");
                 if (responseBrand.IsSuccessStatusCode)
                 {
                     string data = await responseBrand.Content.ReadAsStringAsync();

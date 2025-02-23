@@ -12,7 +12,6 @@ namespace APIBanXeDap.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class BrandsController : ControllerBase
     {
         private readonly IBrandRepository BrandRepository;
@@ -21,30 +20,30 @@ namespace APIBanXeDap.Controllers
         {
             this.BrandRepository = BrandRepository;
         }
-        [HttpGet("GetAllBrand")]
-        public IActionResult GetAllBrand(string? keywords, string? sort, int page)
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetAllBrandByPage")]
+        public IActionResult GetAllBrandByPage(string? keywords, string? sort, int page = 1)
         {
-            if(page >= 1)
+            int pagesize = 10;
+            var ListBrands = BrandRepository.GetAllBrand(keywords, sort);
+            var pagedBrand = ListBrands.Skip((page - 1) * pagesize).Take(pagesize).ToList();
+            var totalItems = ListBrands.Count();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
+            return Ok(new
             {
-                int pagesize = 10;
-                var ListBrands = BrandRepository.GetAllBrand(keywords, sort);
-                var pagedBrand = ListBrands.Skip((page - 1) * pagesize).Take(pagesize).ToList();    
-                var totalItems = ListBrands.Count();
-                var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
-                return Ok(new
-                {
-                    Data = pagedBrand,
-                    TotalItems = totalItems,
-                    TotalPages = totalPages,
-                    Page = page,
-                });
-            }
-            else
-            {
-                var ListBrands = BrandRepository.GetAllBrand(keywords, sort);
-                return Ok(ListBrands);
-            }
+                Data = pagedBrand,
+                TotalItems = totalItems,
+                TotalPages = totalPages,
+                Page = page,
+            });
         }
+        [HttpGet("GetAllBrand")]
+        public IActionResult GetAllBrand()
+        {
+            var ListBrands = BrandRepository.GetAllBrand(null, null);
+            return Ok(ListBrands);
+        }
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetBrandById/{id}")]
         public IActionResult GetBrandById([FromRoute]int id)
         {
@@ -70,6 +69,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost("CreateBrand")]
         public IActionResult CreateBrand(BrandEM brand)
         {
@@ -101,6 +101,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("EditBrand")]
         public IActionResult EditBrand(BrandEM brand)
         {
@@ -139,6 +140,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("DeleteBrand/{id}")]
         public IActionResult DeleteBrand([FromRoute] int id)
         {

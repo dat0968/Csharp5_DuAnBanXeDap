@@ -90,35 +90,6 @@ namespace APIBanXeDap.Controllers
                 Page = page,
             });
         }
-        [HttpGet("GetAllCategory")]
-        public IActionResult GetAllCategory()
-        {
-            var ListCategories = trangChuRepository.GetAllCategory();
-            return Ok(ListCategories);
-        }
-        [HttpGet("GetAllBrand")]
-        public IActionResult GetAllBrand(string? keywords, string? sort, int page)
-        {
-            if (page >= 1)
-            {
-                int pagesize = 10;
-                var ListBrands = trangChuRepository.GetAllBrand(keywords, sort);
-                var pagedBrand = ListBrands.Skip((page - 1) * pagesize).Take(pagesize).ToList();
-                var totalItems = ListBrands.Count();
-                var totalPages = (int)Math.Ceiling((double)totalItems / pagesize);
-                return Ok(new
-                {
-                    Data = pagedBrand,
-                    TotalItems = totalItems,
-                    TotalPages = totalPages,
-                    Page = page,
-                });
-            }
-            else
-            {
-                var ListBrands = trangChuRepository.GetAllBrand(keywords, sort);
-                return Ok(ListBrands);
-            }
-        }
+        
     }
 }

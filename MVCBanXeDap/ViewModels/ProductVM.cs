@@ -24,5 +24,13 @@ namespace MVCBanXeDap.ViewModels
         public List<ImgProductVM> Hinhanhs { get; set; }
         public decimal MinPrice { get; set; }
         public decimal MaxPrice { get; set; }
+        private double _rating;
+        public double Rating
+        {
+            get => Math.Round(_rating, 1);
+            set => _rating = value;
+        }
+        public int TotalReviews { get; set; }
+        public List<CommentVM>? Comments { get; set; }
     }
 }

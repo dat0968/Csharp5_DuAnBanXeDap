@@ -386,7 +386,7 @@
         }
       }
     },
-    "/api/Brands/GetAllBrand": {
+    "/api/Brands/GetAllBrandByPage": {
       "get": {
         "tags": [
           "Brands"
@@ -411,9 +411,22 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 1
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Brands/GetAllBrand": {
+      "get": {
+        "tags": [
+          "Brands"
         ],
         "responses": {
           "200": {
@@ -578,6 +591,155 @@
         "tags": [
           "Colors"
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Comments/GetAllComments": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "parameters": [
+          {
+            "name": "keywords",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rating",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Comments/{id}": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Binhluan"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Binhluan"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Binhluan"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Comments/create": {
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Binhluan"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Binhluan"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Binhluan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Comments/edit": {
+      "put": {
+        "tags": [
+          "Comments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Binhluan"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Binhluan"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Binhluan"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -900,54 +1062,6 @@
               "type": "integer",
               "format": "int32",
               "default": 1
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Home/GetAllCategory": {
-      "get": {
-        "tags": [
-          "Home"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Home/GetAllBrand": {
-      "get": {
-        "tags": [
-          "Home"
-        ],
-        "parameters": [
-          {
-            "name": "keywords",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
             }
           }
         ],
@@ -2543,6 +2657,131 @@
         }
       }
     },
+    "/api/Replys": {
+      "get": {
+        "tags": [
+          "Replys"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Replys"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Traloibinhluan"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Traloibinhluan"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Traloibinhluan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Replys/{id}": {
+      "get": {
+        "tags": [
+          "Replys"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Replys"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Traloibinhluan"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Traloibinhluan"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Traloibinhluan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Replys"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Shippings/GetAll": {
       "get": {
         "tags": [
@@ -3358,6 +3597,59 @@
   },
   "components": {
     "schemas": {
+      "Binhluan": {
+        "required": [
+          "maKH",
+          "maSP",
+          "ngayTao",
+          "noiDung"
+        ],
+        "type": "object",
+        "properties": {
+          "maBinhLuan": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "noiDung": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "ngayTao": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maSP": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maKH": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rating": {
+            "type": "number",
+            "format": "double"
+          },
+          "isDelete": {
+            "type": "boolean"
+          },
+          "sanPham": {
+            "$ref": "#/components/schemas/Sanpham"
+          },
+          "khachHang": {
+            "$ref": "#/components/schemas/Khachhang"
+          },
+          "traLoiBinhLuans": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Traloibinhluan"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "BrandEM": {
         "type": "object",
         "properties": {
@@ -3430,6 +3722,66 @@
         },
         "additionalProperties": false
       },
+      "Chitietsanpham": {
+        "type": "object",
+        "properties": {
+          "maSp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maMau": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maKichThuoc": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soLuongTon": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "donGia": {
+            "type": "number",
+            "format": "double"
+          },
+          "maKichThuocNavigation": {
+            "$ref": "#/components/schemas/SizeVM"
+          },
+          "maMauNavigation": {
+            "$ref": "#/components/schemas/Mausac"
+          },
+          "maSpNavigation": {
+            "$ref": "#/components/schemas/Sanpham"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Danhmuc": {
+        "type": "object",
+        "properties": {
+          "maDanhMuc": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tenDanhMuc": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDelete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "sanphams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sanpham"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "DetailsProductEM": {
         "type": "object",
         "properties": {
@@ -3452,6 +3804,100 @@
           "donGia": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Hinhanh": {
+        "type": "object",
+        "properties": {
+          "maHinhAnh": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hinhAnh1": {
+            "type": "string",
+            "nullable": true
+          },
+          "maSp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maSpNavigation": {
+            "$ref": "#/components/schemas/Sanpham"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Hoadon": {
+        "type": "object",
+        "properties": {
+          "maHoaDon": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "diaChiNhanHang": {
+            "type": "string",
+            "nullable": true
+          },
+          "ngayTao": {
+            "type": "string",
+            "format": "date"
+          },
+          "httt": {
+            "type": "string",
+            "nullable": true
+          },
+          "tinhTrang": {
+            "type": "string",
+            "nullable": true
+          },
+          "maNv": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "maKh": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "moTa": {
+            "type": "string",
+            "nullable": true
+          },
+          "hoten": {
+            "type": "string",
+            "nullable": true
+          },
+          "sdt": {
+            "type": "string",
+            "nullable": true
+          },
+          "thoiGianGiao": {
+            "type": "string",
+            "format": "date"
+          },
+          "giamGiaMaCoupon": {
+            "type": "number",
+            "format": "float"
+          },
+          "phiVanChuyen": {
+            "type": "number",
+            "format": "float"
+          },
+          "tienGoc": {
+            "type": "number",
+            "format": "float"
+          },
+          "tongTien": {
+            "type": "number",
+            "format": "float"
+          },
+          "maKhNavigation": {
+            "$ref": "#/components/schemas/Khachhang"
+          },
+          "maNvNavigation": {
+            "$ref": "#/components/schemas/Nhanvien"
           }
         },
         "additionalProperties": false
@@ -3523,6 +3969,84 @@
         },
         "additionalProperties": false
       },
+      "Khachhang": {
+        "type": "object",
+        "properties": {
+          "maKh": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hoTen": {
+            "type": "string",
+            "nullable": true
+          },
+          "gioiTinh": {
+            "type": "string",
+            "nullable": true
+          },
+          "ngaySinh": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "diaChi": {
+            "type": "string",
+            "nullable": true
+          },
+          "cccd": {
+            "type": "string",
+            "nullable": true
+          },
+          "sdt": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "tenTaiKhoan": {
+            "type": "string",
+            "nullable": true
+          },
+          "matKhau": {
+            "type": "string",
+            "nullable": true
+          },
+          "tinhTrang": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDelete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "hinh": {
+            "type": "string",
+            "nullable": true
+          },
+          "anh": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
+          "hoadons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Hoadon"
+            },
+            "nullable": true
+          },
+          "yeuThichs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Yeuthich"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Login": {
         "type": "object",
         "properties": {
@@ -3572,6 +4096,151 @@
           },
           "daSuDung": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Mausac": {
+        "type": "object",
+        "properties": {
+          "maMau": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tenMau": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDelete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "chitietsanphams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Chitietsanpham"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Nhacungcap": {
+        "type": "object",
+        "properties": {
+          "maNhaCc": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tenNhaCc": {
+            "type": "string",
+            "nullable": true
+          },
+          "diaChi": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "sdt": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDelete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "sanphams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sanpham"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Nhanvien": {
+        "type": "object",
+        "properties": {
+          "maNv": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hoTen": {
+            "type": "string",
+            "nullable": true
+          },
+          "gioiTinh": {
+            "type": "string",
+            "nullable": true
+          },
+          "ngaySinh": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "diaChi": {
+            "type": "string",
+            "nullable": true
+          },
+          "cccd": {
+            "type": "string",
+            "nullable": true
+          },
+          "sdt": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "ngayVaoLam": {
+            "type": "string",
+            "format": "date"
+          },
+          "luong": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vaiTro": {
+            "type": "string",
+            "nullable": true
+          },
+          "tenTaiKhoan": {
+            "type": "string",
+            "nullable": true
+          },
+          "matKhau": {
+            "type": "string",
+            "nullable": true
+          },
+          "tinhTrang": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDelete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "hinh": {
+            "type": "string",
+            "nullable": true
+          },
+          "anh": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
+          "hoadons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Hoadon"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3680,6 +4349,78 @@
         },
         "additionalProperties": false
       },
+      "Sanpham": {
+        "type": "object",
+        "properties": {
+          "maSp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tenSp": {
+            "type": "string",
+            "nullable": true
+          },
+          "maThuongHieu": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hinh": {
+            "type": "string",
+            "nullable": true
+          },
+          "moTa": {
+            "type": "string",
+            "nullable": true
+          },
+          "ngaySanXuat": {
+            "type": "string",
+            "format": "date"
+          },
+          "maNhaCc": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maDanhMuc": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isDelete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "chitietsanphams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Chitietsanpham"
+            },
+            "nullable": true
+          },
+          "hinhanhs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Hinhanh"
+            },
+            "nullable": true
+          },
+          "maDanhMucNavigation": {
+            "$ref": "#/components/schemas/Danhmuc"
+          },
+          "maNhaCcNavigation": {
+            "$ref": "#/components/schemas/Nhacungcap"
+          },
+          "maThuongHieuNavigation": {
+            "$ref": "#/components/schemas/Thuonghieu"
+          },
+          "yeuThichs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Yeuthich"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ShippingVM": {
         "type": "object",
         "properties": {
@@ -3701,6 +4442,31 @@
           },
           "thanhPho": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SizeVM": {
+        "type": "object",
+        "properties": {
+          "maKichThuoc": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tenKichThuoc": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDelete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "chitietsanphams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Chitietsanpham"
+            },
             "nullable": true
           }
         },
@@ -3756,6 +4522,70 @@
         },
         "additionalProperties": false
       },
+      "Thuonghieu": {
+        "type": "object",
+        "properties": {
+          "maThuongHieu": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tenThuongHieu": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDelete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "sanphams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sanpham"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Traloibinhluan": {
+        "required": [
+          "maBinhLuan",
+          "maNV",
+          "noiDung",
+          "thoiGian"
+        ],
+        "type": "object",
+        "properties": {
+          "maTraLoi": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "noiDung": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "thoiGian": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maBinhLuan": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "binhLuan": {
+            "$ref": "#/components/schemas/Binhluan"
+          },
+          "maNV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nhanVien": {
+            "$ref": "#/components/schemas/Nhanvien"
+          }
+        },
+        "additionalProperties": false
+      },
       "WeatherForecast": {
         "type": "object",
         "properties": {
@@ -3775,6 +4605,34 @@
           "summary": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Yeuthich": {
+        "type": "object",
+        "properties": {
+          "ma": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maDoiTuong": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maNguoiDung": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "doiTuongYeuThich": {
+            "type": "string",
+            "nullable": true
+          },
+          "sanpham": {
+            "$ref": "#/components/schemas/Sanpham"
+          },
+          "khachhang": {
+            "$ref": "#/components/schemas/Khachhang"
           }
         },
         "additionalProperties": false

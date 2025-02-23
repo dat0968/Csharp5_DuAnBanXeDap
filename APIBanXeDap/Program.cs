@@ -28,6 +28,8 @@ using APIBanXeDap.Repository.ThanhToan;
 using APIBanXeDap.Repository.UpdateProfile;
 using APIBanXeDap.Repository.YeuThich;
 using Microsoft.OpenApi.Models;
+using APIBanXeDap.Repository.BinhLuan;
+using APIBanXeDap.Repository.TraLoiBinhLuan;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -113,6 +115,8 @@ builder.Services.AddScoped<INhanVienRepository, NhanVienRepository>();
 builder.Services.AddScoped<IUpdateProfileRepository, UpdateProfileRepository>();
 builder.Services.AddScoped<ICheckoutRepository, CheckoutRepository>();
 builder.Services.AddScoped<IYeuThichRepository, YeuThichRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IReplyCommentRepository, ReplyCommentRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "MyPolicy", options =>

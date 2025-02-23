@@ -1,0 +1,218 @@
+﻿@using MVCBanXeDap.ViewModels
+@model IEnumerable<CommentVM>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    .input-number {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+    }
+
+        .input-number:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+</style>
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Danh sách bình luận</h4>
+        </div>
+        <div class="card-body">
+            <!-- Tìm kiếm nhà bình luận theo tên khách hàng -->
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input id="keywords" value="@ViewBag.Keywords" name="keywords" type="text" class="form-control" placeholder="Tìm kiếm bình luận..." />
+                </div>
+                <div class="col-md-3">
+                    <select id="SortByRating" name="rating" class="form-select">
+                        <option value="" selected>Sắp xếp theo đánh giá</option>
+                        <option value="5">5 sao</option>
+                        <option value="4">4 sao</option>
+                        <option value="3">3 sao</option>
+                        <option value="2">2 sao</option>
+                        <option value="1">1 sao</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button id="btnSearch" class="btn btn-primary">Tìm kiếm</button>
+                </div>
+            </div>
+
+           
+
+
+            <!-- Danh sách bình luận -->
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Sao</th>
+                            <th>Nội dung</th>
+                            <th>Ngày tạo</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Người đăng</th>
+                            <th>Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="basic-datatables">
+                        @foreach (var comment in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= comment.Rating)
+                                            {
+                                                <i class="fas fa-star text-warning"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-star text-secondary"></i>
+                                            }
+                                        }
+                                    </span>
+                                </td>
+                                <td>@comment.NoiDung</td>
+                                <td>@comment.NgayTao.ToString("dd/MM/yyyy")</td>
+                                <td>@comment.TenSanPham</td>
+                                <td>@comment.TenKhachHang</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <!-- Nút xem chi tiết -->
+                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal-@comment.MaBinhLuan">
+                                            <i class="fas fa-eye"></i> Chi tiết
+                                        </button>
+
+                                        <!-- Nút phản hồi -->
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#replyModal-@comment.MaBinhLuan">
+                                            <i class="fas fa-edit"></i> Phản hồi
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Modal Chi tiết bình luận -->
+                            <div class="modal fade" id="detailModal-@comment.MaBinhLuan" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="detailModalLabel">Chi tiết bình luận</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><strong>Người đăng:</strong> @comment.TenKhachHang</p>
+                                            <p><strong>Sản phẩm:</strong> @comment.TenSanPham</p>
+                                            <p><strong>Số sao:</strong> @comment.Rating</p>
+                                            <p><strong>Nội dung:</strong> @comment.NoiDung</p>
+                                            <p><strong>Ngày tạo:</strong> @comment.NgayTao.ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Phản hồi bình luận -->
+                            <div class="modal fade" id="replyModal-@comment.MaBinhLuan" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="replyModalLabel">Phản hồi bình luận</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="replyForm-@comment.MaBinhLuan">
+                                                <input type="hidden" name="MaBinhLuan" value="@comment.MaBinhLuan" id="commentId-@comment.MaBinhLuan" />
+
+                                                <div class="mb-3">
+                                                    <label for="replyContent-@comment.MaBinhLuan" class="form-label">Nội dung phản hồi</label>
+                                                    <textarea class="form-control" id="replyContent-@comment.MaBinhLuan" rows="4" required></textarea>
+                                                </div>
+
+                                                <button type="button" class="btn btn-primary" onclick="sendReply(@comment.MaBinhLuan)">Gửi phản hồi</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Phân trang -->
+@if (ViewBag.TotalPages != null && ViewBag.TotalPages > 0)
+{
+    <nav aria-label="Comment Pagination">
+        <ul class="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.Page == i ? "active" : "")">
+                    <a class="page-link"
+                       href="@Url.Action("Index", new { page = i, keywords = ViewBag.Keywords, rating = ViewBag.Rating })">
+                        @i
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+<!-- Modal Thêm Nhà Cung Cấp -->
+<!-- Script gửi request -->
+<script>
+    document.getElementById("btnSearch").addEventListener("click", function () {
+        const keywords = document.getElementById("keywords").value;
+        const rating = document.getElementById("SortByRating").value;
+
+        const query = `?keywords=${keywords}&rating=${rating}`;
+        window.location.href = '@Url.Action("Index", "Comment")' + query;
+    });
+        function sendReply(commentId) {
+        const replyContent = document.getElementById(`replyContent-${commentId}`).value;
+
+        if (!replyContent) {
+            alert("Vui lòng nhập nội dung phản hồi!");
+            return;
+        }
+
+        const replyData = {
+            MaBinhLuan: commentId,
+            NoiDung: replyContent,
+            NguoiPhanHoi: "Admin" // Hoặc lấy từ session
+        };
+
+        fetch('/Reply/CreateReply', { // Đổi API thành controller MVC
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(replyData)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Phản hồi thành công!");
+                location.reload(); // Reload lại trang để cập nhật phản hồi mới
+            } else {
+                alert("Phản hồi thất bại!");
+            }
+        })
+        .catch(error => {
+            console.error("Lỗi khi gửi phản hồi:", error);
+            alert("Đã xảy ra lỗi khi gửi phản hồi!");
+        });
+    }
+
+</script>
