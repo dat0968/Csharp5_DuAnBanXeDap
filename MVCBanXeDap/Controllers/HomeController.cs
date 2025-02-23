@@ -33,49 +33,64 @@ namespace MVCBanXeDap.Controllers
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        [HttpPost]
+        public async Task<IActionResult> AddComment([FromBody] CommentVM comment)
         {
             SetAuthorizationHeader();
-            var list = new List<ProductVM>();
-            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + "Home/SanPhamBanChay");
+
+            if (comment == null)
+            {
+                return BadRequest("Bình luận không hợp lệ.");
+            }
+
+            HttpResponseMessage response = await _client.PostAsJsonAsync("Comment/AddComment", comment);
+
             if (response.IsSuccessStatusCode)
             {
-                var data = await response.Content.ReadAsStringAsync();
-                var convertResponse = JsonConvert.DeserializeObject<List<ProductVM>>(data);
-                foreach(var item in convertResponse)
-                {
-                    var minPrice = Convert.ToDecimal(item.Chitietsanphams.Min(x => x.DonGia));  
-                    var maxPrice = Convert.ToDecimal(item.Chitietsanphams.Max(x => x.DonGia));
-
-                    // C?p nh?t MinPrice và MaxPrice
-                    item.MinPrice = minPrice;
-                    item.MaxPrice = maxPrice;
-                    list.Add(item);
-                }
-
+                return Ok("Bình luận đã được gửi thành công!");
             }
-            else
-            {
-                return StatusCode((int)response.StatusCode);
-            }
-            return View(list);
+            return StatusCode((int)response.StatusCode, "Không thể gửi bình luận.");
         }
+
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var ProductVM = new ProductVM();
             SetAuthorizationHeader();
+
+            // Gọi API lấy thông tin sản phẩm theo ID
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Home/GetProductById/{id}");
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
                 ProductVM = JsonConvert.DeserializeObject<ProductVM>(data);
+
+                // 🟠 Gọi API lấy bình luận của sản phẩm
+                HttpResponseMessage commentResponse = await _client.GetAsync(_client.BaseAddress + $"Comment/GetCommentsByProduct/{id}");
+                if (commentResponse.IsSuccessStatusCode)
+                {
+                    var commentData = await commentResponse.Content.ReadAsStringAsync();
+                    var comments = JsonConvert.DeserializeObject<List<CommentVM>>(commentData);
+
+                    // 🟠 Tính số sao và số người đánh giá
+                    if (comments != null && comments.Any())
+                    {
+                        ProductVM.Rating = comments.Average(c => c.Rating);
+                        ProductVM.TotalReviews = comments.Count();
+                    }
+                    else
+                    {
+                        ProductVM.Rating = 0;
+                        ProductVM.TotalReviews = 0;
+                    }
+                }
             }
             else
             {
                 return StatusCode((int)response.StatusCode);
             }
+
+            // 🟠 Gọi API lấy sản phẩm liên quan theo danh mục
             string ten = ProductVM.DanhMuc;
             var relatedProducts = await _client.GetAsync(_client.BaseAddress + $"Home/GetSanPhamLienQuan/{ten}");
             List<ProductVM> relatedProductsList = new List<ProductVM>();
@@ -84,6 +99,7 @@ namespace MVCBanXeDap.Controllers
             {
                 string relatedData = await relatedProducts.Content.ReadAsStringAsync();
                 relatedProductsList = JsonConvert.DeserializeObject<List<ProductVM>>(relatedData);
+
                 foreach (var item in relatedProductsList)
                 {
                     if (item.Chitietsanphams != null && item.Chitietsanphams.Any())
@@ -91,9 +107,28 @@ namespace MVCBanXeDap.Controllers
                         var minPrice = Convert.ToDecimal(item.Chitietsanphams.Min(x => x.DonGia));
                         var maxPrice = Convert.ToDecimal(item.Chitietsanphams.Max(x => x.DonGia));
 
-                        // Cập nhật MinPrice và MaxPrice cho sản phẩm liên quan
+                        // 🟠 Cập nhật giá thấp nhất và cao nhất cho sản phẩm liên quan
                         item.MinPrice = minPrice;
                         item.MaxPrice = maxPrice;
+
+                        // 🟠 Gọi API lấy bình luận cho sản phẩm liên quan
+                        HttpResponseMessage relatedCommentResponse = await _client.GetAsync(_client.BaseAddress + $"Comment/GetCommentsByProduct/{item.MaSP}");
+                        if (relatedCommentResponse.IsSuccessStatusCode)
+                        {
+                            var relatedCommentData = await relatedCommentResponse.Content.ReadAsStringAsync();
+                            var relatedComments = JsonConvert.DeserializeObject<List<CommentVM>>(relatedCommentData);
+
+                            if (relatedComments != null && relatedComments.Any())
+                            {
+                                item.Rating = relatedComments.Average(c => c.Rating);
+                                item.TotalReviews = relatedComments.Count();
+                            }
+                            else
+                            {
+                                item.Rating = 0;
+                                item.TotalReviews = 0;
+                            }
+                        }
                     }
                 }
             }
@@ -101,7 +136,8 @@ namespace MVCBanXeDap.Controllers
             {
                 return StatusCode((int)relatedProducts.StatusCode);
             }
-            // Truyền dữ liệu sản phẩm liên quan vào ViewBag hoặc View
+
+            // 🟠 Truyền dữ liệu sản phẩm và sản phẩm liên quan vào View
             ViewBag.RelatedProducts = relatedProductsList;
             return View(ProductVM);
         }

@@ -90,10 +90,26 @@
                         <h6>@product.TenSp</h6>
                         <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
 
-
                         <h6 style="color: red;">@product.MinPrice VNĐ - @product.MaxPrice VNĐ</h6>
-                        
+
+                        <!-- Hiển thị số sao -->
+                        <div class="product__rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= product.Rating)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                }
+                                else
+                                {
+                                    <i class="far fa-star text-secondary"></i>
+                                }
+                            }
+                            <!-- Hiển thị số người đánh giá -->
+                            <span class="rating-count">(@product.TotalReviews lượt đánh giá)</span>
+                        </div>
                     </div>
+
                 </div>
             </div>
 

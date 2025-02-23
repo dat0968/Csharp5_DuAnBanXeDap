@@ -22,6 +22,43 @@ namespace APIBanXeDap.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("APIBanXeDap.Models.Binhluan", b =>
+                {
+                    b.Property<int>("MaBinhLuan")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaBinhLuan"));
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaKH")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaSP")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NoiDung")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
+
+                    b.HasKey("MaBinhLuan");
+
+                    b.HasIndex("MaKH");
+
+                    b.HasIndex("MaSP");
+
+                    b.ToTable("Binhluans");
+                });
+
             modelBuilder.Entity("APIBanXeDap.Models.Chitiethoadon", b =>
                 {
                     b.Property<int>("MaHoaDon")
@@ -325,8 +362,8 @@ namespace APIBanXeDap.Migrations
                             Code = "COUPON001",
                             DaSuDung = false,
                             MinimumOrderAmount = 200000m,
-                            NgayHetHan = new DateTime(2025, 3, 20, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3337),
-                            NgayTao = new DateTime(2025, 2, 18, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3306),
+                            NgayHetHan = new DateTime(2025, 3, 22, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9114),
+                            NgayTao = new DateTime(2025, 2, 20, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9095),
                             SoTienGiam = 50000m,
                             TrangThai = true
                         },
@@ -335,8 +372,8 @@ namespace APIBanXeDap.Migrations
                             Code = "COUPON002",
                             DaSuDung = false,
                             MinimumOrderAmount = 300000m,
-                            NgayHetHan = new DateTime(2025, 3, 5, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3360),
-                            NgayTao = new DateTime(2025, 2, 18, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3356),
+                            NgayHetHan = new DateTime(2025, 3, 7, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9124),
+                            NgayTao = new DateTime(2025, 2, 20, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9122),
                             PhanTramGiam = 10f,
                             TrangThai = true
                         },
@@ -345,8 +382,8 @@ namespace APIBanXeDap.Migrations
                             Code = "COUPON003",
                             DaSuDung = false,
                             MinimumOrderAmount = 500000m,
-                            NgayHetHan = new DateTime(2025, 3, 10, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3372),
-                            NgayTao = new DateTime(2025, 2, 18, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3368),
+                            NgayHetHan = new DateTime(2025, 3, 12, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9128),
+                            NgayTao = new DateTime(2025, 2, 20, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9127),
                             SoTienGiam = 100000m,
                             TrangThai = false
                         },
@@ -355,8 +392,8 @@ namespace APIBanXeDap.Migrations
                             Code = "COUPON004",
                             DaSuDung = false,
                             MinimumOrderAmount = 400000m,
-                            NgayHetHan = new DateTime(2025, 2, 28, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3382),
-                            NgayTao = new DateTime(2025, 2, 18, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3379),
+                            NgayHetHan = new DateTime(2025, 3, 2, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9139),
+                            NgayTao = new DateTime(2025, 2, 20, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9138),
                             PhanTramGiam = 20f,
                             TrangThai = true
                         },
@@ -365,8 +402,8 @@ namespace APIBanXeDap.Migrations
                             Code = "COUPON005",
                             DaSuDung = false,
                             MinimumOrderAmount = 600000m,
-                            NgayHetHan = new DateTime(2025, 3, 15, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3392),
-                            NgayTao = new DateTime(2025, 2, 18, 18, 48, 27, 3, DateTimeKind.Local).AddTicks(3389),
+                            NgayHetHan = new DateTime(2025, 3, 17, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9142),
+                            NgayTao = new DateTime(2025, 2, 20, 23, 58, 27, 680, DateTimeKind.Local).AddTicks(9141),
                             SoTienGiam = 150000m,
                             TrangThai = true
                         });
@@ -661,6 +698,37 @@ namespace APIBanXeDap.Migrations
                     b.ToTable("THUONGHIEU", (string)null);
                 });
 
+            modelBuilder.Entity("APIBanXeDap.Models.Traloibinhluan", b =>
+                {
+                    b.Property<int>("MaTraLoi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaTraLoi"));
+
+                    b.Property<int>("MaBinhLuan")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaNV")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NoiDung")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("ThoiGian")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MaTraLoi");
+
+                    b.HasIndex("MaBinhLuan");
+
+                    b.HasIndex("MaNV");
+
+                    b.ToTable("Traloibinhluans");
+                });
+
             modelBuilder.Entity("APIBanXeDap.Models.Vanchuyen", b =>
                 {
                     b.Property<int>("Id")
@@ -715,6 +783,25 @@ namespace APIBanXeDap.Migrations
                     b.HasIndex("MaNguoiDung");
 
                     b.ToTable("YEUTHICH", (string)null);
+                });
+
+            modelBuilder.Entity("APIBanXeDap.Models.Binhluan", b =>
+                {
+                    b.HasOne("APIBanXeDap.Models.Khachhang", "KhachHang")
+                        .WithMany()
+                        .HasForeignKey("MaKH")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("APIBanXeDap.Models.Sanpham", "SanPham")
+                        .WithMany()
+                        .HasForeignKey("MaSP")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KhachHang");
+
+                    b.Navigation("SanPham");
                 });
 
             modelBuilder.Entity("APIBanXeDap.Models.Chitiethoadon", b =>
@@ -835,6 +922,25 @@ namespace APIBanXeDap.Migrations
                     b.Navigation("MaThuongHieuNavigation");
                 });
 
+            modelBuilder.Entity("APIBanXeDap.Models.Traloibinhluan", b =>
+                {
+                    b.HasOne("APIBanXeDap.Models.Binhluan", "BinhLuan")
+                        .WithMany("TraLoiBinhLuans")
+                        .HasForeignKey("MaBinhLuan")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("APIBanXeDap.Models.Nhanvien", "NhanVien")
+                        .WithMany()
+                        .HasForeignKey("MaNV")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BinhLuan");
+
+                    b.Navigation("NhanVien");
+                });
+
             modelBuilder.Entity("APIBanXeDap.Models.Yeuthich", b =>
                 {
                     b.HasOne("APIBanXeDap.Models.Sanpham", "Sanpham")
@@ -850,6 +956,11 @@ namespace APIBanXeDap.Migrations
                     b.Navigation("Khachhang");
 
                     b.Navigation("Sanpham");
+                });
+
+            modelBuilder.Entity("APIBanXeDap.Models.Binhluan", b =>
+                {
+                    b.Navigation("TraLoiBinhLuans");
                 });
 
             modelBuilder.Entity("APIBanXeDap.Models.Danhmuc", b =>

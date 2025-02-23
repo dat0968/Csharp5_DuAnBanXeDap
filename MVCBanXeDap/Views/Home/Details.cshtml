@@ -126,7 +126,83 @@
                     <button class="btn btn-danger btn-lg w-100" id="addToCart" disabled>Thêm vào giỏ</button>
                 </div>
             </div>
+            <br />
         </div>
+        <br />
+        <div class="row border rounded p-4 bg-white shadow-sm">
+            <h4 class="fw-bold">Khách hàng nói về sản phẩm</h4>
+            <div class="col-md-4">
+                <div class="d-flex">
+                    <h1 id="average-rating" class="fw-bold me-6">@Model.Rating.ToString("0.0")</h1>
+                    <div>
+                        <div class="text-warning" id="star-rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="fa-star @(i <= Model.Rating ? "fas" : "far")"></i>
+                            }
+                        </div>
+                        <p class="mb-0"><span id="total-reviews">@Model.TotalReviews</span> lượt đánh giá</p>
+                    </div>
+                </div>
+                <button class="btn btn-danger mt-3" onclick="scrollToComment()">Đánh giá sản phẩm</button>
+            </div>
+            <div class="col-md-6">
+                <div class="mt-4 d-flex align-items-center">
+                    <h5 class="fw-bold me-3"><span id="total-comments">@Model.Comments?.Count()</span> Bình luận</h5>
+                    <button class="btn btn-outline-danger me-2">Tất cả</button>
+                    <button class="btn btn-outline-secondary">5 ★</button>
+                    <button class="btn btn-outline-secondary">4 ★</button>
+                    <button class="btn btn-outline-secondary">3 ★</button>
+                    <button class="btn btn-outline-secondary">2 ★</button>
+                    <button class="btn btn-outline-secondary">1 ★</button>
+                </div>
+            </div>
+            <div class="mt-3">
+                <textarea id="comment-input" class="form-control" placeholder="Nhập nội dung bình luận" rows="2"></textarea>
+                <input type="hidden" id="rating" value="5">
+                <div class="mt-2">
+                    <div id="rating-stars">
+                        <span class="fa fa-star checked" data-star="1"></span>
+                        <span class="fa fa-star checked" data-star="2"></span>
+                        <span class="fa fa-star checked" data-star="3"></span>
+                        <span class="fa fa-star checked" data-star="4"></span>
+                        <span class="fa fa-star checked" data-star="5"></span>
+                    </div>
+                </div>
+                <button id="submit-comment" class="btn btn-dark mt-2">Gửi bình luận</button>
+            </div>
+
+            <div class="mt-3" id="comment-list">
+                @if (Model.Comments != null && Model.Comments.Any())
+                {
+                    foreach (var comment in Model.Comments)
+                    {
+                        <div class="mt-4">
+                            <div class="d-flex align-items-start">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <span>@comment.TenSanPham.Substring(0, 1).ToUpper()</span>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-1">@comment.TenKhachHang <small class="text-muted">· @comment.NgayTao.ToString("dd/MM/yyyy HH:mm")</small></h6>
+                                    <div class="text-warning">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fa-star @(i <= comment.Rating ? "fas" : "far")"></i>
+                                        }
+                                    </div>
+                                    <p class="mb-1">@comment.NoiDung</p>
+                                    <div class="d-flex align-items-center">
+                                        @*                                             <button class="btn btn-light btn-sm me-2"><i class="far fa-thumbs-up"></i> @comment.Likes</button> *@
+                                        <button class="btn btn-light btn-sm"><i class="fas fa-reply"></i> Trả lời</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
     </div>
 </div>
 <div class="container py-5">
@@ -152,6 +228,22 @@
                         <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
 
                         <h6 style="color:red;">@product.MinPrice VNĐ - @product.MaxPrice VNĐ</h6>
+                        <!-- Hiển thị số sao -->
+                        <div class="product__rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= product.Rating)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                }
+                                else
+                                {
+                                    <i class="far fa-star text-secondary"></i>
+                                }
+                            }
+                            <!-- Hiển thị số người đánh giá -->
+                            <span class="rating-count">(@product.TotalReviews lượt đánh giá)</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -161,6 +253,58 @@
 <input value="@Model.MaSP" type="hidden" id="MaSP" />
 <input value="@Model.TenSp" type="hidden" id="TenSP" />
 <script>
+        document.getElementById('submit-comment').addEventListener('click', function () {
+        const content = document.getElementById('comment-input').value;
+        const rating = document.getElementById('rating').value;
+        const productId = @Model.MaSP;
+
+        if (content.trim() === '') {
+            alert('Vui lòng nhập nội dung bình luận!');
+            return;
+        }
+
+        const comment = {
+            ProductId: productId,
+            Content: content,
+            Rating: parseInt(rating),
+            CreatedAt: new Date().toISOString()
+        };
+
+        fetch('/Home/AddComment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(comment)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Bình luận đã được gửi thành công!');
+                location.reload();
+            } else {
+                alert('Không thể gửi bình luận. Vui lòng thử lại!');
+            }
+        })
+        .catch(error => console.error('Lỗi:', error));
+    });
+
+    const stars = document.querySelectorAll('#rating-stars .fa-star');
+    stars.forEach(star => {
+        star.addEventListener('click', function () {
+            const value = this.getAttribute('data-star');
+            document.getElementById('rating').value = value;
+
+            stars.forEach((s, index) => {
+                s.classList.toggle('checked', index < value);
+            });
+        });
+    });
+
+    function scrollToComment() {
+        document.getElementById('comment-input').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    //
     document.addEventListener('DOMContentLoaded', function () {
         const colorOptions = document.querySelectorAll('.color-option');
         const sizeOptionsContainer = document.getElementById('sizeOptions');

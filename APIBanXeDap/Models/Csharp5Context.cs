@@ -38,6 +38,8 @@ public partial class Csharp5Context : DbContext
 
     public virtual DbSet<Sanpham> Sanphams { get; set; }
 
+    public virtual DbSet<Binhluan> Binhluans { get; set; }
+    public virtual DbSet<Traloibinhluan> Traloibinhluans { get; set; }
     public virtual DbSet<Thuonghieu> Thuonghieus { get; set; }
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     public virtual DbSet<MaCoupon> MaCoupons { get; set; }
