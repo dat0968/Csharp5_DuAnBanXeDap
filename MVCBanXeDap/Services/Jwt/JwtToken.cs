@@ -57,6 +57,7 @@ namespace MVCBanXeDap.Services.Jwt
                                 }
                                 else
                                 {
+                                    _httpContextAccessor.HttpContext.Session.Remove("RefreshToken");
                                     return null;
                                 }
                             }
