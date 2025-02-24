@@ -29,7 +29,7 @@ namespace MVCBanXeDap.Controllers
             var information = ijwtToken.GetInformationUserFromToken(token);
             var id = information.Id;
             // Lấy thông tin khách hàng từ API
-            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"KhachHang/GetKhachHangById/{id}");
+            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"UpdateProfile/GetKhachHangById/{id}");
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();

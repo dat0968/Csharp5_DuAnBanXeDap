@@ -2078,6 +2078,22 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.UpdateProfileController",
+    "Method": "GetKhachHangById",
+    "RelativePath": "api/UpdateProfile/GetKhachHangById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.UpdateProfileController",
     "Method": "Update",
     "RelativePath": "api/UpdateProfile/UpdateProfile/{id}",
     "HttpMethod": "PUT",

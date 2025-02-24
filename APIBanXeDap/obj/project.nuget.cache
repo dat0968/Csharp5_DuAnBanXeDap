@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8Kj3+DNPvIs=",
+  "dgSpecHash": "2nvV15IxXKY=",
   "success": true,
-  "projectFilePath": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj",
+  "projectFilePath": "D:\\FPT\\CSharp5\\DuAnBanXeDap\\APIBanXeDap\\APIBanXeDap.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
