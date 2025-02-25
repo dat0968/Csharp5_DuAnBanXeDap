@@ -48,7 +48,7 @@ namespace APIBanXeDap.Controllers
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet("GetCommentBy/{id}")]
         public ActionResult<Binhluan> GetById(int id)
         {
             var binhLuan = _binhLuanRepository.GetById(id);

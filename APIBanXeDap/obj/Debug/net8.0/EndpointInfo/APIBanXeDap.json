@@ -734,7 +734,7 @@
         }
       }
     },
-    "/api/Comments/{id}": {
+    "/api/Comments/GetCommentBy/{id}": {
       "get": {
         "tags": [
           "Comments"
@@ -2756,38 +2756,9 @@
             "description": "OK"
           }
         }
-      },
-      "post": {
-        "tags": [
-          "Replys"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Traloibinhluan"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Traloibinhluan"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Traloibinhluan"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
       }
     },
-    "/api/Replys/{id}": {
+    "/api/Replys/GetReplyBy/{id}": {
       "get": {
         "tags": [
           "Replys"
@@ -2808,7 +2779,40 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Replys/Create": {
+      "post": {
+        "tags": [
+          "Replys"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplyCommentVM"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplyCommentVM"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplyCommentVM"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Replys/Edit": {
       "put": {
         "tags": [
           "Replys"
@@ -2816,8 +2820,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -2828,17 +2831,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Traloibinhluan"
+                "$ref": "#/components/schemas/ReplyCommentVM"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Traloibinhluan"
+                "$ref": "#/components/schemas/ReplyCommentVM"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Traloibinhluan"
+                "$ref": "#/components/schemas/ReplyCommentVM"
               }
             }
           }
@@ -2848,7 +2851,9 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Replys/Delete": {
       "delete": {
         "tags": [
           "Replys"
@@ -2856,8 +2861,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -4469,6 +4473,36 @@
           "matKhau": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReplyCommentVM": {
+        "type": "object",
+        "properties": {
+          "maPhanHoi": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maBinhLuan": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "noiDung": {
+            "type": "string",
+            "nullable": true
+          },
+          "tenNguoiDung": {
+            "type": "string",
+            "nullable": true
+          },
+          "maNV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ngayTao": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

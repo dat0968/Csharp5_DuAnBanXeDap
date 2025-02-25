@@ -27,5 +27,8 @@ namespace MVCBanXeDap.ViewModels
         // Thêm trường hiển thị tên sản phẩm và tên khách hàng nếu cần
         public string? TenSanPham { get; set; }
         public string? TenKhachHang { get; set; }
+
+        // Thêm danh sách phản hồi
+        public List<ReplyVM> PhanHoi { get; set; } = new List<ReplyVM>();
     }
 }

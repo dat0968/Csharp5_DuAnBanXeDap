@@ -468,32 +468,6 @@
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.CommentsController",
-    "Method": "GetById",
-    "RelativePath": "api/Comments/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "APIBanXeDap.Models.Binhluan",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "APIBanXeDap.Controllers.CommentsController",
     "Method": "Create",
     "RelativePath": "api/Comments/create",
     "HttpMethod": "POST",
@@ -554,6 +528,32 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.CommentsController",
+    "Method": "GetById",
+    "RelativePath": "api/Comments/GetCommentBy/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "APIBanXeDap.Models.Binhluan",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "APIBanXeDap.Controllers.CompareProductsController",
@@ -1840,51 +1840,14 @@
   {
     "ContainingType": "APIBanXeDap.Controllers.ReplysController",
     "Method": "CreateReply",
-    "RelativePath": "api/Replys",
+    "RelativePath": "api/Replys/Create",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "reply",
-        "Type": "APIBanXeDap.Models.Traloibinhluan",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "APIBanXeDap.Controllers.ReplysController",
-    "Method": "GetReplyById",
-    "RelativePath": "api/Replys/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "APIBanXeDap.Controllers.ReplysController",
-    "Method": "UpdateReply",
-    "RelativePath": "api/Replys/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "reply",
-        "Type": "APIBanXeDap.Models.Traloibinhluan",
+        "Name": "replyVM",
+        "Type": "APIBanXeDap.ViewModels.ReplyCommentVM",
         "IsRequired": true
       }
     ],
@@ -1893,8 +1856,45 @@
   {
     "ContainingType": "APIBanXeDap.Controllers.ReplysController",
     "Method": "DeleteReply",
-    "RelativePath": "api/Replys/{id}",
+    "RelativePath": "api/Replys/Delete",
     "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ReplysController",
+    "Method": "UpdateReply",
+    "RelativePath": "api/Replys/Edit",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "replyVM",
+        "Type": "APIBanXeDap.ViewModels.ReplyCommentVM",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ReplysController",
+    "Method": "GetReplyById",
+    "RelativePath": "api/Replys/GetReplyBy/{id}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
