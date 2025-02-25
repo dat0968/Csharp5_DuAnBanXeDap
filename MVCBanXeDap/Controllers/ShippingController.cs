@@ -52,6 +52,8 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.PriceFilter = priceFilter;
                     ViewBag.SortByPrice = SortByPrice;
                     ViewBag.Token = accesstoken;
+                    var infomation = jwtToken.GetInformationUserFromToken(accesstoken);
+                    ViewBag.Role = infomation.VaiTro;
                 }
             }
             else

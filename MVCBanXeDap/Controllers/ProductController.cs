@@ -62,6 +62,8 @@ namespace MVCBanXeDap.Controllers
                 ViewBag.MaThuongHieu = MaThuongHieu;
                 ViewBag.Sort = sort;
                 ViewBag.Token = accesstoken;
+                var infomation = jwtToken.GetInformationUserFromToken(accesstoken);
+                ViewBag.Role = infomation.VaiTro;
             }
             else
             {
@@ -477,7 +479,7 @@ namespace MVCBanXeDap.Controllers
         public IActionResult GetPartialViewEdit([FromBody] ProductVM model)
         {
             var ListBrand = new List<BrandVM>();
-            HttpResponseMessage responseBrand = _client.GetAsync(_client.BaseAddress + "Brands/GettAllBrand").Result;
+            HttpResponseMessage responseBrand = _client.GetAsync(_client.BaseAddress + "Brands/GetAllBrand").Result;
             if (responseBrand.IsSuccessStatusCode)
             {
                 string data = responseBrand.Content.ReadAsStringAsync().Result;

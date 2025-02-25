@@ -10,7 +10,7 @@ namespace APIBanXeDap.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    
     public class SuppliersController : ControllerBase
     {
         private readonly ISupplierRepository SupplierRepository;
@@ -19,8 +19,9 @@ namespace APIBanXeDap.Controllers
         {
             this.SupplierRepository = SupplierRepository;
         }
-        [HttpGet("GetAllSupplier")]
-        public IActionResult GetAllSupplier(string? keywords, string? sort, int page)
+        [Authorize(Roles = "Admin, Nhân viên")]
+        [HttpGet("GetAllSupplierByPage")]
+        public IActionResult GetAllSupplierByPage(string? keywords, string? sort, int page = 1)
         {
             if(page >= 1)
             {
@@ -44,8 +45,15 @@ namespace APIBanXeDap.Controllers
             }
            
         }
+        [HttpGet("GetAllSupplier")]
+        public IActionResult GetAllSupplier()
+        {
+            var ListSuppliers = SupplierRepository.GetAllSupplier(null, null);
+            return Ok(ListSuppliers);
 
+        }
         // Lấy thông tin nhà cung cấp theo ID
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public IActionResult GetSupplierById([FromRoute] int id)
         {
@@ -71,6 +79,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost("CreateSupplier")]
         public IActionResult CreateSupplier(SupplierEM supplier)
         {
@@ -102,6 +111,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("EditSupplier")]
         public IActionResult EditSupplier(SupplierEM supplier)
         {
@@ -140,6 +150,7 @@ namespace APIBanXeDap.Controllers
                 });
             }
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("DeleteSupplier/{id}")]
         public IActionResult DeleteSupplier([FromRoute] int id)
         {

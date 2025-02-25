@@ -54,6 +54,8 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.Keywords = keywords;
                     ViewBag.Sort = sort;
                     ViewBag.Token = accesstoken;
+                    var infomation = jwtToken.GetInformationUserFromToken(accesstoken);
+                    ViewBag.Role = infomation.VaiTro;
                 }
                 else
                 {
@@ -167,6 +169,13 @@ namespace MVCBanXeDap.Controllers
                 return StatusCode((int)response.StatusCode);
             }
             return RedirectToAction("index", "Brand");
+        }
+
+
+        [HttpPost]
+        public IActionResult GetPartialViewEdit([FromBody] BrandVM model)
+        {          
+            return PartialView("~/Views/Shared/_BrandEdit.cshtml", model);
         }
     }
 }

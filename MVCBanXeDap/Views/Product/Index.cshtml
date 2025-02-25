@@ -74,16 +74,18 @@
                         <option selected="@(ViewBag.Sort == "asc")" value="asc">Khoảng Giá: Thấp đến Cao</option>
                         <option selected="@(ViewBag.Sort == "desc")" value="desc">Khoảng Giá: Cao đến Thấp</option>
                     </select>
-                 </div>
+                </div>
             </div>
 
             <!-- Nút Thêm sản phẩm -->
-            <div class="d-flex justify-content-start mb-3">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                    <i class="fas fa-plus"></i> Thêm sản phẩm
-                </button>
-            </div>
-
+            @if (ViewBag.Role == "Admin")
+            {
+                <div class="d-flex justify-content-start mb-3">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                        <i class="fas fa-plus"></i> Thêm sản phẩm
+                    </button>
+                </div>
+            }
             <!-- Danh sách sản phẩm -->
             <div class="table-responsive">
                 <table id="basic-datatables" class="display table table-striped table-hover">
@@ -118,13 +120,16 @@
                                             <i class="fas fa-eye"></i> Chi tiết
                                         </button>
                                         <partial name="_ProductDetails" model="@product"></partial>
-                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@product.MaSP-edit">
-                                            <i class="fas fa-edit"></i> Sửa
-                                        </button>
-                                        <partial name="_ProductEdit" model="@product"></partial>
-                                        <form method="post" asp-action="DeleteProduct" asp-controller="Product" asp-route-id="@product.MaSP" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')">
-                                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
-                                        </form>
+                                        @if (ViewBag.Role == "Admin")
+                                        {
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@product.MaSP-edit">
+                                                <i class="fas fa-edit"></i> Sửa
+                                            </button>
+                                            <partial name="_ProductEdit" model="@product"></partial>
+                                            <form method="post" asp-action="DeleteProduct" asp-controller="Product" asp-route-id="@product.MaSP" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')">
+                                                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
+                                            </form>
+                                        }                                                                              
                                     </div>
                                 </td>
                             </tr>
@@ -185,9 +190,11 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error Status: ", status);
-                console.error("Error Message: ", error);
+                console.error("Error Status: ", xhr.status);
+                console.error("Error Message: ", xhr.error);
                 console.error("Response Text: ", xhr.responseText);
+                console.log(maSP)
+                console.log(productData)
             }
         })
     }
@@ -216,7 +223,7 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error Status: ", status);
+                console.error("Error Status: ", xhr.status);
                 console.error("Error Message: ", error);
                 console.error("Response Text: ", xhr.responseText);
             }
@@ -247,7 +254,7 @@
         .then(data => {
             const tbody = document.querySelector("#basic-datatables tbody");
             tbody.innerHTML = "";
-
+            var role = @Html.Raw(Json.Serialize(ViewBag.Role));
             data.data.forEach(product => {
                 const row = `
                     <tr>
@@ -262,12 +269,15 @@
                                 <button data-product='${JSON.stringify(product)}' onclick="generateDetailsModal(this)" type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${product.maSP}">
                                     <i class="fas fa-eye"></i> Chi tiết
                                 </button>
-                                <button data-product='${JSON.stringify(product)}' onclick="generateEditModal(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${product.maSP}-edit">
+                                ${role == 'Admin' ? `
+                                    <button data-product='${JSON.stringify(product)}' onclick="generateEditModal(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${product.maSP}-edit">
                                     <i class="fas fa-edit"></i> Sửa
-                                </button>
-                                <form method="post" action="/Product/DeleteProduct/${product.maSP}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')">
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
-                                </form>
+                                    </button>
+                                    <form method="post" action="/Product/DeleteProduct/${product.maSP}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')">
+                                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Xóa</button>
+                                    </form>
+                                ` : ""}
+                                
                             </div>
                         </td>
                     </tr>

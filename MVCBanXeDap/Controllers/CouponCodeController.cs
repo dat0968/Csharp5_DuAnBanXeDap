@@ -53,6 +53,8 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.Status = status;
                     ViewBag.Sort = sort;
                     ViewBag.Token = accesstoken;
+                    var infomation = jwtToken.GetInformationUserFromToken(accesstoken);
+                    ViewBag.Role = infomation.VaiTro;
                 }
             }
             else

@@ -119,6 +119,7 @@ namespace MVCBanXeDap.Controllers
                                     var information = jwtToken.GetInformationUserFromToken(accesstoken);
                                     HttpContext.Session.SetString("HoTen", information.HoTen);
                                     HttpContext.Session.SetString("Hinh", information.Hinh ?? "");
+                                    HttpContext.Session.SetString("Role", information.VaiTro);
                                 }
                                 TempData["SuccessMessage"] = "Đăng nhập thành công";
                                 return RedirectToAction("Index", "Product");

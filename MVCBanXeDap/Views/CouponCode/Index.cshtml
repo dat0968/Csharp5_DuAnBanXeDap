@@ -52,12 +52,14 @@
             </div>
 
             <!-- Nút thêm mã coupon -->
-            <div class="d-flex justify-content-start mb-3">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCouponCodeModal">
-                    <i class="fas fa-plus"></i> Thêm mã coupon
-                </button>
-            </div>
-
+            @if (ViewBag.Role == "Admin")
+            {
+                <div class="d-flex justify-content-start mb-3">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCouponCodeModal">
+                        <i class="fas fa-plus"></i> Thêm mã coupon
+                    </button>
+                </div>
+            }          
             <!-- Danh sách mã coupon -->
             <div class="table-responsive">
                 <table class="display table table-striped table-hover">
@@ -101,27 +103,30 @@
                                         : "text-danger fw-bold"
                                     )">
                                     @(
-                                        couponcode.TrangThai
-                                        ? (couponcode.DaSuDung == true ? "Đã sử dụng" :
-                                        (couponcode.NgayHetHan > DateTime.Now ? "Còn hiệu lực" : "Đã hết hạn"))
-                                        : "Đã hủy"
-                                        )
+                                            couponcode.TrangThai
+                                            ? (couponcode.DaSuDung == true ? "Đã sử dụng" :
+                                            (couponcode.NgayHetHan > DateTime.Now ? "Còn hiệu lực" : "Đã hết hạn"))
+                                            : "Đã hủy"
+                                            )
                                 </td>
 
                                 <td>@($"{couponcode.MinimumOrderAmount} VNĐ")</td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        @if (couponcode.TrangThai == true && couponcode.DaSuDung == false && couponcode.NgayHetHan > DateTime.Now )
-                                        {
-                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@couponcode.Code-edit">
-                                                <i class="fas fa-edit"></i> Sửa
-                                            </button>
-                                            <partial name="_CouponCodeEdit" model="@couponcode"></partial>
-                                            <form method="post" asp-action="CancelCouponCode" asp-controller="CouponCode" asp-route-id="@couponcode.Code" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn hủy mã coupon này không?')">
-                                                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Hủy</button>
-                                            </form>
-                                        }           
-                                    </div>
+                                    @if(ViewBag.Role == "Admin")
+                                    {
+                                        <div class="btn-group" role="group">
+                                            @if (couponcode.TrangThai == true && couponcode.DaSuDung == false && couponcode.NgayHetHan > DateTime.Now)
+                                            {
+                                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@couponcode.Code-edit">
+                                                    <i class="fas fa-edit"></i> Sửa
+                                                </button>
+                                                <partial name="_CouponCodeEdit" model="@couponcode"></partial>
+                                                <form method="post" asp-action="CancelCouponCode" asp-controller="CouponCode" asp-route-id="@couponcode.Code" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn hủy mã coupon này không?')">
+                                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Hủy</button>
+                                                </form>
+                                            }
+                                        </div>
+                                    }                                   
                                 </td>
                             </tr>
                         }
@@ -169,7 +174,7 @@
             // Lấy table body và reset nội dung cũ
             const tableBody = document.getElementById("basic-datatables");
             tableBody.innerHTML = "";
-
+            var role = @Html.Raw(Json.Serialize(ViewBag.Role));
             // Duyệt qua danh sách coupon codes
             data.data.forEach(couponcode => {
                 const discount = couponcode.soTienGiam
@@ -202,20 +207,22 @@
                     <td><span class="${statusClass}">${statusText}</span></td>
                     <td>${couponcode.minimumOrderAmount} VNĐ</td>
                     <td>
-                        <div class="btn-group" role="group">
-                            ${(couponcode.trangThai && !couponcode.daSuDung)
-                                ? `<button data-couponcode='${JSON.stringify(couponcode)}' onclick="loadPartialView(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${couponcode.code}-edit">
-                                        <i class="fas fa-edit"></i> Sửa
-                                    </button>`
-                                : ""}
-                            ${(!couponcode.daSuDung && couponcode.trangThai)
-                                ? `<form method="post" action="/CouponCode/CancelCouponCode/${couponcode.code}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn hủy mã coupon này không?')">
-                                        <button class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash"></i> Hủy
-                                        </button>
-                                    </form>`
-                                : ""}
-                        </div>
+                        ${role == 'Admin' ? `
+                            <div class="btn-group" role="group">
+                                ${(couponcode.trangThai && !couponcode.daSuDung)
+                                    ? `<button data-couponcode='${JSON.stringify(couponcode)}' onclick="loadPartialView(this)" type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-${couponcode.code}-edit">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </button>`
+                                    : ""}
+                                ${(!couponcode.daSuDung && couponcode.trangThai)
+                                    ? `<form method="post" action="/CouponCode/CancelCouponCode/${couponcode.code}" style="display: inline" onsubmit="return confirm('Bạn có chắc chắn muốn hủy mã coupon này không?')">
+                                            <button class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Hủy
+                                            </button>
+                                        </form>`
+                                    : ""}
+                            </div>
+                        ` : ""}                      
                     </td>
                 </tr>
                 `;

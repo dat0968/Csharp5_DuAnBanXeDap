@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MVCBanXeDap.Models;
 using MVCBanXeDap.Services.Jwt;
+using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
@@ -39,7 +40,7 @@ namespace MVCBanXeDap.Controllers
         {
             var accesstoken = await SetAuthorizationHeader();
             var ListSupplier = new List<SupplierVM>();
-            HttpResponseMessage responseSupplier = await _client.GetAsync(_client.BaseAddress + $"Suppliers/GetAllSupplier?keywords={keywords}&sort={sort}&page={page}");
+            HttpResponseMessage responseSupplier = await _client.GetAsync(_client.BaseAddress + $"Suppliers/GetAllSupplierByPage?keywords={keywords}&sort={sort}&page={page}");
             if (responseSupplier.IsSuccessStatusCode)
             {
                 string data = responseSupplier.Content.ReadAsStringAsync().Result;
@@ -50,6 +51,8 @@ namespace MVCBanXeDap.Controllers
                 ViewBag.Keywords = keywords;
                 ViewBag.Sort = sort;
                 ViewBag.Token = accesstoken;
+                var infomation = jwtToken.GetInformationUserFromToken(accesstoken);
+                ViewBag.Role = infomation.VaiTro;
             }
             else
             {
@@ -145,6 +148,19 @@ namespace MVCBanXeDap.Controllers
                 return StatusCode((int)response.StatusCode);
             }
             return RedirectToAction("index", "Supplier");
+        }
+
+
+        [HttpPost]
+        public IActionResult GetPartialViewEdit([FromBody] SupplierVM model)
+        {
+            return PartialView("~/Views/Shared/_SupplierEdit.cshtml", model);
+        }
+        [HttpPost]
+        public IActionResult GetPartialViewDetails([FromBody] SupplierVM model)
+        {
+
+            return PartialView("~/Views/Shared/_SupplierDetails.cshtml", model);
         }
     }
 }

@@ -5,28 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Kaiadmin - Bootstrap 5 Admin Dashboard</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
-          name="viewport" />
+    name="viewport" />
     <link rel="icon"
-          href="~/AdminTemplate/assets/img/kaiadmin/favicon.ico"
-          type="image/x-icon" />
+    href="~/AdminTemplate/assets/img/kaiadmin/favicon.ico"
+    type="image/x-icon" />
 
     <!-- Fonts and icons -->
     <script src="~/AdminTemplate/assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
         WebFont.load({
-          google: { families: ["Public Sans:300,400,500,600,700"] },
-          custom: {
-            families: [
-              "Font Awesome 5 Solid",
-              "Font Awesome 5 Regular",
-              "Font Awesome 5 Brands",
-              "simple-line-icons",
-            ],
-            urls: ["AdminTemplate/assets/css/fonts.min.css"],
-          },
-          active: function () {
-            sessionStorage.fonts = true;
-          },
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+        families: [
+        "Font Awesome 5 Solid",
+        "Font Awesome 5 Regular",
+        "Font Awesome 5 Brands",
+        "simple-line-icons",
+        ],
+        urls: ["AdminTemplate/assets/css/fonts.min.css"],
+        },
+        active: function () {
+        sessionStorage.fonts = true;
+        },
         });
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -42,36 +42,36 @@
 
     <style>
         .logo-header {
-            background-color: #1a1a1a; /* Màu nền tối */
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        background-color: #1a1a1a; /* Màu nền tối */
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         }
 
         .logo {
-            font-size: 2.4rem; /* Tăng kích thước chữ */
-            font-weight: bold; /* Đậm */
-            color: #fff; /* Màu chữ trắng */
-            text-transform: uppercase; /* Viết hoa toàn bộ */
-            text-decoration: none; /* Bỏ gạch chân */
-            letter-spacing: 2px; /* Khoảng cách giữa các ký tự */
-            position: relative;
+        font-size: 2.4rem; /* Tăng kích thước chữ */
+        font-weight: bold; /* Đậm */
+        color: #fff; /* Màu chữ trắng */
+        text-transform: uppercase; /* Viết hoa toàn bộ */
+        text-decoration: none; /* Bỏ gạch chân */
+        letter-spacing: 2px; /* Khoảng cách giữa các ký tự */
+        position: relative;
         }
         .topbar-toggler {
-            background: transparent;
-            border: none;
-            color: #fff; /* Màu icon */
-            font-size: 1.6rem;
-            cursor: pointer;
+        background: transparent;
+        border: none;
+        color: #fff; /* Màu icon */
+        font-size: 1.6rem;
+        cursor: pointer;
         }
 
         .topbar-toggler i {
-            font-size: 2.4rem; /* Kích thước biểu tượng */
+        font-size: 2.4rem; /* Kích thước biểu tượng */
         }
         .tawk-bubble-container img:hover {
-            transform: scale(1.1); /* Phóng to 10% khi hover */
-            transition: transform 0.2s ease; /* Hiệu ứng mượt */
+        transform: scale(1.1); /* Phóng to 10% khi hover */
+        transition: transform 0.2s ease; /* Hiệu ứng mượt */
         }
 
     </style >
@@ -107,12 +107,6 @@
                             </span>
                         </li>
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="Dashboard">
-                                <i class="fa fa-chart-area"></i> <!-- Biểu tượng tổng quan -->
-                                TỔNG QUAN
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a asp-action="Index" asp-controller="Product">
                                 <i class="fa fa-box"></i> <!-- Icon sản phẩm -->
                                 QUẢN LÝ SẢN PHẨM
@@ -142,12 +136,15 @@
                                 QUẢN LÝ BÌNH LUẬN
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a asp-action="Index" asp-controller="NhanVien">
-                                <i class="fa fa-user-tie"></i> <!-- Icon nhân viên -->
-                                QUẢN LÝ NHÂN VIÊN
-                            </a>
-                        </li>
+                        @if(Context.Session.GetString("Role") == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a asp-action="Index" asp-controller="NhanVien">
+                                    <i class="fa fa-user-tie"></i> <!-- Icon nhân viên -->
+                                    QUẢN LÝ NHÂN VIÊN
+                                </a>
+                            </li>
+                        }                       
                         <li class="nav-item">
                             <a asp-action="Index" asp-controller="Supplier">
                                 <i class="fa fa-industry"></i> <!-- Icon nhà cung cấp -->
@@ -166,12 +163,15 @@
                                 QUẢN LÝ ĐƠN HÀNG
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="/Dashboard">
-                                <i class="fa fa-chart-bar"></i> <!-- Icon thống kê -->
-                                THỐNG KÊ
-                            </a>
-                        </li>
+                        @if (Context.Session.GetString("Role") == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a href="/Dashboard">
+                                    <i class="fa fa-chart-bar"></i> <!-- Icon thống kê -->
+                                    THỐNG KÊ
+                                </a>
+                            </li>
+                        }                      
                     </ul>
                 </div>
             </div>

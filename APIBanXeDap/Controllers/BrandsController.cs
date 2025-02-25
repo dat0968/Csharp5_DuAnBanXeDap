@@ -20,7 +20,7 @@ namespace APIBanXeDap.Controllers
         {
             this.BrandRepository = BrandRepository;
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Nhân viên")]
         [HttpGet("GetAllBrandByPage")]
         public IActionResult GetAllBrandByPage(string? keywords, string? sort, int page = 1)
         {
