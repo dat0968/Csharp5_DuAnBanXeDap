@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace MVCBanXeDap.Controllers
@@ -24,8 +25,15 @@ namespace MVCBanXeDap.Controllers
             this.jwtToken = jwtToken;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            SetAuthorizationHeader();
+            var response = await _client.GetAsync(_client.BaseAddress + "wishlist/IsAuth");
+            if (!response.IsSuccessStatusCode)
+            {
+                int Status = (int)response.StatusCode;
+                return RedirectToAction("Error", "Home", Status);
+            }
             return View();
         }
 
@@ -42,13 +50,9 @@ namespace MVCBanXeDap.Controllers
             {
                 return Json(new { success = false, message = "Bạn không phải là khách hàng để yêu thích sản phẩm." });
             }
-            int? idUser = await GetUserIdAsync();
-            if (idUser == null)
-            {
-                return Json(new { success = false, message = "Bạn cần đăng nhập để thay đổi yêu thích.", isLoginAgain = true });
-            }
+            SetAuthorizationHeader();
 
-            var response = await _client.PutAsJsonAsync(_client.BaseAddress + $"Wishlist/ChangeStatusWishlist/{idProduct}&{idUser}", new { });
+            var response = await _client.PutAsJsonAsync(_client.BaseAddress + $"Wishlist/ChangeStatusWishlist/{idProduct}", new { });
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<object>();
@@ -72,13 +76,9 @@ namespace MVCBanXeDap.Controllers
                 return Json(new { data = false });
             }
 
-            int? idUser = await GetUserIdAsync();
-            if (idUser == null)
-            {
-                return Json(new { data = false });
-            }
+            SetAuthorizationHeader();
 
-            var response = await _client.GetAsync(_client.BaseAddress + $"Wishlist/IsOneInWishlist/{idProduct}&{idUser}");
+            var response = await _client.GetAsync(_client.BaseAddress + $"Wishlist/IsOneInWishlist/{idProduct}");
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<object>();
@@ -102,13 +102,9 @@ namespace MVCBanXeDap.Controllers
                 return Json(new { data = Enumerable.Repeat(false, idProducts.Length).ToArray() });
             }
 
-            int? idUser = await GetUserIdAsync();
-            if (idUser == null)
-            {
-                return Json(new { data = Enumerable.Repeat(false, idProducts.Length).ToArray() });
-            }
+            SetAuthorizationHeader();
 
-            var response = await _client.PostAsJsonAsync(_client.BaseAddress + $"Wishlist/IsManyInWishlist/{idUser}", idProducts);
+            var response = await _client.PostAsJsonAsync(_client.BaseAddress + $"Wishlist/IsManyInWishlist/", idProducts);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<object>();
@@ -120,13 +116,9 @@ namespace MVCBanXeDap.Controllers
 
         public async Task<IActionResult> GetWishlistData()
         {
-            int? idUser = await GetUserIdAsync();
-            if (idUser == null)
-            {
-                return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
-            }
+            SetAuthorizationHeader();
 
-            var response = await _client.GetAsync(_client.BaseAddress + $"Wishlist/GetAllWishlistItems/{idUser}");
+            var response = await _client.GetAsync(_client.BaseAddress + $"Wishlist/GetAllWishlistItems/");
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<IEnumerable<WishlistVM>>();
@@ -149,29 +141,14 @@ namespace MVCBanXeDap.Controllers
 
             return role;
         }
-        [NonAction]
-        private async Task<int?> GetUserIdAsync()
+        private async void SetAuthorizationHeader()
         {
-            var accessToken = HttpContext.Session.GetString("AccessToken");
-            var refreshToken = HttpContext.Session.GetString("RefreshToken");
-
-            if (accessToken == null || refreshToken == null)
-            {
-                return null;
-            }
-
             var validateAccessToken = await jwtToken.ValidateAccessToken();
-            if (validateAccessToken == null)
+            if (!string.IsNullOrEmpty(validateAccessToken))
             {
-                return null;
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
             }
-            else
-            {
-                HttpContext.Session.SetString("AccessToken", validateAccessToken);
-            }
-            var information = jwtToken.GetInformationUserFromToken(validateAccessToken);
-            var id = information.Id;
-            return id;
         }
         #endregion
     }

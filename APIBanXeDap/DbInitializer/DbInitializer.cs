@@ -105,7 +105,7 @@ namespace APIBanXeDap.DbInitializer
                         DiaChiNhanHang = $"Địa chỉ {i + 1}",
                         NgayTao = DateOnly.FromDateTime(DateTime.Now.AddDays(-rand.Next(1, 365 * 5))),
                         ThoiGianGiao = DateOnly.FromDateTime(DateTime.Now.AddDays(rand.Next(7, 365 * 5))),
-                        Httt = rand.Next(0, 2) == 0 ? "COD" : "VNPAY", // Hình thức thanh toán
+                        Httt = rand.Next(0, 2) == 0 ? "COD" : "VNPAY", // Thanh Toán
                         TinhTrang = tinhTrang,
                         Hoten = $"Khách hàng {i + 1}",
                         Sdt = "0123456789",

@@ -197,29 +197,29 @@ namespace MVCBanXeDap.Controllers
 
                     table.AddCell(new Cell().Add(new Paragraph(item.TenSanPham)));
                     table.AddCell(new Cell().Add(new Paragraph(item.SoLuong.ToString())).SetTextAlignment(TextAlignment.CENTER));
-                    table.AddCell(new Cell().Add(new Paragraph($"{String.Format("{0:n0}", item.DonGia)} đ")).SetTextAlignment(TextAlignment.RIGHT));
-                    table.AddCell(new Cell().Add(new Paragraph($"{String.Format("{0:n0}", itemTotal)} đ"))).SetTextAlignment(TextAlignment.RIGHT);
+                    table.AddCell(new Cell().Add(new Paragraph($"{String.Format("{0:n0}", item.DonGia)} VNĐ")).SetTextAlignment(TextAlignment.RIGHT));
+                    table.AddCell(new Cell().Add(new Paragraph($"{String.Format("{0:n0}", itemTotal)} VNĐ"))).SetTextAlignment(TextAlignment.RIGHT);
                 }
 
                 document.Add(table.SetMarginBottom(20));
 
                 // Thêm thông tin Tiền Gốc
-                document.Add(new Paragraph($"Tiền Gốc: {String.Format("{0:n0}", invoice.TienGoc)} đ")
+                document.Add(new Paragraph($"Tiền Gốc: {String.Format("{0:n0}", invoice.TienGoc)} VNĐ")
                     .SetFontSize(12)
                     .SetMarginBottom(20));
 
                 // Thêm thông tin Phí Vận Chuyển
-                document.Add(new Paragraph($"Phí Vận Chuyển: {String.Format("{0:n0}", invoice.PhiVanChuyen)} đ")
+                document.Add(new Paragraph($"Phí Vận Chuyển: {String.Format("{0:n0}", invoice.PhiVanChuyen)} VNĐ")
                     .SetFontSize(12)
                     .SetMarginBottom(10));
 
                 // Thêm thông tin Giảm Giá Mã Coupon
-                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {String.Format("{0} VNĐ", invoice.GiamGiaMaCoupon)}")
+                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {String.Format("{0:n0}", invoice.GiamGiaMaCoupon)} VNĐ")
                     .SetFontSize(12)
                     .SetMarginBottom(10));
 
                 // Thêm thông tin Tổng Tiền
-                document.Add(new Paragraph($"Tổng Tiền: {String.Format("{0:n0}", invoice.TongTien)} đ")
+                document.Add(new Paragraph($"Tổng Tiền: {String.Format("{0:n0}", invoice.TongTien)} VNĐ")
                     .SetBold()
                     .SetFontSize(14));
 
@@ -328,8 +328,8 @@ namespace MVCBanXeDap.Controllers
 
                     table.AddCell(new Paragraph(item.TenSanPham));
                     table.AddCell(new Paragraph(item.SoLuong.ToString()).SetTextAlignment(TextAlignment.CENTER));
-                    table.AddCell(new Paragraph($"{item.DonGia:n0} đ").SetTextAlignment(TextAlignment.RIGHT));
-                    table.AddCell(new Paragraph($"{subTotal:n0} đ").SetTextAlignment(TextAlignment.RIGHT));
+                    table.AddCell(new Paragraph($"{item.DonGia:n0} VNĐ").SetTextAlignment(TextAlignment.RIGHT));
+                    table.AddCell(new Paragraph($"{subTotal:n0} VNĐ").SetTextAlignment(TextAlignment.RIGHT));
                 }
 
                 document.Add(table.SetMarginBottom(20));
@@ -354,13 +354,13 @@ namespace MVCBanXeDap.Controllers
                 }
 
                 // Tổng tiền, hiển thị các thông tin đã xử lý sẵn
-                document.Add(new Paragraph($"Tiền Gốc: {invoice.TienGoc:n0} đ")
+                document.Add(new Paragraph($"Tiền Gốc: {invoice.TienGoc:n0} VNĐ")
                     .SetFontSize(12));
-                document.Add(new Paragraph($"Phí Vận Chuyển: {invoice.PhiVanChuyen:n0} đ")
+                document.Add(new Paragraph($"Phí Vận Chuyển: {invoice.PhiVanChuyen:n0} VNĐ")
                     .SetFontSize(12));
-                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {invoice.GiamGiaMaCoupon} VNĐ")
+                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {invoice.GiamGiaMaCoupon:n0} VNĐ")
                     .SetFontSize(12));
-                document.Add(new Paragraph($"Tổng tiền: {invoice.TongTien:n0} đ")
+                document.Add(new Paragraph($"Tổng tiền: {invoice.TongTien:n0} VNĐ")
                     .SetBold()
                     .SetFontSize(14)
                     .SetMarginBottom(20));

@@ -7,7 +7,7 @@
         public DateTime NgayTao { get; set; }
         public DateTime ThoiGianGiao { get; set; }
         public string TinhTrang { get; set; }
-        public string HinhThucThanhToan { get; set; } // Hình thức thanh toán
+        public string HinhThucThanhToan { get; set; } // Thanh Toán
         public string TenKhachHang { get; set; } // Họ tên khách hàng
         public int MaNhanVien { get; set; }
         public string TenNhanVien { get; set; }

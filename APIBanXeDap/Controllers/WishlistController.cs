@@ -1,5 +1,6 @@
 ﻿using APIBanXeDap.Repository.YeuThich;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace APIBanXeDap.Controllers
 {
@@ -14,54 +15,95 @@ namespace APIBanXeDap.Controllers
             _yeuThichRepo = yeuThichRepo;
         }
 
-        [HttpPut("{idProduct}&{idUser}")]
-        public async Task<IActionResult> ChangeStatusWishlist(int idProduct, int idUser)
+        [HttpGet]
+        public IActionResult IsAuth()
         {
-            var result = await _yeuThichRepo.ChangeWishlist(idProduct, "SanPham", idUser); // type Binhluan still not support
+            return Ok();
+        }
+
+        [HttpPut("{idProduct}")]
+        public async Task<IActionResult> ChangeStatusWishlist(int idProduct)
+        {
+            int? idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (!idUser.HasValue)
+            {
+                return Unauthorized();
+            }
+            var result = await _yeuThichRepo.ChangeWishlist(idProduct, "SanPham", idUser.Value); // type Binhluan still not support
             return result;
         }
 
-        [HttpPut("{idUser}")]
-        public async Task<IActionResult> ChangeListStatusWishlist([FromBody] int[] idProducts, int idUser)
+        [HttpPut]
+        public async Task<IActionResult> ChangeListStatusWishlist([FromBody] int[] idProducts)
         {
+            int? idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (!idUser.HasValue)
+            {
+                return Unauthorized();
+            }
             foreach (var idProduct in idProducts)
             {
-                await _yeuThichRepo.ChangeWishlist(idProduct, "SanPham", idUser); // type Binhluan still not support
+                await _yeuThichRepo.ChangeWishlist(idProduct, "SanPham", idUser.Value); // type Binhluan still not support
             }
             return Ok();
         }
 
-        [HttpGet("{idProduct}&{idUser}")]
-        public async Task<IActionResult> IsOneInWishlist(int idProduct, int idUser)
+        [HttpGet("{idProduct}")]
+        public async Task<IActionResult> IsOneInWishlist(int idProduct)
         {
-            var exists = await _yeuThichRepo.IsOneInWishlist(idProduct, idUser);
+            int? idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (!idUser.HasValue)
+            {
+                return Unauthorized();
+            }
+            var exists = await _yeuThichRepo.IsOneInWishlist(idProduct, idUser.Value);
             return Ok(exists);
         }
 
-        [HttpGet("{idUser}")]
-        public async Task<IActionResult> IsManyInWishlist([FromBody] int[] idProducts, int idUser)
+        [HttpGet]
+        public async Task<IActionResult> IsManyInWishlist([FromBody] int[] idProducts)
         {
-            var results = await _yeuThichRepo.IsManyInWishlist(idProducts, idUser);
+            int? idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (!idUser.HasValue)
+            {
+                return Unauthorized();
+            }
+            var results = await _yeuThichRepo.IsManyInWishlist(idProducts, idUser.Value);
             return Ok(results);
         }
 
-        [HttpGet("{idUser}")]
-        public async Task<IActionResult> GetAllWishlistItems(int idUser)
+        [HttpGet]
+        public async Task<IActionResult> GetAllWishlistItems()
         {
-            var result = await _yeuThichRepo.GetAllYeuThichVMAsync(x => x.MaNguoiDung == idUser, includeProperties: "Sanpham");
+            int? idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (!idUser.HasValue)
+            {
+                return Unauthorized();
+            }
+            var result = await _yeuThichRepo.GetAllYeuThichVMAsync(x => x.MaNguoiDung == idUser.Value, includeProperties: "Sanpham,Sanpham.MaNhaCcNavigation,Sanpham.MaThuongHieuNavigation,Sanpham.MaDanhMucNavigation");
             return Ok(result);
         }
-        [HttpGet("{idUser}")]
-        public async Task<IActionResult> CountWishlistOfUser(int idUser)
+        [HttpGet]
+        public async Task<IActionResult> CountWishlistOfUser()
         {
-            var result = await _yeuThichRepo.GetAllYeuThichVMAsync(x => x.MaNguoiDung == idUser, includeProperties: "Sanpham");
+            int? idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (!idUser.HasValue)
+            {
+                return Unauthorized();
+            }
+            var result = await _yeuThichRepo.GetAllYeuThichVMAsync(x => x.MaNguoiDung == idUser.Value, includeProperties: "Sanpham,Sanpham.MaNhaCcNavigation,Sanpham.MaThuongHieuNavigation,Sanpham.MaDanhMucNavigation");
             return Ok(result.Count());
         }
 
-        [HttpGet("{idProduct}&{idUser}")]
-        public async Task<IActionResult> GetWishlistItem(int idProduct, int idUser)
+        [HttpGet("{idProduct}")]
+        public async Task<IActionResult> GetWishlistItem(int idProduct)
         {
-            var result = await _yeuThichRepo.GetAsync(x => x.MaDoiTuong == idProduct && x.MaNguoiDung == idUser, includeProperties: "Sanpham");
+            int? idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (!idUser.HasValue)
+            {
+                return Unauthorized();
+            }
+            var result = await _yeuThichRepo.GetAsync(x => x.MaDoiTuong == idProduct &&  x.MaNguoiDung == idUser.Value, includeProperties: "Sanpham,Sanpham.MaNhaCcNavigation,Sanpham.MaThuongHieuNavigation,Sanpham.MaDanhMucNavigation");
             return Ok(result);
         }
     }

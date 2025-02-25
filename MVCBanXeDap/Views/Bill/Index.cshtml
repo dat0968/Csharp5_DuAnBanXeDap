@@ -63,12 +63,12 @@
                         <input id="ngayTao" name="ngayTao" type="date" class="form-control" onchange="loadDT()" />
                     </div>
                     <div class="col-md-3">
-                        <label for="httt" class="form-label">Hình thức thanh toán</label>
+                        <label for="httt" class="form-label">Thanh Toán</label>
                         <select id="httt" name="httt" class="form-select" onchange="loadDT()">
-                            <option value="">Lọc theo hình thức thanh toán</option>
+                            <option value="">Lọc theo Thanh Toán</option>
                             <option value="VNPAY">VNPAY</option>
                             <option value="COD">COD</option>
-                            <!-- Các giá trị khác cho hình thức thanh toán -->
+                            <!-- Các giá trị khác cho Thanh Toán -->
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -162,7 +162,7 @@
                 columns: [
                     { title: 'Mã', data: 'maHoaDon', width: '4%', className: 'text-center' },
                     { title: 'Ngày Tạo', data: 'ngayTao', width: '10%', className: 'text-center' },
-                    { title: 'Hình Thức Thanh Toán', data: 'httt', width: '18%', className: 'text-center' },
+                    { title: 'Thanh Toán', data: 'httt', width: '18%', className: 'text-center' },
                     { title: 'Tình Trạng', data: 'tinhTrang', width: '18%', className: 'text-center' },
                     { title: 'Họ Tên', data: 'hoten', width: '15%', className: 'text-center' },
                     { title: 'Số Điện Thoại', data: 'sdt', width: '10%', className: 'text-center' },

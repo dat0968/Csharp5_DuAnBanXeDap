@@ -42,72 +42,72 @@
         <div class="card-body">
             <!-- Bộ lọc: Bộ lọc hóa đơn -->
             <div class="mb-4">
-                <h5 class="mb-3">Bộ lọc hóa đơn</h5>
-                <div class="row g-3">
+                <h4 class="mb-3">Bộ lọc hóa đơn</h4>
+
+                <!-- Hàng 1: Lọc thời gian -->
+                <div class="row g-3 mb-3">
                     <!-- Ngày tạo -->
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="mb-2">
                             <label for="ngayTao" class="form-label">Ngày tạo</label>
                         </div>
-                        <div>
-                            <input id="ngayTao" name="ngayTao" type="date" class="form-control" />
-                        </div>
+                        <input id="ngayTao" name="ngayTao" type="date" class="form-control" />
                     </div>
 
                     <!-- Thời gian giao -->
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="mb-2">
                             <label for="thoiGianGiao" class="form-label">Thời gian giao</label>
                         </div>
-                        <div>
-                            <input id="thoiGianGiao" name="thoiGianGiao" type="date" class="form-control" />
-                        </div>
-                    </div>
-
-                    <!-- Hình thức thanh toán -->
-                    <div class="col-md-3">
-                        <div class="mb-2">
-                            <label for="httt" class="form-label">Thanh toán</label>
-                        </div>
-                        <div>
-                            <select id="httt" name="httt" class="form-select">
-                                <option value="" disabled selected hidden>Hình thức thanh toán</option>
-                                <option value="VNPAY">VNPAY</option>
-                                <option value="COD">COD</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Tình trạng -->
-                    <div class="col-md-3">
-                        <div class="mb-2">
-                            <label for="tinhTrang" class="form-label">Tình trạng</label>
-                        </div>
-                        <div>
-                            <select id="tinhTrang" name="tinhTrang" class="form-select">
-                                <option value="" disabled selected hidden>Tình trạng</option>
-                                <option value="Chờ xác nhận">Chờ xác nhận</option>
-                                <option value="Đã xác nhận">Đã xác nhận</option>
-                                <option value="Đã giao cho đơn vị vận chuyển">Đã giao cho đơn vị vận chuyển</option>
-                                <option value="Đang giao hàng">Đang giao hàng</option>
-                                <option value="Chờ thanh toán">Chờ thanh toán</option>
-                                <option value="Đã thanh toán">Đã thanh toán</option>
-                                <option value="Hoàn trả/Hoàn tiền">Hoàn trả/Hoàn tiền</option>
-                                <option value="Đã hủy">Đã hủy</option>
-                            </select>
-                        </div>
+                        <input id="thoiGianGiao" name="thoiGianGiao" type="date" class="form-control" />
                     </div>
                 </div>
+
+                <!-- Hàng 2: Lọc thanh toán ở trên, tình trạng ở dưới -->
+                <div class="row g-3">
+                    <!-- Thanh toán (Hàng thứ nhất) -->
+                    <div class="col-12">
+                        <div class="mb-2">
+                            <label class="form-label">Thanh toán</label>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 justify-content-start" id="httt">
+                            <button class="btn btn-outline-secondary payment-filter" type="button" data-value="VNPAY">VNPAY</button>
+                            <button class="btn btn-outline-secondary payment-filter" type="button" data-value="COD">COD</button>
+                        </div>
+                        <!-- Gắn ID ẩn để lưu giá trị thanh toán -->
+                        <input type="hidden" id="httt-value" name="httt" />
+                    </div>
+
+                    <!-- Tình trạng (Hàng thứ hai) -->
+                    <div class="col-12">
+                        <div class="mb-2">
+                            <label class="form-label">Tình trạng</label>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 justify-content-start" id="tinhTrang">
+                            <button class="btn btn-outline-primary status-filter" type="button" data-value="Chờ xác nhận">Chờ xác nhận</button>
+                            <button class="btn btn-outline-primary status-filter" type="button" data-value="Đã xác nhận">Đã xác nhận</button>
+                            <button class="btn btn-outline-primary status-filter" type="button" data-value="Đã giao cho đơn vị vận chuyển">Đã giao cho đơn vị vận chuyển</button>
+                            <button class="btn btn-outline-primary status-filter" type="button" data-value="Đang giao hàng">Đang giao hàng</button>
+                            <button class="btn btn-outline-primary status-filter" type="button" data-value="Chờ thanh toán">Chờ thanh toán</button>
+                            <button class="btn btn-outline-primary status-filter" type="button" data-value="Đã thanh toán">Đã thanh toán</button>
+                            <button class="btn btn-outline-primary status-filter" type="button" data-value="Hoàn trả/Hoàn tiền">Hoàn trả/Hoàn tiền</button>
+                            <button class="btn btn-outline-primary status-filter" type="button" data-value="Đã hủy">Đã hủy</button>
+                        </div>
+                        <!-- Gắn ID ẩn để lưu giá trị tình trạng -->
+                        <input type="hidden" id="tinhTrang-value" name="tinhTrang" />
+                    </div>
+                </div>
+
             </div>
 
 
             <!-- Danh sách hóa đơn -->
             <div class="table-responsive">
                 <table id="basic-datatables" class="display table table-striped table-hover">
+                    <!-- Nội dung của bảng -->
                 </table>
             </div>
         </div>
-
 
     </div>
 </div>
@@ -136,27 +136,57 @@
     <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 
     <script>
+        //Load datatable ban đầu
         $(document).ready(function () {
             let datatable;
             loadDatatable();
         });
+
+        //Gắn event lọc
         $(document).ready(function() {
-            // Cập nhật lại dữ liệu khi thay đổi bộ lọc
-            $('#ngayTao, #httt, #tinhTrang, #thoiGianGiao').on('change', function () {
+            // Xử lý lựa chọn tình trạng
+            $('#tinhTrang .status-filter').on('click', function () {
+                // Loại bỏ trạng thái "active" khỏi tất cả các nút
+                $('#tinhTrang .status-filter').removeClass('active');
+                // Đánh dấu nút hiện tại đang chọn
+                $(this).addClass('active');
+                // Lưu giá trị vào input ẩn
+                $('#tinhTrang-value').val($(this).data('value'));
+                // Cập nhật lại dữ liệu bảng
+                datatable.ajax.reload();
+            });
+
+            // Xử lý lựa chọn thanh toán
+            $('#httt .payment-filter').on('click', function () {
+                // Loại bỏ trạng thái "active" khỏi tất cả các nút
+                $('#httt .payment-filter').removeClass('active');
+                // Đánh dấu nút hiện tại đang chọn
+                $(this).addClass('active');
+                // Lưu giá trị vào input ẩn
+                $('#httt-value').val($(this).data('value'));
+                // Cập nhật lại dữ liệu bảng
+                datatable.ajax.reload();
+            });
+
+            // Xử lý sự kiện thay đổi cho các trường ngày
+            $('#ngayTao, #thoiGianGiao').on('change', function () {
+                // Cập nhật lại dữ liệu bảng
                 datatable.ajax.reload();
             });
         });
+
+
         function loadDatatable() {
             // DataTable khởi tạo
             datatable = $('#basic-datatables').DataTable({
                 ajax: {
                     url: '/ClientOrder/getall', // Đường dẫn API trả về danh sách hóa đơn
                     data: function (d) {
-                        // Thêm các tham số lọc từ input của form
+                        // Lấy giá trị từ các trường lọc
                         d.ngayTao = $('#ngayTao').val();
-                        d.httt = $('#httt').val();
-                        d.tinhTrang = $('#tinhTrang').val();
                         d.thoiGianGiao = $('#thoiGianGiao').val();
+                        d.tinhTrang = $('#tinhTrang-value').val();
+                        d.httt = $('#httt-value').val();
                     },
                     method: 'GET',
                     dataSrc: function(response) {
@@ -185,58 +215,59 @@
                     }
                 },
                 columns: [
-                    { title: 'Mã', data: 'maHoaDon', className: 'text-center table-cell-ellipsis', width: '10%' },
-                    { title: 'Ngày Tạo', data: 'ngayTao', className: 'text-center table-cell-ellipsis', width: '15%' },
-                    { title: 'Hình Thức Thanh Toán', data: 'httt', className: 'text-center table-cell-ellipsis', width: '15%' },
+                    { title: 'Mã', data: 'maHoaDon', className: 'text-center table-cell-ellipsis  align-middle', width: '5%' },
+                    { title: 'Thanh Toán', data: 'httt', className: 'text-center table-cell-ellipsis  align-middle', width: '20%' },
                     {
                         title: 'Tình Trạng',
                         data: 'tinhTrang',
-                        className: 'text-center table-cell-ellipsis',
+                        className: 'text-center table-cell-ellipsis  align-middle',
                         width: '15%',
-                        render: function (data, type, row) {
-                            let options = [];
-                            switch (data) {
-                                case "Chờ xác nhận":
-                                case "Đã xác nhận":
-                                case "Đã giao cho đơn vị vận chuyển":
-                                case "Đang giao hàng":
-                                case "Đã giao cho khách":
-                                case "Hoàn trả/Hoàn tiền":
-                                case "Đã hủy":
-                                    options.push(data);
-                                    break;
-                                case "Chờ thanh toán":
-                                    options.push(data, "Hủy đơn");
-                                    break;
-                                case "Đã thanh toán":
-                                    options.push(data, "Hoàn trả/Hoàn tiền");
-                                    break;
-                            }
-                            return `
-                                <select class="form-select">
-                                    ${options.map(option =>
-                                        `<option value="${option}" ${data === option ? 'selected' : ''}>${option}</option>`
-                                    ).join('')}
-                                </select>`;
+                        render: function (data) {
+                            return `<span>${data}</span>`; // Show the status as plain text
                         }
                     },
-                    { title: 'Họ Tên', data: 'hoten', className: 'text-center table-cell-ellipsis', width: '15%' },
-                    { title: 'Số Điện Thoại', data: 'sdt', className: 'text-center table-cell-ellipsis', width: '10%' },
-                    { title: 'Thời Gian Giao', data: 'thoiGianGiao', className: 'text-center table-cell-ellipsis', width: '15%' },
+                    { title: 'Địa chỉ nhận', data: 'diaChiNhanHang', className: 'text-center table-cell-ellipsis  align-middle', width: '15%' },
+                    { title: 'Số Điện Thoại', data: 'sdt', className: 'text-center table-cell-ellipsis  align-middle', width: '15%' },
+                    { title: 'Thời Gian Giao', data: 'thoiGianGiao', className: 'text-center table-cell-ellipsis  align-middle', width: '15%' },
                     {
-                        title: '',
-                        data: 'maHoaDon',
+                        title: 'Hành Động',
+                        data: null,
                         className: 'text-center',
-                        width: '5%',
-                        render: function(data) {
-                            return `
-                                <span type="button"
-                                        onclick="loadDetailOrderToModal('${data}')"
+                        width: '15%', // Điều chỉnh độ rộng nếu cần
+                        render: function(data, type, row) {
+                            let actions = [];
+
+                            // Nút chi tiết (sử dụng Bootstrap button-styled span để đồng nhất với các nút khác)
+                            actions.push(`
+                                <button class="btn btn-primary btn-sm w-100 mb-1"
+                                        onclick="loadDetailOrderToModal('${row.maHoaDon}')"
                                         data-bs-toggle="modal" data-bs-target="#coverContentDetailOrder">
-                                    <i class="bi bi-info-circle"></i>
-                                </span>`;
+                                    <i class="bi bi-eye"></i> Chi tiết
+                                </button>
+                            `);
+
+                            // Nút hành động dựa trên tình trạng đơn hàng
+                            switch (row.tinhTrang) {
+                                case "Chờ xác nhận":
+                                    actions.push(`
+                                        <button class="btn btn-danger btn-sm w-100" onclick="cancelOrder('${row.maHoaDon}')">
+                                            <i class="bi bi-x-circle"></i> Hủy đơn
+                                        </button>
+                                    `);
+                                    break;
+                                case "Đã thanh toán":
+                                    actions.push(`
+                                        <button class="btn btn-warning btn-sm w-100" onclick="returnOrder('${row.maHoaDon}')">
+                                            <i class="bi bi-arrow-return-left"></i> Trả hàng
+                                        </button>
+                                    `);
+                                    break;
+                            }
+
+                            return `${actions.join(' ')}`;
                         }
                     }
+
                 ],
                 paging: true,
                 searching: true,
