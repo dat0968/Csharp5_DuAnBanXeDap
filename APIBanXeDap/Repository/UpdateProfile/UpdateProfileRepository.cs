@@ -50,5 +50,21 @@ namespace APIBanXeDap.Repository.UpdateProfile
             db.Khachhangs.Update(khachHang);
             db.SaveChanges();
         }
+        public Khachhang GetKhachHangById(int id)
+        {
+            var khachHang = db.Khachhangs.FirstOrDefault(kh => kh.MaKh == id && kh.IsDelete == false);
+
+            if (khachHang != null)
+            {
+                khachHang.HoTen = khachHang.HoTen?.Trim();
+                khachHang.DiaChi = khachHang.DiaChi?.Trim();
+                khachHang.Sdt = khachHang.Sdt?.Trim();
+                khachHang.Cccd = khachHang.Cccd?.Trim();
+                khachHang.TenTaiKhoan = khachHang.TenTaiKhoan?.Trim();
+                khachHang.MatKhau = khachHang.MatKhau?.Trim();
+            }
+
+            return khachHang;
+        }
     }
 }
