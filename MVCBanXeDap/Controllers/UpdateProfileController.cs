@@ -32,7 +32,7 @@ namespace MVCBanXeDap.Controllers
                 var accesstoken = validationToken;
                 var information = ijwtToken.GetInformationUserFromToken(accesstoken);
                 var id = information.Id;
-                HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"KhachHang/GetKhachHangById/{id}");
+                HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"UpdateProfile/GetKhachHangById/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await response.Content.ReadAsStringAsync();
@@ -79,6 +79,7 @@ namespace MVCBanXeDap.Controllers
             HttpResponseMessage response = await _client.PutAsync(_client.BaseAddress + $"UpdateProfile/UpdateProfile/{id}", formData);
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessMessage"] = "Cập nhật thông tin cá nhân thành công";
                 return RedirectToAction("Index", "Home"); // Chuyển hướng về trang chủ
             }
             ModelState.AddModelError(string.Empty, "Cập nhật thất bại");
