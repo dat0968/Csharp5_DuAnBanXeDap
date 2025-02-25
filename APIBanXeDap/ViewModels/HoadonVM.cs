@@ -1,4 +1,6 @@
-﻿namespace APIBanXeDap.ViewModels
+﻿using System;
+
+namespace APIBanXeDap.ViewModels
 {
     public class HoadonVM
     {
@@ -23,9 +25,15 @@
         public string? Sdt { get; set; }
 
         public DateOnly ThoiGianGiao { get; set; }
+
         public float GiamGiaMaCoupon { get; set; } = 0;
+
         public float PhiVanChuyen { get; set; } = 0;
+
         public float TienGoc { get; set; }
+
         public float TongTien { get; set; }
+
+        public string? LyDoHuy { get; set; }
     }
 }

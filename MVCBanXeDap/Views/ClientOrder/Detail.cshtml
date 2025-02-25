@@ -1,5 +1,7 @@
 ﻿@model MVCBanXeDap.ViewModels.InvoiceVM
+
 <div class="row mb-3">
+    <!-- Thông tin đơn hàng -->
     <div class="col-md-6">
         <h4>Thông tin đơn hàng</h4>
         <div class="row mb-3">
@@ -14,24 +16,21 @@
         </div>
         <div class="row mb-3">
             <div class="col-md-6">
-                <label><strong>Ngày tạo:</strong></label>
-                <input type="text" class="form-control" value="@Model.NgayTao.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+                <label><strong>Ngày đặt hàng:</strong></label>
+                <input type="text" class="form-control" value="@Model.NgayTao.ToString("yyyy-MM-dd")" readonly />
             </div>
             <div class="col-md-6">
-                <label><strong>Ngày giao hàng:</strong></label>
-                <input type="text" class="form-control" value="@Model.ThoiGianGiao.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+                <label><strong>Ngày giao hàng (dự kiến):</strong></label>
+                <input type="text" class="form-control" value="@Model.ThoiGianGiao.ToString("yyyy-MM-dd")" readonly />
             </div>
         </div>
         <div class="mb-3">
-            <label><strong>Nhân viên phụ trách đơn hàng: <span class="fw-bold text-secondary">[ID: @(Model?.MaNhanVien ?? 0)]</span></strong></label>
-            <input type="text" class="form-control mt-1" value="@(Model?.TenNhanVien ?? "Đơn hàng chưa có nhân viên phụ trách")" readonly />
-        </div>
-        <div class="mb-3">
-            <label><strong>Tình trạng:</strong></label>
+            <label><strong>Trạng thái đơn hàng:</strong></label>
             <input type="text" class="form-control" value="@(Model?.TinhTrang ?? "Chờ xác nhận")" readonly />
         </div>
     </div>
 
+    <!-- Thông tin khách hàng -->
     <div class="col-md-6">
         <h4>Thông tin khách hàng</h4>
         <div class="mb-3">
@@ -41,10 +40,6 @@
         <div class="mb-3">
             <label><strong>Số điện thoại khách hàng:</strong></label>
             <input type="text" class="form-control" value="@Model.SoDienThoaiKhachHang" readonly />
-        </div>
-        <div class="mb-3">
-            <label><strong>Địa chỉ khách hàng:</strong></label>
-            <input type="text" class="form-control" value="@Model.DiaChiKhachHang" readonly />
         </div>
         <div class="mb-3">
             <label><strong>Địa chỉ nhận hàng:</strong></label>
@@ -63,12 +58,13 @@
     </div>
 }
 
+<!-- Chi tiết đơn hàng -->
 <div class="row mb-3">
     <div class="col-md-12">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">Chi tiết đơn hàng</h4> <!-- Tiêu đề -->
-            <a href="bill/TakeInvoice?maHoaDon=@Model.MaHoaDon" class="btn btn-link" title="Tải hóa đơn">
-                <i class="fas fa-download fa-2x"></i> <!-- Biểu tượng tải hóa đơn -->
+            <h4 class="mb-0">Chi tiết đơn hàng</h4>
+            <a href="/clientorder/TakeInvoice?maHoaDon=@Model.MaHoaDon" class="btn btn-link" title="Tải hóa đơn">
+                <i class="bi bi-download fa-2x"></i>
             </a>
         </div>
 
@@ -104,7 +100,7 @@
         </div>
         <div class="mt-3 d-flex flex-column align-items-end">
             <strong class="h3">Tổng tiền đơn hàng:</strong>
-            <p class="h5 text-primary">@((Model.TongTien != 0) ? Model.TongTien.ToString("N0") : (Model.TienGoc = Model.TongTien).ToString("N0")) VNĐ</p>
+            <p class="h5 text-primary">@((Model.TienGoc != 0) ? Model.TienGoc.ToString("N0") : Model.TongTien.ToString("N0")) VNĐ</p>
             <p class="h5 text-secondary">Phí vận chuyển: @(Model?.PhiVanChuyen != 0 ? Model?.PhiVanChuyen.ToString("N0") + " VNĐ" : "Phí vận chuyển (miễn phí)")</p>
             <p class="h5 text-secondary">Giảm giá mã coupon: @(Model?.GiamGiaMaCoupon != 0 ? Model?.GiamGiaMaCoupon.ToString("N0") + " %" : "Giảm giá mã coupon (không được áp dụng)")</p>
         </div>

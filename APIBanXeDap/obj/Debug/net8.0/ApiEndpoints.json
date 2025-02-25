@@ -207,6 +207,11 @@
         "Name": "statusOrder",
         "Type": "System.String",
         "IsRequired": false
+      },
+      {
+        "Name": "reason",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -384,6 +389,68 @@
       {
         "Name": "model",
         "Type": "APIBanXeDap.ViewModels.ThongTinHoaDonVM",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ClientOrderController",
+    "Method": "CountOrder",
+    "RelativePath": "api/ClientOrder/CountOrder",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ClientOrderController",
+    "Method": "Get",
+    "RelativePath": "api/ClientOrder/Get",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ClientOrderController",
+    "Method": "Get",
+    "RelativePath": "api/ClientOrder/Get/{maHoadon}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maHoadon",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ClientOrderController",
+    "Method": "GetAllInvoiceData",
+    "RelativePath": "api/ClientOrder/GetAllInvoiceData",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIBanXeDap.Controllers.ClientOrderController",
+    "Method": "GetInvoiceData",
+    "RelativePath": "api/ClientOrder/GetInvoiceData/{maHoaDon}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maHoaDon",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

@@ -198,6 +198,9 @@ namespace APIBanXeDap.Migrations
                         .HasColumnType("nvarchar(25)")
                         .HasColumnName("HTTT");
 
+                    b.Property<string>("LyDoHuy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("MaKh")
                         .HasColumnType("int")
                         .HasColumnName("MaKH");

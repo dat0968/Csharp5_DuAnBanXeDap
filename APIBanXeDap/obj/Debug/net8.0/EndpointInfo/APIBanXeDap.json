@@ -342,6 +342,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "reason",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -579,6 +586,88 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ClientOrder/Get": {
+      "get": {
+        "tags": [
+          "ClientOrder"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ClientOrder/Get/{maHoadon}": {
+      "get": {
+        "tags": [
+          "ClientOrder"
+        ],
+        "parameters": [
+          {
+            "name": "maHoadon",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ClientOrder/GetInvoiceData/{maHoaDon}": {
+      "get": {
+        "tags": [
+          "ClientOrder"
+        ],
+        "parameters": [
+          {
+            "name": "maHoaDon",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ClientOrder/GetAllInvoiceData": {
+      "get": {
+        "tags": [
+          "ClientOrder"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ClientOrder/CountOrder": {
+      "get": {
+        "tags": [
+          "ClientOrder"
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -3896,6 +3985,10 @@
             "type": "string",
             "nullable": true
           },
+          "lyDoHuy": {
+            "type": "string",
+            "nullable": true
+          },
           "thoiGianGiao": {
             "type": "string",
             "format": "date"
@@ -3988,6 +4081,10 @@
           "tongTien": {
             "type": "number",
             "format": "float"
+          },
+          "lyDoHuy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

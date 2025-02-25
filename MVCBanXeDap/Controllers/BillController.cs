@@ -2,21 +2,13 @@ using iText.IO.Font;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
-using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.IdentityModel.Tokens;
 using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
-using System.IO.Compression;
 using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
 
 namespace MVCBanXeDap.Controllers
 {
@@ -32,24 +24,14 @@ namespace MVCBanXeDap.Controllers
             _client.BaseAddress = baseAddress;
             this.jwtToken = jwtToken;
         }
-        [NonAction]
-        [HttpGet]
-        public async void SetAuthorizationHeader()
-        {
-            var validateAccessToken = await jwtToken.ValidateAccessToken();
-            if (!string.IsNullOrEmpty(validateAccessToken))
-            {
-                var accesstoken = validateAccessToken;
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
-            }
-        }
+
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status)
+        public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status, string? reason)
         {
             var accessToken = HttpContext.Session.GetString("AccessToken");
             var refreshToken = HttpContext.Session.GetString("RefreshToken");
@@ -76,16 +58,24 @@ namespace MVCBanXeDap.Controllers
                 return Json(new { success = false, message = "Không tìm thấy mã người dùng đăng nhập, vui lòng liên hệ nhà phát triển để được hỗ trợ." });
             }
 
-            var paramsChange = new Dictionary<string, string>
+            var paramsChange = new Dictionary<string, string?>
             {
                 { "idOrder", idOrder },
                 { "idStaff", id },
-                { "statusOrder", status }
+                { "statusOrder", status },
+                { "reason", reason }
             };
 
+            // Kiểm tra, cập nhật và đảm bảo "reason" không bị null
+            paramsChange["reason"] = paramsChange["reason"] != null
+                ? "Đơn hàng bị hủy bởi nhân viên với lý do:\n" + paramsChange["reason"]
+                : null;
+
+            // Tạo queryString và xử lý lọc null hoặc chuỗi rỗng đảm bảo an toàn
             string queryString = string.Join("&",
-                paramsChange.Where(x => !string.IsNullOrEmpty(x.Value))
-                            .Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
+                paramsChange
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Value)) // Lọc bỏ giá trị null hoặc chuỗi rỗng
+                    .Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value!)}")); // Mã hóa giá trị để gửi trong URL
 
             Console.WriteLine(queryString);
             SetAuthorizationHeader();
@@ -213,13 +203,44 @@ namespace MVCBanXeDap.Controllers
 
                 document.Add(table.SetMarginBottom(20));
 
-                // Tổng tiền và trạng thái thanh toán
-                document.Add(new Paragraph($"Tổng Tiền: {String.Format("{0:n0}", totalAmount)} đ")
+                // Thêm thông tin Tiền Gốc
+                document.Add(new Paragraph($"Tiền Gốc: {String.Format("{0:n0}", invoice.TienGoc)} đ")
+                    .SetFontSize(12)
+                    .SetMarginBottom(20));
+
+                // Thêm thông tin Phí Vận Chuyển
+                document.Add(new Paragraph($"Phí Vận Chuyển: {String.Format("{0:n0}", invoice.PhiVanChuyen)} đ")
+                    .SetFontSize(12)
+                    .SetMarginBottom(10));
+
+                // Thêm thông tin Giảm Giá Mã Coupon
+                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {String.Format("{0}%", invoice.GiamGiaMaCoupon)}")
+                    .SetFontSize(12)
+                    .SetMarginBottom(10));
+
+                // Thêm thông tin Tổng Tiền
+                document.Add(new Paragraph($"Tổng Tiền: {String.Format("{0:n0}", invoice.TongTien)} đ")
                     .SetBold()
                     .SetFontSize(14));
+
+                // Thêm thông tin Trạng Thái Thanh Toán
                 document.Add(new Paragraph($"Trạng Thái Thanh Toán: {invoice.TinhTrang}")
                     .SetFontSize(12)
                     .SetMarginBottom(20));
+
+                // Thêm lý do hủy nếu có
+                if (!string.IsNullOrEmpty(invoice.LyDoHuy))
+                {
+                    document.Add(new Paragraph($"Lý Do Hủy Đơn Hàng:")
+                        .SetFontSize(12)
+                        .SetBold()
+                        .SetMarginBottom(5));
+
+                    document.Add(new Paragraph(invoice.LyDoHuy)
+                        .SetFontSize(12)
+                        .SetItalic()
+                        .SetMarginBottom(20));
+                }
 
                 // Cảm ơn khách hàng
                 document.Add(new Paragraph("Cảm ơn quý khách đã mua hàng!")
@@ -269,15 +290,11 @@ namespace MVCBanXeDap.Controllers
 
             foreach (var invoice in invoices)
             {
-                // Tiêu đề hóa đơn
-                //document.Add(new Paragraph("****************************************")
-                //    .SetTextAlignment(TextAlignment.CENTER)
-                //    .SetFontSize(12)
-                //    .SetBold());
                 document.Add(new Paragraph("HÓA ĐƠN BÁN HÀNG")
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetFontSize(20)
                     .SetBold());
+
                 document.Add(new Paragraph($"Mã hóa đơn: {invoice.MaHoaDon}")
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetFontSize(14)
@@ -317,21 +334,40 @@ namespace MVCBanXeDap.Controllers
 
                 document.Add(table.SetMarginBottom(20));
 
-                // Tổng tiền
-                document.Add(new Paragraph($"Tổng tiền: {totalAmount:n0} đ")
+                // Trạng Thái Thanh Toán
+                document.Add(new Paragraph($"Trạng Thái Thanh Toán: {invoice.TinhTrang}")
+                    .SetFontSize(12)
+                    .SetMarginBottom(20));
+
+                // Thêm lý do hủy nếu có
+                if (!string.IsNullOrEmpty(invoice.LyDoHuy))
+                {
+                    document.Add(new Paragraph($"Lý Do Hủy Đơn Hàng:")
+                        .SetFontSize(12)
+                        .SetBold()
+                        .SetMarginBottom(5));
+
+                    document.Add(new Paragraph(invoice.LyDoHuy)
+                        .SetFontSize(12)
+                        .SetItalic()
+                        .SetMarginBottom(20));
+                }
+
+                // Tổng tiền, hiển thị các thông tin đã xử lý sẵn
+                document.Add(new Paragraph($"Tiền Gốc: {invoice.TienGoc:n0} đ")
+                    .SetFontSize(12));
+                document.Add(new Paragraph($"Phí Vận Chuyển: {invoice.PhiVanChuyen:n0} đ")
+                    .SetFontSize(12));
+                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {invoice.GiamGiaMaCoupon} VNĐ")
+                    .SetFontSize(12));
+                document.Add(new Paragraph($"Tổng tiền: {invoice.TongTien:n0} đ")
                     .SetBold()
                     .SetFontSize(14)
                     .SetMarginBottom(20));
 
-                // Khoảng cách giữa các hóa đơn (dòng phân cách)
-                //document.Add(new Paragraph("****************************************")
-                //    .SetTextAlignment(TextAlignment.CENTER)
-                //    .SetFontSize(12)
-                //    .SetBold()
-                //    .SetMarginBottom(20));
-                // Ngắt trang để ghi hóa đơn tiếp theo
                 document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             }
+
 
             // Tải xuống file PDF tại đây
             document.Close();
@@ -372,6 +408,46 @@ namespace MVCBanXeDap.Controllers
             return Json(new { data = hoadonVMs });
         }
 
+        #endregion
+
+        #region [NON ACTION]
+        [NonAction]
+        [HttpGet]
+        public async void SetAuthorizationHeader()
+        {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                var accesstoken = validateAccessToken;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
+            }
+        }
+        //[NonAction]
+        //private string GetUserId()
+        //{
+        //    var accessToken = HttpContext.Session.GetString("AccessToken");
+        //    var refreshToken = HttpContext.Session.GetString("RefreshToken");
+
+        //    if (accessToken == null || refreshToken == null)
+        //    {
+        //        return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
+        //    }
+
+        //    var ValidateAccessToken = await jwtToken.ValidateAccessToken();
+        //    if (ValidateAccessToken == null)
+        //    {
+        //        return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
+        //    }
+        //    else
+        //    {
+        //        HttpContext.Session.SetString("AccessToken", ValidateAccessToken);
+        //    }
+
+        //    var information = jwtToken.GetInformationUserFromToken(ValidateAccessToken); // Lấy idStaff từ token
+        //    var id = information.Id.ToString();
+
+        //    return id;
+        //}
         #endregion
     }
 }

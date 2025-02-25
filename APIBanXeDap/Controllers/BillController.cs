@@ -28,7 +28,7 @@ namespace APIBanXeDap.Controllers
             return Ok(await hoaDonRepository.GetAsync(x => x.MaHoaDon == maHoadon));
         }
         [HttpPut]
-        public async Task<IActionResult> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder)
+        public async Task<IActionResult> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder, string? reason)
         {
             var currentOrderStatus = await hoaDonRepository.GetOrderStatusById(idOrder);
 
@@ -45,7 +45,7 @@ namespace APIBanXeDap.Controllers
             }
 
             // Thực hiện thay đổi trạng thái đơn hàng
-            var result = await hoaDonRepository.ChangeStatusOrder(idOrder, idStaff, statusOrder);
+            var result = await hoaDonRepository.ChangeStatusOrder(idOrder, idStaff, statusOrder, reason);
 
             if (result == null)
             {
@@ -59,12 +59,12 @@ namespace APIBanXeDap.Controllers
         [HttpGet("{maHoaDon}")]
         public async Task<IActionResult> GetInvoiceData(int maHoaDon) // Lấy 1 thông tin hóa đơn cùng sản phẩm cho xuất hóa đơn
         {
-            return Ok(await hoaDonRepository.GetInvoiceDataAsync(maHoaDon));
+            return Ok(await hoaDonRepository.GetInvoiceDataAsync(null, maHoaDon:maHoaDon));
         }
         [HttpGet]
         public async Task<IActionResult> GetAllInvoiceData() // Lấy nhiều thông tin hóa đơn cùng sản phẩm cho xuất hóa đơn
         {
-            return Ok(await hoaDonRepository.GetAllInvoiceDataAsync());
+            return Ok(await hoaDonRepository.GetAllInvoiceDataAsync(null));
         }
 
         #region//NonAction

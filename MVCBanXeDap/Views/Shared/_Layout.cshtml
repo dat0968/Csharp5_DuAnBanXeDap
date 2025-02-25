@@ -135,9 +135,13 @@
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div id="IconCart" class="header__nav__option">                     
-                        <div class="header__nav__option">
+                        <div class="">
                             @await Component.InvokeAsync("WishlistNav")
                             @* <a href="#"><img src="img/icon/heart.png" alt=""></a> *@
+                            <a asp-action="Index" asp-controller="ClientOrder">
+                                <i class="bi bi-truck position-relative fs-5 text-white"></i>
+                                <span></span>
+                            </a>
                             <a asp-action="Index" asp-controller="Cart"><img src="~/img/icon/cart.png" alt=""><span></span></a>
                             <div class="price"></div>
                         </div>

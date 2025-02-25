@@ -50,7 +50,7 @@ namespace APIBanXeDap.Repository.ChiTietHoaDon
                     Gia = chitiet.Gia,
                     ThanhTien = chitiet.ThanhTien,
                     MoTa = sp?.MoTa ?? "Không xác định",
-                    Hinh = sp?.Hinh ?? ""
+                    Hinh = sp?.Hinh ?? "",                
                 };
             }).ToList();
             return result;
