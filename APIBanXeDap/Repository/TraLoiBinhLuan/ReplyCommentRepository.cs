@@ -17,12 +17,17 @@ namespace APIBanXeDap.Repository.TraLoiBinhLuan
             return _context.Traloibinhluans
                 .Include(r => r.BinhLuan)
                 .Include(r => r.NhanVien)
+                .AsNoTracking()
                 .ToList();
         }
 
-        public Traloibinhluan GetById(int id)
+        public Traloibinhluan? GetById(int id)
         {
-            return _context.Traloibinhluans.Find(id);
+            return _context.Traloibinhluans
+                .Include(r => r.BinhLuan)
+                .Include(r => r.NhanVien)
+                .AsNoTracking()
+                .FirstOrDefault(r => r.MaTraLoi == id);
         }
 
         public void Create(Traloibinhluan reply)
@@ -48,6 +53,5 @@ namespace APIBanXeDap.Repository.TraLoiBinhLuan
         {
             _context.SaveChanges();
         }
-
     }
 }

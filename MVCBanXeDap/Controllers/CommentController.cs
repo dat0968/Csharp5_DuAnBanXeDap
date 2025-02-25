@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCBanXeDap.ViewModels;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 
@@ -10,31 +9,40 @@ namespace MVCBanXeDap.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl = "https://localhost:7137/api/Comments";
+        private readonly string _apiUrls = "https://localhost:7137/api/Replys";
 
         public CommentController()
         {
             _httpClient = new HttpClient();
         }
 
-        // Lấy danh sách bình luận (có tên sản phẩm và khách hàng)
+        // Lấy danh sách bình luận (kèm phản hồi)
         public async Task<IActionResult> Index(string? keywords, int? rating, int page = 1)
         {
             var response = await _httpClient.GetAsync($"{_apiUrl}/GetAllComments?keywords={keywords}&rating={rating}&page={page}");
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
-
-                // Đọc object chứa data và thông tin trang
                 var result = JsonSerializer.Deserialize<JsonElement>(data);
-
-                // Lấy danh sách comment
                 var commentsJson = result.GetProperty("data").GetRawText();
                 var comments = JsonSerializer.Deserialize<List<CommentVM>>(commentsJson, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                // Lấy thông tin phân trang
+                foreach (var comment in comments)
+                {
+                    var replyResponse = await _httpClient.GetAsync($"{_apiUrls}/GetRepliesByCommentId/{comment.MaBinhLuan}");
+                    if (replyResponse.IsSuccessStatusCode)
+                    {
+                        var replyData = await replyResponse.Content.ReadAsStringAsync();
+                        comment.PhanHoi = JsonSerializer.Deserialize<List<ReplyVM>>(replyData, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
+                    }
+                }
+
                 ViewBag.TotalPages = result.GetProperty("totalPages").GetInt32();
                 ViewBag.Page = result.GetProperty("page").GetInt32();
                 ViewBag.Keywords = keywords;
@@ -45,7 +53,6 @@ namespace MVCBanXeDap.Controllers
             return View(new List<CommentVM>());
         }
 
-        // Xem chi tiết bình luận
         public async Task<IActionResult> Details(int id)
         {
             var response = await _httpClient.GetAsync($"{_apiUrl}/{id}");
@@ -58,7 +65,6 @@ namespace MVCBanXeDap.Controllers
             return NotFound("Không tìm thấy bình luận.");
         }
 
-        // Tạo mới bình luận
         public IActionResult Create()
         {
             return View();
@@ -69,7 +75,7 @@ namespace MVCBanXeDap.Controllers
         {
             var json = JsonSerializer.Serialize(comment);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync($"{_apiUrl}/create", content);
+            var response = await _httpClient.PostAsync($"{_apiUrl}/Create", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -80,7 +86,6 @@ namespace MVCBanXeDap.Controllers
             return View(comment);
         }
 
-        // Chỉnh sửa bình luận
         public async Task<IActionResult> Edit(int id)
         {
             var response = await _httpClient.GetAsync($"{_apiUrl}/{id}");

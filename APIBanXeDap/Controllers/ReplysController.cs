@@ -1,5 +1,6 @@
 ﻿using APIBanXeDap.Models;
 using APIBanXeDap.Repository.TraLoiBinhLuan;
+using APIBanXeDap.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIBanXeDap.Controllers
@@ -15,55 +16,107 @@ namespace APIBanXeDap.Controllers
             _replyRepository = replyRepository;
         }
 
+        // 🟢 API lấy tất cả trả lời bình luận
         [HttpGet]
         public IActionResult GetAllReplies()
         {
-            var replies = _replyRepository.GetAll();
+            var replies = _replyRepository.GetAll()
+                .Select(r => new ReplyCommentVM
+                {
+                    MaPhanHoi = r.MaTraLoi,
+                    MaBinhLuan = r.MaBinhLuan,
+                    NoiDung = r.NoiDung,
+                    TenNguoiDung = r.NhanVien?.HoTen ?? "Ẩn danh",
+                    NgayTao = r.ThoiGian
+                })
+                .ToList();
+
+            if (replies.Count == 0)
+            {
+                return NotFound(new { message = "Không có câu trả lời nào." });
+            }
+
             return Ok(replies);
         }
 
-        [HttpGet("{id}")]
+
+        // 🟢 API lấy trả lời theo mã trả lời
+        [HttpGet("GetReplyBy/{id}")]
         public IActionResult GetReplyById(int id)
         {
             var reply = _replyRepository.GetById(id);
+
             if (reply == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Không tìm thấy trả lời với ID này." });
             }
-            return Ok(reply);
+
+            var viewModel = new ReplyCommentVM
+            {
+                MaPhanHoi = reply.MaTraLoi,
+                MaBinhLuan = reply.MaBinhLuan,
+                NoiDung = reply.NoiDung,
+                TenNguoiDung = reply.NhanVien?.HoTen ?? "Ẩn danh",
+                NgayTao = reply.ThoiGian
+            };
+
+            return Ok(viewModel);
         }
 
-        [HttpPost]
-        public IActionResult CreateReply([FromBody] Traloibinhluan reply)
+        // 🟢 API tạo trả lời mới
+        [HttpPost("Create")]
+        public IActionResult CreateReply(ReplyCommentVM replyVM)
         {
-            if (!ModelState.IsValid)
+            var nhanVien = _replyRepository.Create;
+            if (nhanVien == null)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new { message = "Mã nhân viên không tồn tại!" });
             }
+
+            var reply = new Traloibinhluan
+            {
+                MaBinhLuan = replyVM.MaBinhLuan,
+                NoiDung = replyVM.NoiDung,
+                MaNV = replyVM.MaNV,
+                ThoiGian = DateTime.Now
+            };
 
             _replyRepository.Create(reply);
             _replyRepository.Save();
 
-            return CreatedAtAction(nameof(GetReplyById), new { id = reply.MaTraLoi }, reply);
+            return Ok(new { message = "Trả lời bình luận thành công!" });
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateReply(int id, [FromBody] Traloibinhluan reply)
+
+        // 🟢 API cập nhật trả lời
+        [HttpPut("Edit")]
+        public IActionResult UpdateReply(int id, [FromBody] ReplyCommentVM replyVM)
         {
-            if (id != reply.MaTraLoi)
+            var existingReply = _replyRepository.GetById(id);
+            if (existingReply == null)
             {
-                return BadRequest("Mã trả lời không khớp.");
+                return NotFound(new { message = "Không tìm thấy trả lời để cập nhật." });
             }
 
-            _replyRepository.Update(reply);
+            existingReply.NoiDung = replyVM.NoiDung;
+            existingReply.ThoiGian = DateTime.Now;
+
+            _replyRepository.Update(existingReply);
             _replyRepository.Save();
 
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        // 🟢 API xóa trả lời
+        [HttpDelete("Delete")]
         public IActionResult DeleteReply(int id)
         {
+            var reply = _replyRepository.GetById(id);
+            if (reply == null)
+            {
+                return NotFound(new { message = "Không tìm thấy trả lời để xóa." });
+            }
+
             _replyRepository.Delete(id);
             _replyRepository.Save();
             return NoContent();
