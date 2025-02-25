@@ -57,7 +57,7 @@ namespace APIBanXeDap.Repository.HoaDon
                 GiamGiaMaCoupon = hoadon.GiamGiaMaCoupon,
                 PhiVanChuyen = hoadon.PhiVanChuyen,
                 TienGoc = hoadon.TienGoc,
-                TongTien = hoadon.TongTien * (1 - (hoadon?.GiamGiaMaCoupon ?? (float)100) / 100) + (hoadon?.PhiVanChuyen ?? 0)
+                TongTien = hoadon.TongTien // Note
             }).ToList();
 
         }
@@ -101,7 +101,7 @@ namespace APIBanXeDap.Repository.HoaDon
                 GiamGiaMaCoupon = hoadon.GiamGiaMaCoupon,
                 PhiVanChuyen = hoadon.PhiVanChuyen,
                 TienGoc = hoadon.TienGoc,
-                TongTien = hoadon.TongTien * (1 - (hoadon?.GiamGiaMaCoupon ?? (float)100) / 100) + (hoadon?.PhiVanChuyen ?? 0)
+                TongTien = hoadon.TongTien // Note
             };
             return hoadonVM;
         }
@@ -165,8 +165,19 @@ namespace APIBanXeDap.Repository.HoaDon
             var invoiceItems = await _db.Chitiethoadons
                 .Where(ct => ct.MaHoaDon == maHoaDon)
                 .Include(ct => ct.MaSpNavigation) // Include sản phẩm
-                .ToListAsync(); 
-            
+                .ToListAsync();
+
+            var tongTienInvoice = invoiceData?.TongTien != null && invoiceData.TongTien != 0
+                        ? (decimal)invoiceData.TongTien
+                        : invoiceItems.Sum(ct => ct.ThanhTien) -
+                          ((decimal)(invoiceData?.PhiVanChuyen ?? 0) + (decimal)(invoiceData?.GiamGiaMaCoupon ?? 0));
+
+            var giamGiaInvoice = (invoiceData?.GiamGiaMaCoupon ?? 0);
+            var phiVanChuyenInvoice = (invoiceData?.PhiVanChuyen ?? 0);
+            var tienGocInvoice = ((invoiceData?.TienGoc != null && invoiceData.TienGoc != 0)
+                        ? invoiceData.TienGoc
+                        : (float)tongTienInvoice + giamGiaInvoice + phiVanChuyenInvoice);
+
             var invoiceViewModel = new InvoiceVM
             {
                 MaHoaDon = invoiceData.MaHoaDon,
@@ -175,23 +186,23 @@ namespace APIBanXeDap.Repository.HoaDon
                 NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
                 ThoiGianGiao = invoiceData.ThoiGianGiao.ToDateTime(TimeOnly.MinValue),
                 HinhThucThanhToan = invoiceData.Httt,
-                TenKhachHang = invoiceData.MaKhNavigation.HoTen,
+                TenKhachHang = invoiceData.MaKhNavigation?.HoTen ?? "-",
                 MaNhanVien = invoiceData.MaNv ?? 0,
                 TenNhanVien = staffForce?.HoTen ?? "Đơn hàng chưa có nhân viên phụ trách",
-                SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
-                DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
+                SoDienThoaiKhachHang = invoiceData.MaKhNavigation?.Sdt ?? "-",
+                DiaChiKhachHang = invoiceData.MaKhNavigation?.DiaChi ?? "-" ,
                 LyDoHuy = invoiceData?.LyDoHuy,
                 Items = invoiceItems.Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
-                {
-                    TenSanPham = ct.MaSpNavigation.TenSp,
-                    SoLuong = ct.SoLuong,
-                    DonGia = ct.Gia,
-                    Tong = ct.ThanhTien
-                }).ToList(),
-                TongTien = invoiceItems.Sum(ct => ct.ThanhTien) * (decimal)(1 - (invoiceData?.GiamGiaMaCoupon ?? 0) / 100) + (decimal)(invoiceData?.PhiVanChuyen ?? 0),
-                GiamGiaMaCoupon = (invoiceData?.GiamGiaMaCoupon ?? 0),
-                PhiVanChuyen = (invoiceData?.PhiVanChuyen ?? 0),
-                TienGoc = (invoiceData?.TienGoc ?? 0)
+                    {
+                        TenSanPham = ct.MaSpNavigation.TenSp,
+                        SoLuong = ct.SoLuong,
+                        DonGia = ct.Gia,
+                        Tong = ct.ThanhTien
+                    }).ToList(),
+                TongTien = tongTienInvoice,
+                GiamGiaMaCoupon = giamGiaInvoice,
+                PhiVanChuyen = phiVanChuyenInvoice,
+                TienGoc = tienGocInvoice
             };
 
             return invoiceViewModel;
@@ -217,31 +228,45 @@ namespace APIBanXeDap.Repository.HoaDon
                 .Include(ct => ct.MaSpNavigation) // Bao gồm thông tin sản phẩm
                 .ToListAsync();
 
-            var invoicesViewModel = invoicesData.Where(i => (maKhachHang.HasValue ? i.MaKh == maKhachHang.Value! : true)).Select(invoiceData => new InvoiceVM
-            {
-                MaHoaDon = invoiceData.MaHoaDon,
-                DiaChiNhanHang = invoiceData.DiaChiNhanHang,
-                TinhTrang = invoiceData.TinhTrang,
-                NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
-                ThoiGianGiao = invoiceData.ThoiGianGiao.ToDateTime(TimeOnly.MinValue),
-                HinhThucThanhToan = invoiceData.Httt,
-                TenKhachHang = invoiceData.MaKhNavigation.HoTen,
-                MaNhanVien = invoiceData.MaNv ?? 0,
-                TenNhanVien = staffsForce.FirstOrDefault(sf => sf.MaNv == invoiceData.MaNv)?.TenTaiKhoan ?? "Đơn hàng chưa có nhân viên phụ trách",
-                SoDienThoaiKhachHang = invoiceData.MaKhNavigation.Sdt,
-                DiaChiKhachHang = invoiceData.MaKhNavigation.DiaChi,
-                LyDoHuy = invoiceData?.LyDoHuy,
-                Items = invoiceItems.Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
+            var invoicesViewModel = invoicesData.Where(i => (maKhachHang.HasValue ? i.MaKh == maKhachHang.Value! : true)).Select(invoiceData =>{
+
+                var tongTienInvoice = invoiceData?.TongTien != null && invoiceData.TongTien != 0
+                            ? (decimal)invoiceData.TongTien
+                            : invoiceItems.Sum(ct => ct.ThanhTien) -
+                              ((decimal)(invoiceData?.PhiVanChuyen ?? 0) + (decimal)(invoiceData?.GiamGiaMaCoupon ?? 0));
+                
+                var giamGiaInvoice = (invoiceData?.GiamGiaMaCoupon ?? 0);
+                var phiVanChuyenInvoice = (invoiceData?.PhiVanChuyen ?? 0);
+                var tienGocInvoice = ((invoiceData?.TienGoc != null && invoiceData.TienGoc != 0) 
+                            ? invoiceData.TienGoc 
+                            : (float)tongTienInvoice + giamGiaInvoice + phiVanChuyenInvoice);
+
+                return new InvoiceVM
                 {
-                    TenSanPham = ct.MaSpNavigation.TenSp,
-                    SoLuong = ct.SoLuong,
-                    DonGia = ct.Gia,
-                    Tong = ct.ThanhTien
-                }).ToList(),
-                TongTien = invoiceItems.Sum(ct => ct.ThanhTien) * (decimal)(1 - (invoiceData?.GiamGiaMaCoupon ?? 0) / 100) + (decimal)(invoiceData?.PhiVanChuyen ?? 0),
-                GiamGiaMaCoupon = (invoiceData?.GiamGiaMaCoupon ?? 0),
-                PhiVanChuyen = (invoiceData?.PhiVanChuyen ?? 0),
-                TienGoc = (invoiceData?.TienGoc ?? 0)
+                    MaHoaDon = invoiceData.MaHoaDon,
+                    DiaChiNhanHang = invoiceData.DiaChiNhanHang,
+                    TinhTrang = invoiceData.TinhTrang,
+                    NgayTao = invoiceData.NgayTao.ToDateTime(TimeOnly.MinValue),
+                    ThoiGianGiao = invoiceData.ThoiGianGiao.ToDateTime(TimeOnly.MinValue),
+                    HinhThucThanhToan = invoiceData.Httt,
+                    TenKhachHang = invoiceData.MaKhNavigation?.HoTen ?? "-",
+                    MaNhanVien = invoiceData.MaNv ?? 0,
+                    TenNhanVien = staffsForce.FirstOrDefault(sf => sf.MaNv == invoiceData.MaNv)?.TenTaiKhoan ?? "Đơn hàng chưa có nhân viên phụ trách",
+                    SoDienThoaiKhachHang = invoiceData.MaKhNavigation?.Sdt ?? "-",
+                    DiaChiKhachHang = invoiceData.MaKhNavigation?.DiaChi ?? "-",
+                    LyDoHuy = invoiceData?.LyDoHuy,
+                    Items = invoiceItems.Select(ct => new InvoiceVM.ChiTietHoaDonViewModel
+                    {
+                        TenSanPham = ct.MaSpNavigation.TenSp,
+                        SoLuong = ct.SoLuong,
+                        DonGia = ct.Gia,
+                        Tong = ct.ThanhTien
+                    }).ToList(),
+                    TongTien = tongTienInvoice,
+                    GiamGiaMaCoupon = giamGiaInvoice,
+                    PhiVanChuyen = phiVanChuyenInvoice,
+                    TienGoc = tienGocInvoice
+                };
             });
 
             return invoicesViewModel;

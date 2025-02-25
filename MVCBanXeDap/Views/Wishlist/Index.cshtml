@@ -71,16 +71,16 @@
                         width: '50%',
                         className: 'text-left align-middle',
                         render: function (data) {
+                            // console.log(data); //Note
                             if (data.doiTuongYeuThich === "SanPham") {
                                 return `
-                                    <a href="/Home/Details/${data.ma}" class="d-flex align-items-center">
+                                    <a href="/Home/Details/${data.maDoiTuong}" class="d-flex align-items-center">
                                         <img src="Hinh/SanPham/${data.hinh ?? 'N/A'}" alt="Hình sản phẩm" class="img-thumbnail me-2" width="150">
                                         <div>
-                                            <span class="fw-bold text-truncate d-inline-block" style="max-width: 200px;" title="${data.tenSp ?? 'N/A'}">
+                                            <span class="fw-bold text-truncate d-inline-block" style="max-width: 100%;" title="${data.tenSp ?? 'N/A'}">
                                                 ${data.tenSp ?? 'N/A'}
                                             </span><br>
                                             <small class="text-muted">${data.danhMuc ?? "N/A"} | ${data.thuongHieu ?? "N/A"}</small><br>
-                                            <span class="text-success font-weight-bold">Khoảng giá: ${data.khoangGia ?? 'N/A'}</span>
                                         </div>
                                     </a>`;
                             } else {
@@ -101,7 +101,7 @@
                         render: function (data, type, row) {
                             return `
                                 <button class="btn btn-danger btn-sm" onclick="removeFromWishlist(${data}, '${row.doiTuongYeuThich}')">
-                                    🗑️ Xóa
+                                    Xóa
                                 </button>
                             `;
                         }
