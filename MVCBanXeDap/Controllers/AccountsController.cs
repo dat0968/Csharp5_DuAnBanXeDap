@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MVCBanXeDap.Services;
 using MVCBanXeDap.Services.Email;
 using MVCBanXeDap.Services.Jwt;
@@ -28,8 +29,19 @@ namespace MVCBanXeDap.Controllers
             this.jwtToken = jwtToken;
         }
         [HttpGet]
-        public IActionResult Login_Customer()
+        public async Task<IActionResult> Login_Customer()
         {
+            var validationtoken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validationtoken))
+            {
+                var information = jwtToken.GetInformationUserFromToken(validationtoken);
+                var role = information.VaiTro;
+                if(role == "Admin" || role == "Nhân viên")
+                {
+                    return RedirectToAction("Index", "Product");
+                }
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         [HttpPost]
@@ -72,7 +84,7 @@ namespace MVCBanXeDap.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Tài khoản không tồn tại hoặc đang bị tạm khóa!");
+                        ModelState.AddModelError(string.Empty, responseData["message"].ToString());
                     }
                 }
             }
@@ -83,8 +95,19 @@ namespace MVCBanXeDap.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Login_Staff()
+        public async Task<IActionResult> Login_Staff()
         {
+            var validationtoken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validationtoken))
+            {
+                var information = jwtToken.GetInformationUserFromToken(validationtoken);
+                var role = information.VaiTro;
+                if (role == "Admin" || role == "Nhân viên")
+                {
+                    return RedirectToAction("Index", "Product");
+                }
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         [HttpPost]
@@ -136,7 +159,7 @@ namespace MVCBanXeDap.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Tài khoản không tồn tại hoặc đang bị tạm khóa!");
+                        ModelState.AddModelError(string.Empty, responseData["message"].ToString());
                     }
                 }
             }
@@ -167,7 +190,7 @@ namespace MVCBanXeDap.Controllers
                     if (isSuccess)
                     {
                         TempData["SuccessMessage"] = "Đăng ký thành công";
-                        return RedirectToAction("LoginCustomer", "Accounts");
+                        return RedirectToAction("Login_Customer", "Accounts");
                     }
                     else
                     {
@@ -227,10 +250,10 @@ namespace MVCBanXeDap.Controllers
                     await emailService.SendEmailAsync(YourEmail, subject, body.ToString());
                     var message = ResponseConvert["message"].Value<string>();
                     TempData["SuccessMessage"] = message;
-                    return RedirectToAction("LoginCustomer", "Accounts");
+                    return RedirectToAction("Login_Customer", "Accounts");
                 }
                 TempData["ErrorMessage"] = ResponseConvert["message"].Value<string>();
-                return RedirectToAction("LoginCustomer", "Accounts");
+                return RedirectToAction("Login_Customer", "Accounts");
             }
             return BadRequest();
         }
@@ -264,10 +287,10 @@ namespace MVCBanXeDap.Controllers
                     await emailService.SendEmailAsync(YourEmail, subject, body.ToString());
                     var message = ResponseConvert["message"].Value<string>();
                     TempData["SuccessMessage"] = message;
-                    return RedirectToAction("LoginStaff", "Accounts");
+                    return RedirectToAction("Login_Staff", "Accounts");
                 }
                 TempData["ErrorMessage"] = ResponseConvert["message"].Value<string>();
-                return RedirectToAction("LoginStaff", "Accounts");
+                return RedirectToAction("Login_Staff", "Accounts");
             }
             return BadRequest();
         }

@@ -37,7 +37,7 @@ namespace APIBanXeDap.Repository.ThanhToan
                 var Chitietsanpham = db.Chitietsanphams.FirstOrDefault(p => p.MaSp == chitiet.MaSp && p.MaMau == chitiet.MaMau && p.MaKichThuoc == chitiet.MaKichThuoc);
                 if (Chitietsanpham != null)
                 {
-                    Chitietsanpham.SoLuongTon = Chitietsanpham.SoLuongTon - 1;
+                    Chitietsanpham.SoLuongTon = Chitietsanpham.SoLuongTon - chitiet.SoLuong;
                     db.Chitietsanphams.Update(Chitietsanpham);
                     db.SaveChanges();
                 }

@@ -61,95 +61,130 @@ namespace APIBanXeDap.Controllers
         [HttpPost("LoginCustomer")]
         public async Task<IActionResult> LoginCustomer(Login model)
         {
-            var findUser = db.Khachhangs.AsNoTracking().FirstOrDefault(p => (p.TenTaiKhoan == model.Email_TenTaiKhoan && 
-            p.MatKhau == model.MatKhau) || (p.Email == model.Email_TenTaiKhoan && p.MatKhau == model.MatKhau) );
-
+            var findUser = db.Khachhangs.AsNoTracking().FirstOrDefault(p => (p.TenTaiKhoan.Trim().ToLower() == model.Email_TenTaiKhoan.Trim().ToLower()) || (p.Email.Trim().ToLower() == model.Email_TenTaiKhoan.Trim().ToLower()));
             if (findUser == null)
             {
                 return Ok(new
                 {
                     Success = false,
-                    Message = "Login failed"
+                    Message = "Tài khoản không tồn tại"
                 });
             }
-            var Khachhang = new PersonalInformation
+            else
             {
-                Id = findUser.MaKh,
-                HoTen = findUser.HoTen,
-                SDT = findUser.Sdt,
-                VaiTro = "Customer",
-                Hinh = findUser.Hinh ?? null,
-            };
-            var AccessToken = TokenServices.GenerateAccessToken(Khachhang);
-            var RefreshToken = TokenServices.GenerateRefreshToken();
-            var AddRefreshTokenDb = new RefreshToken
-            {
-                Id = Guid.NewGuid(),
-                UserId = findUser.MaKh.ToString(),
-                Token = RefreshToken,
-                IssuedAt = DateTime.UtcNow,
-                ExpiredAt = DateTime.UtcNow.AddDays(1),
-            };
-            db.RefreshTokens.Add(AddRefreshTokenDb);
-            await db.SaveChangesAsync();
-            Khachhang.RefreshToken = RefreshToken;
-            return Ok(new
-            {
-                Success = true,
-                Message = "Login successfully",
-                //IDCustomer = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sub),
-                Data = new TokenResponse
+                if(findUser.TinhTrang?.Trim().ToLower() != "Đang hoạt động".Trim().ToLower())
                 {
-                    AccessToken = AccessToken,
-                    RefreshToken = RefreshToken,
-                },
-            });
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = "Tài khoản đang bị tạm khóa"
+                    });
+                }
+                if (findUser.MatKhau?.Trim().ToLower() != model.MatKhau.Trim().ToLower())
+                {
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = "Sai mật khẩu"
+                    });
+                }
+                var Khachhang = new PersonalInformation
+                {
+                    Id = findUser.MaKh,
+                    HoTen = findUser.HoTen,
+                    SDT = findUser.Sdt,
+                    VaiTro = "Customer",
+                    Hinh = findUser.Hinh ?? null,
+                };
+                var AccessToken = TokenServices.GenerateAccessToken(Khachhang);
+                var RefreshToken = TokenServices.GenerateRefreshToken();
+                var AddRefreshTokenDb = new RefreshToken
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = findUser.MaKh.ToString(),
+                    Token = RefreshToken,
+                    IssuedAt = DateTime.UtcNow,
+                    ExpiredAt = DateTime.UtcNow.AddDays(1),
+                };
+                db.RefreshTokens.Add(AddRefreshTokenDb);
+                await db.SaveChangesAsync();
+                Khachhang.RefreshToken = RefreshToken;
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Login successfully",
+                    //IDCustomer = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Sub),
+                    Data = new TokenResponse
+                    {
+                        AccessToken = AccessToken,
+                        RefreshToken = RefreshToken,
+                    },
+                });
+            }
+            
         }
         [HttpPost("LoginStaff")]
         public async Task<IActionResult> LoginStaff(Login model)
         {
-            var findUser = db.Nhanviens.AsNoTracking().FirstOrDefault(p => (p.TenTaiKhoan == model.Email_TenTaiKhoan &&
-            p.MatKhau == model.MatKhau) || (p.Email == model.Email_TenTaiKhoan && p.MatKhau == model.MatKhau));
-
+            var findUser = db.Nhanviens.AsNoTracking().FirstOrDefault(p => (p.TenTaiKhoan.Trim().ToLower() == model.Email_TenTaiKhoan.Trim().ToLower()) || (p.Email.Trim().ToLower() == model.Email_TenTaiKhoan.Trim().ToLower()));
             if (findUser == null)
             {
                 return Ok(new
                 {
                     Success = false,
-                    Message = "Login failed"
+                    Message = "Tài khoản không tồn tại"
                 });
             }
-            var nhanvien = new PersonalInformation
+            else
             {
-                Id = findUser.MaNv,
-                HoTen = findUser.HoTen,
-                SDT = findUser.Sdt,
-                VaiTro = findUser.VaiTro,
-                Hinh = findUser.Hinh ?? null,
-            };
-            var AccessToken = TokenServices.GenerateAccessToken(nhanvien);
-            var RefreshToken = TokenServices.GenerateRefreshToken();
-            var AddRefreshTokenDb = new RefreshToken
-            {
-                Id = Guid.NewGuid(),
-                UserId = findUser.MaNv.ToString(),
-                Token = RefreshToken,
-                IssuedAt = DateTime.UtcNow,
-                ExpiredAt = DateTime.UtcNow.AddDays(1),
-            };
-            db.RefreshTokens.Add(AddRefreshTokenDb);
-            await db.SaveChangesAsync();
-            nhanvien.RefreshToken = RefreshToken;
-            return Ok(new
-            {
-                Success = true,
-                Message = "Login successfully",
-                Data = new TokenResponse
+                if (findUser.TinhTrang?.Trim().ToLower() != "Đang hoạt động".Trim().ToLower())
                 {
-                    AccessToken = AccessToken,
-                    RefreshToken = RefreshToken,
-                },
-            });
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = "Tài khoản đang bị tạm khóa"
+                    });
+                }
+                if (findUser.MatKhau?.Trim().ToLower() != model.MatKhau.Trim().ToLower())
+                {
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = "Sai mật khẩu"
+                    });
+                }
+                var nhanvien = new PersonalInformation
+                {
+                    Id = findUser.MaNv,
+                    HoTen = findUser.HoTen,
+                    SDT = findUser.Sdt,
+                    VaiTro = findUser.VaiTro,
+                    Hinh = findUser.Hinh ?? null,
+                };
+                var AccessToken = TokenServices.GenerateAccessToken(nhanvien);
+                var RefreshToken = TokenServices.GenerateRefreshToken();
+                var AddRefreshTokenDb = new RefreshToken
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = findUser.MaNv.ToString(),
+                    Token = RefreshToken,
+                    IssuedAt = DateTime.UtcNow,
+                    ExpiredAt = DateTime.UtcNow.AddDays(1),
+                };
+                db.RefreshTokens.Add(AddRefreshTokenDb);
+                await db.SaveChangesAsync();
+                nhanvien.RefreshToken = RefreshToken;
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Login successfully",
+                    Data = new TokenResponse
+                    {
+                        AccessToken = AccessToken,
+                        RefreshToken = RefreshToken,
+                    },
+                });
+            }          
         }
         [HttpDelete("Logout")]
         public async Task<IActionResult> Logout(string RefreshToken)
