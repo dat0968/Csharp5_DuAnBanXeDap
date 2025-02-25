@@ -143,6 +143,10 @@ namespace APIBanXeDap.Repository
             khachHang.TinhTrang = khachHangVM.TinhTrang;
             khachHang.IsDelete = khachHangVM.IsDelete;
 
+            if (khachHangVM.Anh != null)
+            {
+                khachHang.Hinh = SaveImage(khachHangVM.Anh);
+            }
             _context.SaveChanges();
             return khachHang;
         }

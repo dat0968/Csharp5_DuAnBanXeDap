@@ -3,7 +3,342 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     ViewData["Title"] = "Nhân Viên";
 }
+<script>
 
+    $(document).ready(function () {
+        // Mở modal để thêm khách hàng
+        $('#openModalCreate').on('click', function () {
+            $('#createEditModal').modal('show');
+            $('#formCreateEdit')[0].reset(); // Reset form
+            $('#formCreateEdit').attr('action', '/NhanVien/Create');
+            $('#imagePreview').hide(); // Ẩn preview ảnh nếu không có ảnh
+        });
+        $(document).on('click', '.btn-edit', function () {
+            const id = $(this).data('id'); // Lấy ID từ nút Sửa
+            openEditModal(id); // Gọi hàm mở modal
+        });
+        $('.btn-hide').on('click', function () {
+            const id = $(this).data('id');
+            toggleIsDelete(id); // Hàm xử lý ẩn khách hàng
+        });
+        $('#formCreateEdit').on('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var actionUrl = $(this).attr('action');
+
+            // Xóa thông báo lỗi cũ
+            $('.text-danger').text('');
+
+            $.ajax({
+                url: actionUrl,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: response.message,
+                            confirmButtonColor: '#007bff'
+                        });
+
+                        setTimeout(() => {
+                            $('#createEditModal').modal('hide');
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        if (response.errors) {
+                            // Hiển thị lỗi dưới từng trường input
+                            for (var fieldName in response.errors) {
+                                var errorMessages = response.errors[fieldName];
+                                $(`[name="${fieldName}"]`).siblings('.text-danger').text(errorMessages.join(', '));
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Thất bại!',
+                                text: response.message,
+                                confirmButtonColor: '#dc3545'
+                            });
+                            if (response.status != null) {
+                                setTimeout(function () {
+                                    window.location.href = `/Home/Error/${parseInt(response.status, 10)}`
+                                }, 2000)
+                            }
+
+                        }
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: 'Có lỗi xảy ra!',
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            });
+        });
+
+    $(document).ready(function () {
+    // Tìm kiếm và sắp xếp nhân viên
+    $('#searchInput, #sortSelect').on('input change', function () {
+        const keyword = $('#searchInput').val().toLowerCase(); // Lấy từ khóa tìm kiếm
+        const sort = $('#sortSelect').val(); // Lấy giá trị sắp xếp
+        const rows = $('#employeeRows tr'); // Lấy các dòng nhân viên trong bảng
+
+        // Lọc nhân viên theo từ khóa
+        rows.each(function () {
+            const name = $(this).find('td:nth-child(2)').text().toLowerCase(); // Tìm tên nhân viên
+            $(this).toggle(name.includes(keyword)); // Nếu tên bao gồm từ khóa thì hiển thị
+        });
+
+        // Sắp xếp nhân viên theo tên
+        const sortedRows = rows.sort(function (a, b) {
+            const nameA = $(a).find('td:nth-child(2)').text().toLowerCase();
+            const nameB = $(b).find('td:nth-child(2)').text().toLowerCase();
+            return sort === "asc" ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+        });
+
+        $('#employeeRows').html(sortedRows); // Cập nhật lại danh sách
+    });
+
+    // Áp dụng bộ lọc tìm kiếm
+    $('#applyFilters').on('click', function () {
+        const keyword = $('#searchInput').val(); // Từ khóa tìm kiếm
+        const status = $('#statusFilter').val(); // Trạng thái lọc
+        const gender = $('#genderFilter').val(); // Giới tính lọc
+
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('keyword', keyword);
+        urlParams.set('status', status);
+        urlParams.set('gender', gender);
+        window.location.search = urlParams.toString(); // Cập nhật lại URL để thực hiện lọc
+    });
+});
+
+
+        // Xử lý kéo thả
+        const rows = document.querySelectorAll('.draggable-row');
+        const dropzones = document.querySelectorAll('.dropzone');
+
+        rows.forEach(row => {
+            row.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('id', row.dataset.id); // Truyền ID khách hàng qua drag event
+            });
+        });
+
+        dropzones.forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                zone.classList.add('dragover');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('dragover');
+            });
+
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+
+                const id = e.dataTransfer.getData('id'); // Lấy ID khách hàng
+                const action = zone.dataset.action; // Lấy hành động từ dropzone
+
+                if (action === 'edit') {
+                    openEditModal(id); // Mở modal chỉnh sửa
+                } else if (action === 'delete') {
+                    toggleIsDelete(id); // Hiển thị xác nhận trước khi ẩn khách hàng
+                }
+            });
+        });
+
+        // Hàm gọi API để ẩn khách hàng (IsDelete = true) sau khi xác nhận
+        function toggleIsDelete(id) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn?',
+                text: 'Khách hàng sẽ bị ẩn khỏi danh sách!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#007bff',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Có, ẩn khách hàng!',
+                cancelButtonText: 'Hủy bỏ'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Gửi yêu cầu tới API nếu người dùng xác nhận
+                    $.ajax({
+                        url: `/NhanVien/ToggleIsDelete/${id}`,
+                        type: 'POST',
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Thành công!',
+                                    text: response.message,
+                                    confirmButtonColor: '#007bff'
+                                });
+
+                                setTimeout(() => {
+                                    location.reload(); // Tải lại trang sau 2 giây
+                                }, 2000);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Thất bại!',
+                                    text: response.message,
+                                    confirmButtonColor: '#dc3545'
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi!',
+                                text: 'Có lỗi xảy ra!',
+                                confirmButtonColor: '#dc3545'
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        // Hàm mở modal chỉnh sửa
+        function openEditModal(id) {
+            $.get(`/NhanVien/GetNhanVienById/${id}`, function (data) {
+                if (data.success) {
+                    $('#HoTen').val(data.data.hoTen ? data.data.hoTen.trim() : '');
+                    $('#Email').val(data.data.email ? data.data.email.trim() : '');
+                    $('#Sdt').val(data.data.sdt ? data.data.sdt.trim() : '');
+                    $('#Cccd').val(data.data.cccd ? data.data.cccd.trim() : '');
+                    $('#DiaChi').val(data.data.diaChi ? data.data.diaChi.trim() : '');
+                    $('#GioiTinh').val(data.data.gioiTinh ? data.data.gioiTinh.trim() : '');
+                    // Xử lý ngày sinh
+                    if (data.data.ngaySinh) {
+                        const ngaySinhDate = new Date(data.data.ngaySinh); // Chuyển chuỗi thành đối tượng Date
+                        const ngaySinhFormatted = `${ngaySinhDate.getFullYear()}-${String(ngaySinhDate.getMonth() + 1).padStart(2, '0')}-${String(ngaySinhDate.getDate()).padStart(2, '0')}`;
+                        $('#NgaySinh').val(ngaySinhFormatted); // Đặt giá trị ngày vào input
+                    } else {
+                        $('#NgaySinh').val('');
+                    }
+                    $('#TinhTrang').val(data.data.tinhTrang ? data.data.tinhTrang.trim() : '');
+                    $('#TenTaiKhoan').val(data.data.tenTaiKhoan ? data.data.tenTaiKhoan.trim() : '').prop('readonly', true);
+                    $('#MatKhau').val(data.data.matKhau ? data.data.matKhau.trim() : '').parent().hide();
+                    $('#Role').val(data.data.vaiTro ? data.data.vaiTro.trim() : '');
+                    $('#Luong').val(data.data.luong ? data.data.luong : 0);
+                    $('#NgayVaoLam').val(data.data.NgayVaoLam ? data.data.NgayVaoLam.trim() : '').parent().hide();
+
+
+
+                    if (data.data.hinh) {
+                        $('#imagePreview').attr('src', 'https://localhost:7137' + data.data.hinh).show();
+                    } else {
+                        $('#imagePreview').hide();
+                    }
+
+
+                    $('#formCreateEdit').attr('action', `/NhanVien/Edit/${id}`);
+                    $('#createEditModal').modal('show');
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: data.message,
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            });
+        }
+
+        function showSuccessAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: message,
+                confirmButtonColor: '#007bff'
+            });
+        }
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi!',
+                text: message,
+                confirmButtonColor: '#dc3545'
+            });
+        }
+    });
+    $('#exportExcel').on('click', function () {
+        window.location.href = '/NhanVien/ExportToExcel';
+    });
+    $(document).ready(function () {
+        // Xác thực khi nhập tệp Excel
+        $('form[asp-action="ImportExcel"]').on('submit', function (e) {
+            e.preventDefault(); // Gọi đúng phương thức preventDefault()
+
+            const fileInput = $('#importFile')[0]; // Lấy phần tử input file
+            console.log("File input:", fileInput);
+
+            const file = fileInput.files[0]; // Lấy tệp được chọn
+            console.log("File:", file);
+
+            // Kiểm tra định dạng tệp
+            if (file && !file.name.match(/\.(xls|xlsx)$/)) {
+                alert("Vui lòng chọn tệp Excel hợp lệ (.xls, .xlsx)!");
+                return; // Dừng lại nếu tệp không hợp lệ
+            }
+
+            // Nếu tệp hợp lệ, tiến hành gửi form
+            this.submit();
+        });
+
+
+
+        // File preview logic for create/edit modal
+        $('#Anh').on('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').attr('src', e.target.result).show();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                $('#imagePreview').hide();
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        // Khi thay đổi số lượng hiển thị
+        $('#pageSizeSelect').on('change', function () {
+            const pageSize = $(this).val();
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('pageSize', pageSize);
+            urlParams.set('pageNumber', 1); // Reset về trang đầu tiên
+            window.location.search = urlParams.toString();
+        });
+
+        $('#exportExcel').on('click', function () {
+            window.location.href = '/NhanVien/ExportToExcel';
+        });
+    });
+// Đảm bảo là đoạn mã này chạy sau khi DOM đã được tải
+$(document).ready(function () {
+    // Khi nhấn nút "Hủy"
+    $('.btn-cancel').on('click', function () {
+        const modal = document.getElementById('createEditModal'); // Lấy modal
+        const bootstrapModal = bootstrap.Modal.getInstance(modal); // Lấy instance của modal
+        bootstrapModal.hide(); // Đóng modal
+        location.reload(); // Tải lại trang
+    });
+});
+
+
+</script>
 <div class="container">
     <h2>Danh Sách Nhân Viên</h2>
 
@@ -18,7 +353,7 @@
             <select id="statusFilter" class="form-control">
                 <option value="">-- Chọn Tình Trạng --</option>
                 <option value="Đang hoạt động" selected="@(ViewBag.Status == "Đang hoạt động" ? "selected" : null)">Đang hoạt động</option>
-                <option value="Đã tạm khoá" selected="@(ViewBag.Status == "Đã tạm khoá" ? "selected" : null)">Đã tạm khoá</option>
+                <option value="Đã tạm khóa" selected="@(ViewBag.Status == "Đã tạm khóa" ? "selected" : null)">Đã tạm khóa</option>
             </select>
         </div>
 
@@ -216,27 +551,27 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="HoTen">Họ và tên</label>
-                                    <input type="text" class="form-control" id="HoTen" name="HoTen" required>
+                                    <input type="text" class="form-control" id="HoTen" name="HoTen" >
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="Email">Email</label>
-                                    <input type="email" class="form-control" id="Email" name="Email" required>
-                                    <span class="text-danger"></span>
+                                    <input type="text" class="form-control" id="Email" name="Email">
+                                    <span class="text-danger"></span> <!-- Hiển thị lỗi -->
                                 </div>
                                 <div class="form-group">
                                     <label for="Sdt">Số điện thoại</label>
-                                    <input type="text" class="form-control" id="Sdt" name="Sdt" required>
+                                    <input type="text" class="form-control" id="Sdt" name="Sdt" >
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="Luong">Lương</label>
-                                    <input type="number" class="form-control" id="Luong" name="Luong" min="0" required>
+                                    <input type="text" class="form-control" id="Luong" name="Luong" min="0" >
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="VaiTro">Vai trò</label>
-                                    <select class="form-control" id="VaiTro" name="VaiTro" required>
+                                    <select class="form-control" id="VaiTro" name="VaiTro" >
                                         <option value="Admin">Admin</option>
                                         <option value="Nhân Viên">Nhân Viên</option>
                                     </select>
@@ -244,12 +579,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="DiaChi">Địa chỉ</label>
-                                    <input type="text" class="form-control" id="DiaChi" name="DiaChi" required>
+                                    <input type="text" class="form-control" id="DiaChi" name="DiaChi" >
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="GioiTinh">Giới tính</label>
-                                    <select class="form-control" id="GioiTinh" name="GioiTinh" required>
+                                    <select class="form-control" id="GioiTinh" name="GioiTinh" >
                                         <option value="Nam">Nam</option>
                                         <option value="Nữ">Nữ</option>
                                     </select>
@@ -276,19 +611,19 @@
 
                                 <div class="form-group">
                                     <label for="TenTaiKhoan">Tên tài khoản</label>
-                                    <input type="text" class="form-control" id="TenTaiKhoan" name="TenTaiKhoan" required>
+                                    <input type="text" class="form-control" id="TenTaiKhoan" name="TenTaiKhoan" >
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="MatKhau">Mật khẩu</label>
-                                    <input type="password" class="form-control" id="MatKhau" name="MatKhau" required>
+                                    <input type="password" class="form-control" id="MatKhau" name="MatKhau" >
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="TinhTrang">Tình trạng</label>
                                     <select class="form-control" id="TinhTrang" name="TinhTrang">
                                         <option value="Đang hoạt động">Hoạt động</option>
-                                        <option value="Đã tạm khoá">tạm khoá</option>
+                                        <option value="Đã tạm khóa">Đã tạm khóa</option>
                                     </select>
                                     <span class="text-danger"></span>
                                 </div>
@@ -319,332 +654,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
 
-<script>
 
-    $(document).ready(function () {
-        // Mở modal để thêm khách hàng
-        $('#openModalCreate').on('click', function () {
-            $('#createEditModal').modal('show');
-            $('#formCreateEdit')[0].reset(); // Reset form
-            $('#formCreateEdit').attr('action', '/NhanVien/Create');
-            $('#imagePreview').hide(); // Ẩn preview ảnh nếu không có ảnh
-        });
-        $(document).on('click', '.btn-edit', function () {
-            const id = $(this).data('id'); // Lấy ID từ nút Sửa
-            openEditModal(id); // Gọi hàm mở modal
-        });
-        $('.btn-hide').on('click', function () {
-            const id = $(this).data('id');
-            toggleIsDelete(id); // Hàm xử lý ẩn khách hàng
-        });
-        $('#formCreateEdit').on('submit', function (e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            var actionUrl = $(this).attr('action');
-
-            // Xóa thông báo lỗi cũ
-            $('.text-danger').text('');
-
-            $.ajax({
-                url: actionUrl,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công!',
-                            text: response.message,
-                            confirmButtonColor: '#007bff'
-                        });
-
-                        setTimeout(() => {
-                            $('#createEditModal').modal('hide');
-                            location.reload();
-                        }, 2000);
-                    } else {
-                        if (response.errors) {
-                            // Hiển thị lỗi dưới từng trường input
-                            for (var fieldName in response.errors) {
-                                var errorMessages = response.errors[fieldName];
-                                $(`[name="${fieldName}"]`).siblings('.text-danger').text(errorMessages.join(', '));
-                            }
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Thất bại!',
-                                text: response.message,
-                                confirmButtonColor: '#dc3545'
-                            });
-                            if(response.status != null ){
-                                 setTimeout(function(){
-                                     window.location.href = `/Home/Error/${parseInt(response.status, 10)}`
-                                 }, 2000)
-                            }
-                            
-                        }
-                    }
-                },
-                error: function () {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi!',
-                        text: 'Có lỗi xảy ra!',
-                        confirmButtonColor: '#dc3545'
-                    });
-                }
-            });
-        });
-
-        // Tìm kiếm và sắp xếp khách hàng
-        $('#searchInput, #sortSelect').on('input change', function () {
-            const keyword = $('#searchInput').val().toLowerCase();
-            const sort = $('#sortSelect').val();
-            const rows = $('#customerRows tr');
-
-            // Lọc khách hàng theo từ khóa
-            rows.each(function () {
-                const name = $(this).find('td:nth-child(2)').text().toLowerCase();
-                $(this).toggle(name.includes(keyword));
-            });
-
-            // Sắp xếp khách hàng theo tên
-            const sortedRows = rows.sort(function (a, b) {
-                const nameA = $(a).find('td:nth-child(2)').text().toLowerCase();
-                const nameB = $(b).find('td:nth-child(2)').text().toLowerCase();
-                return sort === "asc" ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
-            });
-
-            $('#customerRows').html(sortedRows);
-        });
-        $(document).ready(function () {
-            $('#applyFilters').on('click', function () {
-                const keyword = $('#searchInput').val();
-                const status = $('#statusFilter').val();
-                const gender = $('#genderFilter').val();
-
-                const urlParams = new URLSearchParams(window.location.search);
-                urlParams.set('keyword', keyword);
-                urlParams.set('status', status);
-                urlParams.set('gender', gender);
-                window.location.search = urlParams.toString();
-            });
-        });
-
-        // Xử lý kéo thả
-        const rows = document.querySelectorAll('.draggable-row');
-        const dropzones = document.querySelectorAll('.dropzone');
-
-        rows.forEach(row => {
-            row.addEventListener('dragstart', e => {
-                e.dataTransfer.setData('id', row.dataset.id); // Truyền ID khách hàng qua drag event
-            });
-        });
-
-        dropzones.forEach(zone => {
-            zone.addEventListener('dragover', e => {
-                e.preventDefault();
-                zone.classList.add('dragover');
-            });
-
-            zone.addEventListener('dragleave', () => {
-                zone.classList.remove('dragover');
-            });
-
-            zone.addEventListener('drop', e => {
-                e.preventDefault();
-                zone.classList.remove('dragover');
-
-                const id = e.dataTransfer.getData('id'); // Lấy ID khách hàng
-                const action = zone.dataset.action; // Lấy hành động từ dropzone
-
-                if (action === 'edit') {
-                    openEditModal(id); // Mở modal chỉnh sửa
-                } else if (action === 'delete') {
-                    toggleIsDelete(id); // Hiển thị xác nhận trước khi ẩn khách hàng
-                }
-            });
-        });
-
-        // Hàm gọi API để ẩn khách hàng (IsDelete = true) sau khi xác nhận
-        function toggleIsDelete(id) {
-            Swal.fire({
-                title: 'Bạn có chắc chắn?',
-                text: 'Khách hàng sẽ bị ẩn khỏi danh sách!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#007bff',
-                cancelButtonColor: '#dc3545',
-                confirmButtonText: 'Có, ẩn khách hàng!',
-                cancelButtonText: 'Hủy bỏ'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Gửi yêu cầu tới API nếu người dùng xác nhận
-                    $.ajax({
-                        url: `/NhanVien/ToggleIsDelete/${id}`,
-                        type: 'POST',
-                        success: function (response) {
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Thành công!',
-                                    text: response.message,
-                                    confirmButtonColor: '#007bff'
-                                });
-
-                                setTimeout(() => {
-                                    location.reload(); // Tải lại trang sau 2 giây
-                                }, 2000);
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Thất bại!',
-                                    text: response.message,
-                                    confirmButtonColor: '#dc3545'
-                                });
-                            }
-                        },
-                        error: function () {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Lỗi!',
-                                text: 'Có lỗi xảy ra!',
-                                confirmButtonColor: '#dc3545'
-                            });
-                        }
-                    });
-                }
-            });
-        }
-
-        // Hàm mở modal chỉnh sửa
-        function openEditModal(id) {
-            $.get(`/NhanVien/GetNhanVienById/${id}`, function (data) {
-                if (data.success) {
-                    $('#HoTen').val(data.data.hoTen ? data.data.hoTen.trim() : '');
-                    $('#Email').val(data.data.email ? data.data.email.trim() : '');
-                    $('#Sdt').val(data.data.sdt ? data.data.sdt.trim() : '');
-                    $('#Cccd').val(data.data.cccd ? data.data.cccd.trim() : '');
-                    $('#DiaChi').val(data.data.diaChi ? data.data.diaChi.trim() : '');
-                    $('#GioiTinh').val(data.data.gioiTinh ? data.data.gioiTinh.trim() : '');
-                    // Xử lý ngày sinh
-                    if (data.data.ngaySinh) {
-                        const ngaySinhDate = new Date(data.data.ngaySinh); // Chuyển chuỗi thành đối tượng Date
-                        const ngaySinhFormatted = `${ngaySinhDate.getFullYear()}-${String(ngaySinhDate.getMonth() + 1).padStart(2, '0')}-${String(ngaySinhDate.getDate()).padStart(2, '0')}`;
-                        $('#NgaySinh').val(ngaySinhFormatted); // Đặt giá trị ngày vào input
-                    } else {
-                        $('#NgaySinh').val('');
-                    }
-                    $('#TinhTrang').val(data.data.tinhTrang ? data.data.tinhTrang.trim() : '');
-                    $('#TenTaiKhoan').val(data.data.tenTaiKhoan ? data.data.tenTaiKhoan.trim() : '').prop('readonly', true);
-                    $('#MatKhau').val(data.data.matKhau ? data.data.matKhau.trim() : '').parent().hide();
-                    $('#Role').val(data.data.vaiTro ? data.data.vaiTro.trim() : '');
-                    $('#Luong').val(data.data.luong ? data.data.luong: 0);
-                    $('#NgayVaoLam').val(data.data.NgayVaoLam ? data.data.NgayVaoLam.trim() : '').parent().hide();
-
-
-
-                    if (data.data.hinh) {
-                        $('#imagePreview').attr('src', 'https://localhost:7137' + data.data.hinh).show();
-                    } else {
-                        $('#imagePreview').hide();
-                    }
-
-
-                    $('#formCreateEdit').attr('action', `/NhanVien/Edit/${id}`);
-                    $('#createEditModal').modal('show');
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi!',
-                        text: data.message,
-                        confirmButtonColor: '#dc3545'
-                    });
-                }
-            });
-        }
-
-        function showSuccessAlert(message) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Thành công!',
-                text: message,
-                confirmButtonColor: '#007bff'
-            });
-        }
-
-        function showErrorAlert(message) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi!',
-                text: message,
-                confirmButtonColor: '#dc3545'
-            });
-        }
-    });
-    $('#exportExcel').on('click', function () {
-        window.location.href = '/NhanVien/ExportToExcel';
-    });
-    $(document).ready(function () {
-        // Xác thực khi nhập tệp Excel
-        $('form[asp-action="ImportExcel"]').on('submit', function (e) {
-            e.preventDefault(); // Gọi đúng phương thức preventDefault()
-
-            const fileInput = $('#importFile')[0]; // Lấy phần tử input file
-            console.log("File input:", fileInput);
-
-            const file = fileInput.files[0]; // Lấy tệp được chọn
-            console.log("File:", file);
-
-            // Kiểm tra định dạng tệp
-            if (file && !file.name.match(/\.(xls|xlsx)$/)) {
-                alert("Vui lòng chọn tệp Excel hợp lệ (.xls, .xlsx)!");
-                return; // Dừng lại nếu tệp không hợp lệ
-            }
-
-            // Nếu tệp hợp lệ, tiến hành gửi form
-            this.submit();
-        });
-
-
-
-        // File preview logic for create/edit modal
-        $('#Anh').on('change', function () {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#imagePreview').attr('src', e.target.result).show();
-                };
-                reader.readAsDataURL(file);
-            } else {
-                $('#imagePreview').hide();
-            }
-        });
-    });
-
-    $(document).ready(function () {
-        // Khi thay đổi số lượng hiển thị
-        $('#pageSizeSelect').on('change', function () {
-            const pageSize = $(this).val();
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('pageSize', pageSize);
-            urlParams.set('pageNumber', 1); // Reset về trang đầu tiên
-            window.location.search = urlParams.toString();
-        });
-
-        $('#exportExcel').on('click', function () {
-            window.location.href = '/NhanVien/ExportToExcel';
-        });
-    });
-    document.querySelector('.btn-cancel').addEventListener('click', function () {
-        const modal = document.getElementById('createEditModal');
-        const bootstrapModal = bootstrap.Modal.getInstance(modal);
-        bootstrapModal.hide(); // Đóng modal
-    });
-</script>
 <style>
     .custom-modal-width {
         max-width: 80%;
