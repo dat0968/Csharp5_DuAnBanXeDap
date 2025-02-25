@@ -30,6 +30,7 @@ using APIBanXeDap.Repository.YeuThich;
 using Microsoft.OpenApi.Models;
 using APIBanXeDap.Repository.BinhLuan;
 using APIBanXeDap.Repository.TraLoiBinhLuan;
+using APIBanXeDap.Repository.UpdateNhanVien;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -112,6 +113,7 @@ builder.Services.AddScoped<IKhachHangService, KhachHangService>();
 builder.Services.AddScoped<IKhachHangRepository, KhachHangRepository>();
 builder.Services.AddScoped<INhanVienService, NhanVienService>();
 builder.Services.AddScoped<INhanVienRepository, NhanVienRepository>();
+builder.Services.AddScoped<IUpdateNhanVienRepository, UpdateNhanVienRepository>();
 builder.Services.AddScoped<IUpdateProfileRepository, UpdateProfileRepository>();
 builder.Services.AddScoped<ICheckoutRepository, CheckoutRepository>();
 builder.Services.AddScoped<IYeuThichRepository, YeuThichRepository>();
