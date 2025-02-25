@@ -1,4 +1,5 @@
-﻿<style type="text/css">
+﻿
+<style type="text/css">
     .css_select_div {
         text-align: center;
     }
@@ -114,10 +115,12 @@
         if(!isconfirm){
             return false;
         }
+        var token = @Html.Raw(Json.Serialize(ViewBag.Token));
         fetch(`https://localhost:7137/api/Shippings/CreateShipping`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json' 
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${token}`
             },
             body: JSON.stringify(model) 
         })

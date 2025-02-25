@@ -214,7 +214,7 @@ namespace MVCBanXeDap.Controllers
                     .SetMarginBottom(10));
 
                 // Thêm thông tin Giảm Giá Mã Coupon
-                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {String.Format("{0}%", invoice.GiamGiaMaCoupon)}")
+                document.Add(new Paragraph($"Giảm Giá Mã Coupon: {String.Format("{0} VNĐ", invoice.GiamGiaMaCoupon)}")
                     .SetFontSize(12)
                     .SetMarginBottom(10));
 
