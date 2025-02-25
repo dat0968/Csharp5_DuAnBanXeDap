@@ -4260,6 +4260,10 @@
             "type": "string",
             "nullable": true
           },
+          "hinh": {
+            "type": "string",
+            "nullable": true
+          },
           "vaiTro": {
             "type": "string",
             "nullable": true

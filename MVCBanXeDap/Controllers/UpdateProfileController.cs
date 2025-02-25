@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using MVCBanXeDap.Models;
 using System.Net.Http.Headers;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MVCBanXeDap.Controllers
 {
@@ -25,20 +26,23 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateProfile()
         {
-            string token = HttpContext.Session.GetString("AccessToken");
-            var information = ijwtToken.GetInformationUserFromToken(token);
-            var id = information.Id;
-            // Lấy thông tin khách hàng từ API
-            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"KhachHang/GetKhachHangById/{id}");
-            if (response.IsSuccessStatusCode)
+            var validationToken = await ijwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validationToken))
             {
-                var data = await response.Content.ReadAsStringAsync();
-                var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(data);
-                var kh = new KhachHangVM();
-                kh = khachHang.Data;
-                return View(kh);
-                
-            }
+                var accesstoken = validationToken;
+                var information = ijwtToken.GetInformationUserFromToken(accesstoken);
+                var id = information.Id;
+                HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"KhachHang/GetKhachHangById/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var data = await response.Content.ReadAsStringAsync();
+                    var khachHang = JsonConvert.DeserializeObject<ApiReponse<KhachHangVM>>(data);
+                    var kh = new KhachHangVM();
+                    kh = khachHang.Data;
+                    return View(kh);
+
+                }
+            }            
             return NotFound("Không tìm thấy khách hàng");
         }
 

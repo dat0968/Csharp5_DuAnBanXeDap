@@ -78,6 +78,7 @@ namespace APIBanXeDap.Controllers
                 HoTen = findUser.HoTen,
                 SDT = findUser.Sdt,
                 VaiTro = "Customer",
+                Hinh = findUser.Hinh ?? null,
             };
             var AccessToken = TokenServices.GenerateAccessToken(Khachhang);
             var RefreshToken = TokenServices.GenerateRefreshToken();
@@ -124,6 +125,7 @@ namespace APIBanXeDap.Controllers
                 HoTen = findUser.HoTen,
                 SDT = findUser.Sdt,
                 VaiTro = findUser.VaiTro,
+                Hinh = findUser.Hinh ?? null,
             };
             var AccessToken = TokenServices.GenerateAccessToken(nhanvien);
             var RefreshToken = TokenServices.GenerateRefreshToken();

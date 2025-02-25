@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using MVCBanXeDap.Services;
 using MVCBanXeDap.Services.Email;
+using MVCBanXeDap.Services.Jwt;
 using MVCBanXeDap.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace MVCBanXeDap.Controllers
@@ -16,11 +18,14 @@ namespace MVCBanXeDap.Controllers
         Uri baseAddress = new Uri("https://localhost:7137/api/");
         private readonly HttpClient _client;
         private readonly IConfiguration _config;
-        public AccountsController(IConfiguration config)
+        private readonly IjwtToken jwtToken;
+
+        public AccountsController(IConfiguration config, IjwtToken jwtToken)
         {
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
             _config = config;
+            this.jwtToken = jwtToken;
         }
         [HttpGet]
         public IActionResult Login_Customer()
@@ -107,6 +112,14 @@ namespace MVCBanXeDap.Controllers
                                 HttpContext.Session.SetString("AccessToken", token["accessToken"]?.ToString());
                                 HttpContext.Session.SetString("RefreshToken", token["refreshToken"]?.ToString());
                                 //HttpContext.Session.SetString("Role", "Staff");
+                                var validateAccessToken = await jwtToken.ValidateAccessToken();
+                                if (!string.IsNullOrEmpty(validateAccessToken))
+                                {
+                                    var accesstoken = validateAccessToken;
+                                    var information = jwtToken.GetInformationUserFromToken(accesstoken);
+                                    HttpContext.Session.SetString("HoTen", information.HoTen);
+                                    HttpContext.Session.SetString("Hinh", information.Hinh ?? "");
+                                }
                                 TempData["SuccessMessage"] = "Đăng nhập thành công";
                                 return RedirectToAction("Index", "Product");
                             }

@@ -82,11 +82,12 @@
         if (!isConfirm) {
             return false;
         }
-
+        var token = @Html.Raw(Json.Serialize(ViewBag.Token))
         fetch(`https://localhost:7137/api/Shippings/EditShipping`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(model)
         })

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "HXsts+6ZiKb03Pz3VubiczBY9e+yjBQY2k3C8R6bgek=",
+  "Hash": "lKEkiSBYIes6yhD+9m5ib4TOVZrGYtLj83e/Iik6bDk=",
   "Source": "MVCBanXeDap",
   "BasePath": "_content/MVCBanXeDap",
   "Mode": "Default",
@@ -10051,6 +10051,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\fonts\\Merriweather-Regular.ttf"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (1).jfif",
+      "SourceId": "MVCBanXeDap",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\",
+      "BasePath": "_content/MVCBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/images (1)#[.{fingerprint}]?.jfif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "0vu8ynnoxe",
+      "Integrity": "xCN0Hm6UQbD98eYPR/XmBsYwq1byhGUPrsCYuPJ3I2g=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Hinh\\AnhKhachHang\\images (1).jfif"
     },
     {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (3).jpg",
@@ -53810,6 +53831,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-BqLrORdttZubew3a/uV0j0wDJFDASKyZF0pZ8LMZl7k="
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/AnhKhachHang/images (1).0vu8ynnoxe.jfif",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (1).jfif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4198"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/pjpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xCN0Hm6UQbD98eYPR/XmBsYwq1byhGUPrsCYuPJ3I2g=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 02 Nov 2024 08:20:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "0vu8ynnoxe"
+        },
+        {
+          "Name": "label",
+          "Value": "Hinh/AnhKhachHang/images (1).jfif"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-xCN0Hm6UQbD98eYPR/XmBsYwq1byhGUPrsCYuPJ3I2g="
+        }
+      ]
+    },
+    {
+      "Route": "Hinh/AnhKhachHang/images (1).jfif",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (1).jfif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4198"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/pjpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xCN0Hm6UQbD98eYPR/XmBsYwq1byhGUPrsCYuPJ3I2g=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 02 Nov 2024 08:20:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-xCN0Hm6UQbD98eYPR/XmBsYwq1byhGUPrsCYuPJ3I2g="
         }
       ]
     },

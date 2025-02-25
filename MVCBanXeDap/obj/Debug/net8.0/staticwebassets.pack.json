@@ -1709,6 +1709,10 @@
       "PackagePath": "staticwebassets\\AdminTemplate\\widgets.html"
     },
     {
+      "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (1).jfif",
+      "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\images (1).jfif"
+    },
+    {
       "Id": "F:\\CSHARP_5\\APIBanXeDap\\MVCBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\images (3).jpg",
       "PackagePath": "staticwebassets\\Hinh\\AnhKhachHang\\images (3).jpg"
     },

@@ -446,20 +446,35 @@
                             @* </li> *@
 
                             <li class="nav-item topbar-user dropdown hidden-caret">
-                                <a class="dropdown-toggle profile-pic"
-                                   data-bs-toggle="dropdown"
-                                   href="#"
-                                   aria-expanded="false">
-                                    <div class="avatar-sm">
-                                        <img src="~/AdminTemplate/assets/img/profile.jpg"
-                                             alt="..."
-                                             class="avatar-img rounded-circle" />
-                                    </div>
-                                    <span class="profile-username">
-                                        <span class="op-7">Hi,</span>
-                                        <span class="fw-bold">Hizrian</span>
-                                    </span>
-                                </a>
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle profile-pic"
+                                       data-bs-toggle="dropdown"
+                                       href="#"
+                                       aria-expanded="false">
+                                        <div class="avatar-sm">
+                                            <img src="@(!string.IsNullOrEmpty(Context.Session.GetString("Hinh")) ? Url.Content($"~/Hinh/AnhKhachHang/{Context.Session.GetString("Hinh")}") : Url.Content("~/AdminTemplate/assets/img/profile.jpg"))"
+                                                 alt="..."
+                                                 class="avatar-img rounded-circle" />
+                                        </div>
+                                        <span class="profile-username">
+                                            <span class="op-7">Xin chào,</span>
+                                            <span class="fw-bold">@(Context.Session.GetString("HoTen") ?? "Lỗi")</span>
+                                        </span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="UpdateProfile" asp-action="UpdateProfile">
+                                                <i class="fas fa-user-edit me-2"></i> Cập nhật thông tin cá nhân
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Accounts" asp-action="LogoutAccount">
+                                                <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
                                 <ul class="dropdown-menu dropdown-user animated fadeIn">
                                     <div class="dropdown-user-scroll scrollbar-outer">
                                     <li>

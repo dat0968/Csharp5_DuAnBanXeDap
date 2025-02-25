@@ -28,7 +28,8 @@ namespace APIBanXeDap.Repository.Token
                     new Claim(JwtRegisteredClaimNames.Jti, radomIDToken.ToString()),
                     new Claim("PhoneNumber", model.SDT ?? ""),
                     new Claim("FullName", model.HoTen),
-                    new Claim(ClaimTypes.Role, model.VaiTro)
+                    new Claim(ClaimTypes.Role, model.VaiTro),
+                    new Claim("Avatar", model.Hinh ?? ""),
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKetByte), SecurityAlgorithms.HmacSha256Signature),

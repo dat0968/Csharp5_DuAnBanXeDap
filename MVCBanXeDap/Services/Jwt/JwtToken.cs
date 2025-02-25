@@ -84,12 +84,14 @@ namespace MVCBanXeDap.Services.Jwt
                 var hoten = claims.FirstOrDefault(c => c.Type == "FullName");
                 var sdt = claims.FirstOrDefault(c => c.Type == "PhoneNumber");
                 var role = claims.FirstOrDefault(c => c.Type == "role");
+                var hinh = claims.FirstOrDefault(c => c.Type == "Avatar");
                 var data = new PersonalInformation
                 {
                     Id = int.Parse(id.Value),
                     HoTen = hoten.Value,
                     SDT = sdt.Value,
                     VaiTro = role.Value,
+                    Hinh = string.IsNullOrEmpty(hinh?.Value) ? null : hinh.Value,
                 };
                 return data;
             }

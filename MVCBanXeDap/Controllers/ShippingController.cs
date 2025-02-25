@@ -120,8 +120,13 @@ namespace MVCBanXeDap.Controllers
             return RedirectToAction("index");
         }
         [HttpPost]
-        public IActionResult GetPartialViewEdit([FromBody] ShippingVM model)
+        public async Task<IActionResult> GetPartialViewEdit([FromBody] ShippingVM model)
         {
+            var validateAccessToken = await jwtToken.ValidateAccessToken();
+            if (!string.IsNullOrEmpty(validateAccessToken))
+            {
+                ViewBag.Token = validateAccessToken;              
+            }
             return PartialView("~/Views/Shared/_ShippingtEdit.cshtml", model);
         }
     }
