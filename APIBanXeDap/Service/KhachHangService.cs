@@ -1,4 +1,5 @@
 ﻿using APIBanXeDap.Models;
+using APIBanXeDap.Models.ViewModels;
 using APIBanXeDap.ViewModels;
 
 public class KhachHangService : IKhachHangService
@@ -66,36 +67,37 @@ public class KhachHangService : IKhachHangService
 
     public KhachHangVM UpdateKhachHang(int id, KhachHangVM khachHangVM)
     {
-        // Nếu IsDelete là true, đặt các trường cần thiết thành null
-        if (khachHangVM.IsDelete == true)
-        {
-            khachHangVM.TenTaiKhoan = null;
-            khachHangVM.MatKhau = null;
-            khachHangVM.Email = null;
-        }
+        var khachHang = _repository.Update(id, khachHangVM);
+        //// Nếu IsDelete là true, đặt các trường cần thiết thành null
+        //if (khachHangVM.IsDelete == true)
+        //{
+        //    khachHangVM.TenTaiKhoan = null;
+        //    khachHangVM.MatKhau = null;
+        //    khachHangVM.Email = null;
+        //}
 
-        // Chuyển đổi từ string về DateOnly?
-        var ngaySinh = khachHangVM.NgaySinh;
+        //// Chuyển đổi từ string về DateOnly?
+        //var ngaySinh = khachHangVM.NgaySinh;
 
-        var khachHang = _repository.Update(id, new KhachHangVM
-        {
-            HoTen = khachHangVM.HoTen,
-            GioiTinh = khachHangVM.GioiTinh,
-            NgaySinh = ngaySinh,
-            DiaChi = khachHangVM.DiaChi,
-            Cccd = khachHangVM.Cccd,
-            Sdt = khachHangVM.Sdt,
-            Email = khachHangVM.Email,
-            TenTaiKhoan = khachHangVM.TenTaiKhoan,
-            MatKhau = khachHangVM.MatKhau,
-            TinhTrang = khachHangVM.TinhTrang,
-            Hinh = khachHangVM.Hinh,
-            IsDelete = khachHangVM.IsDelete
-        });
-        if (khachHangVM.IsDelete != null)
-        {
-            khachHang.IsDelete = khachHangVM.IsDelete;
-        }
+        //var khachHang = _repository.Update(id, new KhachHangVM
+        //{
+        //    HoTen = khachHangVM.HoTen,
+        //    GioiTinh = khachHangVM.GioiTinh,
+        //    NgaySinh = ngaySinh,
+        //    DiaChi = khachHangVM.DiaChi,
+        //    Cccd = khachHangVM.Cccd,
+        //    Sdt = khachHangVM.Sdt,
+        //    Email = khachHangVM.Email,
+        //    TenTaiKhoan = khachHangVM.TenTaiKhoan,
+        //    MatKhau = khachHangVM.MatKhau,
+        //    TinhTrang = khachHangVM.TinhTrang,
+        //    Hinh = khachHangVM.Hinh,
+        //    IsDelete = khachHangVM.IsDelete
+        //});
+        //if (khachHangVM.IsDelete != null)
+        //{
+        //    khachHang.IsDelete = khachHangVM.IsDelete;
+        //}
         return new KhachHangVM
         {
             HoTen = khachHang.HoTen,

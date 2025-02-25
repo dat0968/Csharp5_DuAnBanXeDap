@@ -77,9 +77,9 @@ namespace APIBanXeDap.Controllers
                 { "Chờ xác nhận", new List<string> { "Đã xác nhận", "Đã hủy" } },
                 { "Đã xác nhận", new List<string> { "Đã giao cho đơn vị vận chuyển", "Đã hủy" } },
                 { "Đã giao cho đơn vị vận chuyển", new List<string> { "Đang giao hàng", "Đã hủy" } },
-                { "Đang giao hàng", new List<string> { "Đã giao cho khách", "Hoàn trả/Hoàn tiền", "Đã hủy" } },
+                { "Đang giao hàng", new List<string> {  "Hoàn trả/Hoàn tiền", "Đã hủy" } },
                 { "Chờ thanh toán", new List<string> { "Đã xác nhận", "Đã hủy" } },
-                { "Đã thanh toán", new List<string> { "Đã hủy", "Hoàn trả/Hoàn tiền" } },
+                { "Đã thanh toán", new List<string> { "Hoàn trả/Hoàn tiền" } },
                 { "Hoàn trả/Hoàn tiền", new List<string> { } },
                 { "Đã hủy", new List<string> { } }
             };

@@ -7,7 +7,7 @@ namespace MVCBanXeDap.ViewModels
         public int? MaNv { get; set; }
 
         [Required(ErrorMessage = "Họ tên không được để trống")]
-        [StringLength(100, ErrorMessage = "Họ tên không được vượt quá 100 ký tự")]
+        [StringLength(50, ErrorMessage = "Họ tên không được vượt quá 50 ký tự")]
         public string? HoTen { get; set; }
 
         [Required(ErrorMessage = "Số điện thoại không được để trống")]

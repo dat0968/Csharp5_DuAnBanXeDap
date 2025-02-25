@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vPziulO2ySzVbZZa4l37Gc7jQXU3xUr3h2qTEOaj8oc=",
+  "Hash": "UDqqCwGcd9N4MzIqm/moo0zPaw1rr8Ol/ZyTW6y3Hs8=",
   "Source": "MVCBanXeDap",
   "BasePath": "_content/MVCBanXeDap",
   "Mode": "Default",
@@ -412,6 +412,48 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-01-15 063250.png"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-02-16 134453.png",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/Screenshot 2025-02-16 134453#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "vf1fmw308c",
+      "Integrity": "CzuIcojB3yUKbuuUErCzbATibCLqPYqO9bFCA2cQEns=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-02-16 134453.png"
+    },
+    {
+      "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-02-16 134531.png",
+      "SourceId": "APIBanXeDap",
+      "SourceType": "Project",
+      "ContentRoot": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\",
+      "BasePath": "_content/APIBanXeDap",
+      "RelativePath": "Hinh/AnhKhachHang/Screenshot 2025-02-16 134531#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "v35l5yydqf",
+      "Integrity": "5aX3hnZaud6zug0sn0LURGqPXLBuYcfw618NFU718dU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-02-16 134531.png"
     },
     {
       "Identity": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Xe-dap-dia-hinh-mtb-Trinx-X1-One-2021-den-lam.jpg",
@@ -16378,6 +16420,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-SAFhJMM6B2c/WOXLVU++Ig/ZBAqj3GKfb2tBttDhlws="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/Screenshot 2025-02-16 134453.png",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-02-16 134453.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "49956"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CzuIcojB3yUKbuuUErCzbATibCLqPYqO9bFCA2cQEns=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 25 Feb 2025 19:31:36 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-CzuIcojB3yUKbuuUErCzbATibCLqPYqO9bFCA2cQEns="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/Screenshot 2025-02-16 134453.vf1fmw308c.png",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-02-16 134453.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "49956"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CzuIcojB3yUKbuuUErCzbATibCLqPYqO9bFCA2cQEns=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 25 Feb 2025 19:31:36 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "vf1fmw308c"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-CzuIcojB3yUKbuuUErCzbATibCLqPYqO9bFCA2cQEns="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/Screenshot 2025-02-16 134453.png"
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/Screenshot 2025-02-16 134531.png",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-02-16 134531.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "45752"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"5aX3hnZaud6zug0sn0LURGqPXLBuYcfw618NFU718dU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 25 Feb 2025 19:31:36 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-5aX3hnZaud6zug0sn0LURGqPXLBuYcfw618NFU718dU="
+        }
+      ]
+    },
+    {
+      "Route": "_content/APIBanXeDap/Hinh/AnhKhachHang/Screenshot 2025-02-16 134531.v35l5yydqf.png",
+      "AssetFile": "F:\\CSHARP_5\\APIBanXeDap\\APIBanXeDap\\wwwroot\\Hinh\\AnhKhachHang\\Screenshot 2025-02-16 134531.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "45752"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"5aX3hnZaud6zug0sn0LURGqPXLBuYcfw618NFU718dU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 25 Feb 2025 19:31:36 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "v35l5yydqf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-5aX3hnZaud6zug0sn0LURGqPXLBuYcfw618NFU718dU="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/APIBanXeDap/Hinh/AnhKhachHang/Screenshot 2025-02-16 134531.png"
         }
       ]
     },

@@ -217,6 +217,9 @@ namespace MVCBanXeDap.Controllers
         public IActionResult Error(int statusCode)
         {
             ViewBag.StatusCode = statusCode;
+
+            string linkNavigation = "/";
+            string messageLinkNavigation = "Trang chủ";
             switch (statusCode)
             {
                 case 404:
@@ -224,6 +227,8 @@ namespace MVCBanXeDap.Controllers
                     break;
                 case 401:
                     ViewBag.ErrorMessage = "Không thể truy cập vào đường dẫn này hoặc do phiên của bạn đã hết. Vui lòng thử đăng nhập lại.";
+                    linkNavigation = "/Accounts/Login_Customer";
+                    messageLinkNavigation = "Đăng nhập";
                     break;
                 case 500:
                     ViewBag.ErrorMessage = "Lỗi máy chủ nội bộ! Vui lòng thử lại sau.";
@@ -232,8 +237,9 @@ namespace MVCBanXeDap.Controllers
                     ViewBag.ErrorMessage = "Đã xảy ra lỗi!";
                     break;
             }
+            ViewBag.LinkNavigation = linkNavigation;
+            ViewBag.MessageLinkNavigation = messageLinkNavigation;
             return View();
         }
-
     }
 }
