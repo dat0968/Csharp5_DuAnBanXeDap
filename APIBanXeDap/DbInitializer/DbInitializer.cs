@@ -97,14 +97,17 @@ namespace APIBanXeDap.DbInitializer
                     // Lấy ngẫu nhiên tình trạng đơn hàng
                     string tinhTrang = tinhTrangs[rand.Next(tinhTrangs.Count)];
 
+                    // Tạo thời gian tạo
+                    var ngayTao = DateOnly.FromDateTime(DateTime.Now.AddDays(-rand.Next(1, 365 * 5)));
+                    var thoiGianTao = ngayTao.AddDays(3);
                     // Tạo hóa đơn
                     var hoaDon = new Hoadon
                     {
                         MaKh = maKhachHang,
                         MaNv = maNhanVien,
                         DiaChiNhanHang = $"Địa chỉ {i + 1}",
-                        NgayTao = DateOnly.FromDateTime(DateTime.Now.AddDays(-rand.Next(1, 365 * 5))),
-                        ThoiGianGiao = DateOnly.FromDateTime(DateTime.Now.AddDays(rand.Next(7, 365 * 5))),
+                        NgayTao = ngayTao,
+                        ThoiGianGiao = thoiGianTao,
                         Httt = rand.Next(0, 2) == 0 ? "COD" : "VNPAY", // Thanh Toán
                         TinhTrang = tinhTrang,
                         Hoten = $"Khách hàng {i + 1}",

@@ -11,44 +11,106 @@
 
 <!-- Thanh so sánh nhanh -->
 <div class="fixed-bottom bg-white shadow-lg p-3 rounded-top"
-     style="width: 50%; left: 25%; z-index: 1000; display: @(isValueContain ? "block" : "none");"
+     style="width: 70%; left: 15%; z-index: 1000; display: @(isValueContain ? "block" : "none");"
      id="quickCompareSection"
      data-has-products="@isValueContain">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h5 class="text-center fs-5 flex-grow-1">So sánh sản phẩm</h5>
-            <button id="closeQuickCompare" class="btn btn-outline-danger btn-sm rounded-circle">✖</button>
+            <div>
+                <!-- Nút chuyển đến trang So sánh -->
+                <a asp-controller="CompareProducts" asp-action="Index" class="btn btn-outline-success btn-sm rounded-circle" title="So sánh chi tiết">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
+                <button id="closeQuickCompare" class="btn btn-outline-danger btn-sm rounded-circle">✖</button>
+            </div>
         </div>
-
-        <!-- Developer Button -->
-        <!--
-        <div class="input-group mb-3">
-            <input type="number" id="productIdInput" class="form-control" placeholder="Nhập ID sản phẩm" />
-            <button id="addProductButton" class="btn btn-success">Thêm</button>
-        </div>
-        -->
-
         <div class="d-flex justify-content-between align-items-center gap-2">
             @for (int i = 0; i < 3; i++)
             {
                 var isProductAvailable = Model != null && Model.Count() > i && Model[i] != null;
-                <div class="card border-@((isProductAvailable) ? "primary" : "secondary") shadow-sm flex-fill text-center overflow-auto"
-                     style="min-width: 30%; max-width: 32%; height: 150px;">
+
+                <div class="card border-@((isProductAvailable) ? "primary" : "secondary") shadow-sm flex-fill text-center overflow-hidden"
+                     style="min-width: 30%; max-width: 32%; transition: height 0.3s;">
+
                     @if (isProductAvailable)
                     {
-                        var product = Model[i];
+                        var product = Model![i];
+
+                        <!-- Card nội dung khi có sản phẩm -->
                         <div class="d-flex flex-column align-items-center justify-content-between h-100 p-2">
-                            <img src="/hinh/sanpham/@product.Hinh" class="rounded" alt="@product.TenSp"
+                            <!-- Hình ảnh sản phẩm -->
+                            <img src="/hinh/sanpham/@product.Hinh"
+                                 class="rounded"
+                                 alt="@product.TenSp"
                                  style="height: 50px; object-fit: cover;" />
+
+                            <!-- Tên sản phẩm -->
                             <h6 class="text-truncate fs-6 m-1 w-100">@product.TenSp</h6>
+
+                            <!-- Nút hành động -->
                             <div class="d-flex justify-content-center gap-1">
-                                <a href="@Url.Action("Details", "Home", new { id = product.MaSp })" class="btn btn-primary btn-sm">Chi tiết</a>
-                                <button class="btn btn-danger btn-sm" onclick="removeProductFromCompare(@product.MaSp)">Xóa</button>
+                                <a href="@Url.Action("Details", "Home", new { id = product.MaSp })"
+                                   class="btn btn-primary btn-sm">Chi tiết</a>
+                                <button class="btn btn-danger btn-sm"
+                                        onclick="removeProductFromCompare(@product.MaSp)">
+                                    Xóa
+                                </button>
+                            </div>
+
+                            <!-- Quick Detail Info Section (ẩn hiện) -->
+                            <div class="quick-detail-info mt-2 w-100" style="display: none;">
+                                <!-- Hidden by default -->
+                                <hr class="bg-dark" />
+
+                                <!-- Kích cỡ -->
+                                <div class="mb-2">
+                                    <strong class="mb-3">Kích cỡ:</strong>
+                                    <br />
+                                    <div class="btn-group" role="group">
+                                        @foreach (var size in product.Chitietsanphams.Select(c => new { c.MaKichThuoc, c.TenKichThuoc }).Distinct())
+                                        {
+                                            <button type="button" class="btn btn-outline-dark btn-quick-size"
+                                                    data-masp="@product.MaSp" data-size="@size.MaKichThuoc">
+                                                @size.TenKichThuoc
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Màu sắc -->
+                                <div class="mb-2">
+                                    <strong class="mb-3">Màu sắc:</strong>
+                                    <br />
+                                    <div class="btn-group" role="group">
+                                        @foreach (var color in product.Chitietsanphams.Select(c => new { c.MaMau, c.TenMau }).Distinct())
+                                        {
+                                            <button type="button" class="btn btn-outline-dark btn-quick-color"
+                                                    data-masp="@product.MaSp" data-color="@color.MaMau">
+                                                @color.TenMau
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <!-- Kết quả so sánh -->
+                                <div class="product-details" id="quick-product-details-@product.MaSp">
+                                    <p><strong>Số lượng tồn:</strong> <span class="so-luong">-</span></p>
+                                    <p><strong>Giá:</strong> <span class="gia">-</span> VND</p>
+                                </div>
+
+                                <!-- Dữ liệu JSON ẩn -->
+                                <script type="application/json" id="data-quick-@product.MaSp">
+                                    @Html.Raw(Json.Serialize(product.Chitietsanphams))
+                                </script>
                             </div>
                         </div>
                     }
                     else
                     {
+                        <!-- Card nội dung khi không có sản phẩm -->
                         <div class="d-flex align-items-center justify-content-center h-100 text-muted fs-6">
                             Chưa có sản phẩm
                         </div>
@@ -57,20 +119,23 @@
             }
         </div>
 
-        <div class="d-flex justify-content-center mt-3">
-            <a asp-controller="CompareProducts" asp-action="Index" class="btn btn-info px-4">So sánh</a>
+        <!-- Nút ẩn/hiện Quick View -->
+        <div class="d-flex justify-content-center mt-3 gap-3">
+            <!-- Nút hiển thị/thông tin nhanh -->
+            <button type="button" id="toggleQuickDetailCompare" class="btn btn-primary px-4" title="So sánh nhanh">
+                <i class="bi bi-eye"></i> Thông tin nhanh
+            </button>
+
         </div>
+
+
     </div>
 </div>
 
 <style>
 
     #toggleQuickCompare {
-        position: fixed;
         bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1100;
         font-weight: bold;
         opacity: 1;
         transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
@@ -138,6 +203,9 @@
         const toggleQuickCompareBtn = $("#toggleQuickCompare");
         const closeQuickCompareBtn = $("#closeQuickCompare");
 
+        const toggleQuickDetailCompareBtn = $("#toggleQuickDetailCompare");
+        const quickDetailCompareSections = $(".quick-detail-info");
+
         function updateVisibility() {
             const isVisible = localStorage.getItem("compareVisible") === "True";
             quickCompareSection.toggle(isVisible);
@@ -159,14 +227,93 @@
             localStorage.setItem("compareVisible", isCurrentlyVisible ? "False" : "True");
         }
 
-        // Developer function to button
-        // $("#addProductButton").on("click", function () {
-        //     const productId = $("#productIdInput").val();
-        //     addProductToCompare(productId);
-        // });
+        // Hàm bật/tắt phần Quick Compare
+        function toggleQuickDetailComparesSection() {
+            // Lấy tất cả các phần quick compare (các phần muốn ẩn/hiện)
+            const quickDetailCompareSections = $(".quick-detail-info");
+
+            // Kiểm tra trạng thái hiện tại của phần đầu tiên (giả định tất cả đồng nhất trạng thái)
+            const isCurrentlyVisible = quickDetailCompareSections.first().is(":visible");
+
+            // Toggle hiển thị/ẩn dựa trên trạng thái hiện tại
+            quickDetailCompareSections.toggle(!isCurrentlyVisible);
+
+            // Cập nhật vào localStorage trạng thái
+            localStorage.setItem("quickDetailCompareVisible", isCurrentlyVisible ? "False" : "True");
+        }
 
         closeQuickCompareBtn.on("click", toggleQuickCompareSection);
         toggleQuickCompareBtn.on("click", toggleQuickCompareSection);
+        toggleQuickDetailCompareBtn.on("click", toggleQuickDetailComparesSection);
+
+        document.querySelectorAll(".btn-quick-size").forEach(button => {
+            button.addEventListener("click", function () {
+                let productId = this.getAttribute("data-masp");
+                let selectedSize = parseInt(this.getAttribute("data-size"));
+
+                // Highlight the selected size button
+                document.querySelectorAll(`.btn-quick-size[data-masp="${productId}"]`).forEach(btn => btn.classList.remove("active"));
+                this.classList.add("active");
+
+                // Retrieve product data from JSON
+                let productData = JSON.parse(document.getElementById(`data-quick-${productId}`).textContent);
+
+                // Filter available colors for the selected size
+                let availableColors = productData
+                    .filter(p => p.maKichThuoc === selectedSize)
+                    .map(p => p.maMau);
+
+                // Log for debugging
+                console.log("Available colors:", availableColors);
+
+                // Display available colors, hide unavailable ones
+                document.querySelectorAll(`.btn-quick-color[data-masp="${productId}"]`).forEach(btn => {
+                    let colorValue = parseInt(btn.getAttribute("data-color"));
+                    if (availableColors.includes(colorValue)) {
+                        btn.style.display = "inline-block";
+                    } else {
+                        btn.style.display = "none";
+                    }
+                });
+
+                // Reset color selection when size is changed
+                document.querySelectorAll(`.btn-quick-color[data-masp="${productId}"]`).forEach(btn => btn.classList.remove("active"));
+
+                updateProductDetails(productId);
+            });
+        });
+
+        document.querySelectorAll(".btn-quick-color").forEach(button => {
+            button.addEventListener("click", function () {
+                let productId = this.getAttribute("data-masp");
+                let selectedColor = parseInt(this.getAttribute("data-color"));
+
+                // Highlight the selected color button
+                document.querySelectorAll(`.btn-quick-color[data-masp="${productId}"]`).forEach(btn => btn.classList.remove("active"));
+                this.classList.add("active");
+
+                updateProductDetails(productId);
+            });
+        });
+
+        function updateProductDetails(productId) {
+            let selectedSizeBtn = document.querySelector(`.btn-quick-size[data-masp="${productId}"].active`);
+            let selectedColorBtn = document.querySelector(`.btn-quick-color[data-masp="${productId}"].active`);
+
+            if (!selectedSizeBtn || !selectedColorBtn) return;
+
+            let selectedSize = parseInt(selectedSizeBtn.getAttribute("data-size"));
+            let selectedColor = parseInt(selectedColorBtn.getAttribute("data-color"));
+
+            let productData = JSON.parse(document.getElementById(`data-quick-${productId}`).textContent);
+            let matchedProduct = productData.find(p => p.maKichThuoc === selectedSize && p.maMau === selectedColor);
+
+            if (matchedProduct) {
+                document.querySelector(`#quick-product-details-${productId} .so-luong`).textContent = matchedProduct.soLuongTon;
+                document.querySelector(`#quick-product-details-${productId} .gia`).textContent = matchedProduct.donGia.toLocaleString();
+            }
+        }
+
     });
 
 
