@@ -380,7 +380,8 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> GetAll(
                 [FromQuery] DateOnly? ngayTao,
                 [FromQuery] string? httt,
-                [FromQuery] string? tinhTrang)
+                [FromQuery] string? tinhTrang,
+                [FromQuery] bool? takeYourOrders)
         {
             List<HoadonVM> hoadonVMs = new List<HoadonVM>();
             SetAuthorizationHeader();
@@ -398,6 +399,10 @@ namespace MVCBanXeDap.Controllers
                         hoadonVMs = hoadonVMs.Where(hd => hd.Httt.Contains(httt)).ToList();
                     if (!string.IsNullOrEmpty(tinhTrang))
                         hoadonVMs = hoadonVMs.Where(hd => hd.TinhTrang.Contains(tinhTrang)).ToList();
+                    if (takeYourOrders.HasValue && takeYourOrders.Value) {
+                        int? userId = await GetUserId();
+                        hoadonVMs = hoadonVMs.Where(hd => hd.MaNv == userId).ToList();
+                    }
                 }
             }
             else
@@ -413,7 +418,7 @@ namespace MVCBanXeDap.Controllers
         #region [NON ACTION]
         [NonAction]
         [HttpGet]
-        public async void SetAuthorizationHeader()
+        private async void SetAuthorizationHeader()
         {
             var validateAccessToken = await jwtToken.ValidateAccessToken();
             if (!string.IsNullOrEmpty(validateAccessToken))
@@ -422,32 +427,32 @@ namespace MVCBanXeDap.Controllers
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
             }
         }
-        //[NonAction]
-        //private string GetUserId()
-        //{
-        //    var accessToken = HttpContext.Session.GetString("AccessToken");
-        //    var refreshToken = HttpContext.Session.GetString("RefreshToken");
+        [NonAction]
+        private async Task<int?> GetUserId()
+        {
+            var accessToken = HttpContext.Session.GetString("AccessToken");
+            var refreshToken = HttpContext.Session.GetString("RefreshToken");
 
-        //    if (accessToken == null || refreshToken == null)
-        //    {
-        //        return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
-        //    }
+            if (accessToken == null || refreshToken == null)
+            {
+                return null;
+            }
 
-        //    var ValidateAccessToken = await jwtToken.ValidateAccessToken();
-        //    if (ValidateAccessToken == null)
-        //    {
-        //        return Json(new { success = false, message = "Phiên của bạn đã hết, vui lòng đăng nhập lại.", isLoginAgain = true });
-        //    }
-        //    else
-        //    {
-        //        HttpContext.Session.SetString("AccessToken", ValidateAccessToken);
-        //    }
+            var ValidateAccessToken = await jwtToken.ValidateAccessToken();
+            if (ValidateAccessToken == null)
+            {
+                return null!;
+            }
+            else
+            {
+                HttpContext.Session.SetString("AccessToken", ValidateAccessToken);
+            }
 
-        //    var information = jwtToken.GetInformationUserFromToken(ValidateAccessToken); // Lấy idStaff từ token
-        //    var id = information.Id.ToString();
+            var information = jwtToken.GetInformationUserFromToken(ValidateAccessToken); // Lấy idStaff từ token
+            var id = information.Id.ToString();
 
-        //    return id;
-        //}
+            return Convert.ToInt32(id);
+        }
         #endregion
     }
 }
