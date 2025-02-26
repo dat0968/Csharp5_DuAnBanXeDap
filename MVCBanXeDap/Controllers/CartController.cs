@@ -311,7 +311,7 @@ namespace MVCBanXeDap.Controllers
 
 
                     if(paymentMethod == "VNPAY")
-                    {
+                    {                       
                         var model = JsonConvert.SerializeObject(thongtinhoadon);
                         StringContent content = new StringContent(model, Encoding.UTF8, "application/json");
                         var response = await _client.PostAsync("https://localhost:7029/api/VnpayPayment/CreatePaymentUrl", content);

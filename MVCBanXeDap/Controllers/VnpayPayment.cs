@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using VNPAY.NET;
 using VNPAY.NET.Enums;
@@ -33,9 +34,9 @@ namespace MVCBanXeDap.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
                 var ipAddress = NetworkHelper.GetIpAddress(HttpContext); // Lấy địa chỉ IP của thiết bị thực hiện giao dịch
-
-                
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Replace("Bearer ", ""));
                 var model = JsonConvert.SerializeObject(thongtinhoadon);
                 StringContent content = new StringContent(model, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = _client.PostAsync(_client.BaseAddress + "Checkouts/CheckoutOrders", content).Result;
