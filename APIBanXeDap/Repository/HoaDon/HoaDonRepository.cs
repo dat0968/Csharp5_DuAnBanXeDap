@@ -1,6 +1,7 @@
 ﻿using APIBanXeDap.EditModels;
 using APIBanXeDap.Models;
 using APIBanXeDap.ViewModels;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
@@ -122,23 +123,19 @@ namespace APIBanXeDap.Repository.HoaDon
 
             originHoadon.TinhTrang = statusOrder;
             originHoadon.MaNv = idStaff;
-            if (new string[] {
-                    "Hoàn trả/Hoàn tiền",
-                    "Đã hủy"}.Contains(statusOrder))
+
+            switch (reason)
             {
-                //originHoadon.ThoiGianGiao = null;
-                if (reason is not null)
-                {
-                    originHoadon.LyDoHuy = reason;
-                } else
-                {
-                    originHoadon.LyDoHuy = $"Đơn hàng đã bị đổi thành tình trạng [{statusOrder}] bởi nhân viên [Mã nhân viên: {idStaff}].";
-                }
-            }
-            // Cập nhật thời gian giao hàng nếu cần
-            if (statusOrder == "Đã xác nhận")
-            {
-                originHoadon.ThoiGianGiao = DateOnly.FromDateTime(DateTime.Today);
+                case "Hoàn trả/Hoàn tiền":
+                case "Đã hủy":
+                    // Set LyDoHuy
+                    originHoadon.LyDoHuy = reason ?? $"Đơn hàng đã bị đổi thành tình trạng [{statusOrder}] bởi nhân viên [Mã nhân viên: {idStaff}].";
+                    break;
+                case "Đã xác nhận":
+                    originHoadon.ThoiGianGiao = DateOnly.FromDateTime(DateTime.Today);
+                    break;
+                default:
+                    break;
             }
 
             _db.Update(originHoadon);
