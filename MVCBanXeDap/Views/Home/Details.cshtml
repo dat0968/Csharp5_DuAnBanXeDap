@@ -224,9 +224,21 @@
                     <div class="product__item__pic set-bg">
                         <img src="/Hinh/SanPham/@product.Hinh" alt="@product.TenSp" style="border-radius: 10px" />
                         <div class="hover-overlay">
-                            <a href="@Url.Action("Details", "Home", new { id = product.MaSP })" class="btn btn-danger btn-sm">
-                                Xem chi tiết
-                            </a>
+                            <div class="text-center">
+                                <a href="@Url.Action("Details", "Home", new { id = product.MaSP })" class="btn btn-danger btn-sm mb-3">
+                                    Xem chi tiết
+                                </a>
+                                <br />
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <button class="btn btn-outline-secondary btn-sm rounded-circle shadow" onclick="addProductToCompare(@product.MaSP)" title="So sánh sản phẩm">
+                                        <img src="img/icon/compare.png" alt="So sánh" style="width: 20px; height: 20px;">
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm rounded-circle shadow" onclick="changeWishlistStatus(@product.MaSP, 'SanPham')" title="Yêu thích">
+                                        ❤️
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="product__item__text">

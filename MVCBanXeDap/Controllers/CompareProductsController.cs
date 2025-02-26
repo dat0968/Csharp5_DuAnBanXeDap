@@ -13,6 +13,9 @@ namespace MVCBanXeDap.Controllers
         private readonly HttpClient _client;
         private readonly IjwtToken jwtToken;
 
+        private const string CompareSessionKey = "ComparesProducts";
+        private const int MaxCompareItems = 3;
+
         public CompareProductsController(IjwtToken jwtToken)
         {
             _client = new HttpClient();
@@ -20,51 +23,54 @@ namespace MVCBanXeDap.Controllers
             this.jwtToken = jwtToken;
         }
 
+        #region[VIEW DATA]
         public IActionResult Index()
         {
-            var productVMs = HttpContext.Session?.Get<List<CompareProductVM>>("ComparesProducts") ?? new List<CompareProductVM>(3);
+            var productVMs = GetCompareProductsFromSession();
             return View(productVMs);
         }
+        public async Task<IActionResult> QuickBarComparesProducts()
+        {
+            var productVMs = GetCompareProductsFromSession();
+            return PartialView(productVMs);
+        }
+        #endregion
 
+        #region[ACTIONS]
         public async Task<IActionResult> AddProductToCompare(int id)
         {
-            // Lấy danh sách sản phẩm từ Session, mặc định là mảng có chứa 3 sản phẩm nếu không tồn tại
-            var productVMs = HttpContext.Session?.Get<List<CompareProductVM>>("ComparesProducts") ?? new List<CompareProductVM>(3);
+            var productVMs = GetCompareProductsFromSession();
 
-            // Kiểm tra xem sản phẩm đã có trong danh sách so sánh chưa
-            if (productVMs.Any(pr => pr?.MaSp == id))
+            if (productVMs.Any(pr => pr.MaSp == id))
             {
-                return Json(new { success = false, message = "Sản phẩm đã tồn tại trong danh sách sản phẩm so sánh." });
+                return Json(new { success = false, message = "Sản phẩm đã có trong danh sách so sánh." });
             }
 
-            // Gọi API để lấy thông tin sản phẩm theo ID
-            HttpResponseMessage httpResponseMessage = await _client.GetAsync($"{_client.BaseAddress}CompareProducts/AddProductToCopare/{id}");
+            if (productVMs.Count >= MaxCompareItems)
+            {
+                return Json(new { success = false, message = "Danh sách so sánh đã đầy." });
+            }
 
-            // Kiểm tra xem yêu cầu API có thành công không
-            if (!httpResponseMessage.IsSuccessStatusCode)
+            // Gọi API chỉ khi cần
+            var response = await _client.GetAsync($"CompareProducts/AddProductToCopare/{id}");
+            if (!response.IsSuccessStatusCode)
             {
                 return Json(new { success = false, message = "Không thể lấy thông tin sản phẩm." });
             }
 
-            // Đọc dữ liệu sản phẩm từ phản hồi
-            string data = await httpResponseMessage.Content.ReadAsStringAsync();
-            CompareProductVM pVM = JsonConvert.DeserializeObject<CompareProductVM>(data);
+            var data = await response.Content.ReadAsStringAsync();
+            var newProduct = JsonConvert.DeserializeObject<CompareProductVM>(data);
 
-            // Thêm sản phẩm vào danh sách so sánh nếu có chỗ trống
-            if (productVMs.Count < 3)
-            {
-                productVMs.Add(pVM); // Thêm sản phẩm vào danh sách
-                HttpContext.Session.Set("ComparesProducts", productVMs); // Lưu lại vào Session
-                return Json(new { success = true, message = "Sản phẩm đã được thêm vào danh sách so sánh!" });
-            }
+            productVMs.Add(newProduct);
+            SaveCompareProductsToSession(productVMs);
 
-            return Json(new { success = false, message = "Danh sách sản phẩm so sánh đã đầy." });
+            return Json(new { success = true, message = "Sản phẩm đã được thêm!" });
         }
 
-        public async Task<IActionResult> RemoveProductFromCompare(int id)
+        public IActionResult RemoveProductFromCompare(int id)
         {
             // Lấy danh sách sản phẩm từ Session, mặc định là mảng có chứa 3 sản phẩm nếu không tồn tại
-            var productVMs = HttpContext.Session?.Get<List<CompareProductVM>>("ComparesProducts") ?? new List<CompareProductVM>(3);
+            var productVMs = GetCompareProductsFromSession();
 
             // Tìm và xóa sản phẩm trong danh sách nếu tồn tại
             var productToRemove = productVMs.FirstOrDefault(pr => pr?.MaSp == id);
@@ -77,11 +83,19 @@ namespace MVCBanXeDap.Controllers
 
             return Json(new { success = false, message = "Sản phẩm không tồn tại trong danh sách so sánh." });
         }
+        #endregion
 
-        public async Task<IActionResult> QuickBarComparesProducts()
+        #region[NON ACTION]
+
+        private List<CompareProductVM> GetCompareProductsFromSession()
         {
-            var productVMs = HttpContext.Session?.Get<List<CompareProductVM>>("ComparesProducts") ?? new List<CompareProductVM>(3);
-            return PartialView(productVMs);
+            return HttpContext.Session?.Get<List<CompareProductVM>>(CompareSessionKey) ?? new List<CompareProductVM>();
         }
+
+        private void SaveCompareProductsToSession(List<CompareProductVM> productVMs)
+        {
+            HttpContext.Session.Set(CompareSessionKey, productVMs);
+        }
+        #endregion
     }
 }

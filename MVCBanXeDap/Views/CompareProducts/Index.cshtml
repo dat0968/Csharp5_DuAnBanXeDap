@@ -38,13 +38,17 @@
         }
     </style>
 }
+
 <div class="shadow-sm">
+    <!-- Tiêu đề trang -->
     <div class="text-center mb-4">
         <h2 class="text-dark fw-bolder">So sánh sản phẩm</h2>
     </div>
 
+    <!-- Kiểm tra danh sách sản phẩm -->
     @if (Model == null || !Model.Any(m => m != null))
     {
+        <!-- Trường hợp không có sản phẩm -->
         <div class="alert alert-info text-dark text-center">
             <h5>Hiện tại không có sản phẩm nào để so sánh.</h5>
             <a href="/" class="btn btn-dark mt-3">Quay về trang chủ</a>
@@ -52,6 +56,7 @@
     }
     else if (Model.Count == 1)
     {
+        <!-- Trường hợp chỉ có 1 sản phẩm -->
         <div class="alert alert-warning text-dark text-center">
             <h5>Bạn cần chọn thêm ít nhất 1 sản phẩm để so sánh.</h5>
             <a href="/" class="btn btn-dark mt-3">Quay về trang chủ</a>
@@ -59,21 +64,28 @@
     }
     else
     {
-        <div class="row justify-content-center">
+        <!-- Hiển thị danh sách sản phẩm -->
+        <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
             @foreach (var product in Model)
             {
                 if (product == null) continue;
 
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm border-light">
+                <div class="col">
+                    <div class="card shadow-sm h-100 border-light">
+                        <!-- Ảnh sản phẩm -->
                         <a href="@Url.Action("Details", "Home", new { id = product.MaSp })">
                             <img src="/hinh/sanpham/@product.Hinh" alt="@product.TenSp" class="card-img-top product-img">
                         </a>
-                        <div class="card-body">
+
+                        <!-- Thông tin sản phẩm -->
+                        <div class="card-body text-center">
+                            <!-- Tên sản phẩm -->
                             <a href="@Url.Action("Details", "Home", new { id = product.MaSp })" class="text-decoration-none text-dark">
-                                <h5 class="card-title text-center">@product.TenSp</h5>
-                                <h6 class="card-subtitle text-muted text-center">@product.TenThuongHieu</h6>
+                                <h5 class="card-title">@product.TenSp</h5>
+                                <h6 class="card-subtitle text-muted">@product.TenThuongHieu</h6>
                             </a>
+
+                            <!-- Các thông tin khác -->
                             <p><strong>Mô tả:</strong> @product.MoTa</p>
                             <p><strong>Ngày sản xuất:</strong> @product.NgaySanXuat.ToString("dd/MM/yyyy")</p>
                             <p><strong>Nhà cung cấp:</strong> @product.TenNhaCc</p>
@@ -83,10 +95,10 @@
                             <!-- Kích cỡ -->
                             <div class="mb-2">
                                 <strong>Kích cỡ:</strong>
-                                <div class="btn-group" role="group">
+                                <div class="btn-group d-flex flex-wrap" role="group">
                                     @foreach (var size in product.Chitietsanphams.Select(c => new { c.MaKichThuoc, c.TenKichThuoc }).Distinct())
                                     {
-                                        <button type="button" class="btn btn-outline-dark btn-size"
+                                        <button type="button" class="btn btn-outline-dark btn-size mb-1"
                                                 data-masp="@product.MaSp" data-size="@size.MaKichThuoc">
                                             @size.TenKichThuoc
                                         </button>
@@ -97,10 +109,10 @@
                             <!-- Màu sắc -->
                             <div class="mb-2">
                                 <strong>Màu sắc:</strong>
-                                <div class="btn-group" role="group">
+                                <div class="btn-group d-flex flex-wrap" role="group">
                                     @foreach (var color in product.Chitietsanphams.Select(c => new { c.MaMau, c.TenMau }).Distinct())
                                     {
-                                        <button type="button" class="btn btn-outline-dark btn-color"
+                                        <button type="button" class="btn btn-outline-dark btn-color mb-1"
                                                 data-masp="@product.MaSp" data-color="@color.MaMau">
                                             @color.TenMau
                                         </button>
@@ -108,7 +120,7 @@
                                 </div>
                             </div>
 
-                            <hr class="" />
+                            <hr />
 
                             <!-- Kết quả so sánh -->
                             <div class="product-details" id="product-details-@product.MaSp">
@@ -127,6 +139,7 @@
         </div>
     }
 </div>
+
 
 @section Scripts {
     <script>
