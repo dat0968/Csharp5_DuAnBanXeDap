@@ -37,7 +37,7 @@ namespace MVCBanXeDap.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ChangeWishlist(int idProduct, string typeObject)
+        public async Task<IActionResult> ChangeWishlist(int idProduct, string? typeObject)
         {
             string? roleUser = GetUserRole();
 
