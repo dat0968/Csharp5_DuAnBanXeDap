@@ -24,7 +24,7 @@ namespace MVCBanXeDap.Controllers
         }
         [NonAction]
         [HttpGet]
-        public async void SetAuthorizationHeader()
+        public async Task SetAuthorizationHeader()
         {
             var validateAccessToken = await jwtToken.ValidateAccessToken();
             if (!string.IsNullOrEmpty(validateAccessToken))
@@ -36,7 +36,7 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            SetAuthorizationHeader();
+            await SetAuthorizationHeader();
             var list = new List<ProductVM>();
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + "Home/SanPhamBanChay");
             if (response.IsSuccessStatusCode)
@@ -64,7 +64,7 @@ namespace MVCBanXeDap.Controllers
         [HttpPost]
         public async Task<IActionResult> AddComment([FromBody] CommentVM comment)
         {
-            SetAuthorizationHeader();
+            await SetAuthorizationHeader();
 
             if (comment == null)
             {
@@ -84,7 +84,7 @@ namespace MVCBanXeDap.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var ProductVM = new ProductVM();
-            SetAuthorizationHeader();
+            await SetAuthorizationHeader();
 
             // Gọi API lấy thông tin sản phẩm theo ID
             HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + $"Home/GetProductById/{id}");
@@ -172,6 +172,7 @@ namespace MVCBanXeDap.Controllers
         [HttpGet]
         public async Task<IActionResult> Product(int? maThuongHieu, string? timKiem, int? maDanhMuc, string? sapXep, int page = 1)
         {
+            await SetAuthorizationHeader();
             var ListProducts = new List<ProductVM>();
             HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + $"Home/GetAllProduct?keywords={timKiem}&MaDanhMuc={maDanhMuc}&MaThuongHieu={maThuongHieu}&sort={sapXep}&page={page}").Result;
             if (response.IsSuccessStatusCode)
@@ -189,8 +190,10 @@ namespace MVCBanXeDap.Controllers
                 }
                 ViewBag.TotalPages = ConvertResponseProduct["totalPages"].Value<int>();
                 ViewBag.Page = ConvertResponseProduct["page"].Value<int>();
-            };
-            
+            }
+            else {
+                return StatusCode((int)response.StatusCode);
+            }
             ViewBag.MaThuongHieu = maThuongHieu;
             ViewBag.TimKiem = timKiem;
             ViewBag.MaDanhMuc = maDanhMuc;
@@ -203,6 +206,10 @@ namespace MVCBanXeDap.Controllers
                 ListCategory = JsonConvert.DeserializeObject<List<DanhmucVM>>(data);
                 ViewBag.Category = ListCategory;
             }
+            else
+            {
+                return StatusCode((int)responseCategory.StatusCode);
+            }
             var ListBrand = new List<BrandVM>();
             HttpResponseMessage responseBrand = _client.GetAsync(_client.BaseAddress + "Brands/GetAllBrand").Result;
             if (responseBrand.IsSuccessStatusCode)
@@ -210,6 +217,10 @@ namespace MVCBanXeDap.Controllers
                 string data = responseBrand.Content.ReadAsStringAsync().Result;
                 ListBrand = JsonConvert.DeserializeObject<List<BrandVM>>(data);
                 ViewBag.Brand = ListBrand;
+            }
+            else
+            {
+                return StatusCode((int)responseBrand.StatusCode);
             }
             return View(ListProducts);
         }
