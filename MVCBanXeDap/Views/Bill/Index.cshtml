@@ -134,7 +134,7 @@
             "Chờ xác nhận": ["Chờ xác nhận", "Đã xác nhận", "Đã hủy"],
             "Đã xác nhận": ["Đã xác nhận", "Đã giao cho đơn vị vận chuyển"],
             "Đã giao cho đơn vị vận chuyển": ["Đã giao cho đơn vị vận chuyển", "Đang giao hàng"],
-            "Đang giao hàng": ["Đang giao hàng",  "Chờ thanh toán"],
+            "Đang giao hàng": ["Đang giao hàng",  "Chờ thanh toán", "Đã thanh toán"],
             "Chờ thanh toán": ["Chờ thanh toán", "Đã thanh toán"],
             "Đã thanh toán": ["Đã thanh toán", "Hoàn trả/Hoàn tiền"],
             "Hoàn trả/Hoàn tiền": ["Hoàn trả/Hoàn tiền" ],
@@ -246,6 +246,7 @@
                                 icon: "info",
                                 confirmButtonText: "Xác nhận"
                             });
+                            datatable.ajax.reload();
                             return;
                         }
                         // Tiếp tục gọi hàm xử lý ajax khi lý do hợp lệ

@@ -75,10 +75,10 @@ namespace APIBanXeDap.Controllers
             var validNextStatesMap = new Dictionary<string, List<string>>
             {
                 { "Chờ xác nhận", new List<string> { "Đã xác nhận", "Đã hủy" } },
-                { "Đã xác nhận", new List<string> { "Đã giao cho đơn vị vận chuyển", "Đã hủy" } },
-                { "Đã giao cho đơn vị vận chuyển", new List<string> { "Đang giao hàng", "Đã hủy" } },
-                { "Đang giao hàng", new List<string> {  "Hoàn trả/Hoàn tiền", "Đã hủy" } },
-                { "Chờ thanh toán", new List<string> { "Đã xác nhận", "Đã hủy" } },
+                { "Đã xác nhận", new List<string> { "Đã giao cho đơn vị vận chuyển" } },
+                { "Đã giao cho đơn vị vận chuyển", new List<string> { "Đang giao hàng" } },
+                { "Đang giao hàng", new List<string> { "Chờ thanh toán", "Đã thanh toán" } },
+                { "Chờ thanh toán", new List<string> { "Đã xác nhận", "Đã thanh toán" } },
                 { "Đã thanh toán", new List<string> { "Hoàn trả/Hoàn tiền" } },
                 { "Hoàn trả/Hoàn tiền", new List<string> { } },
                 { "Đã hủy", new List<string> { } }
