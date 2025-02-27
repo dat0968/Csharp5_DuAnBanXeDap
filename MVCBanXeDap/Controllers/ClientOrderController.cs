@@ -51,6 +51,47 @@ namespace MVCBanXeDap.Controllers
             }
             return PartialView(invoice);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeStatusOrder(string idOrder, string status, string? reason)
+        {
+            var paramsChange = new Dictionary<string, string?>
+            {
+                { "idOrder", idOrder },
+                { "statusOrder", status },
+                { "reason", reason }
+            };
+
+            // Kiểm tra, cập nhật và đảm bảo "reason" không bị null
+            paramsChange["reason"] = paramsChange["reason"] != null
+                ? $"Đơn hàng đổi thành tình trạng [{status}] bởi khách hàng với lý do:\n" + paramsChange["reason"]
+                : null;
+
+            // Tạo queryString và xử lý lọc null hoặc chuỗi rỗng đảm bảo an toàn
+            string queryString = string.Join("&",
+                paramsChange
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Value)) // Lọc bỏ giá trị null hoặc chuỗi rỗng
+                    .Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value!)}")); // Mã hóa giá trị để gửi trong URL
+
+            SetAuthorizationHeader();
+
+            HttpResponseMessage httpResponse = await _client.PatchAsync(_client.BaseAddress + "ClientOrder/ChangeOrderStatus?" + queryString, null);
+
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+                return Json(jsonResponse);
+            }
+            else
+            {
+                return StatusCode((int)httpResponse.StatusCode);
+            }
+        }
+
+
+
+        #region[DOWNLOAD INVOICE'S ACTION]
         public async Task<IActionResult> TakeInvoice(string maHoaDon)
         {
             InvoiceVM invoice = null;
@@ -307,7 +348,7 @@ namespace MVCBanXeDap.Controllers
 
             return File(outputStream.ToArray(), "application/pdf", "Tổng_hợp_hóa_đơn_LightTeam.pdf");
         }
-
+        #endregion
 
         #region[GET API]
         [HttpGet]

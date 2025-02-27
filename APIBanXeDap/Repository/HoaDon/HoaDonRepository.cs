@@ -2,6 +2,8 @@
 using APIBanXeDap.Models;
 using APIBanXeDap.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
@@ -106,30 +108,51 @@ namespace APIBanXeDap.Repository.HoaDon
             };
             return hoadonVM;
         }
-        public async Task<string?> ChangeStatusOrder(int idOrder, int idStaff, string statusOrder, string? reason)
+        public async Task<string?> ChangeStatusOrder(int idOrder, int? idStaff, string statusOrder, string? reason, int? idCustomer)
         {
+            // Tìm hóa đơn gốc dựa vào mã hóa đơn
             var originHoadon = await _db.Hoadons.FirstOrDefaultAsync(x => x.MaHoaDon == idOrder);
             if (originHoadon == null)
             {
-                // Xử lý trường hợp không tìm thấy hóa đơn (nếu cần)
-                return null; // Trả về null nếu không tìm thấy hóa đơn
+                // Trả về null nếu không tìm thấy hóa đơn
+                return null;
             }
 
-            // Kiểm tra xem nhân viên có quyền thay đổi không
-            if (!String.IsNullOrEmpty(originHoadon.MaNv.ToString()) && originHoadon.MaNv != idStaff)
+            // Hủy hành động nếu cả idCustomer và idStaff đều không có giá trị
+            if (!idCustomer.HasValue && !idStaff.HasValue)
+            {
+                return null;
+            }
+
+            // Kiểm tra quyền của khách hàng (nếu idCustomer được cung cấp)
+            if (idCustomer.HasValue && (originHoadon.MaKh != idCustomer))
+            {
+                return null; // Trả về null nếu khách hàng không có quyền thay đổi
+            }
+
+            // Kiểm tra quyền của nhân viên (nếu idStaff được cung cấp)
+            if (idStaff.HasValue && (!originHoadon.MaNv.HasValue || originHoadon.MaNv != idStaff))
             {
                 return null; // Trả về null nếu nhân viên không có quyền thay đổi
             }
 
             originHoadon.TinhTrang = statusOrder;
-            originHoadon.MaNv = idStaff;
+            if (originHoadon.MaNv == null && idStaff.HasValue) {
+                originHoadon.MaNv = idStaff;
+            }
 
-            switch (reason)
+            switch (statusOrder)
             {
                 case "Hoàn trả/Hoàn tiền":
                 case "Đã hủy":
                     // Set LyDoHuy
-                    originHoadon.LyDoHuy = reason ?? $"Đơn hàng đã bị đổi thành tình trạng [{statusOrder}] bởi nhân viên [Mã nhân viên: {idStaff}].";
+                    if (idCustomer.HasValue)
+                    {
+                        originHoadon.LyDoHuy = reason ?? $"Đơn hàng đã bị đổi thành tình trạng [{statusOrder}] bởi khách hàng [Mã khách hàng: {idCustomer}].";
+                    } else if (idStaff.HasValue)
+                    {
+                        originHoadon.LyDoHuy = reason ?? $"Đơn hàng đã bị đổi thành tình trạng [{statusOrder}] bởi nhân viên [Mã nhân viên: {idStaff}].";
+                    }
                     break;
                 case "Đã xác nhận":
                     originHoadon.ThoiGianGiao = DateOnly.FromDateTime(DateTime.Today);

@@ -51,48 +51,55 @@
 <div class="col-md-12">
     <div class="card">
         <div class="card-header d-flex justify-content-between">
-            <h4 class="card-title">Danh sách đơn hàng</h4>
+            <h3 class="fw-bold mb-3">Danh sách đơn hàng</h3>
             <a id="exportInvoicesButton" class="btn btn-primary" href="bill/ExportAllInvoicesAsSinglePDF">Xuất tất cả hóa đơn</a>
         </div>
         <div class="card-body">
             <!-- Tìm kiếm, Bộ lọc, và Sắp xếp -->
-            <div class="row mb-3">
-                <div class="row mb-3">
-                    <div class="col-md-3">
-                        <label for="ngayTao" class="form-label">Ngày tạo</label>
-                        <input id="ngayTao" name="ngayTao" type="date" class="form-control" onchange="loadDT()" />
-                    </div>
-                    <div class="col-md-3">
-                        <label for="httt" class="form-label">Thanh Toán</label>
-                        <select id="httt" name="httt" class="form-select" onchange="loadDT()">
-                            <option value="">Lọc theo Thanh Toán</option>
-                            <option value="VNPAY">VNPAY</option>
-                            <option value="COD">COD</option>
-                            <!-- Các giá trị khác cho Thanh Toán -->
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="tinhTrang" class="form-label">Tình trạng</label>
-                        <select id="tinhTrang" name="tinhTrang" class="form-select" onchange="loadDT()">
-                            <option value="">Lọc theo tình trạng</option>
-                            <option value="Chờ xác nhận">Chờ xác nhận</option>
-                            <option value="Đã xác nhận">Đã xác nhận</option>
-                            <option value="Đã giao cho đơn vị vận chuyển">Đã giao cho đơn vị vận chuyển</option>
-                            <option value="Đang giao hàng">Đang giao hàng</option>
-                            <option value="Chờ thanh toán">Chờ thanh toán</option>
-                            <option value="Hoàn trả/Hoàn tiền">Hoàn trả/Hoàn tiền</option>
-                            <option value="Đã hủy">Đã hủy</option>
-                            <option value="Đã thanh toán">Đã thanh toán</option>
-
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="thoiGianGiao" class="form-label">Thời gian giao</label>
-                        <input id="thoiGianGiao" name="thoiGianGiao" type="date" class="form-control" onchange="loadDT()" />
-                    </div>
+            <div class="row px-3 mb-3">
+                <div class="col-12 mb-3">
+                    <h4 class="mb-3">Bộ lọc đơn hàng</h4>
                 </div>
+                <div class="col-md-3 p-1">
+                    <label for="httt" class="form-label">Thanh Toán</label>
+                    <select id="httt" name="httt" class="form-select" onchange="loadDT()">
+                        <option value="">Thanh Toán</option>
+                        <option value="VNPAY">VNPAY</option>
+                        <option value="COD">COD</option>
+                        <!-- Các giá trị khác cho Thanh Toán -->
+                    </select>
+                </div>
+                <div class="col-md-3 p-1">
+                    <label for="tinhTrang" class="form-label">Tình trạng</label>
+                    <select id="tinhTrang" name="tinhTrang" class="form-select" onchange="loadDT()">
+                        <option value="">Tình trạng</option>
+                        <option value="Chờ xác nhận">Chờ xác nhận</option>
+                        <option value="Đã xác nhận">Đã xác nhận</option>
+                        <option value="Đã giao cho đơn vị vận chuyển">Đã giao cho đơn vị vận chuyển</option>
+                        <option value="Đang giao hàng">Đang giao hàng</option>
+                        <option value="Chờ thanh toán">Chờ thanh toán</option>
+                        <option value="Hoàn trả/Hoàn tiền">Hoàn trả/Hoàn tiền</option>
+                        <option value="Đã hủy">Đã hủy</option>
+                        <option value="Đã thanh toán">Đã thanh toán</option>
 
+                    </select>
+                </div>
+                <div class="col-md-3 p-1">
+                    <label for="ngayTao" class="form-label">Ngày tạo</label>
+                    <input id="ngayTao" name="ngayTao" type="date" class="form-control" onchange="loadDT()" />
+                </div>
+                <div class="col-md-3 p-1">
+                    <label for="thoiGianGiao" class="form-label">Thời gian giao</label>
+                    <input id="thoiGianGiao" name="thoiGianGiao" type="date" class="form-control" onchange="loadDT()" />
+                </div>
+                <div class="col-md-3 p-1 form-check">
+                    <input id="takeYourOrders" name="takeYourOrders" type="checkbox" class="form-check-input is-valid" onchange="loadDT()"/>
+                    <label class="form-check-label" for="takeYourOrders">
+                        Đơn hàng quản lý
+                    </label>
+                </div>
             </div>
+
 
             <!-- Danh sách đơn hàng -->
             <div class="table-responsive">
@@ -151,6 +158,7 @@
                         d.ngayTao = $('#ngayTao').val();
                         d.httt = $('#httt').val();
                         d.tinhTrang = $('#tinhTrang').val();
+                        d.takeYourOrders = $('#takeYourOrders').prop('checked');
                     },
                     error: function(xhr, status, error) {
                         console.log("Status Code:", xhr.status);
@@ -316,16 +324,8 @@
                     $('#coverContentDetailOrder').modal('show');
                     },
                 error: (xhr) => {
-                    // Tạo một phần tử mới và căn giữa với biểu tượng tải
+                    // Điều hướng trang error
                     window.location.href = `/Home/Error/${xhr.status}`;
-                    // const errorHtml = `
-                    //     <div class="text-center">
-                    //         <i class="fas fa-spinner fa-spin fa-3x"></i><br />
-                    //         <p>Hiện không thể hiển thị thông tin đơn hàng mang mã ${idOrder}!</p>
-                    //     </div>
-                    // `;
-                    // $('#coverContentDetailOrder .modal-body').html(errorHtml);
-                    // $('#coverContentDetailOrder').modal('show');
                 }
             });
         }

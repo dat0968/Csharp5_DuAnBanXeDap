@@ -45,7 +45,7 @@ namespace APIBanXeDap.Controllers
             }
 
             // Thực hiện thay đổi trạng thái đơn hàng
-            var result = await hoaDonRepository.ChangeStatusOrder(idOrder, idStaff, statusOrder, reason);
+            var result = await hoaDonRepository.ChangeStatusOrder(idOrder, idStaff, statusOrder, reason, null);
 
             if (result == null)
             {
