@@ -170,7 +170,7 @@ namespace APIBanXeDap.Repository.TrangChu
 
             return productVMList;
         }
-        public List<ProductVM> GetAllProduct(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort)
+        public List<ProductVM> GetAllProduct(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, double? giaMin, double? giaMax)
         {
             var list = db.Sanphams.AsNoTracking().Where(p => p.IsDelete == false)
                 .Include(sp => sp.MaThuongHieuNavigation)
@@ -193,6 +193,19 @@ namespace APIBanXeDap.Repository.TrangChu
             if (MaThuongHieu.HasValue)
             {
                 list = list.Where(p => p.MaThuongHieu == MaThuongHieu);
+            }
+            if (giaMin.HasValue)
+            {
+                list = list.Where(sp => sp.Chitietsanphams.Any(ct => ct.DonGia >= giaMin.Value));
+            }
+
+            if (giaMax.HasValue)
+            {
+                list = list.Where(sp => sp.Chitietsanphams.Any(ct => ct.DonGia <= giaMax.Value));
+            }
+            if (giaMin.HasValue && giaMax.HasValue)
+            {
+                list = list.Where(sp => sp.Chitietsanphams.Any(ct => ct.DonGia >= giaMin.Value && ct.DonGia <= giaMax.Value));
             }
             switch (sort)
             {

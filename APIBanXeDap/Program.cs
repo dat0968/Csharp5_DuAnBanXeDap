@@ -1,5 +1,4 @@
-﻿using APIBanXeDap.DbInitializer;
-using APIBanXeDap.Models;
+﻿using APIBanXeDap.Models;
 using APIBanXeDap.Repository;
 using APIBanXeDap.Repository.ChiTietHoaDon;
 using APIBanXeDap.Repository.ChiTietSanPham;
@@ -8,7 +7,7 @@ using APIBanXeDap.Repository.HinhAnhSanPham;
 using APIBanXeDap.Repository.HoaDon;
 using APIBanXeDap.Repository.KichThuoc;
 using APIBanXeDap.Repository.MaCoupon;
-using APIBanXeDap.Repository.MauSac;
+using APIBanXeDap.Repository.MauSac;    
 using APIBanXeDap.Repository.NhaCungCap;
 using APIBanXeDap.Repository.SanPham;
 using APIBanXeDap.Repository.ThongKe;
@@ -108,7 +107,6 @@ builder.Services.AddScoped<ITrangChuRepository, TrangChuRepository>();
 builder.Services.AddScoped<IHoaDonRepository, HoaDonRepository>();
 builder.Services.AddScoped<IThongKeRepository, ThongKeRepository>();
 builder.Services.AddScoped<IChiTietHoaDonRepository, ChiTietHoaDonRepository>();
-builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IKhachHangService, KhachHangService>();
 builder.Services.AddScoped<IKhachHangRepository, KhachHangRepository>();
 builder.Services.AddScoped<INhanVienService, NhanVienService>();
@@ -142,24 +140,4 @@ app.UseCors("MyPolicy");
 app.UseAuthentication();
 app.UseAuthorization();;
 app.MapControllers();
-
-SeedDb();
-
 app.Run();
-
-void SeedDb()
-{
-    using (var scope = app.Services.CreateScope()) {
-        {
-            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-            try
-            {
-                dbInitializer.Initializer();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Gặp lỗi khi khởi tại dữ liệu: " + ex.Message);
-            }
-        }
-    }
-}

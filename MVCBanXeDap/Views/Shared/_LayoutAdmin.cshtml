@@ -130,12 +130,12 @@
                                 QUẢN LÝ KHÁCH HÀNG
                             </a>
                         </li>
-                        <li class="nav-item">
+               @*          <li class="nav-item">
                             <a asp-action="Index" asp-controller="Comment">
                                 <i class="fa fa-comments"></i> <!-- Icon bình luận -->
                                 QUẢN LÝ BÌNH LUẬN
                             </a>
-                        </li>
+                        </li> *@
                         @if(Context.Session.GetString("Role") == "Admin")
                         {
                             <li class="nav-item">
@@ -145,12 +145,6 @@
                                 </a>
                             </li>
                         }                       
-                        <li class="nav-item">
-                            <a asp-action="Index" asp-controller="Supplier">
-                                <i class="fa fa-industry"></i> <!-- Icon nhà cung cấp -->
-                                QUẢN LÝ NHÀ CUNG CẤP
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a asp-action="Index" asp-controller="Brand">
                                 <i class="fa fa-industry"></i> <!-- Icon thương hiệu -->
