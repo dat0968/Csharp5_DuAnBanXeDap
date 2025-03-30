@@ -45,14 +45,13 @@ namespace APIBanXeDap.Controllers
         [HttpGet("{timeRange}")]
         public async Task<IActionResult> GetEarningData(string timeRange)
         {
-            var listOrders = (await _hd.GetAllInvoiceDataAsync())
+            var listOrders = (await _hd.GetAllInvoiceDataAsync(null))
                 .Where(x => x.TinhTrang == "Đã xác nhận");  // So sánh trực tiếp với chuỗi "Đã xác nhận"
 
-            var columnData = new List<int>();
+            var columnData = new List<decimal>();
             var categories = new List<string>();
 
             DateOnly today = DateOnly.FromDateTime(DateTime.Today);
-
             switch (timeRange)
             {
                 case "day":
@@ -60,7 +59,7 @@ namespace APIBanXeDap.Controllers
                     columnData = daysOfWeek.Select(day =>
                         listOrders
                             .Where(x => x.NgayTao.DayOfWeek.ToString().StartsWith(day.Substring(0, 3)))
-                            .Sum(x => Convert.ToInt32(x.Items.Sum(it => it.Tong)))
+                            .Sum(x => x.Items.Sum(it => it.Tong)) // Sử dụng Decimal trực tiếp
                     ).ToList();
                     categories = daysOfWeek.ToList();
                     break;
@@ -71,7 +70,7 @@ namespace APIBanXeDap.Controllers
                         listOrders
                             .Where(x => x.NgayTao.Month == today.Month)
                             .Where(x => (x.NgayTao.Day - 1) / 7 + 1 == week)
-                            .Sum(x => Convert.ToInt32(x.Items.Sum(it => it.Tong)))
+                            .Sum(x => x.Items.Sum(it => it.Tong)) // Sử dụng Decimal trực tiếp
                     ).ToList();
                     categories = weeksInMonth.Select(week => "Week " + week).ToList();
                     break;
@@ -81,7 +80,7 @@ namespace APIBanXeDap.Controllers
                     columnData = Enumerable.Range(1, 12).Select(month =>
                         listOrders
                             .Where(x => x.NgayTao.Month == month && x.NgayTao.Year == currentYear)
-                            .Sum(x => Convert.ToInt32(x.Items.Sum(it => it.Tong)))
+                            .Sum(x => x.Items.Sum(it => it.Tong)) // Sử dụng Decimal trực tiếp
                     ).ToList();
                     categories = Enumerable.Range(1, 12).Select(month => "Month " + month).ToList();
                     break;
@@ -92,7 +91,7 @@ namespace APIBanXeDap.Controllers
                     columnData = recentYears.Select(year =>
                         listOrders
                             .Where(x => x.NgayTao.Year == year)
-                            .Sum(x => Convert.ToInt32(x.Items.Sum(it => it.Tong)))
+                            .Sum(x => x.Items.Sum(it => it.Tong)) // Sử dụng Decimal trực tiếp
                     ).ToList();
                     categories = recentYears.Select(year => year.ToString()).ToList();
                     break;
@@ -100,6 +99,7 @@ namespace APIBanXeDap.Controllers
                 default:
                     return BadRequest("Invalid time range specified.");
             }
+
 
             return Ok(new
             {
@@ -140,7 +140,7 @@ namespace APIBanXeDap.Controllers
         [HttpGet("{timeRange}")]
         public async Task<IActionResult> GetOrderStatusData(string timeRange)
         {
-            var listOrders = (await _hd.GetAllHoadonVMAsync())
+            var listOrders = (await _hd.GetAllHoadonVMAsync(null))
                 .Where(x => x.ThoiGianGiao != default(DateOnly));
 
             DateOnly today = DateOnly.FromDateTime(DateTime.Today);
@@ -199,7 +199,7 @@ namespace APIBanXeDap.Controllers
         [HttpGet("{timeRange}")]
         public async Task<IActionResult> GetOrderOverViewData(string timeRange)
         {
-            var listOrders = (await _hd.GetAllInvoiceDataAsync())
+            var listOrders = (await _hd.GetAllInvoiceDataAsync(null))
                 .Where(x => x.TinhTrang != null).ToList();
 
             var orderStatuses = new[] { "Đã xác nhận", "Đã giao cho đơn vị vận chuyển", "Đang giao hàng", "Chờ thanh toán", "Hoàn trả/Hoàn tiền", "Đã hủy", "Chờ xác nhận" };

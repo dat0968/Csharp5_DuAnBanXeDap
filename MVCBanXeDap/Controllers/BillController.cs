@@ -378,7 +378,8 @@ namespace MVCBanXeDap.Controllers
         #region//GET API
         [HttpGet]
         public async Task<IActionResult> GetAll(
-                [FromQuery] DateOnly? ngayTao,
+                [FromQuery] DateOnly? ngayTao,  
+                [FromQuery] DateOnly? thoiGianGiao,
                 [FromQuery] string? httt,
                 [FromQuery] string? tinhTrang,
                 [FromQuery] bool? takeYourOrders)
@@ -395,6 +396,8 @@ namespace MVCBanXeDap.Controllers
                 {
                     if (ngayTao.HasValue)
                         hoadonVMs = hoadonVMs.Where(hd => hd.NgayTao == ngayTao.Value).ToList();
+                    if (thoiGianGiao.HasValue)
+                        hoadonVMs = hoadonVMs.Where(hd => hd.ThoiGianGiao == thoiGianGiao.Value).ToList();
                     if (!string.IsNullOrEmpty(httt))
                         hoadonVMs = hoadonVMs.Where(hd => hd.Httt.Contains(httt)).ToList();
                     if (!string.IsNullOrEmpty(tinhTrang))

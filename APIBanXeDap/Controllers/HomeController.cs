@@ -67,7 +67,7 @@ namespace APIBanXeDap.Controllers
             return Ok(detail);
         }
         [HttpGet("GetAllProduct")]
-        public IActionResult GetAllProduct(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, int page = 1)
+        public IActionResult GetAllProduct(string? keywords, int? MaDanhMuc, int? MaThuongHieu, string? sort, double? giaMin, double? giaMax, int page = 1)
         {
             var status = CheckRole();
             if (status is StatusCodeResult statuscode && statuscode.StatusCode == 401)
@@ -76,7 +76,7 @@ namespace APIBanXeDap.Controllers
             }
             page = page < 1 ? 1 : page;
             int pagesize = 8;
-            var list = trangChuRepository.GetAllProduct(keywords, MaDanhMuc, MaThuongHieu, sort);
+            var list = trangChuRepository.GetAllProduct(keywords, MaDanhMuc, MaThuongHieu, sort, giaMin, giaMax);
             //Phân trang
             var pagedProducts = list.Skip((page - 1) * pagesize).Take(pagesize).ToList();
             //Tổng số trang

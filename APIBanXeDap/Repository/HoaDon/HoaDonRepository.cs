@@ -131,13 +131,13 @@ namespace APIBanXeDap.Repository.HoaDon
             }
 
             // Kiểm tra quyền của nhân viên (nếu idStaff được cung cấp)
-            if (idStaff.HasValue && (!originHoadon.MaNv.HasValue || originHoadon.MaNv != idStaff))
+            if (idStaff.HasValue && (originHoadon.MaNv.HasValue && originHoadon.MaNv != idStaff))
             {
                 return null; // Trả về null nếu nhân viên không có quyền thay đổi
             }
 
-            originHoadon.TinhTrang = statusOrder;
-            if (originHoadon.MaNv == null && idStaff.HasValue) {
+            originHoadon.TinhTrang = statusOrder; 
+            if ((originHoadon.MaNv == null || originHoadon.MaNv == 0) && idStaff.HasValue) {
                 originHoadon.MaNv = idStaff;
             }
 
@@ -145,6 +145,18 @@ namespace APIBanXeDap.Repository.HoaDon
             {
                 case "Hoàn trả/Hoàn tiền":
                 case "Đã hủy":
+                    var chiTietDonHuys = await _db.Chitiethoadons.Where(ct => ct.MaHoaDon == originHoadon.MaHoaDon).ToListAsync();
+                    foreach (var chiTiet in chiTietDonHuys)
+                    {
+                        var sanPhamReturnAmountCancell = await _db.Chitietsanphams.FirstOrDefaultAsync(sp => sp.MaSp == chiTiet.MaSp && sp.MaMau == chiTiet.MaMau && sp.MaKichThuoc == chiTiet.MaKichThuoc);
+
+                        if (sanPhamReturnAmountCancell != null)
+                        {
+                            sanPhamReturnAmountCancell.SoLuongTon += chiTiet.SoLuong;
+
+                            _db.Update(sanPhamReturnAmountCancell);
+                        }
+                    }
                     // Set LyDoHuy
                     if (idCustomer.HasValue)
                     {
